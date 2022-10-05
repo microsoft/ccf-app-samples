@@ -1,0 +1,22 @@
+{
+  "endpoints": {
+    "/log": {
+      "get": {
+        "js_module": "app.js",
+        "js_function": "read",
+        "forwarding_required": "sometimes",
+        "authn_policies": [],
+        "mode": "readonly",
+        "openapi": {}
+      },
+      "post": {
+        "js_module": "app.js",
+        "js_function": "write",
+        "forwarding_required": "sometimes",
+        "authn_policies": [],
+        "mode": "readwrite",
+        "openapi": {}
+      }
+    }
+  }
+}

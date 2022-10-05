@@ -1,0 +1,18 @@
+# Build
+FROM mcr.microsoft.com/ccf/app/dev:2.0.7-sgx as builder
+
+# Run
+FROM mcr.microsoft.com/ccf/app/run-js:2.0.7-sgx
+
+# Note: libjs_generic.virtual is not included in run-js container
+COPY --from=builder /opt/ccf/lib/libjs_generic.virtual.so /usr/lib/ccf
+
+COPY --from=builder /opt/ccf/bin/*.js /app/
+COPY --from=builder /opt/ccf/bin/keygenerator.sh /app/ 
+COPY ./config/cchost_config_virtual_js.json /app/
+WORKDIR /app/
+RUN /app/keygenerator.sh --name member0 --gen-enc-key
+
+EXPOSE 8080/tcp
+
+CMD ["/usr/bin/cchost", "--config", "/app/cchost_config_virtual_js.json"]
