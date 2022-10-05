@@ -1,0 +1,58 @@
+name: "CCF App Samples CI"
+# Created based on https://github.com/microsoft/ccf-app-template
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build-containers:
+    runs-on: ubuntu-20.04
+    container: mcr.microsoft.com/ccf/app/dev:3.0.0-dev6-sgx
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Build JS enclave container
+        run: docker build -t ccf-app-template:js-enclave -f docker/ccf_app_js.enclave .
+
+      - name: Build JS virtual container
+        run: docker build -t ccf-app-template:js-virtual -f docker/ccf_app_js.virtual .
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.0
+
+      - name: Check linting
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          ./lint.sh
+
+      - name: Test Banking application
+        run: |
+          cd banking-app
+          npm ci
+          ./test.sh
+
+  build-samples:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Build samples in DevContainer
+        uses: devcontainers/ci@v0.2
+        with:
+          runCmd: |
+            git config --global --add safe.directory "$GITHUB_WORKSPACE"
+            make lint
+            cd banking-app && make test
+          env: |
+            GITHUB_WORKSPACE

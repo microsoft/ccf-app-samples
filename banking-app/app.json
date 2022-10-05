@@ -1,0 +1,136 @@
+{
+  "endpoints": {
+    "/account/{user_id}/{account_name}": {
+      "put": {
+        "js_module": "endpoints/banking.js",
+        "js_function": "createAccount",
+        "forwarding_required": "always",
+        "authn_policies": ["member_cert"],
+        "mode": "readwrite",
+        "openapi": {
+          "responses": {
+            "204": {
+              "description": "Ok"
+            }
+          },
+          "security": [],
+          "parameters": []
+        }
+      }
+    },
+    "/deposit/{user_id}/{account_name}": {
+      "post": {
+        "js_module": "endpoints/banking.js",
+        "js_function": "deposit",
+        "forwarding_required": "always",
+        "authn_policies": ["member_cert"],
+        "mode": "readwrite",
+        "openapi": {
+          "responses": {
+            "204": {
+              "description": "Ok"
+            }
+          },
+          "security": [],
+          "parameters": [],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "value": {
+                      "type": "number"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/balance/{account_name}": {
+      "get": {
+        "js_module": "endpoints/banking.js",
+        "js_function": "balance",
+        "forwarding_required": "always",
+        "authn_policies": ["user_cert"],
+        "mode": "readonly",
+        "openapi": {
+          "responses": {
+            "200": {
+              "description": "Ok"
+            }
+          },
+          "security": [],
+          "parameters": []
+        }
+      }
+    },
+    "/transfer/{account_name}": {
+      "post": {
+        "js_module": "endpoints/banking.js",
+        "js_function": "transfer",
+        "forwarding_required": "always",
+        "authn_policies": ["user_cert"],
+        "mode": "readwrite",
+        "openapi": {
+          "responses": {
+            "204": {
+              "description": "Ok"
+            }
+          },
+          "security": [],
+          "parameters": [],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "value": {
+                      "type": "number"
+                    },
+                    "user_id_to": {
+                      "type": "string"
+                    },
+                    "account_name_to": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/receipt": {
+      "get": {
+        "js_module": "endpoints/banking.js",
+        "js_function": "getTransactionReceipt",
+        "forwarding_required": "always",
+        "authn_policies": ["user_cert"],
+        "mode": "readonly",
+        "openapi": {
+          "responses": {
+            "200": {
+              "description": "Ok"
+            }
+          },
+          "security": [],
+          "parameters": [
+            {
+              "in": "query",
+              "name": "transaction_id",
+              "required": true
+            }
+          ]
+        }
+      }
+    }
+  }
+}
