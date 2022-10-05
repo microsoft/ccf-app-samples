@@ -17,12 +17,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Build C++ enclave container
-        run: docker build -t ccf-app-template:cpp-enclave -f docker/ccf_app_cpp.enclave .
-
-      - name: Build C++ virtual container
-        run: docker build -t ccf-app-template:cpp-virtual -f docker/ccf_app_cpp.virtual .
-
       - name: Build JS enclave container
         run: docker build -t ccf-app-template:js-enclave -f docker/ccf_app_js.enclave .
 
