@@ -10,7 +10,8 @@ The quickest way to build and run sample applications is to checkout this reposi
 
 [![Open in VSCode](https://img.shields.io/static/v1?label=Open+in&message=VSCode&logo=visualstudiocode&color=007ACC&logoColor=007ACC&labelColor=2C2C32)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/microsoft/ccf-app-samples)
 
-~~All dependencies will be automatically installed (takes ~2 mins on first checkout).~~
+<s>All dependencies will be automatically installed (takes ~2 mins on first checkout).</s>
+
 Currently you need to install node v16 manually. Please run the following commands:
 
 ```bash
