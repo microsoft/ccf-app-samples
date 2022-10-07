@@ -1,5 +1,7 @@
 import * as ccfapp from "@microsoft/ccf-app";
 
+// TODO: Implement based on the spec in README.md
+
 interface LogItem {
   msg: string;
 }
