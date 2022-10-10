@@ -48,7 +48,32 @@ curl https://127.0.0.1:8000/app/account/$user1_id/$account_type1 -X PUT --cacert
 curl https://127.0.0.1:8000/app/deposit/$user0_id/$account_type0 -X POST --cacert service_cert.pem --cert member0_cert.pem --key member0_privk.pem -H "Content-Type: application/json" --data-binary '{ "value": 100 }'
 
 # Transfer 40 from user0 to user1
-curl https://127.0.0.1:8000/app/transfer/$account_type0 -X POST --cacert service_cert.pem --cert user0_cert.pem --key user0_privk.pem -H "Content-Type: application/json" --data-binary "{ \"value\": 40, \"user_id_to\": \"$user1_id\", \"account_name_to\": \"$account_type1\" }"
+transfer_transaction_id=$(curl https://127.0.0.1:8000/app/transfer/$account_type0 -X POST -i --cacert service_cert.pem --cert user0_cert.pem --key user0_privk.pem -H "Content-Type: application/json" --data-binary "{ \"value\": 40, \"user_id_to\": \"$user1_id\", \"account_name_to\": \"$account_type1\" }" | grep -i x-ms-ccf-transaction-id | awk '{print $2}' | sed -e 's/\r//g')
+echo "transaction ID of the transfer: $transfer_transaction_id"
+
+# Wait until the receipt becomes available
+only_status_code="-s -o /dev/null -w %{http_code}"
+while [ "200" != "$(curl https://127.0.0.1:8000/app/receipt?transaction_id=$transfer_transaction_id --cacert service_cert.pem --key user0_privk.pem --cert user0_cert.pem $only_status_code)" ]
+do
+    sleep 1
+done
+
+# Get the receipt for the transfer
+receipt=$(curl https://127.0.0.1:8000/app/receipt?transaction_id=$transfer_transaction_id --cacert service_cert.pem --key user0_privk.pem --cert user0_cert.pem)
+claim_digest=$( jq -r  '.leaf_components.claims_digest' <<< "${receipt}" )
+echo "claim digest is $claim_digest"
+
+expected_claim="${user0_id} sent 40 to ${user1_id}"
+expected_claim_digest=$(echo -n $expected_claim | sha256sum | awk '{print $1}')
+echo "expected claim digest is $expected_claim_digest"
+
+if [ $claim_digest == $expected_claim_digest ]
+then
+    echo "Got expected claim digest"
+else
+    echo "Something went wrong"
+    exit 1
+fi
 
 # Check balance
 curl https://127.0.0.1:8000/app/balance/$account_type0 -X GET --cacert service_cert.pem --cert user0_cert.pem --key user0_privk.pem

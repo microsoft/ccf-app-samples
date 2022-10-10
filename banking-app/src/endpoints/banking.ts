@@ -193,6 +193,9 @@ export function transfer(
   accountToBalance.set(accountName, balance - value);
   accountToBalanceTo.set(accountNameTo, accountToBalanceTo.get(accountNameTo) + value);
 
+  const recordClaim = ccf.digest("SHA-256", ccf.strToBuf(`${userId} sent ${value} to ${userIdTo}`));
+  ccf.rpc.setClaimsDigest(recordClaim);
+
   console.log('Transfer Completed');
 
   return { 
