@@ -59,7 +59,7 @@ check_eq "Balance: user1, account_type1" "{\"balance\":40}" "$(curl $server/app/
 
 # Test reciept
 transfer_transaction_id=$(curl $server/app/transfer/$account_type0 -X POST $(cert_arg "user0") -H "Content-Type: application/json" --data-binary "{ \"value\": 5, \"user_id_to\": \"$user1_id\", \"account_name_to\": \"$account_type1\" }" -i -s | grep -i x-ms-ccf-transaction-id | awk '{print $2}' | sed -e 's/\r//g')
-# Wait for reciept to be ready
+# Wait for receipt to be ready
 while [ "200" != "$(curl $server/app/receipt?transaction_id=$transfer_transaction_id $(cert_arg "member0") $only_status_code)" ]
 do
     sleep 1
