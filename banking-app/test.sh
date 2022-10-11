@@ -50,6 +50,7 @@ account_type1='savings_account'
 # -------------------------- Test cases --------------------------
 echo "Test start"
 
+# Test normal usage
 check_eq "Create account: user0" "204" "$(curl $server/app/account/$user0_id/$account_type0 -X PUT $(cert_arg "member0") $only_status_code)"
 check_eq "Create account: user1" "204" "$(curl $server/app/account/$user1_id/$account_type1 -X PUT $(cert_arg "member0") $only_status_code)"
 check_eq "Deposit: user0, 100" "204" "$(curl $server/app/deposit/$user0_id/$account_type0 -X POST $(cert_arg "member0") -H "Content-Type: application/json" --data-binary '{ "value": 100 }' $only_status_code)"
@@ -60,13 +61,19 @@ check_eq "Balance: user1, account_type1" "{\"balance\":40}" "$(curl $server/app/
 # Test receipt
 transfer_transaction_id=$(curl $server/app/transfer/$account_type0 -X POST $(cert_arg "user0") -H "Content-Type: application/json" --data-binary "{ \"value\": 5, \"user_id_to\": \"$user1_id\", \"account_name_to\": \"$account_type1\" }" -i -s | grep -i x-ms-ccf-transaction-id | awk '{print $2}' | sed -e 's/\r//g')
 # Wait for receipt to be ready
-while [ "200" != "$(curl $server/app/receipt?transaction_id=$transfer_transaction_id $(cert_arg "member0") $only_status_code)" ]
+while [ "200" != "$(curl $server/app/receipt?transaction_id=$transfer_transaction_id $(cert_arg "user0") $only_status_code)" ]
 do
     sleep 1
 done
-receipt=$(curl $server/app/receipt?transaction_id=$transfer_transaction_id $(cert_arg "member0") -s)
+receipt=$(curl $server/app/receipt?transaction_id=$transfer_transaction_id $(cert_arg "user0") -s)
 claim_digest=$( jq -r  '.leaf_components.claims_digest' <<< "${receipt}" )
-expected_claim="${user0_id} sent 5 to ${user1_id}"
+# Get the claim from the app
+while [ "200" != "$(curl $server/app/claim?transaction_id=$transfer_transaction_id $(cert_arg "user0") $only_status_code)" ]
+do
+    sleep 1
+done
+get_claim_response=$(curl $server/app/claim?transaction_id=$transfer_transaction_id $(cert_arg "user0") -s)
+expected_claim=$( jq -r  '.claim' <<< "${get_claim_response}" )
 expected_claim_digest=$(echo -n $expected_claim | sha256sum | awk '{print $1}')
 check_eq "Application claim digest" "$expected_claim_digest" "$claim_digest"
 
@@ -88,6 +95,10 @@ check_eq "Transfer: account not found" "404" "$(curl $server/app/transfer/non-ex
 check_eq "Transfer: userTo not found" "404" "$(curl $server/app/transfer/$account_type0 -X POST $(cert_arg "user0") -H "Content-Type: application/json" --data-binary "{ \"value\": 40, \"user_id_to\": \"non-existing-user\", \"account_name_to\": \"$account_type1\" }" $only_status_code)"
 check_eq "Transfer: accountTo not found" "404" "$(curl $server/app/transfer/$account_type0 -X POST $(cert_arg "user0") -H "Content-Type: application/json" --data-binary "{ \"value\": 40, \"user_id_to\": \"$user1_id\", \"account_name_to\": \"non-existing-account\" }" $only_status_code)"
 check_eq "Balance: account not found" "404" "$(curl $server/app/balance/non-existing-account -X GET $(cert_arg "user0") $only_status_code)"
+check_eq "Get Claim: invalid transaction 1" "400" "$(curl $server/app/claim?transaction_id=123 $(cert_arg "user0") $only_status_code)"
+check_eq "Get Claim: invalid transaction 2" "400" "$(curl $server/app/claim?transaction_id=123.1.2 $(cert_arg "user0") $only_status_code)"
+check_eq "Get Claim: invalid transaction 3" "400" "$(curl $server/app/claim?transaction_id=abc.def $(cert_arg "user0") $only_status_code)"
+check_eq "Get Claim: access is not allowed" "404" "$(curl $server/app/claim?transaction_id=$transfer_transaction_id $(cert_arg "user1") $only_status_code)"
 
 echo "OK"
 kill -9 $sandbox_pid

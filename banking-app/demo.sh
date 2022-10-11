@@ -63,7 +63,14 @@ receipt=$(curl https://127.0.0.1:8000/app/receipt?transaction_id=$transfer_trans
 claim_digest=$( jq -r  '.leaf_components.claims_digest' <<< "${receipt}" )
 echo "claim digest is $claim_digest"
 
-expected_claim="${user0_id} sent 40 to ${user1_id}"
+# Get the claim from the app
+while [ "200" != "$(curl https://127.0.0.1:8000/app/claim?transaction_id=$transfer_transaction_id --cacert service_cert.pem --key user0_privk.pem --cert user0_cert.pem $only_status_code)" ]
+do
+    sleep 1
+done
+
+get_claim_response=$(curl https://127.0.0.1:8000/app/claim?transaction_id=$transfer_transaction_id --cacert service_cert.pem --key user0_privk.pem --cert user0_cert.pem -s)
+expected_claim=$( jq -r  '.claim' <<< "${get_claim_response}" )
 expected_claim_digest=$(echo -n $expected_claim | sha256sum | awk '{print $1}')
 echo "expected claim digest is $expected_claim_digest"
 

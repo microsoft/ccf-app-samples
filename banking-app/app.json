@@ -107,6 +107,30 @@
           }
         }
       }
+    },
+    "/claim": {
+      "get": {
+        "js_module": "endpoints/banking.js",
+        "js_function": "getClaim",
+        "forwarding_required": "always",
+        "authn_policies": ["user_cert"],
+        "mode": "readonly",
+        "openapi": {
+          "responses": {
+            "200": {
+              "description": "Ok"
+            }
+          },
+          "security": [],
+          "parameters": [
+            {
+              "in": "query",
+              "name": "transaction_id",
+              "required": true
+            }
+          ]
+        }
+      }
     }
   }
 }
