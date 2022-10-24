@@ -254,7 +254,7 @@ export function getClaim(
   const rangeBegin = seqno;
   const rangeEnd = seqno;
 
-  // Make hundle based on https://github.com/microsoft/CCF/blob/main/samples/apps/logging/js/src/logging.js
+  // Make handle based on https://github.com/microsoft/CCF/blob/main/samples/apps/logging/js/src/logging.js
   // Compute a deterministic handle for the range request.
   // Note: Instead of ccf.digest, an equivalent of std::hash should be used.
   const makeHandle = (begin: number, end: number, id: string): number => {
