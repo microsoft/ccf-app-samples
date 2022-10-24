@@ -306,3 +306,102 @@ export function getClaim(
     }
   };
 }
+
+interface LeafComponents {
+  claims: string
+  commit_evidence: string
+  write_set_digest: string
+}
+
+interface GetTransactionREceiptResponse {
+  cert: string
+  leaf_components: LeafComponents
+  node_id: string
+  proof: ccfapp.Proof
+  signature: string
+}
+
+
+export function getTransactionReceipt(
+  request: ccfapp.Request
+): ccfapp.Response<GetTransactionREceiptResponse> | ccfapp.Response {
+
+  const parsedQuery = parseRequestQuery(request);
+  const transactionId = parsedQuery.transaction_id;
+
+  if (!validateTransactionId(transactionId)) {
+    return {
+      statusCode: 400
+    };
+  }
+
+  const userId = getCallerId(request);
+  const txNums = transactionId.split('.');
+  const seqno = parseInt(txNums[1]);
+
+  const rangeBegin = seqno;
+  const rangeEnd = seqno;
+
+  // Make hundle based on https://github.com/microsoft/CCF/blob/main/samples/apps/logging/js/src/logging.js
+  // Compute a deterministic handle for the range request.
+  // Note: Instead of ccf.digest, an equivalent of std::hash should be used.
+  const makeHandle = (begin: number, end: number, id: string): number => {
+    const cacheKey = `${begin}-${end}-${id}`;
+    const digest = ccf.digest("SHA-256", ccf.strToBuf(cacheKey));
+    const handle = new DataView(digest).getUint32(0);
+    return handle;
+  };
+  const handle = makeHandle(rangeBegin, rangeEnd, transactionId);
+
+  // Fetch the requested range
+  const expirySeconds = 1800;
+  const states = ccf.historical.getStateRange(
+    handle,
+    rangeBegin,
+    rangeEnd,
+    expirySeconds
+  );
+  if (states === null) {
+    return {
+      statusCode: 202,
+      headers: {
+        "retry-after": "1",
+      },
+      body: `Historical transactions from ${rangeBegin} to ${rangeEnd} are not yet available, fetching now`,
+    };
+  }
+
+  const firstKv = states[0].kv;
+  const claimTable = ccfapp.typedKv(firstKv[claimTableName], ccfapp.string, ccfapp.json<ClaimItem>())
+
+  if (!claimTable.has(keyForClaimTable)) {
+    return {
+      statusCode: 404
+    };
+  }
+
+  const claimItem = claimTable.get(keyForClaimTable);
+  if (claimItem.userId !== userId) {
+    // Access to the claim is not allowed
+    return {
+      statusCode: 404
+    }
+  }
+
+  const receipt = states[0].receipt
+  const body = {
+    cert: receipt.cert,
+    leaf_components: {
+      claim: claimItem.claim,
+      commit_evidence: receipt.leaf_components.commit_evidence,
+      write_set_digest: receipt.leaf_components.write_set_digest
+    },
+    node_id: receipt.node_id,
+    proof: receipt.proof,
+    signature: receipt.signature
+  }
+
+  return {
+    body
+  };
+}
