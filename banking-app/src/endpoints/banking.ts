@@ -221,7 +221,7 @@ interface GetClaimResponse {
 }
 
 function validateTransactionId(transactionId: any): boolean {
-  // Transaction ID is composed of View ID and Sequesnce Number
+  // Transaction ID is composed of View ID and Sequence Number
   // https://microsoft.github.io/CCF/main/overview/glossary.html#term-Transaction-ID
   if (typeof transactionId !== 'string') {
     return false;
