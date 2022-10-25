@@ -10,19 +10,7 @@ The quickest way to build and run sample applications is to checkout this reposi
 
 [![Open in VSCode](https://img.shields.io/static/v1?label=Open+in&message=VSCode&logo=visualstudiocode&color=007ACC&logoColor=007ACC&labelColor=2C2C32)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/microsoft/ccf-app-samples)
 
-<s>All dependencies will be automatically installed (takes ~2 mins on first checkout).</s>
-
-Currently you need to install node v16 manually. Please run the following commands:
-
-```bash
-# Install nvm
-$ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
-
-# Then follow the instruction in the output
-
-# Use v16.17.0 as default
-$ nvm install v16.17.0
-```
+All dependencies will be automatically installed (takes ~2 mins on first checkout).
 
 Alternatively, if your organisation supports it, you can checkout this repository in a Github codespace:
 
