@@ -1,10 +1,18 @@
 {
-  "name": "Development Container for CCF C++ Apps",
-  "context": "..",
+  "name": "CCF Sample DevContainer",
   "image": "mcr.microsoft.com/ccf/app/dev:lts-devcontainer",
-  "runArgs": [],
   "extensions": [
     "ms-vscode.cpptools",
     "vsls-contrib.codetour"
-  ]
+  ],
+  "postCreateCommand": "cd banking-app && npm install",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-from-docker:1": {
+      "version": "20.10.8"
+    },
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "16.17.0",
+      "nodeGypDependencies": true
+    }
+  }
 }
