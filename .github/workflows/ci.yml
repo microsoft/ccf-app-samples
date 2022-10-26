@@ -28,7 +28,9 @@ jobs:
           node-version: 16.0
 
       - name: Check linting
-        run: ./lint.sh
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          ./lint.sh
 
       - name: Test Banking application
         run: |
