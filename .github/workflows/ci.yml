@@ -8,7 +8,6 @@ on:
     branches: [main]
 
 jobs:
-
   build-containers:
     runs-on: ubuntu-20.04
     container: mcr.microsoft.com/ccf/app/dev:lts-devcontainer
@@ -28,9 +27,11 @@ jobs:
         with:
           node-version: 16.0
 
+      - name: Check linting
+        run: ./lint.sh
+
       - name: Test Banking application
         run: |
           cd banking-app
           npm ci
           ./test.sh
-

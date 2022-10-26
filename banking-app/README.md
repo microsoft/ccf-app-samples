@@ -53,7 +53,7 @@ There are multiple reasons that you want to use CCF for a banking consortium.
 cd banking-app
 # The dev container would have installed your npm packages for you
 
-npm run build # Transpile the TypeScript code to JavaScript and copy the output to `dist` directory 
+npm run build # Transpile the TypeScript code to JavaScript and copy the output to `dist` directory
 
 initial_number_of_banks=3
 initial_number_of_users=2

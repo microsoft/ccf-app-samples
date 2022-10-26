@@ -1,10 +1,7 @@
 {
   "name": "CCF Sample DevContainer",
   "image": "mcr.microsoft.com/ccf/app/dev:lts-devcontainer",
-  "extensions": [
-    "ms-vscode.cpptools",
-    "vsls-contrib.codetour"
-  ],
+  "extensions": ["ms-vscode.cpptools", "vsls-contrib.codetour"],
   "postCreateCommand": "cd banking-app && npm install",
   "features": {
     "ghcr.io/devcontainers/features/docker-from-docker:1": {
