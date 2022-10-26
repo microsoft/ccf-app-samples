@@ -136,7 +136,7 @@ cd banking-app
 
 ## How to run the tests
 
-banking-app has a test.
+The banking application has a suite of tests that run in a sandbox; please ensure you do not have an existing sandbox running.
 
 ```bash
 cd banking-app
