@@ -14,7 +14,7 @@ All dependencies will be automatically installed (takes ~2 mins on first checkou
 
 Alternatively, if your organisation supports it, you can checkout this repository in a Github codespace:
 
-TODO: "Open in Github codespace" button
+[![Open in GitHub Codespaces](https://img.shields.io/static/v1?label=Open+in&message=GitHub+codespace&logo=github&color=2F363D&logoColor=white&labelColor=2C2C32)](https://github.com/codespaces/new?hide_repo_select=true&repo=microsoft%2Fccf-app-samples)
 
 Please see `<app-name>/README.md` to run each sample applications.
 
