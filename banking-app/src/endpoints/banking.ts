@@ -14,6 +14,8 @@ function parseRequestQuery(request: ccfapp.Request<any>): any {
 interface ClaimItem {
   userId: string;
   claim: string;
+
+  
 }
 
 const claimTableName = "current_claim";
