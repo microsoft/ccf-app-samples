@@ -22,3 +22,15 @@ jobs:
 
       - name: Build JS virtual container
         run: docker build -t ccf-app-template:js-virtual -f docker/ccf_app_js.virtual .
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.0
+
+      - name: Test Banking application
+        run: |
+          cd banking-app
+          npm ci
+          ./test.sh
+
