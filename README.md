@@ -6,33 +6,21 @@ Sample applications for the Confidential Consortium Framework (CCF).
 
 ## Quickstart
 
-The quickest way to build and run sample applications is to checkout this repository locally in its development container by clicking: 
+The quickest way to build and run sample applications is to checkout this repository locally in its development container by clicking:
 
 [![Open in VSCode](https://img.shields.io/static/v1?label=Open+in&message=VSCode&logo=visualstudiocode&color=007ACC&logoColor=007ACC&labelColor=2C2C32)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/microsoft/ccf-app-samples)
 
-<s>All dependencies will be automatically installed (takes ~2 mins on first checkout).</s>
-
-Currently you need to install node v16 manually. Please run the following commands:
-
-```bash
-# Install nvm
-$ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
-
-# Then follow the instruction in the output
-
-# Use v16.17.0 as default
-$ nvm install v16.17.0
-```
+All dependencies will be automatically installed (takes ~2 mins on first checkout).
 
 Alternatively, if your organisation supports it, you can checkout this repository in a Github codespace:
 
-TODO: "Open in Github codespace" button
+[![Open in GitHub Codespaces](https://img.shields.io/static/v1?label=Open+in&message=GitHub+codespace&logo=github&color=2F363D&logoColor=white&labelColor=2C2C32)](https://github.com/codespaces/new?hide_repo_select=true&repo=microsoft%2Fccf-app-samples)
 
 Please see `<app-name>/README.md` to run each sample applications.
 
 ## Contributing
 
-This project welcomes contributions and suggestions.  Most contributions require you to agree to a
+This project welcomes contributions and suggestions. Most contributions require you to agree to a
 Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
 the rights to use your contribution. For details, visit https://cla.opensource.microsoft.com.
 
@@ -46,8 +34,8 @@ contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additio
 
 ## Trademarks
 
-This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft 
-trademarks or logos is subject to and must follow 
+This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft
+trademarks or logos is subject to and must follow
 [Microsoft's Trademark & Brand Guidelines](https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks/usage/general).
 Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship.
 Any use of third-party trademarks or logos are subject to those third-party's policies.
