@@ -54,3 +54,5 @@ jobs:
             git config --global --add safe.directory "$GITHUB_WORKSPACE"
             make lint
             make test
+          env: |
+            GITHUB_WORKSPACE
