@@ -6,9 +6,13 @@ SHELL := /bin/bash
 help: ## 💬 This help message :)
 	@grep -E '[a-zA-Z_-]+:.*?## .*$$' $(firstword $(MAKEFILE_LIST)) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
 
-lint: ## 🌟 Lint the code base
+lint: ## 🔍 Lint the code base (but don't fix)
 	@echo -e "\e[34m$@\e[0m" || true
 	@./lint.sh
+
+lint-fix: ## 🌟 Lint and fix the code base
+	@echo -e "\e[34m$@\e[0m" || true
+	@./lint.sh -f
 
 build: ## 🔨 Build the Banking Application
 	@echo -e "\e[34m$@\e[0m" || true

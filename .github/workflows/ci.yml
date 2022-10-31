@@ -51,5 +51,6 @@ jobs:
         uses: devcontainers/ci@v0.2
         with:
           runCmd: |
+            git config --global --add safe.directory "$GITHUB_WORKSPACE"
             make lint
             make test

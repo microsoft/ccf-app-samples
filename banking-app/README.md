@@ -47,7 +47,6 @@ There are multiple reasons that you want to use CCF for a banking consortium.
 - Banks don't have to trust each other. A majority of the banks need to agree to make changes on the application with the default [constitution](https://microsoft.github.io/CCF/main/governance/constitution.html#constitution).
 - Banks and users don't have to trust node [operators](https://microsoft.github.io/CCF/main/overview/glossary.html#term-Operators).
 
-
 ## Demo
 
 You can use the demo to understand a typical scenario.
@@ -127,7 +126,8 @@ make test
 
 ## Interact with the sandbox manually
 
-You can always run the sandbox yourself 
+You can always run the sandbox yourself: -
+
 ```bash
 cd banking-app
 # The dev container would have installed your npm packages for you
@@ -140,4 +140,3 @@ initial_number_of_users=2
 ```
 
 You can find example commands to use against the application in `./demo.sh`.
-
