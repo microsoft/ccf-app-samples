@@ -31,12 +31,12 @@ This application provides a REST API with the following endpoints:
 
 ### Why "Deposit money" API (`POST /app/deposit/{user_id}/{account_name}`) can't be called by users not members?
 
-In real life, it's normal that users can deposit money through ATM at their own will. So it might be unintuitive that users can't call the endpoint. However if we allow users, they could deposit any amount of money with no actual money.
+In real life, it's normal that users can deposit money through an ATM at their own will. So it might be unintuitive that users can't call the endpoint. However if we allow users, they could deposit any amount of money with no actual money.
 If you want implement an ATM, the deposit procedure would be:
 
 1. User puts actual money into an ATM.
 2. The ATM counts the money.
-3. The ATM calls "Deposit money" API as bank.
+3. The ATM calls "Deposit money" API as the bank.
 
 ## Why CCF?
 
@@ -47,20 +47,6 @@ There are multiple reasons that you want to use CCF for a banking consortium.
 - Banks don't have to trust each other. A majority of the banks need to agree to make changes on the application with the default [constitution](https://microsoft.github.io/CCF/main/governance/constitution.html#constitution).
 - Banks and users don't have to trust node [operators](https://microsoft.github.io/CCF/main/overview/glossary.html#term-Operators).
 
-## How to run the app in sandbox
-
-```bash
-cd banking-app
-# The dev container would have installed your npm packages for you
-
-npm run build # Transpile the TypeScript code to JavaScript and copy the output to `dist` directory
-
-initial_number_of_banks=3
-initial_number_of_users=2
-/opt/ccf/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count $initial_number_of_banks --initial-user-count $initial_number_of_users
-```
-
-You can find example commands to use the application in demo.sh, or you can run a series of commands by following the next section (Please do not forget to stop the sandbox before moving on)
 
 ## Demo
 
@@ -125,20 +111,33 @@ sequenceDiagram
 ### How to run the demo
 
 ```bash
-cd banking-app
-./prepare_demo.sh
+make prepare-demo
 
 # In another terminal
-cd banking-app
-./demo.sh
-./show_app_log.sh # You can see the application log
+make demo
 ```
 
 ## How to run the tests
 
-The banking application has a suite of tests that run in a sandbox; please ensure you do not have an existing sandbox running.
+The banking application also has a suite of tests that run in a sandbox; please ensure you do not have an existing sandbox running.
 
 ```bash
-cd banking-app
-./test.sh
+make test
 ```
+
+## Interact with the sandbox manually
+
+You can always run the sandbox yourself 
+```bash
+cd banking-app
+# The dev container would have installed your npm packages for you
+
+npm run build # Transpile the TypeScript code to JavaScript and copy the output to `dist` directory
+
+initial_number_of_banks=3
+initial_number_of_users=2
+/opt/ccf/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count $initial_number_of_banks --initial-user-count $initial_number_of_users
+```
+
+You can find example commands to use against the application in `./demo.sh`.
+
