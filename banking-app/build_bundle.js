@@ -54,11 +54,11 @@ const app_reg = {
       name: "set_js_app",
       args: {
         bundle: bundle,
-        disable_bytecode_cache: false
-      }
-    }
-  ]
-} 
+        disable_bytecode_cache: false,
+      },
+    },
+  ],
+};
 
 console.log(
   `Writing bundle containing ${modules.length} modules to ${bundlePath}`
