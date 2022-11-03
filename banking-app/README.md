@@ -110,9 +110,11 @@ sequenceDiagram
 ### How to run the demo
 
 ```bash
-make prepare-demo
+cd banking-app
+make start-host
 
 # In another terminal
+cd banking-app
 make demo
 ```
 
@@ -121,6 +123,7 @@ make demo
 The banking application also has a suite of tests that run in a sandbox; please ensure you do not have an existing sandbox running.
 
 ```bash
+cd banking-app
 make test
 ```
 

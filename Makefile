@@ -1,6 +1,6 @@
 SHELL := /bin/bash
 
-.PHONY: help prepare-demo
+.PHONY: help
 .DEFAULT_GOAL := help
 
 help: ## 💬 This help message :)
@@ -14,26 +14,17 @@ lint-fix: ## 🌟 Lint and fix the code base
 	@echo -e "\e[34m$@\e[0m" || true
 	@./lint.sh -f
 
-build: ## 🔨 Build the Banking Application
-	@echo -e "\e[34m$@\e[0m" || true
-	@cd banking-app && npm run build
+build: ## 🔨 Build an Application
+	@echo -e "\e[34mPlease change directory to the sample you wish to build.\e[0m" || true
 
-test: ## 🧪 Test the Banking Application
-	@echo -e "\e[34m$@\e[0m" || true
-	@cd banking-app && ./test.sh
+test: ## 🧪 Test an Application
+	@echo -e "\e[34mPlease change directory to the sample you wish to test.\e[0m" || true
 
 start-host: build ## 🏃 Start the CCF Sandbox
-	@echo -e "\e[34m$@\e[0m" || true
-	@cd banking-app && /opt/ccf/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count 3 --initial-user-count 0
+	@echo -e "\e[34mPlease change directory to the sample you wish to start.\e[0m" || true
 
-prepare-demo: ## 🚀 Prepare the banking application demo
-	@echo -e "\e[34m$@\e[0m" || true
-	@cd banking-app && ./prepare_demo.sh
-
-demo: ## 🎬 Demo the Banking Application
-	@echo -e "\e[34m$@\e[0m" || true
-	@cd banking-app && ./demo.sh
-	@cd banking-app && ./show_app_log.sh
+demo: ## 🎬 Demo an Application
+	@echo -e "\e[34mPlease change directory to the sample you wish to demo.\e[0m" || true
 
 clean: ## 🧹 Clean the working folders created during build/demo
 	@rm -rf .venv_ccf_sandbox
