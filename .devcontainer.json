@@ -1,6 +1,6 @@
 {
   "name": "CCF Sample DevContainer",
-  "image": "mcr.microsoft.com/ccf/app/dev:lts-devcontainer",
+  "image": "mcr.microsoft.com/ccf/app/dev:3.0.0-dev6-sgx",
   "extensions": ["ms-vscode.cpptools", "vsls-contrib.codetour"],
   "postCreateCommand": "cd banking-app && npm install",
   "features": {
