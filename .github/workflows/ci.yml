@@ -53,6 +53,6 @@ jobs:
           runCmd: |
             git config --global --add safe.directory "$GITHUB_WORKSPACE"
             make lint
-            make test
+            cd banking-app && make test
           env: |
             GITHUB_WORKSPACE

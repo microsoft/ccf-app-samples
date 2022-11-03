@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euox pipefail
 
-# Run prepare_demo.sh in another terminal before running this script
+# Run `make start-host` in another terminal before running this script
 
 
 cd workspace/sandbox_common
