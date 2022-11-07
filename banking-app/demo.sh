@@ -1,7 +1,7 @@
 #!/bin/bash
-set -euo pipefail
+set -euox pipefail
 
-# Run prepare_demo.sh in another terminal before running this script
+# Run `make start-host` in another terminal before running this script
 
 
 cd workspace/sandbox_common
@@ -35,8 +35,6 @@ cp ../../vote/* ./
 
 user0_id=$(openssl x509 -in "user0_cert.pem" -noout -fingerprint -sha256 | cut -d "=" -f 2 | sed 's/://g' | awk '{print tolower($0)}')
 user1_id=$(openssl x509 -in "user1_cert.pem" -noout -fingerprint -sha256 | cut -d "=" -f 2 | sed 's/://g' | awk '{print tolower($0)}')
-
-set -x
 
 # Add users
 
