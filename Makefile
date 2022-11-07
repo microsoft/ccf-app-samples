@@ -29,6 +29,3 @@ demo: ## 🎬 Demo an Application
 clean: ## 🧹 Clean the working folders created during build/demo
 	@rm -rf .venv_ccf_sandbox
 	@rm -rf workspace
-	@rm -rf banking-app/.venv_ccf_sandbox
-	@rm -rf banking-app/dist
-	@rm -rf banking-app/workspace
