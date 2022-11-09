@@ -385,6 +385,3 @@ echo "Verify the installation"
 /opt/ccf/bin/cchost --version
 ```
 
-# Code Tour
-
-In VSCode, a [code tour](https://marketplace.visualstudio.com/items?itemName=vsls-contrib.codetour) of the C++ app can be started with: Ctrl + P, `> CodeTour: Start Tour`
