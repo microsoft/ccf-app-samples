@@ -33,7 +33,11 @@ clean: ## 🧹 Clean the working folders created during build/demo
 	@rm -rf workspace
 	@rm -rf dist
 
-buildimage: ## 📦 Build container image from Dockerfile
+build-virtual: ## 📦 Build Virtual container image from Dockerfile
 	@echo -e "\e[34m$@\e[0m" || true
-	@./build_image.sh
+	@../build_image.sh virtual
+
+build-enclave: ## 📦 Build Enclave container image from Dockerfile
+	@echo -e "\e[34m$@\e[0m" || true
+	@../build_image.sh enclave
 	
