@@ -44,15 +44,17 @@ To test a ccf application you need go through the following steps:
 
 ### Build Application
 
-The application building prerequisites [[CCF](#ccf-install), NodeJS and NPM] installed, all will be preinstalled if you are using devcontainer enviroment,
+The application building prerequisites [[CCF](#ccf-install), NodeJS and NPM] must be installed,
+all will be preinstalled if you are using devcontainer environment,
 otherwise you need to manually install.
 
 In the checkout of this repository:
 
 ```bash
-cd js
+cd banking-app
 npm install
-npm run build
+# build and generate the application bundle and deployment proposal
+make build
 ls
 cd ..
 
@@ -65,25 +67,32 @@ cd ..
 
 There are servral ways and tools which helping to test your application
 
-- Sandbox.sh
+- [Sandbox.sh](#testing-using-sandboxsh)
 
-  - build an initialized a ccf network and deploy your app top it
+  - Build an initialized CCF network and deploy your app on top of it
   - Support both ccf network types [virtual - release (TEE hardware)]
   - No governance steps required
 
-- Docker container
+- [Docker container](#testing-using-docker-containers)
 
   - Support both ccf network types [virtual - release (TEE hardware)]
   - Governance steps required to deploy your app, initialize, and start the network
 
-- Linux Machine
+- [Linux Machine](#testing-using-linux-machine)
+
   - Support both ccf network types [virtual - release (TEE hardware)]
   - Governance steps required to deploy your app, initialize, and start the network
+
+- [Azure Managed CCF Service](#testing-using-azure-managed-ccf-serivce-mccf)
+
+  - Using Azure MCCF service, will Create [a Managed CCF network](https://techcommunity.microsoft.com/t5/azure-confidential-computing/microsoft-introduces-preview-of-azure-managed-confidential/ba-p/3648986) which is (initialized, contains an active member, and In Open State)
+  - Support only a ccf network in release mode (TEE hardware)
+  - No governance steps required to start up your network, but you need to deploy your app proposal
 
 #### Testing: Using Sandbox.sh
 
-By runing sandbox.sh script, it is automatically starting a CCF network and deploy your application on it, the app is up and ready to receive calls,
-all the governance work is done for you.
+By running sandbox.sh script, it is automatically starts a CCF network and deploys your application on it.
+The app is up and ready to receive calls and all the governance work is done for you.
 
 Start in a CCF Network in Release mode
 
@@ -105,9 +114,9 @@ Start in a CCF Network in Virtual mode (the default mode for testing)
 
 #### Testing: Using docker containers
 
-Build and run one of these docker files ["ccf_app_js.virtual" or "ccf_app_js.enclave"] to start a CCF network with one node and one member
-after that you need to execute governance steps to deploy the application and open the network for users to begin access the app endpoints.
-all the governance steps is done manually using [proposal submit and vote process](https://microsoft.github.io/CCF/main/governance/proposals.html).
+Build and run one of these docker files ["ccf_app_js.virtual" or "ccf_app_js.enclave"] to start a CCF network with one node and one member.
+After that, you need to execute governance steps to deploy the application and open the network for users to begin access the app endpoints.
+All the governance steps need to be done manually using [proposal submit and vote process](https://microsoft.github.io/CCF/main/governance/proposals.html).
 
 ##### Build and run docker container to start a CCF network
 
@@ -129,18 +138,17 @@ Start in a CCF Network in Virtual mode, based on virtual config file: "./config/
  # CCF Network initialization needed before the interaction with the service
 ```
 
+Now, a network is started with one node and one member, you need to execute the following governance steps to initialize the network, [check Network governance section](#network-governance)
+
+- Activate the network existing member (to start a network governance)
+- Build the application and [create a deployment proposal](#build-application)
+- Deploy the application proposal, [using governance calls](#network-governance)
+- Optionally Create and submit [an add users proposal](#new-user-proposal)
+- Open the network for users ([using proposal](#open-network-proposal))
+
 ##### CCF Node Configuration file
 
-The configuration for each CCF node must be contained in a single JSON configuration file like [cchost_config_enclave_js.json - cchost_config_virtual_js.json], [ CCF node config file documentation](https://microsoft.github.io/CCF/main/operations/configuration.html)
-
-##### CCF network initialization
-
-After the container run, a network is started with one (node - member), you need to execute the following governance steps to initialize the network, [check Network governance section](#network-governance)
-
-- Activate the network members (to begin network governance)
-- Add users (using proposal)
-- Deploy the application (using proposal)
-- Open the network for users (using proposal)
+To start or join new node you need some configs, The configuration for each CCF node must be contained in a single JSON configuration file like [cchost_config_enclave_js.json - cchost_config_virtual_js.json], [CCF node config file documentation](https://microsoft.github.io/CCF/main/operations/configuration.html)
 
 #### Testing: Using Linux Machine
 
@@ -150,26 +158,39 @@ Start the CCF network using the cchost in release mode
 
 ```bash
  /opt/ccf/bin/cchost --config ./config/cchost_config_enclave_js.json
+ ...
+ # CCF Network initialization needed before the interaction with the service
 ```
 
 Or virtual mode
 
 ```bash
 /opt/ccf/bin/cchost --config ./config/cchost_config_virtual_js.json
+...
+ # CCF Network initialization needed before the interaction with the service
 ```
+
+Now, a network is started with one node and one member, you need to execute the following governance steps to initialize the network, [check Network governance section](#network-governance)
+
+- Activate the network existing member (to start a network governance)
+- Build the application and [create a deployment proposal](#build-application)
+- Deploy the application proposal, [using governance calls](#network-governance)
+- Create and submit [an add users proposal](#new-user-proposal)
+- Open the network for users ([using proposal](#open-network-proposal))
 
 ##### CCF Node Configuration file
 
-The configuration for each CCF node must be contained in a single JSON configuration file like [cchost_config_enclave_js.json - cchost_config_virtual_js.json], [ CCF node config file documentation](https://microsoft.github.io/CCF/main/operations/configuration.html)
+To start or join new node you need some configs, The configuration for each CCF node must be contained in a single JSON configuration file like [cchost_config_enclave_js.json - cchost_config_virtual_js.json], [ CCF node config file documentation](https://microsoft.github.io/CCF/main/operations/configuration.html)
 
-##### CCF network initialization
+#### Testing: Using Azure Managed CCF Serivce ([MCCF](https://techcommunity.microsoft.com/t5/azure-confidential-computing/microsoft-introduces-preview-of-azure-managed-confidential/ba-p/3648986))
 
-Network is started with one (node - member), you need to execute the following governance steps to initialize the network,, [check Network governance section](#network-governance)
+To test you application using MCCF, you can create Azure Managed CCF Serivce on your subscription, the service will create a CCF network which is (initialized, Active member, and In Open State)
 
-- Activate the network members (to start a network governance)
-- Add users (using proposal)
-- Deploy the application (using proposal)
-- Open the network for users (using proposal)
+- First, create the network's first member certificate, please check [Certificates generation](https://microsoft.github.io/CCF/release/3.x/governance/adding_member.htmlhttps://microsoft.github.io/CCF/release/3.x/governance/adding_member.html)
+- Create a new Azure Managed CCF Serivce (first member certificate required as input)
+- Build the application and [create a deployment proposal](#build-application)
+- Deploy the application proposal, [using governance calls](#network-governance)
+- Create and submit [an add users proposal](#new-user-proposal)
 
 ### Testing: Application Endpoints
 
@@ -217,8 +238,6 @@ curl https://ccf_service_url/app/balance/$account_type1 -X GET --cacert service_
 CCF apps can also be written in C++. This offers better performance than JavaScript apps but requires a compilation step and a restart of the CCF node for deployment.
 
 The C++ sample app is located in the [`cpp/`](cpp/) directory.
-
-Also check out the [code tour](#code-tour) to get an overview of the C++ app.
 
 ### Build C++ app
 
@@ -288,6 +307,10 @@ Members vote to accept or reject the proposal
 /opt/ccf/bin/scurl.sh "https://ccf_service_url/gov/proposals/$proposal0_id/ballots" --cacert service_cert.pem --signing-key member1_privk.pem --signing-cert member1_cert.pem --data-binary @vote_accept.json -H "content-type: application/json" | jq
 ```
 
+```
+Note: Members and users, certificates and keys, must be generated before starting a CCF network, please check [Certificates generation](https://microsoft.github.io/CCF/release/3.x/governance/adding_member.htmlhttps://microsoft.github.io/CCF/release/3.x/governance/adding_member.html).
+```
+
 ### Network Governance: Activating network members
 
 By default the CCF network needs at least one member to be started, after the network is started this member must be activated.
@@ -319,7 +342,7 @@ cat request.json
 
 ### Network Governance: Adding users
 
-Users are directly interact with the application running in CCF. Their public identity should be voted in by members before they are allowed to issue requests.
+Users directly interact with the application running in CCF. Their public identities should be voted in by members before they are allowed to issue requests
 
 Once a CCF network is successfully started and an acceptable number of nodes have joined, members should vote to open the network to Users.
 First, the identities of trusted users should be generated,see [Generating Member Keys and Certificates](https://microsoft.github.io/CCF/main/governance/adding_member.html#generating-member-keys-and-certificates) and [Adding Users docs](https://microsoft.github.io/CCF/main/governance/open_network.html)
