@@ -40,4 +40,3 @@ curl https://127.0.0.1:8000/app/balance/$account_type0 -X GET --cacert service_c
 # Check user1 balance
 curl https://127.0.0.1:8000/app/balance/$account_type1 -X GET --cacert service_cert.pem --cert user1_cert.pem --key user1_privk.pem
 
-echo ""
