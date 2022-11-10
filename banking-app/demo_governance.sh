@@ -23,9 +23,13 @@ create_certificate(){
 JSON
 }
 
+# create user0 certificate
 create_certificate user0
+
+# create user1 certificate
 create_certificate user1
 
+# copy vote response file
 cp ../../vote/* ./
 
 # Add users
@@ -51,8 +55,14 @@ echo $proposal0_id
 /opt/ccf/bin/scurl.sh https://127.0.0.1:8000/gov/proposals/$proposal1_id/ballots --cacert service_cert.pem --signing-key member2_privk.pem --signing-cert member2_cert.pem --data-binary @vote_accept.json -H "content-type: application/json" | jq
 
 
-# "Display Network Information"
+# "Display network ccf version"
 curl "https://127.0.0.1:8000/node/version" --cacert service_cert.pem
+
+# "Display network details"
 curl "https://127.0.0.1:8000/node/network" --cacert service_cert.pem
+
+# "Display network nodes details"
 curl "https://127.0.0.1:8000/node/network/nodes" --cacert service_cert.pem
+
+# "Display network members details"
 curl "https://127.0.0.1:8000/gov/members" --cacert service_cert.pem
