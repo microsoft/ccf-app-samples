@@ -77,16 +77,15 @@ There are several approaches to test your application
   - Support both ccf network types [virtual - enclave (TEE hardware)]
   - Governance steps required to deploy your app, initialize, and start the network
 
-- [Linux Machine](#testing-using-linux-machine)
+- [Azure Virtual Machine (Linux)](#testing-using-azure-virtual-machine)
 
   - Support both ccf network types [virtual - enclave (TEE hardware)]
   - Governance steps required to deploy your app, initialize, and start the network
 
-- [Azure Managed CCF Service](#testing-using-azure-managed-ccf-serivce-mccf)
+- [Azure Managed CCF](#testing-using-azure-managed-ccf)
 
-  - Using Azure MCCF service, will Create [a Managed CCF network](https://techcommunity.microsoft.com/t5/azure-confidential-computing/microsoft-introduces-preview-of-azure-managed-confidential/ba-p/3648986) which is (initialized, contains an active member, and In Open State)
   - Support only a ccf network in enclave mode (TEE hardware)
-  - No governance steps required to start up your network, but you need to use governance to propose an application
+  - No governance steps required to start up your network, but you need to use governance to propose your application
 
 #### Testing: Using Sandbox.sh
 
@@ -149,9 +148,11 @@ Now, a network is started with one node and one member, you need to execute the 
 
 To start or join new node you need some configs, The configuration for each CCF node must be contained in a single JSON configuration file like [cchost_config_enclave_js.json - cchost_config_virtual_js.json], [CCF node config file documentation](https://microsoft.github.io/CCF/main/operations/configuration.html)
 
-#### Testing: Using Linux Machine
+#### Testing: Using Azure Virtual Machine
 
-To Start a test CCF network on a VM, it requires [CCF to be intalled](https://microsoft.github.io/CCF/main/build_apps/install_bin.html)
+To Start a test CCF network on a VM, it requires [CCF to be intalled](https://microsoft.github.io/CCF/main/build_apps/install_bin.html).
+
+To create a ready CCF VM please check [Creating a Virtual Machine in Azure to run CCF](https://github.com/microsoft/CCF/blob/main/getting_started/azure_vm/README.md) 
 
 Start the CCF network using the cchost in enclave mode
 
@@ -181,12 +182,12 @@ Now, a network is started with one node and one member, you need to execute the 
 
 To start or join new node you need some configs, The configuration for each CCF node must be contained in a single JSON configuration file like [cchost_config_enclave_js.json - cchost_config_virtual_js.json], [ CCF node config file documentation](https://microsoft.github.io/CCF/main/operations/configuration.html)
 
-#### Testing: Using Azure Managed CCF Serivce ([MCCF](https://techcommunity.microsoft.com/t5/azure-confidential-computing/microsoft-introduces-preview-of-azure-managed-confidential/ba-p/3648986))
+#### Testing: Using [Azure Managed CCF](https://techcommunity.microsoft.com/t5/azure-confidential-computing/microsoft-introduces-preview-of-azure-managed-confidential/ba-p/3648986)
 
-To test you application using MCCF, you can create Azure Managed CCF Serivce on your subscription, the service will create a CCF network which is (initialized, Active member, and In Open State)
+To test you application using Managed CCF, you can create Azure Managed CCF serivce on your subscription, the service will create a ready CCF network
 
-- First, create the network's first member certificate, please check [Certificates generation](https://microsoft.github.io/CCF/release/3.x/governance/adding_member.htmlhttps://microsoft.github.io/CCF/release/3.x/governance/adding_member.html)
-- Create a new Azure Managed CCF Serivce (first member certificate required as input)
+- First, create the network's initial member certificate, please check [Certificates generation](https://microsoft.github.io/CCF/release/3.x/governance/adding_member.html)
+- Create a new Azure Managed CCF serivce (the initial member certificate required as input)
 - Build the application and [create a deployment proposal](#build-application)
 - Deploy the application proposal, [using governance calls](#network-governance)
 - Create and submit [an add users proposal](#new-user-proposal)
@@ -198,6 +199,8 @@ To check samples on how to test your application endpoints, please check these r
 - [Banking Application](https://github.com/microsoft/ccf-app-samples/tree/main/banking-app)
 - [Template Application](https://github.com/microsoft/ccf-app-template)
 
+
+---
 ## <img src="https://user-images.githubusercontent.com/42961061/191275172-24269bf0-bb9c-402d-8900-2d589582a781.png" height=40px></img> C++ Applications
 
 CCF apps can also be written in C++. This offers better performance than JavaScript apps but requires a compilation step and a restart of the CCF node for deployment. please check [ccf-app-template](https://github.com/microsoft/ccf-app-template) repository.
@@ -222,7 +225,7 @@ Members vote to accept or reject the proposal
 ```
 
 ```
-Note: Members and users, certificates and keys, must be generated before starting a CCF network, please check [Certificates generation](https://microsoft.github.io/CCF/release/3.x/governance/adding_member.htmlhttps://microsoft.github.io/CCF/release/3.x/governance/adding_member.html).
+Note: The initial member's certificate and private key, must be generated before starting a CCF network, please check [Certificates generation](https://microsoft.github.io/CCF/release/3.x/governance/adding_member.html).
 ```
 
 ### Network Governance: Activating network members
@@ -247,7 +250,7 @@ cat request.json
       "name": "set_member",
       "args": {
         "cert": "member_cert",
-        "encryption_pub_key": "member_encryption_pub_key"
+        "encryption_pub_key": <member_encryption_pub_key>
       }
     }
   ]
@@ -269,7 +272,7 @@ First, the identities of trusted users should be generated,see [Generating Membe
     {
       "name": "set_user",
       "args": {
-        "cert": "user_cert"
+        "cert": <user_cert>
       }
     }
   ]
@@ -289,8 +292,8 @@ The native format for JavaScript applications in CCF is a [JavaScript applicatio
       "name": "set_js_app",
       "args": {
         "bundle": {
-          "metadata": { "endpoints": {} },
-          "modules": []
+          "metadata": { "endpoints": {<endpoints>} },
+          "modules": [<modules>]
         }
       }
     }
@@ -314,7 +317,7 @@ It is only then that users are able to execute transactions on the deployed appl
     {
       "name": "transition_service_to_open",
       "args": {
-        "next_service_identity": "service_cert"
+        "next_service_identity": <service_cert>
       }
     }
   ]
