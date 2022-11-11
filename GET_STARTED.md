@@ -224,6 +224,7 @@ Or, for an SGX-enabled application (unavailable in development container): `$ /o
 ### Run C++ app: Using Docker
 
 It is possible to build a runtime image of the C++ application via docker:
+
 ```bash
 $ docker build -t ccf-app-template:cpp-enclave -f docker/ccf_app_cpp.enclave .
 $ docker run --device /dev/sgx_enclave:/dev/sgx_enclave --device /dev/sgx_provision:/dev/sgx_provision -v /dev/sgx:/dev/sgx ccf-app-template:cpp-enclave
