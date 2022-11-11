@@ -25,14 +25,14 @@ Applications can be written in
 
 - VS Code Dev Container [![Open in VSCode](https://img.shields.io/static/v1?label=Open+in&message=VSCode&logo=visualstudiocode&color=007ACC&logoColor=007ACC&labelColor=2C2C32)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/microsoft/ccf-app-samples)
 - Github codespace: [![Github codespace](https://img.shields.io/static/v1?label=Open+in&message=GitHub+codespace&logo=github&color=2F363D&logoColor=white&labelColor=2C2C32)](https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=496290904&machine=basicLinux32gb&devcontainer_path=.devcontainer.json&location=WestEurope)
-- Linux Machine ([Create a VM](https://learn.microsoft.com/en-us/azure/confidential-computing/quick-create-portal) and [Install ccf](https://microsoft.github.io/CCF/main/build_apps/install_bin.html))
+- Virtual Machine ([Creating a Virtual Machine in Azure to run CCF](https://github.com/microsoft/CCF/blob/main/getting_started/azure_vm/README.md))
 
 ## <img src="https://user-images.githubusercontent.com/42961061/191275583-88e00f94-73aa-4d66-9786-047987eb9fa9.png" height=40px /> (JavaScript/Typescript) Applications
 
-To test a ccf application you need go through the following steps:
+CCF apps can also be written in JavaScript or Typescript, To test a ccf application you need go through the following steps:
 
 - Start a CCF Network with at least one node
-- Initialize the CCF network with at least one (active member - user), this is done through [Network Governance Proposals](https://microsoft.github.io/CCF/main/governance/proposals.html).
+- Initialize the CCF network with at least one (active member - user), this can be done through [Network Governance Proposals](https://microsoft.github.io/CCF/main/governance/proposals.html).
 - Create an application [deployment proposal](https://microsoft.github.io/CCF/main/build_apps/js_app_bundle.html)
 - Submit the app deployment proposal to the network and all members accept it through voting. This is a part of [Network Governance](https://microsoft.github.io/CCF/main/governance/proposals.html).
 - Open the CCF network for users
