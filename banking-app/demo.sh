@@ -1,5 +1,5 @@
 #!/bin/bash
-set -euox pipefail
+set -euo pipefail
 
 # Run `make start-host` in another terminal before running this script
 # To build and start a ccf network and automatically deploy your application on it.
@@ -10,7 +10,9 @@ cd workspace/sandbox_common
 
 # Run network governance script to add users to the network
 # In this sample Members: represent the Banks, and Users are the customers
-../.././demo_governance.sh
+echo -e "\n <--Run governance demo--> \n"
+../../demo_governance.sh
 
 # Run application test scenario
-../.././demo_application.sh
+echo -e "\n\n <--Run the application's endpoints access demo--> \n"
+../../demo_application.sh
