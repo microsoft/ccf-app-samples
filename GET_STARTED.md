@@ -152,7 +152,7 @@ To start or join new node you need some configs, The configuration for each CCF 
 
 To Start a test CCF network on a VM, it requires [CCF to be intalled](https://microsoft.github.io/CCF/main/build_apps/install_bin.html).
 
-To create a ready CCF VM please check [Creating a Virtual Machine in Azure to run CCF](https://github.com/microsoft/CCF/blob/main/getting_started/azure_vm/README.md) 
+To create a ready CCF VM please check [Creating a Virtual Machine in Azure to run CCF](https://github.com/microsoft/CCF/blob/main/getting_started/azure_vm/README.md)
 
 Start the CCF network using the cchost in enclave mode
 
@@ -199,8 +199,8 @@ To check samples on how to test your application endpoints, please check these r
 - [Banking Application](https://github.com/microsoft/ccf-app-samples/tree/main/banking-app)
 - [Template Application](https://github.com/microsoft/ccf-app-template)
 
-
 ---
+
 ## <img src="https://user-images.githubusercontent.com/42961061/191275172-24269bf0-bb9c-402d-8900-2d589582a781.png" height=40px></img> C++ Applications
 
 CCF apps can also be written in C++. This offers better performance than JavaScript apps but requires a compilation step and a restart of the CCF node for deployment. please check [ccf-app-template](https://github.com/microsoft/ccf-app-template) repository.
