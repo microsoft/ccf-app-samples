@@ -19,19 +19,19 @@ parent_path=`dirname $PWD`
 
 echo "-- Generating image for $setup_type" container.
 
-mkdir -p $app_path/app_certificates
+mkdir -p $app_path/workspace/docker_certificates
 
 echo "-- Copying host config file to be used by docker in current directory"
-cp $parent_path/config/cchost_config_${setup_type}_js.json $app_path/app_certificates/.
+cp $parent_path/config/cchost_config_${setup_type}_js.json $app_path/workspace/docker_certificates/.
 
 echo "-- generating member0 certificates"
 # This is directly related to the member described in host config file 
-cd $app_path/app_certificates
+cd $app_path/workspace/docker_certificates
 /opt/ccf/bin/keygenerator.sh --name member0 --gen-enc-key
-cd ..
+cd $app_path
 
 echo "-- Running docker build command"
 docker build -t $app_name:${setup_type} -f $parent_path/docker/ccf_app_js.${setup_type} .
 
 echo "-- Removing host config files copies"
-rm $app_path/app_certificates/cchost_config_${setup_type}_js.json
+rm $app_path/workspace/docker_certificates/cchost_config_${setup_type}_js.json

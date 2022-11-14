@@ -156,7 +156,7 @@ Both make targets execute the same script: `build_image.sh`. This script expects
 
 The script performs the following:
 
-- create an `app_certificates` folder to store the needed certificates
+- create a `workspace/docker_certificates` folder to store the needed certificates
 - copy the configuration files for the images `../config/cchost_config_{setupType}_js.json`
 - generate member0 certificates (needed to start CCF network)
 - Build the container image
