@@ -43,11 +43,25 @@ const modules = allFiles.map(function (filePath) {
 });
 
 const bundlePath = join(args[0], "bundle.json");
+const appRegPath = join(args[0], "set_js_app.json");
 const bundle = {
   metadata: metadata,
   modules: modules,
 };
+const app_reg = {
+  actions: [
+    {
+      name: "set_js_app",
+      args: {
+        bundle: bundle,
+        disable_bytecode_cache: false,
+      },
+    },
+  ],
+};
+
 console.log(
   `Writing bundle containing ${modules.length} modules to ${bundlePath}`
 );
 writeFileSync(bundlePath, JSON.stringify(bundle));
+writeFileSync(appRegPath, JSON.stringify(app_reg));
