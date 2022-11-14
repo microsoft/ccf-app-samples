@@ -5,7 +5,7 @@ This is a sample application of logging app that takes advantage of CCF's abilit
 ## Use case
 
 You need to build a logging system that can be checked by auditors.
-The amount of disposed data should be minimized.
+The amount of data exposed should be minimized.
 
 ## What the app does?
 
