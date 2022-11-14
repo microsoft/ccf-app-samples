@@ -160,4 +160,4 @@ The script performs the following:
 - Build the container image
 - remove the config files' copies
 
-From this point, you can run your image and start configuring your CCF network.
+From this point, you can run your image and start governance actions on your CCF network.
