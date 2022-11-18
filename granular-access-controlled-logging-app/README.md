@@ -19,7 +19,7 @@ This application provides REST-ish API with following endpoints:
 - PUT: /users/{user_id}/permission
   - Set permission for a user (auditor)
   - It can be called by members
-  - Example request body 0: {startSeqno: 0, endSeqno: 100, startLogId: 0: endLogId: 10}
+  - Example request body 0: {startSeqNo: 0, endSeqNo: 100, startLogId: 0: endLogId: 10}
   - Example request body 1: {allowAnySeqNo: true, allowAnyLogId: true}
   - Example request body 2: {allowOnlyLatestSeqNo: true, allowAnyLogId: true}
 - GET: /log/

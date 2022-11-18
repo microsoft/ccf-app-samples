@@ -1,6 +1,16 @@
 import * as ccfapp from "@microsoft/ccf-app";
 import { ccf } from "@microsoft/ccf-app/global";
 
+function parseRequestQuery(request: ccfapp.Request<any>): any {
+  const elements = request.query.split("&");
+  const obj = {};
+  for (const kv of elements) {
+    const [k, v] = kv.split("=");
+    obj[k] = v;
+  }
+  return obj;
+}
+
 interface Caller {
   id: string;
 }
@@ -33,13 +43,28 @@ function isMember(memberId: string): boolean {
   return membersCerts.has(ccf.strToBuf(memberId));
 }
 
+interface Range {
+  start?: number
+  end?: number // TODO: rename to last
+}
+
+type LogIdAccessType = "ANY" | "SPECIFIED_RANGE";
+interface LogIdAccess {
+  type: LogIdAccessType
+  // Only for "PECIFIED_RANGE"
+  range?: Range
+}
+
+type SeqNoAccessType = "ANY" | "ONLY_LATEST" | "SPECIFIED_RANGE";
+interface SeqNoAccess {
+  type: SeqNoAccessType
+  // Only for "SPECIFIED_RANGE"
+  range?: Range
+}
+
 interface PermissionItem {
-  allowAnySeqNo: boolean;
-  allowAnyLogId: boolean;
-  startSeqno?: number;
-  endSeqno?: number;
-  startLogId?: number;
-  endLogId?: number;
+  logId: LogIdAccess;
+  seqNo: SeqNoAccess;
 }
 
 const permissionTableName = "log_access_permissions";
@@ -49,8 +74,9 @@ const userIdToPermission = ccfapp.typedKv(
   ccfapp.json<PermissionItem>()
 );
 
-function checkUserAccess(userId: string, logId: number): boolean {
-  // TODO: handle historical query
+function checkUserAccess(userId: string, logId: number, seqNo?: number): boolean {
+  // If seqNo is not given, it returns whether if the user has access to the latest sequence number. 
+  // TODO: improve if statments 
 
   // Access is not allowed if perssion is not set explicitly.
   if (!userIdToPermission.has(userId)) {
@@ -58,13 +84,28 @@ function checkUserAccess(userId: string, logId: number): boolean {
   }
 
   const permission = userIdToPermission.get(userId);
-  if (permission.allowAnyLogId) {
+  if (permission.seqNo.type === "ONLY_LATEST" && seqNo) {
+    return false;
+  }
+  else if (permission.seqNo.type === "SPECIFIED_RANGE") {
+    if (
+      seqNo === undefined ||
+      (permission.seqNo.range.start === undefined &&
+        permission.seqNo.range.end === undefined) ||
+      (permission.seqNo.range.start !== undefined && permission.seqNo.range.start > seqNo) ||
+      (permission.seqNo.range.end !== undefined && permission.seqNo.range.end < seqNo)
+    ) {
+      return false;
+    }
+  }
+
+  if (permission.logId.type === "ANY") {
     return true;
   } else if (
-    (permission.startLogId === undefined &&
-      permission.endLogId === undefined) ||
-    (permission.startLogId !== undefined && permission.startLogId > logId) ||
-    (permission.endLogId !== undefined && permission.endLogId < logId)
+    (permission.logId.range.start === undefined &&
+      permission.logId.range.end === undefined) ||
+    (permission.logId.range.start !== undefined && permission.logId.range.start > logId) ||
+    (permission.logId.range.end !== undefined && permission.logId.range.end < logId)
   ) {
     return false;
   } else {
@@ -82,47 +123,101 @@ interface LogEntry extends LogItem {
 
 const logMap = ccfapp.typedKv("log", ccfapp.uint32, ccfapp.json<LogItem>());
 
-export function getLogItem(request: ccfapp.Request): ccfapp.Response<LogItem> {
-  const id = parseInt(request.query.split("=")[1]);
+export function getLogItem(request: ccfapp.Request): ccfapp.Response<LogItem | string> {
+  const parsedQuery = parseRequestQuery(request);
 
+  const logId = parseInt(parsedQuery.log_id);
+  if (logId === NaN) {
+    return {
+      statusCode: 400
+    }
+  }
+  const parsedSeqNo = parseInt(parsedQuery.seq_no);
+  const seqNo = parsedSeqNo ? parsedSeqNo : undefined;
   const callerId = getCallerId(request);
   if (
-    !(isMember(callerId) || (isUser(callerId) && checkUserAccess(callerId, id)))
+    !(isMember(callerId) || (isUser(callerId) && checkUserAccess(callerId, logId, seqNo)))
   ) {
     return {
       statusCode: 403,
     };
   }
-  if (!logMap.has(id)) {
+  if (!logMap.has(logId)) {
     return {
       statusCode: 404,
     };
   }
-  return {
-    body: logMap.get(id),
-  };
+  if (!seqNo) {
+    return {
+      body: logMap.get(logId),
+    };
+  }
+  else {
+    const rangeBegin = seqNo;
+    const rangeEnd = seqNo;
+
+    // Make hundle based on https://github.com/microsoft/CCF/blob/main/samples/apps/logging/js/src/logging.js
+    // Compute a deterministic handle for the range request.
+    // Note: Instead of ccf.digest, an equivalent of std::hash should be used.
+    const makeHandle = (begin: number, end: number): number => {
+      const cacheKey = `${begin}-${end}`;
+      const digest = ccf.digest("SHA-256", ccf.strToBuf(cacheKey));
+      const handle = new DataView(digest).getUint32(0);
+      return handle;
+    };
+    const handle = makeHandle(rangeBegin, rangeEnd);
+
+    // Fetch the requested range
+    const expirySeconds = 1800;
+    const states = ccf.historical.getStateRange(
+      handle,
+      rangeBegin,
+      rangeEnd,
+      expirySeconds
+    );
+    if (states === null) {
+      return {
+        statusCode: 202,
+        headers: {
+          "retry-after": "1",
+        },
+        body: `Historical transactions from ${rangeBegin} to ${rangeEnd} are not yet available, fetching now`,
+      };
+    }
+    const firstKv = states[0].kv;
+    const logMapHistorical = ccfapp.typedKv(
+      firstKv["log"],
+      ccfapp.uint32,
+      ccfapp.json<LogItem>()
+    );
+    return {
+      body: logMapHistorical.get(logId),
+    };
+  }
 }
 
 export function setLogItem(request: ccfapp.Request<LogItem>): ccfapp.Response {
-  const id = parseInt(request.query.split("=")[1]);
-  logMap.set(id, request.body.json());
+  const parsedQuery = parseRequestQuery(request);
+  const logId = parseInt(parsedQuery.log_id);
+  logMap.set(logId, request.body.json());
   return {};
 }
 
-function validatePermission(permission: unknown): boolean {
+function validatePermission(permission: any): boolean {
   // TODO: improve check
   const permissionPropertyKeys = new Set([
     "allowAnySeqNo",
     "allowAnyLogId",
-    "startSeqno",
-    "endSeqno",
+    "startSeqNo",
+    "endSeqNo",
     "startLogId",
     "endLogId",
+    "allowOnlyLatestSeqNo",
   ]);
-  const booleanKeys = new Set(["allowAnySeqNo", "allowAnyLogId"]);
+  const booleanKeys = new Set(["allowAnySeqNo", "allowAnyLogId", "allowOnlyLatestSeqNo"]);
   const numberKeys = new Set([
-    "startSeqno",
-    "endSeqno",
+    "startSeqNo",
+    "endSeqNo",
     "startLogId",
     "endLogId",
   ]);
@@ -141,14 +236,14 @@ function validatePermission(permission: unknown): boolean {
     }
   }
 
-  const p = permission as PermissionItem;
+  const p = permission;
   if (p.allowAnyLogId === true) {
     if (p.startLogId || p.endLogId) {
       return false;
     }
   }
-  if (p.allowAnySeqNo === true) {
-    if (p.startSeqno || p.endSeqno) {
+  if (p.allowAnySeqNo === true || p.allowOnlyLatestSeqNo) {
+    if (p.startSeqNo || p.endSeqNo) {
       return false;
     }
   }
@@ -158,13 +253,35 @@ function validatePermission(permission: unknown): boolean {
 
 function convertRequestBodyToPermissionItem(body: any) {
   // `body` should be validated with validatePermission() before calling this function
-  let permission = Object.assign({}, body);
-  permission.allowAnyLogId = permission.allowAnyLogId
-    ? permission.allowAnyLogId
-    : false;
-  permission.allowAnySeqNo = permission.allowAnySeqNo
-    ? permission.allowAnySeqNo
-    : false;
+  let permission: PermissionItem = {
+    logId: {
+      type: "SPECIFIED_RANGE"
+    },
+    seqNo: {
+      type: "SPECIFIED_RANGE"
+    }
+  };
+  permission.logId = {
+    type: body.allowAnyLogId ? "ANY" : "SPECIFIED_RANGE",
+    range: !body.allowAnyLogId ? {
+      start: body.startLogId,
+      end: body.endLogId
+    } : undefined
+  };
+
+  if (body.allowAnySeqNo) {
+    permission.seqNo.type = "ANY";
+  }
+  else if (body.allowOnlyLatestSeqNo) {
+    permission.seqNo.type = "ONLY_LATEST";
+  }
+  else {
+    // type: "SPECIFIED_RANGE"
+    permission.seqNo.range = {
+      start: body.startSeqNo,
+      end: body.endSeqNo
+    }
+  }
   return permission;
 }
 
