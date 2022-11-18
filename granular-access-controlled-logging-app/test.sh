@@ -47,7 +47,10 @@ user0_id=$(openssl x509 -in "user0_cert.pem" -noout -fingerprint -sha256 | cut -
 echo "Test start"
 
 echo "--- Normal Usage without historical queries ---"
-check_eq "Post item0" "200" "$(curl $server/app/log?log_id=0 -X POST $(cert_arg "member0") -H "Content-Type: application/json" --data-binary '{ "message": "hello" }' $only_status_code)"
+res_post_item0=$(curl $server/app/log?log_id=0 -X POST $(cert_arg "member0") -H "Content-Type: application/json" --data-binary '{ "message": "hello" }' -i --silent)
+check_eq "Posting item0 returns 200" "200" "$(echo "$res_post_item0" | grep -i HTTP/1.1 | awk '{print $2}' | sed -e 's/\r//g')"
+transaction_id_for_post_item0=$(echo "$res_post_item0" | grep -i x-ms-ccf-transaction-id | awk '{print $2}' | sed -e 's/\r//g')
+seqno_for_post_item0=$(echo $transaction_id_for_post_item0 | awk '{split($0,a,"."); print a[2]}')
 check_eq "Post item10" "200" "$(curl $server/app/log?log_id=10 -X POST $(cert_arg "member0") -H "Content-Type: application/json" --data-binary '{ "message": "hello 10" }' $only_status_code)"
 check_eq "Try to get item0, but should fail" "403" "$(curl $server/app/log?log_id=0 -X GET $(cert_arg "user0") $only_status_code)"
 check_eq "Allow user0 to access items with ID from 0 to 9" "204" "$(curl $server/app/users/$user0_id/permission -X POST $(cert_arg "member0") -H "Content-Type: application/json" --data-binary '{"startLogId": 0, "endLogId": 9, "allowOnlyLatestSeqNo": true}' $only_status_code)"
@@ -58,20 +61,19 @@ check_eq "Try to get item0, but should fail" "403" "$(curl $server/app/log?log_i
 
 echo "--- Normal Usage with historical queries ---"
 transaction_id_for_updating_item0=$(curl $server/app/log?log_id=0 -X POST $(cert_arg "member0") -H "Content-Type: application/json" --data-binary '{ "message": "updated hello" }' -i --silent | grep -i x-ms-ccf-transaction-id | awk '{print $2}' | sed -e 's/\r//g')
-# echo $transaction_id_for_updating_item0 # output: 2.11
+# echo $transaction_id_for_updating_item0 # example output: 2.11
 seqno_for_updating_item0=$(echo $transaction_id_for_updating_item0 | awk '{split($0,a,"."); print a[2]}')
-# echo $seqno_for_updating_item0 # output: 11
-# end_seq_no=$((seqno_for_updating_item0-1))
+# echo $seqno_for_updating_item0 # example output: 11
 end_seq_no=$((seqno_for_updating_item0 - 1))
-echo $end_seq_no
+# echo $end_seq_no #example output: 10
 check_eq "Allow user0 to access items with seqno from 0 to $end_seq_no" "204" "$(curl $server/app/users/$user0_id/permission -X POST $(cert_arg "member0") -H "Content-Type: application/json" --data-binary "{\"allowAnyLogId\": true, \"startSeqNo\": 0, \"endSeqNo\": $end_seq_no}" $only_status_code)"
 check_eq "Try to get item0, but should fail" "403" "$(curl $server/app/log?log_id=0 -X GET $(cert_arg "user0") $only_status_code)"
 echo "Waiting for the historical query to be available..."
-while [ "200" != "$(curl "$server/app/log?log_id=0&seq_no=$end_seq_no" -X GET $(cert_arg "user0") $only_status_code)" ]
+while [ "200" != "$(curl "$server/app/log?log_id=0&seq_no=$seqno_for_post_item0" -X GET $(cert_arg "user0") $only_status_code)" ]
 do
     sleep 1
 done
-check_eq "Get item0 with seqno=$end_seq_no (old contents)" '{"message":"hello"}' "$(curl "$server/app/log?log_id=0&seq_no=$end_seq_no" -X GET $(cert_arg "user0") --silent)"
+check_eq "Get item0 with seqno=$seqno_for_post_item0 (old contents)" '{"message":"hello"}' "$(curl "$server/app/log?log_id=0&seq_no=$seqno_for_post_item0" -X GET $(cert_arg "user0") --silent)"
 
 echo "OK"
 kill -9 $sandbox_pid
