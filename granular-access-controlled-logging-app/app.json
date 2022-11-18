@@ -5,7 +5,7 @@
         "js_module": "endpoints/log.js",
         "js_function": "getLogItem",
         "forwarding_required": "always",
-        "authn_policies": ["user_cert"],
+        "authn_policies": ["user_cert", "member_cert"],
         "mode": "readonly",
         "openapi": {
           "responses": {
@@ -34,7 +34,7 @@
         "js_module": "endpoints/log.js",
         "js_function": "setLogItem",
         "forwarding_required": "always",
-        "authn_policies": ["user_cert"],
+        "authn_policies": ["member_cert"],
         "mode": "readwrite",
         "openapi": {
           "responses": {
@@ -65,35 +65,17 @@
         }
       }
     },
-    "/log/all": {
-      "get": {
+    "/users/{user_id}/permission": {
+      "post": {
         "js_module": "endpoints/log.js",
-        "js_function": "getAllLogItems",
+        "js_function": "setUserPermission",
         "forwarding_required": "always",
-        "authn_policies": ["user_cert"],
-        "mode": "readonly",
+        "authn_policies": ["member_cert"],
+        "mode": "readwrite",
         "openapi": {
           "responses": {
-            "200": {
-              "description": "Ok",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "array",
-                    "items": {
-                      "properties": {
-                        "id": {
-                          "type": "number"
-                        },
-                        "msg": {
-                          "type": "string"
-                        }
-                      },
-                      "type": "object"
-                    }
-                  }
-                }
-              }
+            "204": {
+              "description": "Ok"
             }
           }
         }
