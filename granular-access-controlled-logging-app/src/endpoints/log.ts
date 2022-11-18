@@ -44,22 +44,22 @@ function isMember(memberId: string): boolean {
 }
 
 interface Range {
-  start?: number
-  end?: number // TODO: rename to last
+  start?: number;
+  end?: number; // TODO: rename to last
 }
 
 type LogIdAccessType = "ANY" | "SPECIFIED_RANGE";
 interface LogIdAccess {
-  type: LogIdAccessType
+  type: LogIdAccessType;
   // Only for "PECIFIED_RANGE"
-  range?: Range
+  range?: Range;
 }
 
 type SeqNoAccessType = "ANY" | "ONLY_LATEST" | "SPECIFIED_RANGE";
 interface SeqNoAccess {
-  type: SeqNoAccessType
+  type: SeqNoAccessType;
   // Only for "SPECIFIED_RANGE"
-  range?: Range
+  range?: Range;
 }
 
 interface PermissionItem {
@@ -74,9 +74,13 @@ const userIdToPermission = ccfapp.typedKv(
   ccfapp.json<PermissionItem>()
 );
 
-function checkUserAccess(userId: string, logId: number, seqNo?: number): boolean {
-  // If seqNo is not given, it returns whether if the user has access to the latest sequence number. 
-  // TODO: improve if statments 
+function checkUserAccess(
+  userId: string,
+  logId: number,
+  seqNo?: number
+): boolean {
+  // If seqNo is not given, it returns whether if the user has access to the latest sequence number.
+  // TODO: improve if statments
 
   // Access is not allowed if perssion is not set explicitly.
   if (!userIdToPermission.has(userId)) {
@@ -86,14 +90,15 @@ function checkUserAccess(userId: string, logId: number, seqNo?: number): boolean
   const permission = userIdToPermission.get(userId);
   if (permission.seqNo.type === "ONLY_LATEST" && seqNo) {
     return false;
-  }
-  else if (permission.seqNo.type === "SPECIFIED_RANGE") {
+  } else if (permission.seqNo.type === "SPECIFIED_RANGE") {
     if (
       seqNo === undefined ||
       (permission.seqNo.range.start === undefined &&
         permission.seqNo.range.end === undefined) ||
-      (permission.seqNo.range.start !== undefined && permission.seqNo.range.start > seqNo) ||
-      (permission.seqNo.range.end !== undefined && permission.seqNo.range.end < seqNo)
+      (permission.seqNo.range.start !== undefined &&
+        permission.seqNo.range.start > seqNo) ||
+      (permission.seqNo.range.end !== undefined &&
+        permission.seqNo.range.end < seqNo)
     ) {
       return false;
     }
@@ -104,8 +109,10 @@ function checkUserAccess(userId: string, logId: number, seqNo?: number): boolean
   } else if (
     (permission.logId.range.start === undefined &&
       permission.logId.range.end === undefined) ||
-    (permission.logId.range.start !== undefined && permission.logId.range.start > logId) ||
-    (permission.logId.range.end !== undefined && permission.logId.range.end < logId)
+    (permission.logId.range.start !== undefined &&
+      permission.logId.range.start > logId) ||
+    (permission.logId.range.end !== undefined &&
+      permission.logId.range.end < logId)
   ) {
     return false;
   } else {
@@ -123,20 +130,25 @@ interface LogEntry extends LogItem {
 
 const logMap = ccfapp.typedKv("log", ccfapp.uint32, ccfapp.json<LogItem>());
 
-export function getLogItem(request: ccfapp.Request): ccfapp.Response<LogItem | string> {
+export function getLogItem(
+  request: ccfapp.Request
+): ccfapp.Response<LogItem | string> {
   const parsedQuery = parseRequestQuery(request);
 
   const logId = parseInt(parsedQuery.log_id);
   if (logId === NaN) {
     return {
-      statusCode: 400
-    }
+      statusCode: 400,
+    };
   }
   const parsedSeqNo = parseInt(parsedQuery.seq_no);
   const seqNo = parsedSeqNo ? parsedSeqNo : undefined;
   const callerId = getCallerId(request);
   if (
-    !(isMember(callerId) || (isUser(callerId) && checkUserAccess(callerId, logId, seqNo)))
+    !(
+      isMember(callerId) ||
+      (isUser(callerId) && checkUserAccess(callerId, logId, seqNo))
+    )
   ) {
     return {
       statusCode: 403,
@@ -151,8 +163,7 @@ export function getLogItem(request: ccfapp.Request): ccfapp.Response<LogItem | s
     return {
       body: logMap.get(logId),
     };
-  }
-  else {
+  } else {
     const rangeBegin = seqNo;
     const rangeEnd = seqNo;
 
@@ -214,7 +225,11 @@ function validatePermission(permission: any): boolean {
     "endLogId",
     "allowOnlyLatestSeqNo",
   ]);
-  const booleanKeys = new Set(["allowAnySeqNo", "allowAnyLogId", "allowOnlyLatestSeqNo"]);
+  const booleanKeys = new Set([
+    "allowAnySeqNo",
+    "allowAnyLogId",
+    "allowOnlyLatestSeqNo",
+  ]);
   const numberKeys = new Set([
     "startSeqNo",
     "endSeqNo",
@@ -255,32 +270,32 @@ function convertRequestBodyToPermissionItem(body: any) {
   // `body` should be validated with validatePermission() before calling this function
   let permission: PermissionItem = {
     logId: {
-      type: "SPECIFIED_RANGE"
+      type: "SPECIFIED_RANGE",
     },
     seqNo: {
-      type: "SPECIFIED_RANGE"
-    }
+      type: "SPECIFIED_RANGE",
+    },
   };
   permission.logId = {
     type: body.allowAnyLogId ? "ANY" : "SPECIFIED_RANGE",
-    range: !body.allowAnyLogId ? {
-      start: body.startLogId,
-      end: body.endLogId
-    } : undefined
+    range: !body.allowAnyLogId
+      ? {
+          start: body.startLogId,
+          end: body.endLogId,
+        }
+      : undefined,
   };
 
   if (body.allowAnySeqNo) {
     permission.seqNo.type = "ANY";
-  }
-  else if (body.allowOnlyLatestSeqNo) {
+  } else if (body.allowOnlyLatestSeqNo) {
     permission.seqNo.type = "ONLY_LATEST";
-  }
-  else {
+  } else {
     // type: "SPECIFIED_RANGE"
     permission.seqNo.range = {
       start: body.startSeqNo,
-      end: body.endSeqNo
-    }
+      end: body.endSeqNo,
+    };
   }
   return permission;
 }
