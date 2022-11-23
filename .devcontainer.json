@@ -6,7 +6,7 @@
     "vsls-contrib.codetour",
     "esbenp.prettier-vscode"
   ],
-  "postCreateCommand": "npm install --prefix=banking-app && npm install --prefix=granular-access-controlled-logging-app",
+  "postCreateCommand": "npm install --prefix=banking-app && npm install --prefix=auditable-logging-app",
   "features": {
     "ghcr.io/devcontainers/features/docker-from-docker:1": {
       "version": "20.10.8"

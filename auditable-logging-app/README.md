@@ -1,4 +1,4 @@
-# Granular access controlled logging application
+# Auditable logging application
 
 This is a sample application of logging app that takes advantage of CCF's ability for granular access control.
 
@@ -43,7 +43,7 @@ There are multiple reasons that you want to use CCF for the logging system that 
 The logging application also has a suite of tests that run in a sandbox; please ensure you do not have an existing sandbox running.
 
 ```bash
-cd granular-access-controlled-logging-app
+cd auditable-logging-app
 make test
 ```
 
@@ -52,7 +52,7 @@ make test
 You can always run the sandbox yourself: -
 
 ```bash
-$ cd granular-access-controlled-logging-app
+$ cd auditable-logging-app
 # The dev container would have installed your npm packages for you
 npm run build # Transpile the TypeScript code to JavaScript and copy the output to `dist` directory
 initial_number_of_members=3
