@@ -19,9 +19,11 @@ test: ## 🧪 Test the Banking Application
 # NOTE: This hack replaces the content of /opt/ccf/bin/resolve.js
 # Run sandbox. Consider 3 members as 3 banks.
 # --constitution-path /workspaces/ccf-app-samples/banking-app/constitutions
+#	#@mkdir -p /opt/ccf/bin/banking-app-constitution
 start-host: build ## 🏃 Start the CCF Sandbox
 	@echo -e "\e[34m$@\e[0m" || true
-	@/opt/ccf/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count 3 --initial-user-count 0 --constitution-path ./constitutions
+	@cp -r ./constitution /opt/ccf/bin
+	@/opt/ccf/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count 3 --initial-user-count 0 --constitution-path /opt/ccf/bin
 
 demo: ## 🎬 Demo the Banking Application
 	@echo -e "\e[34m$@\e[0m" || true
@@ -40,4 +42,7 @@ build-virtual: ## 📦 Build Virtual container image from Dockerfile
 build-enclave: ## 📦 Build Enclave container image from Dockerfile
 	@echo -e "\e[34m$@\e[0m" || true
 	@../build_image.sh enclave
-	
+
+run-virtual: ## 🏃 Start a virtual CCF node in Docker
+	@echo -e "\e[34m$@\e[0m" || true
+	@docker run banking-app:virtual
