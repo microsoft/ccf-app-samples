@@ -66,7 +66,7 @@ do
     sleep 1
 done
 check_eq "Get receipt for transfer" "200" "$(curl $server/app/receipt?transaction_id=$transfer_transaction_id $(cert_arg "user0") $only_status_code)"
-# TODO: verify receipt
+check_eq "Verify receipt" "OK" "$(curl $server/app/receipt?transaction_id=$transfer_transaction_id $(cert_arg "user0") -s | ../../verify_receipt.sh)"
 
 # Test cases for error handling and coner cases
 check_eq "Create account: user0 again" "204" "$(curl $server/app/account/$user0_id/$account_type0 -X PUT $(cert_arg "member0") $only_status_code)"

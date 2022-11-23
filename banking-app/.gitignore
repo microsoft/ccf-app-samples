@@ -1,3 +1,4 @@
 node_modules/
 dist/
-/.venv_ccf_sandbox/
+.venv_ccf_sandbox/
+.venv_ccf_verify_receipt/
