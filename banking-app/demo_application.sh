@@ -31,8 +31,8 @@ do
     sleep 1
 done
 
-# Get the receipt for the transfer
-curl https://127.0.0.1:8000/app/receipt?transaction_id=$transfer_transaction_id --cacert service_cert.pem --key user0_privk.pem --cert user0_cert.pem -s | jq
+# Verify receipt
+curl https://127.0.0.1:8000/app/receipt?transaction_id=$transfer_transaction_id --cacert service_cert.pem --key user0_privk.pem --cert user0_cert.pem -s | ../../verify_receipt.sh
 
 # Check user0 balance
 curl https://127.0.0.1:8000/app/balance/$account_type0 -X GET --cacert service_cert.pem --cert user0_cert.pem --key user0_privk.pem

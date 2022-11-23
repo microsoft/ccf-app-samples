@@ -3,3 +3,4 @@
 /.venv_ccf_sandbox/
 **/workspace/
 node_modules/
+package-lock.json

@@ -32,3 +32,12 @@ clean: ## 🧹 Clean the working folders created during build/demo
 	@rm -rf .venv_ccf_sandbox
 	@rm -rf workspace
 	@rm -rf dist
+
+build-virtual: ## 📦 Build Virtual container image from Dockerfile
+	@echo -e "\e[34m$@\e[0m" || true
+	@../build_image.sh virtual
+
+build-enclave: ## 📦 Build Enclave container image from Dockerfile
+	@echo -e "\e[34m$@\e[0m" || true
+	@../build_image.sh enclave
+	

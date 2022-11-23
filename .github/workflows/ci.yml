@@ -18,10 +18,14 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Build JS enclave container
-        run: docker build -t ccf-app-template:js-enclave -f docker/ccf_app_js.enclave .
+        run: |
+          cd banking-app
+          make build-enclave
 
       - name: Build JS virtual container
-        run: docker build -t ccf-app-template:js-virtual -f docker/ccf_app_js.virtual .
+        run: |
+          cd banking-app
+          make build-virtual
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
@@ -36,8 +40,15 @@ jobs:
       - name: Test Banking application
         run: |
           cd banking-app
-          npm ci
-          ./test.sh
+          npm install
+          make test
+          cd $GITHUB_WORKSPACE
+      - name: Test Auditable logging application
+        run: |
+          cd auditable-logging-app
+          npm install
+          make test
+          cd $GITHUB_WORKSPACE
 
   build-samples:
     runs-on: ubuntu-20.04
@@ -53,6 +64,7 @@ jobs:
           runCmd: |
             git config --global --add safe.directory "$GITHUB_WORKSPACE"
             make lint
-            cd banking-app && make test
+            cd banking-app && make test && cd ..
+            cd auditable-logging-app && make test && cd ..
           env: |
             GITHUB_WORKSPACE
