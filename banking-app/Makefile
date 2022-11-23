@@ -18,10 +18,10 @@ test: ## 🧪 Test the Banking Application
 # It should be improved after '--no-default-constitution' is added to sandbox.sh.
 # NOTE: This hack replaces the content of /opt/ccf/bin/resolve.js
 # Run sandbox. Consider 3 members as 3 banks.
+# --constitution-path /workspaces/ccf-app-samples/banking-app/constitutions
 start-host: build ## 🏃 Start the CCF Sandbox
 	@echo -e "\e[34m$@\e[0m" || true
-	@cp constitutions/resolve.js /opt/ccf/bin/resolve.js
-	@/opt/ccf/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count 3 --initial-user-count 0
+	@/opt/ccf/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count 3 --initial-user-count 0 --constitution-path ./constitutions
 
 demo: ## 🎬 Demo the Banking Application
 	@echo -e "\e[34m$@\e[0m" || true
