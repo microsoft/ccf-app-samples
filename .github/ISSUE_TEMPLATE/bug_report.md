@@ -1,10 +1,11 @@
 ---
 name: 🪲 Bug report
 about: Create a report to help us improve
-title: ''
-labels: 'bug'
-assignees: ''
+title: ""
+labels: "bug"
+assignees: ""
 ---
+
 Remember to assign it to yourself if you plan to work on the issue in the near future.
 
 **Describe the bug**

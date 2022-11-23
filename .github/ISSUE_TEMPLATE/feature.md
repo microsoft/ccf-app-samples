@@ -1,10 +1,9 @@
 ---
 name: Feature
 about: Feature
-title: ''
-labels: 'feature'
-assignees: ''
-
+title: ""
+labels: "feature"
+assignees: ""
 ---
 
 <!--

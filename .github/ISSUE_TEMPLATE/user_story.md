@@ -1,10 +1,9 @@
 ---
 name: User story
 about: User story with acceptance criteria
-title: ''
-labels: 'story'
-assignees: ''
-
+title: ""
+labels: "story"
+assignees: ""
 ---
 
 <!--
