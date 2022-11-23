@@ -143,3 +143,23 @@ initial_number_of_users=2
 ```
 
 You can find example commands to use against the application in `./demo.sh`.
+
+## Creating a container image for manually dispatch a CCF Network
+
+```bash
+cd banking-app
+make build-virtual # to generate a virtual CCF Network
+make build-enclave # to generate a enclave CCF Network
+```
+
+Both make targets execute the same script: `build_image.sh`. This script expects `virtual|enclave` as parameters, and the differentiation between which image to generate and config files to use is done through the argument passed to it.
+
+The script performs the following:
+
+- create a `workspace/docker_certificates` folder to store the needed certificates
+- copy the configuration files for the images `../config/cchost_config_{setupType}_js.json`
+- generate member0 certificates (needed to start CCF network)
+- Build the container image
+- remove the config files' copies
+
+From this point, you can run your image and start governance actions on your CCF network.
