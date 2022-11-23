@@ -21,5 +21,5 @@ node_cert = load_pem_x509_certificate(json_obj["cert"].encode(), default_backend
 try:
     ccf.receipt.verify(root, json_obj["signature"], node_cert)
     print("OK")
-except:
-    sys.exit("Verify failed")
+except Exception as e:
+    sys.exit(f"Verify failed: {type(e)}")
