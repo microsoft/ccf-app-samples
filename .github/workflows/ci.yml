@@ -37,7 +37,14 @@ jobs:
         run: |
           cd banking-app
           npm ci
-          ./test.sh
+          make test
+          cd $GITHUB_WORKSPACE
+      - name: Test Auditable logging application
+        run: |
+          cd auditable-logging-app
+          npm ci
+          make test
+          cd $GITHUB_WORKSPACE
 
   build-samples:
     runs-on: ubuntu-20.04
@@ -53,6 +60,7 @@ jobs:
           runCmd: |
             git config --global --add safe.directory "$GITHUB_WORKSPACE"
             make lint
-            cd banking-app && make test
+            cd banking-app && make test && cd ..
+            cd auditable-logging-app && make test && cd ..
           env: |
             GITHUB_WORKSPACE
