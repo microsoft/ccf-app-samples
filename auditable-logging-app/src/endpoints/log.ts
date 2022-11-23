@@ -51,7 +51,7 @@ interface Range {
 type LogIdAccessType = "ANY" | "SPECIFIED_RANGE";
 interface LogIdAccess {
   type: LogIdAccessType;
-  // Only for "PECIFIED_RANGE"
+  // Only for "SPECIFIED_RANGE"
   range?: Range;
 }
 
