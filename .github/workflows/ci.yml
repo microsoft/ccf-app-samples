@@ -40,13 +40,13 @@ jobs:
       - name: Test Banking application
         run: |
           cd banking-app
-          npm ci
+          npm install
           make test
           cd $GITHUB_WORKSPACE
       - name: Test Auditable logging application
         run: |
           cd auditable-logging-app
-          npm ci
+          npm install
           make test
           cd $GITHUB_WORKSPACE
 
