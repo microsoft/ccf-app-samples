@@ -14,15 +14,19 @@ test: ## 🧪 Test the Banking Application
 	@echo -e "\e[34m$@\e[0m" || true
 	@./test.sh
 
+test-docker: build-virtual run-virtual ## 🧪 Test the Banking Application
+	@echo -e "\e[34m$@\e[0m" || true
+	@sleep 20
+	@. ./test_docker.sh
+	@{ \
+	containerId=$$(docker ps -qf ancestor=banking-app:virtual) ;\
+	docker stop $$containerId ;\
+	}
+
 # Run sandbox. Consider 3 members as 3 banks.
-# There is a fix to the sandbox.sh that will come as part of v3
-# Until then the following cannot be used.
-#	@/opt/ccf/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count 3 --initial-user-count 0 --constitution-path ./constitution
-# This means we have to copy the constitution over the top of /opt/ccf/bin
 start-host: build ## 🏁 Start the CCF Sandbox
 	@echo -e "\e[34m$@\e[0m" || true
-	@cp ./constitution/resolve.js /opt/ccf/bin/resolve.js
-	@/opt/ccf/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count 3 --initial-user-count 0
+	@/opt/ccf/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count 3 --initial-user-count 0 --constitution-path ./constitution
 
 demo: ## 🎬 Demo the Banking Application
 	@echo -e "\e[34m$@\e[0m" || true

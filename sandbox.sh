@@ -2,7 +2,7 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the Apache 2.0 License.
 
-set -ex
+set -e
 
 VENV_DIR=${VENV_DIR:-.venv_ccf_sandbox}
 
@@ -18,12 +18,12 @@ while [ "$1" != "" ]; do
     case $1 in
         -p|--package)
             is_package_specified=true
-            extra_args+=($1)
+            extra_args+=("$1" "$2")
             shift
             ;;
         -p=*|--package=*)
             is_package_specified=true
-            extra_args+=($1)
+            extra_args+=("$1")
             ;;
         -c|--constitution-path)
             CONSTITUTION_PATH=$2
@@ -32,15 +32,15 @@ while [ "$1" != "" ]; do
             ;;
         --js-app-bundle)
             is_js_bundle_specified=true
-            extra_args+=($1 $2)
+            extra_args+=("$1" "$2")
             shift
             ;;
         --js-app-bundle=*)
             is_js_bundle_specified=true
-            extra_args+=($1)
+            extra_args+=("$1")
             ;;
         *)
-            extra_args+=($1)
+            extra_args+=("$1")
             ;;
     esac
     shift
