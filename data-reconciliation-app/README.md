@@ -16,7 +16,7 @@ This is a work in progress overview of the current architecture and key interact
 
 ## Getting Started
 
-To get started run `make test` to run the application locally.
+To get started run `cd data-reconciliation-app && make test` to run the application locally.
 
 ### Repo Layout
 
@@ -45,7 +45,9 @@ lint                 🌟 Lint & format, will not fix but sets exit code on erro
 lint-fix             🔍 Lint & format, try to fix & update code, run locally
 build                🔨 Build the Application
 test                 🧪 Run tests, used for local development
-start-host           🏃 Start the CCF network
-demo                 🎬 Demo the Data Reconciliation Application
+start-host           🏃 Start the application on a test CCF network
+deploy               🏡 Deploy application to Azure mCCF
+destroy              💣 Destroy application
+e2e-test             🤖 Run end to end tests
 clean                🧹 Clean up local files
 ```

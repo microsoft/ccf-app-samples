@@ -10,17 +10,14 @@ build: ## 🔨 Build the Application
 	@echo -e "\e[34m$@\e[0m" || true
 	@npm run build
 
-test: ## 🧪 Test the Application
+test: ## 🧪 Run tests, used for local development
 	@echo -e "\e[34m$@\e[0m" || true
-	@./scripts/test.sh
+	@./scripts/run_test.sh
 
 # Start hosting the application using `sandbox.sh` 
 start-host: build ## 🏃 Start the CCF network using Sandbox.sh
 	@echo -e "\e[34m$@\e[0m" || true
 	@/opt/ccf/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count 3 --initial-user-count 0
-
-demo: ## 🎬 Demo the Application
-	@echo -e "\e[34m Not Implemented \e[0m" || true
 
 clean: ## 🧹 Clean the working folders created during build/demo
 	@rm -rf .venv_ccf_sandbox
@@ -28,10 +25,19 @@ clean: ## 🧹 Clean the working folders created during build/demo
 	@rm -rf dist
 
 build-virtual: ## 📦 Build Virtual container image from Dockerfile
-	@echo -e "\e[34m Not Implemented \e[0m" || true
+	@echo -e "\e[34m$@\e[0m" || true
 	@../build_image.sh virtual
 
 build-enclave: ## 📦 Build Enclave container image from Dockerfile
-	@echo -e "\e[34m Not Implemented \e[0m" || true
+	@echo -e "\e[34m$@\e[0m" || true
 	@../build_image.sh enclave
+
+deploy: ## 📦 Deploy application to mCCF
+	@echo -e "\e[34m Not Implemented \e[0m" || true
+
+destroy: ## 📦 Destroy application
+	@echo -e "\e[34m Not Implemented \e[0m" || true
+
+e2e-test: ## 📦 Run end to end tests
+	@echo -e "\e[34m Not Implemented \e[0m" || true
 	
