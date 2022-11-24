@@ -18,7 +18,6 @@ This is a work in progress overview of the current architecture and key interact
 
 To get started run `make test` to run the application locally.
 
-
 ### Repo Layout
 
 ```text
