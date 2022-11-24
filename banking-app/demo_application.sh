@@ -2,6 +2,7 @@
 set -euox pipefail
 
 declare server="https://127.0.0.1:8000"
+
 # Run The application demo Test Scenario
 
 # Define user accounts Id

@@ -58,8 +58,9 @@ create_test_network_proposal(){
 JSON
 }
 
-
-# Start docker first
+##############################################
+# Discover docker configuration
+##############################################
 containerId=$(docker ps -f ancestor=banking-app:virtual -q)
 docker cp "$containerId:/app/service_cert.pem" ./workspace/docker_certificates
 dockerIPAddress=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' $containerId)
@@ -117,15 +118,14 @@ network_proposal_out=$(/opt/ccf/bin/scurl.sh "${server}/gov/proposals" \
     -H "content-type: application/json")
 echo ${network_proposal_out} | jq
 network_proposal_out_id=$( jq -r  '.proposal_id' <<< "${network_proposal_out}" )
-if [ -z $network_proposal_out_id ]; then
-    echo "Network Proposal ID: $network_proposal_out_id"
-    /opt/ccf/bin/scurl.sh "${server}/gov/proposals/$network_proposal_out_id/ballots" \
-        --cacert service_cert.pem \
-        --signing-key member0_privk.pem \
-        --signing-cert member0_cert.pem \
-        --data-binary @vote_accept.json \
-        -H "content-type: application/json" | jq
-fi
+
+echo "Network Proposal ID: $network_proposal_out_id"
+/opt/ccf/bin/scurl.sh "${server}/gov/proposals/$network_proposal_out_id/ballots" \
+    --cacert service_cert.pem \
+    --signing-key member0_privk.pem \
+    --signing-cert member0_cert.pem \
+    --data-binary @vote_accept.json \
+    -H "content-type: application/json" | jq
 
 ##############################################
 # Propose users and application
@@ -148,11 +148,7 @@ echo "Application Proposal ID: ${application_proposal_out_id}"
 ##############################################
 # Test Network
 ##############################################
-# curl "${server}/node/network" --cacert service_cert.pem | jq
-# curl "${server}/node/network/nodes" --cacert service_cert.pem | jq
-# curl "${server}/node/version" --cacert service_cert.pem | jq
-curl "${server}/gov/members" --cacert service_cert.pem | jq
-
+curl "${server}/node/network" --cacert service_cert.pem | jq
 
 # -------------------------- Preparation --------------------------
 
@@ -176,8 +172,7 @@ cert_arg() {
 
 only_status_code="-s -o /dev/null -w %{http_code}"
 
-curl ${server}/app/commit --cacert service_cert.pem | jq
-exit 0
+#curl ${server}/app/commit --cacert service_cert.pem | jq
 echo "Waiting for the app frontend..."
 # Using the same way as https://github.com/microsoft/CCF/blob/1f26340dea89c06cf615cbd4ec1b32665840ef4e/tests/start_network.py#L94
 while [ "200" != "$(curl ${server}/app/commit --cacert service_cert.pem $only_status_code)" ]

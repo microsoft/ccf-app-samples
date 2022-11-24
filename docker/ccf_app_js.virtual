@@ -7,8 +7,6 @@ FROM mcr.microsoft.com/ccf/app/run-js:2.0.7-sgx
 # Note: libjs_generic.virtual is not included in run-js container
 COPY --from=builder /opt/ccf/lib/libjs_generic.virtual.so /usr/lib/ccf
 
-COPY --from=builder /opt/ccf/bin/*.js /app/
-
 # copy configuration into image
 COPY ./constitution/*.js /app/
 COPY ./workspace/docker_certificates/cchost_config_virtual_js.json /app/
