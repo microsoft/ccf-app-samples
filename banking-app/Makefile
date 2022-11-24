@@ -21,7 +21,7 @@ test: ## 🧪 Test the Banking Application
 # This means we have to copy the constitution over the top of /opt/ccf/bin
 start-host: build ## 🏁 Start the CCF Sandbox
 	@echo -e "\e[34m$@\e[0m" || true
-	@cp ./constitution/*.js /opt/ccf/bin/
+	@cp ./constitution/resolve.js /opt/ccf/bin/resolve.js
 	@/opt/ccf/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count 3 --initial-user-count 0
 
 demo: ## 🎬 Demo the Banking Application
@@ -42,6 +42,8 @@ build-enclave: ## 📦 Build Enclave container image from Dockerfile
 	@echo -e "\e[34m$@\e[0m" || true
 	@../build_image.sh enclave
 
+# We hardcode the IP so that we can set this in the cchost_config
+# TODO: Move the cchost_config into the sample folder
 run-virtual: ## 🏃 Start a virtual CCF node in Docker
 	@echo -e "\e[34m$@\e[0m" || true
 	@docker run --detach --ip 172.17.0.4 banking-app:virtual
