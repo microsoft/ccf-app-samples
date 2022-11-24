@@ -13,8 +13,7 @@ function parseRequestQuery(request: ccfapp.Request<any>): any {
 
 export function write(request) {
   const parsedQuery = parseRequestQuery(request);
-  if (parsedQuery.id === undefined)
-  {
+  if (parsedQuery.id === undefined) {
     return { body: { error: "Missing query parameter 'id'" } };
   }
   const id = ccf.strToBuf(parsedQuery.id);
@@ -26,15 +25,16 @@ export function write(request) {
 
 export function read(request) {
   const parsedQuery = parseRequestQuery(request);
-  if (parsedQuery.id === undefined)
-  {
+  if (parsedQuery.id === undefined) {
     return { body: { error: "Missing query parameter 'id'" } };
   }
   const id = ccf.strToBuf(parsedQuery.id);
 
   const msg = ccf.kv["records"].get(id);
   if (msg === undefined) {
-    return { body: { error: `Cannot find record for id \"${parsedQuery.id}\".` } };
+    return {
+      body: { error: `Cannot find record for id \"${parsedQuery.id}\".` },
+    };
   }
   return { body: ccf.bufToStr(msg) };
 }

@@ -1,6 +1,6 @@
 # CCF Data Reconciliation Application
 
-This is the repo for *CCF Data Reconciliation - sample*.
+This is the repo for _CCF Data Reconciliation - sample_.
 
 ## Architecture
 
@@ -17,11 +17,11 @@ This is a work in progress overview of the current architecture and key interact
 │
 ├── governance
 │   └── constitutions   CCF network constitutions files
-│   └── vote            Contains proposal voting acceptance and rejection logic 
+│   └── vote            Contains proposal voting acceptance and rejection logic
 │   └── scripts         All governance scripts
 │
 └── scripts             All the scripts to test, demo and deploy the application
-└── src                 Application source code 
+└── src                 Application source code
     └── endpoints       Application endpoints implementation
 ```
 
@@ -41,6 +41,3 @@ clean                🧹 Clean up local files
 ```
 
 To get started run `make test` to run the application locally.
-
-
-
