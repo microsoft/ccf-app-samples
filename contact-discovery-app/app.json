@@ -1,11 +1,13 @@
 {
   "endpoints": {
-    "/account/{user_id}/{account_name}": {
+    "/numbers/{hashed_number}": {
       "put": {
-        "js_module": "endpoints/banking.js",
-        "js_function": "createAccount",
+        "js_module": "endpoints/contact-discovery.js",
+        "js_function": "registerNumber",
         "forwarding_required": "always",
-        "authn_policies": ["member_cert"],
+        "authn_policies": [
+          "user_cert"
+        ],
         "mode": "readwrite",
         "openapi": {
           "responses": {
@@ -18,17 +20,30 @@
         }
       }
     },
-    "/deposit/{user_id}/{account_name}": {
-      "post": {
-        "js_module": "endpoints/banking.js",
-        "js_function": "deposit",
+    "/find-numbers/": {
+      "get": {
+        "js_module": "endpoints/contact-discovery.js",
+        "js_function": "findNumbers",
         "forwarding_required": "always",
-        "authn_policies": ["member_cert"],
-        "mode": "readwrite",
+        "authn_policies": [
+          "user_cert"
+        ],
+        "mode": "readonly",
         "openapi": {
           "responses": {
-            "204": {
-              "description": "Ok"
+            "200": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "items": {
+                      "description": "Hashed phone numbers",
+                      "type": "string"
+                    },
+                    "type": "array"
+                  }
+                }
+              },
+              "description": "Returns hashed phone numbers registered"
             }
           },
           "security": [],
@@ -38,97 +53,15 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "properties": {
-                    "value": {
-                      "type": "number"
-                    }
+                  "items": {
+                    "description": "Hashed phone numbers",
+                    "type": "string"
                   },
-                  "type": "object"
+                  "type": "array"
                 }
               }
             }
           }
-        }
-      }
-    },
-    "/balance/{account_name}": {
-      "get": {
-        "js_module": "endpoints/banking.js",
-        "js_function": "balance",
-        "forwarding_required": "always",
-        "authn_policies": ["user_cert"],
-        "mode": "readonly",
-        "openapi": {
-          "responses": {
-            "200": {
-              "description": "Ok"
-            }
-          },
-          "security": [],
-          "parameters": []
-        }
-      }
-    },
-    "/transfer/{account_name}": {
-      "post": {
-        "js_module": "endpoints/banking.js",
-        "js_function": "transfer",
-        "forwarding_required": "always",
-        "authn_policies": ["user_cert"],
-        "mode": "readwrite",
-        "openapi": {
-          "responses": {
-            "204": {
-              "description": "Ok"
-            }
-          },
-          "security": [],
-          "parameters": [],
-          "requestBody": {
-            "required": true,
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "value": {
-                      "type": "number"
-                    },
-                    "user_id_to": {
-                      "type": "string"
-                    },
-                    "account_name_to": {
-                      "type": "string"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/receipt": {
-      "get": {
-        "js_module": "endpoints/banking.js",
-        "js_function": "getTransactionReceipt",
-        "forwarding_required": "always",
-        "authn_policies": ["user_cert"],
-        "mode": "readonly",
-        "openapi": {
-          "responses": {
-            "200": {
-              "description": "Ok"
-            }
-          },
-          "security": [],
-          "parameters": [
-            {
-              "in": "query",
-              "name": "transaction_id",
-              "required": true
-            }
-          ]
         }
       }
     }

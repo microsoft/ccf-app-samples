@@ -1,1 +1,1 @@
-export * from "./banking";
+export * from "./contact-discovery";

@@ -52,4 +52,4 @@ initial_number_of_users=3
 /opt/ccf/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count $initial_number_of_members --initial-user-count $initial_number_of_users
 ```
 
-You can find example commands to use against the application in `./test.sh`.
+You can find example usage in `./test.sh`.

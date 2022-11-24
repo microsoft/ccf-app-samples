@@ -1,3 +1,4 @@
 node_modules/
 dist/
 /.venv_ccf_sandbox/
+package-lock.json
