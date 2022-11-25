@@ -22,12 +22,13 @@ To get started run `cd data-reconciliation-app && make test` to run the applicat
 
 ```text
 📂
-├── docs                Main project docs
+├── docs                Sample application documentation
 │   └── adrs            All Architecture design records (ADR)
 │
 ├── governance
-│   └── constitutions   CCF network constitutions files
+│   └── constitution    CCF network constitution files
 │   └── vote            Contains proposal voting acceptance and rejection logic
+│   └── nodes           CCF network nodes config and docker files
 │   └── scripts         All governance scripts
 │
 └── scripts             All the scripts to test, demo and deploy the application
