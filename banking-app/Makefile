@@ -14,12 +14,21 @@ test: ## 🧪 Test the Banking Application
 	@echo -e "\e[34m$@\e[0m" || true
 	@./test.sh
 
-test-docker: build-virtual run-virtual ## 🧪 Test the Banking Application
+test-docker-virtual: build-virtual run-virtual ## 🧪 Test the Banking Application
 	@echo -e "\e[34m$@\e[0m" || true
-	@sleep 20
-	@. ./test_docker.sh
+	@sleep 10
+	@. ./test_docker.sh --virtual
 	@{ \
 	containerId=$$(docker ps -qf ancestor=banking-app:virtual) ;\
+	docker stop $$containerId ;\
+	}
+
+test-docker-enclave: build-enclave run-enclave ## 🧪 Test the Banking Application
+	@echo -e "\e[34m$@\e[0m" || true
+	@sleep 10
+	@. ./test_docker.sh --enclave
+	@{ \
+	containerId=$$(docker ps -qf ancestor=banking-app:enclave) ;\
 	docker stop $$containerId ;\
 	}
 
