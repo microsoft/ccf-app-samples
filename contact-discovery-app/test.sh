@@ -61,8 +61,8 @@ echo "Test start"
 check_eq "Register user0" "204" "$(curl $server/app/numbers/$(echo -n $user0_hashed_number | jq -sRr @uri) -X PUT $(cert_arg "user0") $only_status_code)"
 check_eq "Register friend0 (user1)" "204" "$(curl $server/app/numbers/$(echo -n $friend0_hashed_number | jq -sRr @uri) -X PUT $(cert_arg "user1") $only_status_code)"
 check_eq "Register stranger0 (user2)" "204" "$(curl $server/app/numbers/$(echo -n $stranger0_hashed_number | jq -sRr @uri) -X PUT $(cert_arg "user2") $only_status_code)"
-check_eq "Find contacts" "[\"$friend0_hashed_number\"]" "$(curl $server/app/find-numbers/ -X GET $(cert_arg "user0") -H "Content-Type: application/json" --data-binary "[\"$friend0_hashed_number\", \"$friend1_hashed_number\", \"$friend2_hashed_number\"]" --silent)"
-check_eq "Invalid input for finding contacts" "400" ""$(curl $server/app/find-numbers/ -X GET $(cert_arg "user0") -H "Content-Type: application/json" --data-binary "{ \"numbers\": [\"$friend0_hashed_number\", \"$friend1_hashed_number\", \"$friend2_hashed_number\"] }" $only_status_code)""
+check_eq "Find contacts" "[\"$friend0_hashed_number\"]" "$(curl $server/app/find-contacts/ -X GET $(cert_arg "user0") -H "Content-Type: application/json" --data-binary "[\"$friend0_hashed_number\", \"$friend1_hashed_number\", \"$friend2_hashed_number\"]" --silent)"
+check_eq "Invalid input for finding contacts" "400" ""$(curl $server/app/find-contacts/ -X GET $(cert_arg "user0") -H "Content-Type: application/json" --data-binary "{ \"numbers\": [\"$friend0_hashed_number\", \"$friend1_hashed_number\", \"$friend2_hashed_number\"] }" $only_status_code)""
 
 echo "OK"
 kill -9 $sandbox_pid

@@ -16,7 +16,7 @@ This application provides a REST API with the following endpoints:
   - Register user's number
   - It can be called by [users](https://microsoft.github.io/CCF/main/overview/glossary.html#term-Users)
   - Status code for successful calls: 204
-- GET /app/find-numbers/
+- GET /app/find-contacts/
   - Check if given numbers are registered.
   - It can be called by [users](https://microsoft.github.io/CCF/main/overview/glossary.html#term-Users)
   - Request body: Array of hashed phone numbers to be checked.
@@ -24,7 +24,7 @@ This application provides a REST API with the following endpoints:
 
 ## Why CCF?
 
-If the application is built with CCF, node [operators](https://microsoft.github.io/CCF/main/overview/glossary.html#term-Operators) cannot see the registered phone number. Users don't have to trust them. Note
+If the application is built with CCF, node [operators](https://microsoft.github.io/CCF/main/overview/glossary.html#term-Operators) cannot see the registered phone number. Therefore, users don't have to trust them. Note
 that even phone numbers are hashed, it's easy to get the raw number from a hash because the number of phone numbers is limited.
 
 ## How to run the tests

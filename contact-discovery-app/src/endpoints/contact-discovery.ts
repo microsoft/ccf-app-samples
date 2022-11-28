@@ -54,7 +54,7 @@ export function registerNumber(
 
 type PhoneNumbers = Array<string>;
 
-export function findNumbers(
+export function findContacts(
   request: ccfapp.Request<PhoneNumbers>
 ): ccfapp.Response<PhoneNumbers> {
   let body;

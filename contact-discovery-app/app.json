@@ -18,10 +18,10 @@
         }
       }
     },
-    "/find-numbers/": {
+    "/find-contacts/": {
       "get": {
         "js_module": "endpoints/contact-discovery.js",
-        "js_function": "findNumbers",
+        "js_function": "findContacts",
         "forwarding_required": "always",
         "authn_policies": ["user_cert"],
         "mode": "readonly",
