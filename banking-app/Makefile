@@ -52,9 +52,22 @@ run-virtual: ## 🏃 Start a virtual CCF node in Docker
 	@echo -e "\e[34m$@\e[0m" || true
 	@docker run --detach --ip 172.17.0.4 banking-app:virtual
 
+# We hardcode the IP so that we can set this in the cchost_config
+# TODO: Move the cchost_config into the sample folder
+run-enclave: ## 🏃 Start an enclave CCF node in Docker
+	@echo -e "\e[34m$@\e[0m" || true
+	@docker run --detach --ip 172.17.0.4 banking-app:enclave
+
 stop-virtual: ## ⛔ Stop a virtual CCF node in Docker
 	@echo -e "\e[34m$@\e[0m" || true
 	@{ \
 	containerId=$$(docker ps -qf ancestor=banking-app:virtual) ;\
+	docker stop $$containerId ;\
+	}
+
+stop-enclave: ## ⛔ Stop a virtual CCF node in Docker
+	@echo -e "\e[34m$@\e[0m" || true
+	@{ \
+	containerId=$$(docker ps -qf ancestor=banking-app:enclave) ;\
 	docker stop $$containerId ;\
 	}
