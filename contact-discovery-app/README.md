@@ -25,7 +25,7 @@ This application provides a REST API with the following endpoints:
 ## Why CCF?
 
 If the application is built with CCF, node [operators](https://microsoft.github.io/CCF/main/overview/glossary.html#term-Operators) cannot see the registered phone number. Therefore, users don't have to trust them. Note
-that even phone numbers are hashed, it's easy to get the raw number from a hash because the number of phone numbers is limited.
+that even though phone numbers are hashed, it's easy to get the raw number from a hash because the number of phone numbers is limited.
 
 ## How to run the tests
 
