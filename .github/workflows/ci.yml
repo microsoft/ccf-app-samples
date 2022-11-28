@@ -49,6 +49,12 @@ jobs:
           npm install
           make test
           cd $GITHUB_WORKSPACE
+      - name: Test Contact discovery application
+        run: |
+        cd contact-discovery-app
+        npm install
+        make test
+        cd $GITHUB_WORKSPACE
 
   build-samples:
     runs-on: ubuntu-20.04
@@ -66,5 +72,6 @@ jobs:
             make lint
             cd banking-app && make test && cd ..
             cd auditable-logging-app && make test && cd ..
+            cd contact-discovery-app && make test && cd ..
           env: |
             GITHUB_WORKSPACE
