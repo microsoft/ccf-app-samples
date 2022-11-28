@@ -6,7 +6,7 @@ This is a sample application of a contact discovery service.
 
 A contact discovery service is required.
 Users should be able to check if friends or colleagues's phone numbers are registered in the application using their address book without revealing
-the their contact information to the application server.
+their contact information to the application server.
 
 ## What the application does
 
