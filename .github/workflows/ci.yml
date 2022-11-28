@@ -51,10 +51,10 @@ jobs:
           cd $GITHUB_WORKSPACE
       - name: Test Contact discovery application
         run: |
-        cd contact-discovery-app
-        npm install
-        make test
-        cd $GITHUB_WORKSPACE
+          cd contact-discovery-app
+          npm install
+          make test
+          cd $GITHUB_WORKSPACE
 
   build-samples:
     runs-on: ubuntu-20.04
