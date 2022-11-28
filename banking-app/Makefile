@@ -26,7 +26,7 @@ test-docker: build-virtual run-virtual ## 🧪 Test the Banking Application
 # Run sandbox. Consider 3 members as 3 banks.
 start-host: build ## 🏁 Start the CCF Sandbox
 	@echo -e "\e[34m$@\e[0m" || true
-	@/opt/ccf/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count 3 --initial-user-count 0 --constitution-path ./constitution
+	@/opt/ccf/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count 3 --initial-user-count 0 --constitution-dir ./constitution
 
 demo: ## 🎬 Demo the Banking Application
 	@echo -e "\e[34m$@\e[0m" || true

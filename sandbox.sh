@@ -7,11 +7,15 @@ set -e
 VENV_DIR=${VENV_DIR:-.venv_ccf_sandbox}
 
 PATH_HERE=$(dirname "$(realpath -s "$0")")
-CONSTITUTION_PATH="${PATH_HERE}"
+CONSTITUTION_DIR="${PATH_HERE}"
 VERSION_FILE="${PATH_HERE}"/../share/VERSION_LONG
 
 is_package_specified=false
 is_js_bundle_specified=false
+
+PLATFORM_FILE="${PATH_HERE}"/../share/PLATFORM
+platform="virtual"
+enclave_type="virtual"
 
 extra_args=()
 while [ "$1" != "" ]; do
@@ -25,11 +29,6 @@ while [ "$1" != "" ]; do
             is_package_specified=true
             extra_args+=("$1")
             ;;
-        -c|--constitution-path)
-            CONSTITUTION_PATH=$2
-            # We don't copy this argument to extra_args
-            shift
-            ;;
         --js-app-bundle)
             is_js_bundle_specified=true
             extra_args+=("$1" "$2")
@@ -38,6 +37,11 @@ while [ "$1" != "" ]; do
         --js-app-bundle=*)
             is_js_bundle_specified=true
             extra_args+=("$1")
+            ;;
+        -c|--constitution-dir)
+            CONSTITUTION_DIR=$2
+            # We don't copy this argument to extra_args
+            shift
             ;;
         *)
             extra_args+=("$1")
@@ -61,6 +65,12 @@ if [ -f "${VERSION_FILE}" ]; then
     START_NETWORK_SCRIPT="${PATH_HERE}"/start_network.py
     VERSION=$(<"${VERSION_FILE}")
     VERSION=${VERSION#"ccf-"}
+    platform=$(<"${PLATFORM_FILE}")
+    if [ "${platform}" == "sgx" ]; then
+        enclave_type="release"
+    else
+        enclave_type="virtual"
+    fi
     if [ ${is_package_specified} == false ] && [ ${is_js_bundle_specified} == false ]; then
         # Only on install tree, default to installed js logging app
         echo "No package/app specified. Defaulting to installed JS logging app"
@@ -89,17 +99,20 @@ fi
 echo "Python environment successfully setup"
 
 export CURL_CLIENT=ON
+export CURL_CLIENT_USE_COSE=ON
 exec python "${START_NETWORK_SCRIPT}" \
     --binary-dir "${BINARY_DIR}" \
-    --enclave-type virtual \
+    --enclave-type "${enclave_type}" \
+    --enclave-platform "${platform}" \
     --initial-member-count 1 \
-    --constitution "${CONSTITUTION_PATH}"/actions.js \
-    --constitution "${CONSTITUTION_PATH}"/validate.js \
-    --constitution "${CONSTITUTION_PATH}"/resolve.js \
-    --constitution "${CONSTITUTION_PATH}"/apply.js \
+    --constitution "${CONSTITUTION_DIR}"/actions.js \
+    --constitution "${CONSTITUTION_DIR}"/validate.js \
+    --constitution "${CONSTITUTION_DIR}"/resolve.js \
+    --constitution "${CONSTITUTION_DIR}"/apply.js \
     --ledger-chunk-bytes 5000000 \
     --snapshot-tx-interval 10000 \
     --initial-node-cert-validity-days 90 \
     --initial-service-cert-validity-days 90 \
     --label sandbox \
     "${extra_args[@]}"
+    

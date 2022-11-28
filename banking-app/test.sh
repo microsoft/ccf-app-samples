@@ -7,7 +7,7 @@ npm run build > /dev/null 2>&1
 
 # Run sandbox. Consider 3 members as 3 banks.
 echo "Starting sandbox..."
-/opt/ccf/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count 3 --initial-user-count 2 --constitution-path ./constitution > /dev/null 2>&1 &
+/opt/ccf/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count 3 --initial-user-count 2 --constitution-dir ./constitution > /dev/null 2>&1 &
 sandbox_pid=$!
 
 check_eq() {
