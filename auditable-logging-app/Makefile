@@ -6,11 +6,11 @@ SHELL := /bin/bash
 help: ## 💬 This help message :)
 	@grep -E '[a-zA-Z_-]+:.*?## .*$$' $(firstword $(MAKEFILE_LIST)) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
 
-build: ## 🔨 Build the Banking Application
+build: ## 🔨 Build the Auditable Logging Application
 	@echo -e "\e[34m$@\e[0m" || true
 	@npm run build
 
-test: ## 🧪 Test the Banking Application
+test: ## 🧪 Test the Auditable Logging Application
 	@echo -e "\e[34m$@\e[0m" || true
 	@./test.sh
 
