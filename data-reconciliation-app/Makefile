@@ -6,27 +6,18 @@ SHELL := /bin/bash
 help: ## 💬 This help message :)
 	@grep -E '[a-zA-Z_-]+:.*?## .*$$' $(firstword $(MAKEFILE_LIST)) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
 
-build: ## 🔨 Build the Banking Application
+build: ## 🔨 Build the Application
 	@echo -e "\e[34m$@\e[0m" || true
 	@npm run build
 
-test: ## 🧪 Test the Banking Application
+test: ## 🧪 Run tests, used for local development
 	@echo -e "\e[34m$@\e[0m" || true
-	@./test.sh
+	@./scripts/run_test.sh
 
-# Hack to use default resolve.js
-# It should be improved after '--no-default-constitution' is added to sandbox.sh.
-# NOTE: This hack replaces the content of /opt/ccf/bin/resolve.js
-# Run sandbox. Consider 3 members as 3 banks.
-start-host: build ## 🏃 Start the CCF Sandbox
+# Start hosting the application using `sandbox.sh` 
+start-host: build ## 🏃 Start the CCF network using Sandbox.sh
 	@echo -e "\e[34m$@\e[0m" || true
-	@cp constitutions/resolve.js /opt/ccf/bin/resolve.js
 	@/opt/ccf/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count 3 --initial-user-count 0
-
-demo: ## 🎬 Demo the Banking Application
-	@echo -e "\e[34m$@\e[0m" || true
-	@./demo.sh
-	@./show_app_log.sh
 
 clean: ## 🧹 Clean the working folders created during build/demo
 	@rm -rf .venv_ccf_sandbox
@@ -40,4 +31,13 @@ build-virtual: ## 📦 Build Virtual container image from Dockerfile
 build-enclave: ## 📦 Build Enclave container image from Dockerfile
 	@echo -e "\e[34m$@\e[0m" || true
 	@../build_image.sh enclave
+
+deploy: ## 📦 Deploy application to mCCF
+	@echo -e "\e[34m Not Implemented \e[0m" || true
+
+destroy: ## 📦 Destroy application
+	@echo -e "\e[34m Not Implemented \e[0m" || true
+
+e2e-test: ## 📦 Run end to end tests
+	@echo -e "\e[34m Not Implemented \e[0m" || true
 	
