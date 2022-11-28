@@ -1,0 +1,65 @@
+{
+  "endpoints": {
+    "/numbers/{hashed_number}": {
+      "put": {
+        "js_module": "endpoints/contact-discovery.js",
+        "js_function": "registerNumber",
+        "forwarding_required": "always",
+        "authn_policies": ["user_cert"],
+        "mode": "readwrite",
+        "openapi": {
+          "responses": {
+            "204": {
+              "description": "Ok"
+            }
+          },
+          "security": [],
+          "parameters": []
+        }
+      }
+    },
+    "/find-contacts/": {
+      "get": {
+        "js_module": "endpoints/contact-discovery.js",
+        "js_function": "findContacts",
+        "forwarding_required": "always",
+        "authn_policies": ["user_cert"],
+        "mode": "readonly",
+        "openapi": {
+          "responses": {
+            "200": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "items": {
+                      "description": "Hashed phone numbers",
+                      "type": "string"
+                    },
+                    "type": "array"
+                  }
+                }
+              },
+              "description": "Returns hashed phone numbers registered"
+            }
+          },
+          "security": [],
+          "parameters": [],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "description": "Hashed phone numbers",
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
