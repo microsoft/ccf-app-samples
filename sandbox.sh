@@ -65,12 +65,6 @@ if [ -f "${VERSION_FILE}" ]; then
     START_NETWORK_SCRIPT="${PATH_HERE}"/start_network.py
     VERSION=$(<"${VERSION_FILE}")
     VERSION=${VERSION#"ccf-"}
-    platform=$(<"${PLATFORM_FILE}")
-    if [ "${platform}" == "sgx" ]; then
-        enclave_type="release"
-    else
-        enclave_type="virtual"
-    fi
     if [ ${is_package_specified} == false ] && [ ${is_js_bundle_specified} == false ]; then
         # Only on install tree, default to installed js logging app
         echo "No package/app specified. Defaulting to installed JS logging app"
@@ -103,7 +97,6 @@ export CURL_CLIENT_USE_COSE=ON
 exec python "${START_NETWORK_SCRIPT}" \
     --binary-dir "${BINARY_DIR}" \
     --enclave-type "${enclave_type}" \
-    --enclave-platform "${platform}" \
     --initial-member-count 1 \
     --constitution "${CONSTITUTION_DIR}"/actions.js \
     --constitution "${CONSTITUTION_DIR}"/validate.js \

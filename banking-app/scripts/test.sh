@@ -1,16 +1,15 @@
 #!/bin/bash
 set -euo pipefail
 
-declare enclave_type=""
+declare serverIP=""
 
 function usage {
     echo ""
-    echo "Test this sample running in docker."
+    echo "Test this sample."
     echo ""
-    echo "usage: ./test_docker.sh [--virtual] [--enclave]"
+    echo "usage: ./test.sh --serverIP <IPADDRESS>"
     echo ""
-    echo "  --virtual   string      Run this in a virtual node"
-    echo "  --enclave   string      Run this in a SGX node"
+    echo "  --serverIP   string      The IP address of the primary CCF node"
     echo ""
     exit 0
 }
@@ -21,8 +20,7 @@ function failed {
 }
 
 # parse parameters
-
-if [[ $# -eq 0 || $# -gt 1 ]]; then
+if [[ $# -lt 2 || $# -gt 2 ]]; then
     usage
     exit 1
 fi
@@ -32,8 +30,7 @@ do
     name="${1/--/}"
     name="${name/-/_}"
     case "--$name"  in
-        --virtual) enclave_type="virtual";;
-        --enclave) enclave_type="enclave";;
+        --serverIP) serverIP="$2"; shift;;
         --help) usage; exit 0;;
         --) shift;;
     esac
@@ -41,160 +38,11 @@ do
 done
 
 # validate parameters
-if [ -z $enclave_type ]; then
-    failed "You must supply --virtual or --enclave"
+if [ -z $serverIP ]; then
+    failed "You must supply --serverIP"
 fi
 
-# create certificate files
-create_certificate(){
-    local certName="$1"
-    local certFile="${1}_cert.pem"
-    local setUserFile="set_${1}.json"
-    /opt/ccf/bin/keygenerator.sh --name $certName --gen-enc-key
-}
-
-
-# Prepare a test network by adding a member 
-# and two users to the network, and then open it
-create_test_network_proposal(){
-
-    create_certificate "user0"
-    create_certificate "user1"
-    create_certificate "member1"
-
-    local user0_cert=$(< user0_cert.pem sed '$!G' | paste -sd '\\n' -)
-    local user1_cert=$(< user1_cert.pem sed '$!G' | paste -sd '\\n' -)
-    local member1_cert=$(< member1_cert.pem sed '$!G' | paste -sd '\\n' -)
-    local member1_encryption_pub_key=$(< member1_enc_pubk.pem sed '$!G' | paste -sd '\\n' -)
-    local service_cert=$(< service_cert.pem sed '$!G' | paste -sd '\\n' -)
-
-    local proposalFileName="network_open_proposal.json"
-    cat <<JSON > $proposalFileName
-{
-  "actions": [
-    {
-      "name": "set_member",
-      "args": {
-        "cert": "${member1_cert}\n",
-        "encryption_pub_key": "${member1_encryption_pub_key}\n"
-      }
-    },
-    {
-      "name": "set_user",
-      "args": {
-        "cert": "${user0_cert}\n"
-      }
-    },
-    {
-      "name": "set_user",
-      "args": {
-        "cert": "${user1_cert}\n"
-      }
-    },
-    {
-      "name": "transition_service_to_open",
-      "args": {
-        "next_service_identity": "${service_cert}\n"
-      }
-    }
-  ]
-}
-JSON
-}
-
-##############################################
-# Discover docker configuration
-##############################################
-containerId=$(docker ps -f ancestor=banking-app:$enclave_type -q)
-docker cp "$containerId:/app/service_cert.pem" ./workspace/docker_certificates
-dockerIPAddress=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' $containerId)
-server="https://${dockerIPAddress}:8080"
-
-##############################################
-# Create all the certs in a well known directory
-##############################################
-cd workspace/docker_certificates
-
-##############################################
-# Activate member 0
-##############################################
-echo "Getting list of members..."
-curl $server/gov/members \
-    --cacert service_cert.pem \
-    | jq
-
-curl "${server}/gov/ack/update_state_digest" \
-    -X POST \
-    --cacert service_cert.pem \
-    --key member0_privk.pem \
-    --cert member0_cert.pem \
-    --silent | jq > activation.json
-
-echo "Show digest"
-cat activation.json
-
-/opt/ccf/bin/scurl.sh "${server}/gov/ack" \
-    --cacert service_cert.pem \
-    --signing-key member0_privk.pem \
-    --signing-cert member0_cert.pem \
-    --header "Content-Type: application/json" \
-    --data-binary @activation.json
-
-echo "Getting list of members..."
-curl ${server}/gov/members \
-    --cacert service_cert.pem \
-    | jq
-
-##############################################
-# Generate Proposals
-##############################################
-create_test_network_proposal
-
-##############################################
-# Open Network
-##############################################
-echo "Open the network"
-network_proposal_out=$(/opt/ccf/bin/scurl.sh "${server}/gov/proposals" \
-    --cacert service_cert.pem \
-    --signing-key member0_privk.pem \
-    --signing-cert member0_cert.pem \
-    --data-binary @network_open_proposal.json \
-    -H "content-type: application/json")
-echo ${network_proposal_out} | jq
-network_proposal_out_id=$( jq -r  '.proposal_id' <<< "${network_proposal_out}" )
-
-echo "Network Proposal ID: $network_proposal_out_id"
-/opt/ccf/bin/scurl.sh "${server}/gov/proposals/$network_proposal_out_id/ballots" \
-    --cacert service_cert.pem \
-    --signing-key member0_privk.pem \
-    --signing-cert member0_cert.pem \
-    --data-binary @vote_accept.json \
-    -H "content-type: application/json" | jq
-
-##############################################
-# Propose users and application
-##############################################
-application_proposal_out=$(/opt/ccf/bin/scurl.sh "${server}/gov/proposals" \
-    --cacert service_cert.pem \
-    --signing-key member0_privk.pem \
-    --signing-cert member0_cert.pem \
-    --data-binary @../../dist/set_js_app.json \
-    -H "content-type: application/json")
-application_proposal_out_id=$( jq -r  '.proposal_id' <<< "${application_proposal_out}" )
-echo "Application Proposal ID: ${application_proposal_out_id}"
-/opt/ccf/bin/scurl.sh "${server}/gov/proposals/${application_proposal_out_id}/ballots" \
-    --cacert service_cert.pem \
-    --signing-key member0_privk.pem \
-    --signing-cert member0_cert.pem \
-    --data-binary @vote_accept.json \
-    -H "content-type: application/json" | jq
-
-##############################################
-# Test Network
-##############################################
-curl "${server}/node/network" --cacert service_cert.pem | jq
-
-# -------------------------- Preparation --------------------------
+server="https://${serverIP}"
 
 check_eq() {
     local test_name="$1"
@@ -216,13 +64,15 @@ cert_arg() {
 
 only_status_code="-s -o /dev/null -w %{http_code}"
 
-#curl ${server}/app/commit --cacert service_cert.pem | jq
 echo "Waiting for the app frontend..."
 # Using the same way as https://github.com/microsoft/CCF/blob/1f26340dea89c06cf615cbd4ec1b32665840ef4e/tests/start_network.py#L94
-while [ "200" != "$(curl ${server}/app/commit --cacert service_cert.pem $only_status_code)" ]
+while [ "200" != "$(curl $server/app/commit --cacert service_cert.pem $only_status_code)" ]
 do
+    curl $server/app/commit --cacert service_cert.pem $only_status_code
     sleep 1
 done
+
+echo "Working directory (for certificates): $(pwd)"
 
 user0_id=$(openssl x509 -in "user0_cert.pem" -noout -fingerprint -sha256 | cut -d "=" -f 2 | sed 's/://g' | awk '{print tolower($0)}')
 user1_id=$(openssl x509 -in "user1_cert.pem" -noout -fingerprint -sha256 | cut -d "=" -f 2 | sed 's/://g' | awk '{print tolower($0)}')

@@ -10,37 +10,45 @@ build: ## 🔨 Build the Banking Application
 	@echo -e "\e[34m$@\e[0m" || true
 	@npm run build
 
-test: ## 🧪 Test the Banking Application
+test: start-host-for-test ## 🧪 Test the Banking Application in the sandbox
 	@echo -e "\e[34m$@\e[0m" || true
-	@./test.sh
+	@cd workspace/sandbox_common && ../../scripts/test.sh --serverIP 127.0.0.1:8000
+	@. ./scripts/stop_sandbox.sh
 
-test-docker-virtual: build-virtual run-virtual ## 🧪 Test the Banking Application
+# TODO: Currently a lot of the scripts have to be in the folder where
+# the certificates are - I think this can be tidied up
+test-docker-virtual: build-virtual ## 🧪 Test the Banking Application in a Docker sandbox
 	@echo -e "\e[34m$@\e[0m" || true
-	@sleep 10
-	@. ./test_docker.sh --virtual
-	@{ \
-	containerId=$$(docker ps -qf ancestor=banking-app:virtual) ;\
-	docker stop $$containerId ;\
-	}
+	@. ./scripts/start_docker.sh --virtual --serverIP 172.17.0.3
+	@cd workspace/docker_certificates && ../../scripts/setup_governance.sh --serverIP 172.17.0.3:8080
+	@cd workspace/docker_certificates && ../../scripts/test.sh --serverIP 172.17.0.3:8080
+	@. ./scripts/stop_docker.sh --virtual
 
-test-docker-enclave: build-enclave run-enclave ## 🧪 Test the Banking Application
+# TODO: Currently a lot of the scripts have to be in the folder where
+# the certificates are - I think this can be tidied up
+test-docker-enclave: build-enclave ## 🧪 Test the Banking Application in a Docker enclave
 	@echo -e "\e[34m$@\e[0m" || true
-	@sleep 10
-	@. ./test_docker.sh --enclave
-	@{ \
-	containerId=$$(docker ps -qf ancestor=banking-app:enclave) ;\
-	docker stop $$containerId ;\
-	}
+	@. ./scripts/start_docker.sh --enclave --serverIP 172.17.0.4
+	@cd workspace/docker_certificates && ../../scripts/setup_governance.sh --serverIP 172.17.0.4:8080
+	@cd workspace/docker_certificates && ../../scripts/test.sh --serverIP 172.17.0.4:8080
+	@. ./scripts/stop_docker.sh --enclave
 
 # Run sandbox. Consider 3 members as 3 banks.
-start-host: build ## 🏁 Start the CCF Sandbox
+# This is used in the demo scripts
+start-host: build ## 🏁 Start the CCF Sandbox for the demo
 	@echo -e "\e[34m$@\e[0m" || true
 	@/opt/ccf/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count 3 --initial-user-count 0 --constitution-dir ./constitution
 
+start-host-for-test: build ## 🏁 Start the CCF Sandbox for the test
+	@echo -e "\e[34m$@\e[0m" || true
+	@/opt/ccf/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count 3 --initial-user-count 2 --constitution-dir ./constitution > /dev/null 2>&1 &
+	@echo "💤 Waiting for sandbox . . . "
+	@sleep 15
+
 demo: ## 🎬 Demo the Banking Application
 	@echo -e "\e[34m$@\e[0m" || true
-	@./demo.sh
-	@./show_app_log.sh
+	@./scripts/demo.sh
+	@./scripts/show_app_log.sh
 
 clean: ## 🧹 Clean the working folders created during build/demo
 	@rm -rf .venv_ccf_sandbox
@@ -59,24 +67,18 @@ build-enclave: ## 📦 Build Enclave container image from Dockerfile
 # TODO: Move the cchost_config into the sample folder
 run-virtual: ## 🏃 Start a virtual CCF node in Docker
 	@echo -e "\e[34m$@\e[0m" || true
-	@docker run --detach --ip 172.17.0.4 banking-app:virtual
+	@. ./scripts/start_docker.sh --virtual --serverIP 172.17.0.4
 
 # We hardcode the IP so that we can set this in the cchost_config
 # TODO: Move the cchost_config into the sample folder
 run-enclave: ## 🏃 Start an enclave CCF node in Docker
 	@echo -e "\e[34m$@\e[0m" || true
-	@docker run --detach --ip 172.17.0.4 banking-app:enclave
+	@. ./scripts/start_docker.sh --enclave --serverIP 172.17.0.4
 
 stop-virtual: ## ⛔ Stop a virtual CCF node in Docker
 	@echo -e "\e[34m$@\e[0m" || true
-	@{ \
-	containerId=$$(docker ps -qf ancestor=banking-app:virtual) ;\
-	docker stop $$containerId ;\
-	}
+	@. ./scripts/stop_docker.sh --virtual
 
 stop-enclave: ## ⛔ Stop a virtual CCF node in Docker
 	@echo -e "\e[34m$@\e[0m" || true
-	@{ \
-	containerId=$$(docker ps -qf ancestor=banking-app:enclave) ;\
-	docker stop $$containerId ;\
-	}
+	@. ./scripts/stop_docker.sh --enclave
