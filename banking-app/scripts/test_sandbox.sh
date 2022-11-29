@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-echo "🟢 Starting sandbox..."
+echo "▶️ Starting sandbox..."
 /opt/ccf/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count 3 --initial-user-count 2 --constitution-dir ./constitution > /dev/null 2>&1 &
 sandbox_pid=$!
 echo "💤 Waiting for sandbox . . . (${sandbox_pid})"

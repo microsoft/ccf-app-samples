@@ -20,12 +20,12 @@ jobs:
       - name: Build JS enclave container
         run: |
           cd banking-app
-          make build-enclave
+          make test-docker-enclave
 
       - name: Build JS virtual container
         run: |
           cd banking-app
-          make build-virtual
+          make test-docker-virtual
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
@@ -37,20 +37,23 @@ jobs:
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
           ./lint.sh
 
-      - name: Test Banking application
-        run: |
-          cd banking-app
-          npm install
-          make test
-          cd $GITHUB_WORKSPACE
-      - name: Test Auditable logging application
-        run: |
-          cd auditable-logging-app
-          npm install
-          make test
-          cd $GITHUB_WORKSPACE
+      # These are not going to work because the sandbox.sh will need to
+      # be copied over
+      # - name: Test Banking application
+      #   run: |
+      #     cd banking-app
+      #     npm install
+      #     make test
+      #     cd $GITHUB_WORKSPACE
+      # - name: Test Auditable logging application
+      #   run: |
+      #     cd auditable-logging-app
+      #     npm install
+      #     make test
+      #     cd $GITHUB_WORKSPACE
 
-  build-samples:
+  build-sandbox-samples:
+    name: Test the samples in the sandbox
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout repository

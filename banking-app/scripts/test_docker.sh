@@ -2,12 +2,13 @@
 set -euo pipefail
 
 declare enclave_type=""
+declare certificate_dir="./workspace/docker_certificates"
 
 function usage {
     echo ""
     echo "Start a CCF node in docker."
     echo ""
-    echo "usage: ./start_docker.sh --nodeAddress <IPADDRESS> --certificate_dir <workspace/docker_certificates> [--virtual] [--enclave]"
+    echo "usage: ./test_docker.sh --serverIP <IPADDRESS> --port <PORT> [--virtual] [--enclave]"
     echo ""
     echo "  --serverIP  string      The IP address of the primary CCF node"
     echo "  --port      string      The port of the primary CCF node"
@@ -18,7 +19,7 @@ function usage {
 }
 
 function failed {
-    printf "Script failed: %s\n\n" "$1"
+    printf "💥 Script failed: %s\n\n" "$1"
     exit 1
 }
 
@@ -54,7 +55,6 @@ fi
 if [ -z $port ]; then
     failed "You must supply --port"
 fi
-declare certificate_dir="./workspace/docker_certificates"
 declare server="https://${serverIP}:${port}"
 
 function finish {

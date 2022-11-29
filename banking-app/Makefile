@@ -28,12 +28,6 @@ start-host: build ## 🏁 Start the CCF Sandbox for the demo
 	@echo -e "\e[34m$@\e[0m" || true
 	@/opt/ccf/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count 3 --initial-user-count 0 --constitution-dir ./constitution
 
-start-host-for-test: build ## 🏁 Start the CCF Sandbox for the test
-	@echo -e "\e[34m$@\e[0m" || true
-	@/opt/ccf/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count 3 --initial-user-count 2 --constitution-dir ./constitution > /dev/null 2>&1 &
-	@echo "💤 Waiting for sandbox . . . "
-	@sleep 15
-
 demo: ## 🎬 Demo the Banking Application
 	@echo -e "\e[34m$@\e[0m" || true
 	@./scripts/demo.sh

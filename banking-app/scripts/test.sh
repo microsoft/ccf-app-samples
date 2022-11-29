@@ -8,7 +8,7 @@ function usage {
     echo ""
     echo "Test this sample."
     echo ""
-    echo "usage: ./test.sh --nodeAddress <IPADDRESS> --certificate_dir <workspace/sandbox_common>"
+    echo "usage: ./test.sh --nodeAddress <IPADDRESS:PORT> --certificate_dir <workspace/sandbox_common>"
     echo ""
     echo "  --nodeAddress        string      The IP and port of the primary CCF node"
     echo "  --certificate_dir    string      The directory where the certificates are"
@@ -17,7 +17,7 @@ function usage {
 }
 
 function failed {
-    printf "Script failed: %s\n\n" "$1"
+    printf "💥 Script failed: %s\n\n" "$1"
     exit 1
 }
 
@@ -50,7 +50,7 @@ fi
 
 server="https://${nodeAddress}"
 
-echo "Working directory (for certificates): ${certificate_dir}"
+echo "📂 Working directory (for certificates): ${certificate_dir}"
 
 check_eq() {
     local test_name="$1"

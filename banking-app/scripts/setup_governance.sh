@@ -5,7 +5,7 @@ function usage {
     echo ""
     echo "Setup the CCF network."
     echo ""
-    echo "usage: ./setup_governance.sh --serverIP <IPADDRESS>"
+    echo "usage: ./setup_governance.sh --nodeAddress <IPADDRESS:PORT> --certificate_dir <workspace/sandbox_common>"
     echo ""
     echo "  --nodeAddress        string      The IP and port of the primary CCF node"
     echo "  --certificate_dir    string      The directory where the certificates are"
@@ -14,7 +14,7 @@ function usage {
 }
 
 function failed {
-    printf "Script failed: %s\n\n" "$1"
+    printf "💥 Script failed: %s\n\n" "$1"
     exit 1
 }
 
@@ -47,7 +47,7 @@ if [ -z $certificate_dir ]; then
 fi
 server="https://${nodeAddress}"
 
-echo "Working directory (for certificates): ${certificate_dir}"
+echo "📂 Working directory (for certificates): ${certificate_dir}"
 cd ${certificate_dir}
 
 # create certificate files
@@ -57,7 +57,6 @@ create_certificate(){
     local setUserFile="set_${1}.json"
     /opt/ccf/bin/keygenerator.sh --name $certName --gen-enc-key
 }
-
 
 # Prepare a test network by adding a member 
 # and two users to the network, and then open it
