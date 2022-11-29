@@ -1,15 +1,14 @@
 #!/bin/bash
 set -euo pipefail
 
-declare enclave_type=""
-
 function usage {
     echo ""
     echo "Setup the CCF network."
     echo ""
     echo "usage: ./setup_governance.sh --serverIP <IPADDRESS>"
     echo ""
-    echo "  --serverIP  string      The IP address of the primary CCF node"
+    echo "  --nodeAddress        string      The IP and port of the primary CCF node"
+    echo "  --certificate_dir    string      The directory where the certificates are"
     echo ""
     exit 0
 }
@@ -21,7 +20,7 @@ function failed {
 
 # parse parameters
 
-if [[ $# -lt 2 || $# -gt 2 ]]; then
+if [ $# -gt 4 ]; then
     usage
     exit 1
 fi
@@ -31,7 +30,8 @@ do
     name="${1/--/}"
     name="${name/-/_}"
     case "--$name"  in
-        --serverIP) serverIP="$2"; shift;;
+        --nodeAddress) nodeAddress="$2"; shift;;
+        --certificate_dir) certificate_dir="$2"; shift;;
         --help) usage; exit 0;;
         --) shift;;
     esac
@@ -39,10 +39,16 @@ do
 done
 
 # validate parameters
-if [ -z $serverIP ]; then
-    failed "You must supply --serverIP"
+if [ -z $nodeAddress ]; then
+    failed "You must supply --nodeAddress"
 fi
-server="https://${serverIP}"
+if [ -z $certificate_dir ]; then
+    failed "You must supply --certificate_dir"
+fi
+server="https://${nodeAddress}"
+
+echo "Working directory (for certificates): ${certificate_dir}"
+cd ${certificate_dir}
 
 # create certificate files
 create_certificate(){
@@ -154,7 +160,7 @@ echo "Network Proposal ID: $network_proposal_out_id"
     --cacert service_cert.pem \
     --signing-key member0_privk.pem \
     --signing-cert member0_cert.pem \
-    --data-binary @vote_accept.json \
+    --data-binary @../../vote/vote_accept.json \
     -H "content-type: application/json" | jq
 
 ##############################################
@@ -172,7 +178,7 @@ echo "Application Proposal ID: ${application_proposal_out_id}"
     --cacert service_cert.pem \
     --signing-key member0_privk.pem \
     --signing-cert member0_cert.pem \
-    --data-binary @vote_accept.json \
+    --data-binary @../../vote/vote_accept.json \
     -H "content-type: application/json" | jq
 
 ##############################################
