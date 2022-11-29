@@ -45,23 +45,3 @@ build-virtual: ## 📦 Build Virtual container image from Dockerfile
 build-enclave: ## 📦 Build Enclave container image from Dockerfile
 	@echo -e "\e[34m$@\e[0m" || true
 	@../build_image.sh enclave
-
-# We hardcode the IP so that we can set this in the cchost_config
-# TODO: Move the cchost_config into the sample folder
-run-virtual: ## 🏃 Start a virtual CCF node in Docker
-	@echo -e "\e[34m$@\e[0m" || true
-	@. ./scripts/start_docker.sh --virtual --serverIP 172.17.0.4
-
-# We hardcode the IP so that we can set this in the cchost_config
-# TODO: Move the cchost_config into the sample folder
-run-enclave: ## 🏃 Start an enclave CCF node in Docker
-	@echo -e "\e[34m$@\e[0m" || true
-	@. ./scripts/start_docker.sh --enclave --serverIP 172.17.0.4
-
-stop-virtual: ## ⛔ Stop a virtual CCF node in Docker
-	@echo -e "\e[34m$@\e[0m" || true
-	@. ./scripts/stop_docker.sh --virtual
-
-stop-enclave: ## ⛔ Stop a virtual CCF node in Docker
-	@echo -e "\e[34m$@\e[0m" || true
-	@. ./scripts/stop_docker.sh --enclave

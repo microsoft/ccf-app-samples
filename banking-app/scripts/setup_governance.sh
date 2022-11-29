@@ -142,7 +142,7 @@ curl ${server}/gov/members \
 create_test_network_proposal
 
 ##############################################
-# Open Network
+# Propose users and Open Network
 ##############################################
 echo "Open the network"
 network_proposal_out=$(/opt/ccf/bin/scurl.sh "${server}/gov/proposals" \
@@ -154,6 +154,9 @@ network_proposal_out=$(/opt/ccf/bin/scurl.sh "${server}/gov/proposals" \
 echo ${network_proposal_out} | jq
 network_proposal_out_id=$( jq -r  '.proposal_id' <<< "${network_proposal_out}" )
 
+######
+# Vote
+######
 echo "Network Proposal ID: $network_proposal_out_id"
 /opt/ccf/bin/scurl.sh "${server}/gov/proposals/$network_proposal_out_id/ballots" \
     --cacert service_cert.pem \
@@ -163,7 +166,10 @@ echo "Network Proposal ID: $network_proposal_out_id"
     -H "content-type: application/json" | jq
 
 ##############################################
-# Propose users and application
+# Propose application. The json file we use
+# in the proposal is generated when we build
+# the application as it has all the endpoints
+# defined in it.
 ##############################################
 application_proposal_out=$(/opt/ccf/bin/scurl.sh "${server}/gov/proposals" \
     --cacert service_cert.pem \
@@ -172,6 +178,10 @@ application_proposal_out=$(/opt/ccf/bin/scurl.sh "${server}/gov/proposals" \
     --data-binary @../../dist/set_js_app.json \
     -H "content-type: application/json")
 application_proposal_out_id=$( jq -r  '.proposal_id' <<< "${application_proposal_out}" )
+
+######
+# Vote
+######
 echo "Application Proposal ID: ${application_proposal_out_id}"
 /opt/ccf/bin/scurl.sh "${server}/gov/proposals/${application_proposal_out_id}/ballots" \
     --cacert service_cert.pem \
