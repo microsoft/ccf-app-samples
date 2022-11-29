@@ -12,7 +12,7 @@ build: ## 🔨 Build the Banking Application
 
 test: start-host-for-test ## 🧪 Test the Banking Application in the sandbox
 	@echo -e "\e[34m$@\e[0m" || true
-	@cd workspace/sandbox_common && ../../scripts/test.sh --serverIP 127.0.0.1:8000
+	@cd ./workspace/sandbox_common && ../../scripts/test.sh --serverIP 127.0.0.1:8000
 	@. ./scripts/stop_sandbox.sh
 
 # TODO: Currently a lot of the scripts have to be in the folder where
@@ -20,8 +20,8 @@ test: start-host-for-test ## 🧪 Test the Banking Application in the sandbox
 test-docker-virtual: build-virtual ## 🧪 Test the Banking Application in a Docker sandbox
 	@echo -e "\e[34m$@\e[0m" || true
 	@. ./scripts/start_docker.sh --virtual --serverIP 172.17.0.3
-	@cd workspace/docker_certificates && ../../scripts/setup_governance.sh --serverIP 172.17.0.3:8080
-	@cd workspace/docker_certificates && ../../scripts/test.sh --serverIP 172.17.0.3:8080
+	@cd ./workspace/docker_certificates && ../../scripts/setup_governance.sh --serverIP 172.17.0.3:8080
+	@cd ./workspace/docker_certificates && ../../scripts/test.sh --serverIP 172.17.0.3:8080
 	@. ./scripts/stop_docker.sh --virtual
 
 # TODO: Currently a lot of the scripts have to be in the folder where
@@ -29,8 +29,8 @@ test-docker-virtual: build-virtual ## 🧪 Test the Banking Application in a Doc
 test-docker-enclave: build-enclave ## 🧪 Test the Banking Application in a Docker enclave
 	@echo -e "\e[34m$@\e[0m" || true
 	@. ./scripts/start_docker.sh --enclave --serverIP 172.17.0.4
-	@cd workspace/docker_certificates && ../../scripts/setup_governance.sh --serverIP 172.17.0.4:8080
-	@cd workspace/docker_certificates && ../../scripts/test.sh --serverIP 172.17.0.4:8080
+	@cd ./workspace/docker_certificates && ../../scripts/setup_governance.sh --serverIP 172.17.0.4:8080
+	@cd ./workspace/docker_certificates && ../../scripts/test.sh --serverIP 172.17.0.4:8080
 	@. ./scripts/stop_docker.sh --enclave
 
 # Run sandbox. Consider 3 members as 3 banks.
