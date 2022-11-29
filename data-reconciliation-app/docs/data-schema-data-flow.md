@@ -11,7 +11,7 @@ Main idea: We build a generalized sample app for a bunch of institutions who wan
 ## Data Schema 
 Assumption: In our sample application, members will agree upon their schema. The only requirement is that this schema has a unique idenifier and attributes associated with the unique identifier. 
 
-Validation on the schema is not neccessary for our app, but it could be simple in our sample to check keys/attributes exist: 
+Our main audience for our sample app is a developer. A developer could take our sample app and extend it to their own use case. A developer could provide their input schema. Therefore, validation on the schema is not neccessary for our app, but it could be a simple check:
 - Yes, the data is in correct schema --> ingested into app
 - No, not correct schema ---> Error: Try again. 
 
@@ -34,9 +34,13 @@ Validation on the schema is not neccessary for our app, but it could be simple i
     - Query by specific record 
     - Query for all data 
 - If a record is determined out of consensus with other members in the network, you cannot share the value of what other members had for that record. 
-- Depending on the input data schema, results can be numerical or categorical and returned as a CSV table to all members.
-    - For example, the forum app returned the mean and standard deviation based on the opinions (data) submitted by the members.
-- For LEI data/categorical data, Results = CSV table of records in consensus, out of consensus, or undetermined, as well as number of folks in the network you are in or out of consensus with. Something along the lines of:
+- Depending on the input data schema, results data can be numerical or categorical and will be returned as a CSV table to all members. We could even require a developer provide their own output schema for desired results.
+    - For example, the forum app computed the mean and standard deviation based on the opinions (data) submitted by the members and returned this as response data (numerical).
+    - ID, Mean, Std
+    - unqiue_id_1, 3.2, 0.01
+    - unique_id_2, 4.5, 0.2
+    - unique_id_3, 3.4, 0.1
+    - For LEI data, Results = CSV table of records, thier status (consensus, out of consensus, or undetermined = categorical data) as well as number of folks in the network you are in or out of consensus with. Something along the lines of:
     - ID, Status, # Members Agreed, # Members did not agree
     - unqiue_id_1, IN_CONSENSUS, 5, 0
     - unique_id_2, OUT_OF_CONSENSUS, 3, 2
