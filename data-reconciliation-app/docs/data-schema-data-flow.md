@@ -34,13 +34,15 @@ Our main audience for our sample app is a developer. A developer could take our 
     - Query by specific record 
     - Query for all data 
 - If a record is determined out of consensus with other members in the network, you cannot share the value of what other members had for that record. 
-- Depending on the input data schema, results data can be numerical or categorical and will be returned as a CSV table to all members. We could even require a developer provide their own output schema for desired results.
-    - For example, the forum app computed the mean and standard deviation based on the opinions (data) submitted by the members and returned this as response data (numerical).
+
+## Data Results Schema
+- Depending on the scenario and input data, results data can be numerical or categorical and will be returned as a CSV table to all members. We could even require a developer provide their own output schema for desired results.
+- Numerical Results: For example, the forum app computed the mean and standard deviation based on the opinions (data) submitted by the members and returned this as response data .
     - ID, Mean, Std
     - unqiue_id_1, 3.2, 0.01
     - unique_id_2, 4.5, 0.2
     - unique_id_3, 3.4, 0.1
-    - For LEI data, Results = CSV table of records, thier status (consensus, out of consensus, or undetermined = categorical data) as well as number of folks in the network you are in or out of consensus with. Something along the lines of:
+- Categorical Results: For LEI data, Results = CSV table of records, thier status (consensus, out of consensus, or undetermined = categorical data) as well as number of folks in the network you are in or out of consensus with. Something along the lines of:
     - ID, Status, # Members Agreed, # Members did not agree
     - unqiue_id_1, IN_CONSENSUS, 5, 0
     - unique_id_2, OUT_OF_CONSENSUS, 3, 2
