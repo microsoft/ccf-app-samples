@@ -2,7 +2,6 @@ name: "CCF App Samples Deployment"
 
 on:
   pull_request:
-    branches: [main]
   workflow_dispatch:
 
 jobs:
