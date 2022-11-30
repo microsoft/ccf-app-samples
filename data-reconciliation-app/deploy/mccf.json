@@ -8,37 +8,11 @@
                 "description": "Resource Name"
             }
         },
-        "resourceType": {
-            "defaultValue": "",
-            "allowedValues": [
-                "Public",
-                "Private",
-                "App"
-            ],
-            "type": "string",
-            "metadata": {
-                "description": "Values are App, Public or Private"
-            }
-        },
         "location": {
             "defaultValue": "southcentralus",
             "type": "string",
             "metadata": {
                 "description": "Azure Region"
-            }
-        },
-        "aclAadBasedSecurityPrincipals": {
-            "defaultValue": [],
-            "type": "array",
-            "metadata": {
-                "description": "AAD-based users"
-            }
-        },
-        "aclCertBasedSecurityPrincipals": {
-            "defaultValue": [],
-            "type": "array",
-            "metadata": {
-                "description": "Cert-based users"
             }
         },
         "mccfAppSourceUri": {
@@ -80,12 +54,11 @@
                 "count": "[length(parameters('mccfMemberBasedSecurityPrincipals'))]",
                 "input": {
                     "certificate": "[last(take(parameters('mccfMemberBasedSecurityPrincipals'),copyIndex('memberBasedSecurityPrincipals',1))).cert]",
-                    "encryptionkey": "[last(take(parameters('mccfMemberBasedSecurityPrincipals'),copyIndex('memberBasedSecurityPrincipals',1))).encryptionKey]",
+                    "encryptionkey": "[last(take(parameters('mccfMemberBasedSecurityPrincipals'),copyIndex('memberBasedSecurityPrincipals',1))).encryptionKey]"
                 }
             }
         ]
     },
-    "functions": [],
     "resources": [
         {
             "type": "Microsoft.ConfidentialLedger/ManagedCCFs",
@@ -99,9 +72,7 @@
                     "appSourceUri": "[parameters('mccfAppSourceUri')]"
                 },
                 "memberIdentityCertificates": "[variables('memberBasedSecurityPrincipals')]"
-            },
-            "condition": "[equals(parameters('resourceType'),'App')]"
+            }
         }
-    ],
-    "outputs": {}
+    ]
 }
