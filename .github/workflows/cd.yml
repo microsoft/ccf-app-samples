@@ -1,7 +1,6 @@
 name: "CCF App Samples Deployment"
 
 on:
-  pull_request:
   workflow_dispatch:
 
 jobs:
@@ -30,7 +29,6 @@ jobs:
           inlineScript: |
             #!/bin/bash
             az group create --name ${{ env.ResourceGroupName }} --location ${{ env.ResourceGroupLocation }}
-            echo "Azure resource group created
 
       - name: Deploy
         uses: azure/arm-deploy@v1
