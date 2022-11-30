@@ -1,0 +1,39 @@
+name: "CCF App Samples Deployment"
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Managed CCF
+    runs-on: ubuntu-20.04
+    environment: dev
+    env:
+      ResourceGroupName: mCCF1
+      ResourceGroupLocation: "westeurope"
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Azure Login
+        uses: Azure/login@v1.4.5
+        with:
+          creds: '{"clientId":"${{ secrets.ARM_CLIENT_ID }}","clientSecret":"${{ secrets.ARM_CLIENT_SECRET }}","subscriptionId":"${{ secrets.ARM_SUBSCRIPTION_ID }}","tenantId":"${{ secrets.ARM_TENANT_ID }}"}'  # editorconfig-checker-disable-line
+
+      - name: Create Resource Group
+        uses: Azure/CLI@v1
+        with:
+          inlineScript: |
+            #!/bin/bash
+            az group create --name ${{ env.ResourceGroupName }} --location ${{ env.ResourceGroupLocation }}
+            echo "Azure resource group created
+
+      - name: Deploy
+        uses: azure/arm-deploy@v1
+        with:
+          resourceGroupName: ${{ env.ResourceGroupName }}
+          template: ./data-reconciliation-app/deploy/mccf.json
+          parameters: ./data-reconciliation-app/deploy/parameters.json mccfMemberBasedSecurityPrincipals.cert=${{ secrets.PUBLIC_CERT }}

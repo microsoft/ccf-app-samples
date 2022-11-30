@@ -1,0 +1,29 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "resourceName": {
+        "value": "rosmith"
+      },
+      "resourceType": {
+        "value": "App"
+      },
+      "location": {
+        "value": "southcentralus"
+      },
+      "mccfAppLanguage": {
+        "value": "JS"
+      },
+      "mccfMemberBasedSecurityPrincipals": {
+        "value": [
+          {
+            "cert": "-----BEGIN CERTIFICATE-----\nMIIByjCCAVCgAwIBAgIUAvf8iDE4ZcO32LCV1QHHfszPzEswCgYIKoZIzj0EAwMw\nHDEaMBgGA1UEAwwRbmV1dHJpbm9fb3BlcmF0b3IwHhcNMjIxMTA5MTMwNTEzWhcN\nMjMxMTA5MTMwNTEzWjAcMRowGAYDVQQDDBFuZXV0cmlub19vcGVyYXRvcjB2MBAG\nByqGSM49AgEGBSuBBAAiA2IABLHRljGUJ0kYGbM+i4hl93a0VMyp3inbWQBmI+ha\niQ3lEt9D6svXAySgOd5swFpdtvxIPGWoaJcnjCwYi4hxbb5xI8sEaZ+zQVKEYugi\n/pcT011vutCVtpgblaOwyTVftKNTMFEwHQYDVR0OBBYEFFyBQOqPaGUc5+LKlKBb\n2UrGe1hZMB8GA1UdIwQYMBaAFFyBQOqPaGUc5+LKlKBb2UrGe1hZMA8GA1UdEwEB\n/wQFMAMBAf8wCgYIKoZIzj0EAwMDaAAwZQIwLT80lELn11R8/VB4WkFDE16THx05\n60tJXXwg3JHyjfR9efV3KLCeooXC588Y7D2tAjEAv33dZ8BiwUDcfhWzcCNfKbL9\nXoyP9HR28XLP1S4iE9djCelez299GLl/KtA/SaWm\n-----END CERTIFICATE-----\n",
+            "encryptionKey": ""
+          }
+        ]
+      },
+      "tags": {
+        "value": {}
+      }
+    }
+  }
