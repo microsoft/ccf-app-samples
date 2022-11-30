@@ -23,7 +23,7 @@ To get started run `cd data-reconciliation-app && make test` to run the applicat
 ```text
 📂
 ├── docs                Sample application documentation
-│   └── adrs            All Architecture design records (ADR)
+│   └── adrs            All Architecture decision records (ADR)
 │
 ├── governance
 │   └── constitution    CCF network constitution files
