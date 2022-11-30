@@ -40,7 +40,6 @@ To get started run `cd data-reconciliation-app && make test` to run the applicat
 │
 └── deploy              Scripts to deploy to the application
 └── demo                Scripts to run demo
-└── docker              CCF network nodes docker files
 
 ```
 
