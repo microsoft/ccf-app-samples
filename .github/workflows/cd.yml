@@ -35,4 +35,4 @@ jobs:
         with:
           resourceGroupName: ${{ env.ResourceGroupName }}
           template: ./data-reconciliation-app/deploy/mccf.json
-          parameters: ./data-reconciliation-app/deploy/parameters.json mccfMemberBasedSecurityPrincipals="{\"cert\":\"${{ secrets.PUBLIC_CERT }}\", \"encryptionKey\":\"\"}"
+          parameters: ./data-reconciliation-app/deploy/parameters.json mccfMemberBasedSecurityPrincipals="[{\"cert\":\"${{ secrets.PUBLIC_CERT }}\", \"encryptionKey\":\"\"}]"
