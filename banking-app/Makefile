@@ -35,13 +35,14 @@ demo: ## 🎬 Demo the Banking Application
 
 clean: ## 🧹 Clean the working folders created during build/demo
 	@rm -rf .venv_ccf_sandbox
+	@rm -rf .venv_ccf_verify_receipt
 	@rm -rf workspace
 	@rm -rf dist
 
-build-virtual: ## 📦 Build Virtual container image from Dockerfile
+build-virtual: build ## 📦 Build Virtual container image from Dockerfile
 	@echo -e "\e[34m$@\e[0m" || true
 	@../build_image.sh virtual
 
-build-enclave: ## 📦 Build Enclave container image from Dockerfile
+build-enclave: build ## 📦 Build Enclave container image from Dockerfile
 	@echo -e "\e[34m$@\e[0m" || true
 	@../build_image.sh enclave
