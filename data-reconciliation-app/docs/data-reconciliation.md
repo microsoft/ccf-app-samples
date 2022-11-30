@@ -1,10 +1,8 @@
 # What is data reconciliation means in the context of the project?
 
-## _Reconciliation in finance_
+## _Reconciliation Overview_
 
-Reconciliation in finance is the process of comparing different business entities, accounts, amounts, data points, etc. to find out if they are matching or to explain why there are differences between them.
-
-Data Reconciliation is important because it will address a range of issues such as:
+Generally speaking, data reconciliation is used describe a verification phase where the target data is compared against original source data to address a range of issues:
 
 - Missing records
 - Missing values
@@ -13,13 +11,15 @@ Data Reconciliation is important because it will address a range of issues such 
 - Badly formatted values
 - Broken relationships across tables or systems
 
+However, in many scenarios, there may not exist a single source of truth to compare your target data against. Rather, institutions can come together in a network to consolidate, compare and identify issues with their own data. One of the benefits of a CCF network is that these institutions can do so confidently, without actually sharing their data with one another.
+
+Some potential use cases may involve:
+
+- In finance, a number of financial institutions coming together to predict the price of a derivative.
+- In finance, a number of financial institutions coming together to reconcile reference data or ticker symbols.
+- In healthcare, a number of hospitals coming together to reconcile hospital records for patients.
+
 ![reconciliation diagram](data-reconciliation.png)
-
-## Use case
-
-In the last few years, regulatory legislation has enforced a unique Legal Entity Identifier (LEI) which allows all financial industry participants to standardize how they reference counter-parties and clients. This law has been the impetus for all financial industry participants to clean up their reference data and adopt this new identification system. It has been inefficient and expensive for industry participants to maintain reference data. These datasets are critical for trade processing, risk management and regulatory reporting and therefore a high degree of accuracy is required. Yet the only way to have certainty regarding their accuracy is constant review and refresh against authoritative sources of all data, an enormous and costly task.
-
-Rather than collaborating with data providers and hiring human resources to keep these LEIs in sync, financial industry participants could leverage confidential compute platforms to create a consortium network and reconciliation service to clean up all their reference data. This would improve data quality in a compliant and cost-effective way through industry collaboration.
 
 ## Proposed solution
 
@@ -64,6 +64,6 @@ The reconciliation application will consist of three main services.
 
 ## Resources
 
-- [https://www.guru99.com/what-is-data-reconciliation.html](https://www.guru99.com/what-is-data-reconciliation.html)
-
-- [https://managedlei.com/blog/legal-entity-identification-data-mapping](https://managedlei.com/blog/legal-entity-identification-data-mapping)
+- [Data reconciliation data schema](https://github.com/microsoft/ccf-app-samples/blob/main/data-reconciliation-app/docs/data-schema-data-flow.md)
+- [Data validation and reconciliation](https://en.wikipedia.org/wiki/Data_validation_and_reconciliation)
+- [What is data reconciliation?](https://www.guru99.com/what-is-data-reconciliation.html)
