@@ -1,14 +1,56 @@
 #!/bin/bash
+set -euo pipefail
 
-# -------------------------- Preparation --------------------------
+declare nodeAddress=""
+declare certificate_dir=""
 
-echo "Building app..."
-npm run build > /dev/null 2>&1
+function usage {
+    echo ""
+    echo "Test this sample."
+    echo ""
+    echo "usage: ./test.sh --nodeAddress <IPADDRESS:PORT> --certificate_dir <workspace/sandbox_common>"
+    echo ""
+    echo "  --nodeAddress        string      The IP and port of the primary CCF node"
+    echo "  --certificate_dir    string      The directory where the certificates are"
+    echo ""
+    exit 0
+}
 
-# Run sandbox. Consider 3 members as 3 banks.
-echo "Starting sandbox..."
-/opt/ccf/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count 3 --initial-user-count 2 > /dev/null 2>&1 &
-sandbox_pid=$!
+function failed {
+    printf "💥 Script failed: %s\n\n" "$1"
+    exit 1
+}
+
+# parse parameters
+if [ $# -gt 4 ]; then
+    usage
+    exit 1
+fi
+
+while [ $# -gt 0 ]
+do
+    name="${1/--/}"
+    name="${name/-/_}"
+    case "--$name"  in
+        --nodeAddress) nodeAddress="$2"; shift;;
+        --certificate_dir) certificate_dir="$2"; shift;;
+        --help) usage; exit 0;;
+        --) shift;;
+    esac
+    shift;
+done
+
+# validate parameters
+if [ -z $nodeAddress ]; then
+    failed "You must supply --nodeAddress"
+fi
+if [ -z $certificate_dir ]; then
+    failed "You must supply --certificate_dir"
+fi
+
+server="https://${nodeAddress}"
+
+echo "📂 Working directory (for certificates): ${certificate_dir}"
 
 check_eq() {
     local test_name="$1"
@@ -16,10 +58,9 @@ check_eq() {
     local actual="$3"
     echo -n "$test_name: "
     if [ "$expected" == "$actual" ]; then
-        echo "[Pass]"
+        echo "[Pass] ✅"
     else
-        echo "[Fail]: $expected expected, but got $actual"
-        (kill -9 $sandbox_pid)
+        echo "[Fail] ❌: $expected expected, but got $actual"
         exit 1
     fi
 }
@@ -29,17 +70,21 @@ cert_arg() {
     echo "--cacert service_cert.pem --cert ${caller}_cert.pem --key ${caller}_privk.pem"
 }
 
-server="https://127.0.0.1:8000"
 only_status_code="-s -o /dev/null -w %{http_code}"
 
-echo "Waiting for the app frontend..."
+echo "💤 Waiting for the app frontend..."
 # Using the same way as https://github.com/microsoft/CCF/blob/1f26340dea89c06cf615cbd4ec1b32665840ef4e/tests/start_network.py#L94
-while [ "200" != "$(curl $server/app/commit --cacert workspace/sandbox_common/service_cert.pem $only_status_code)" ]
+# There is a side effect here in the case of the sandbox as it creates the 'workspace/sandbox_common' everytime
+# it starts up. The following condition not only checks that this pem file has been created, it also checks it
+# is valid. Don't be caught out by the folder existing from a previous run.
+while [ "200" != "$(curl $server/app/commit --cacert "${certificate_dir}/service_cert.pem" $only_status_code)" ]
 do
     sleep 1
 done
 
-cd workspace/sandbox_common
+# Only when this directory has been created (or refreshed), should we change to it
+# otherwise you can get permission issues.
+cd ${certificate_dir}
 
 user0_id=$(openssl x509 -in "user0_cert.pem" -noout -fingerprint -sha256 | cut -d "=" -f 2 | sed 's/://g' | awk '{print tolower($0)}')
 user1_id=$(openssl x509 -in "user1_cert.pem" -noout -fingerprint -sha256 | cut -d "=" -f 2 | sed 's/://g' | awk '{print tolower($0)}')
@@ -86,7 +131,4 @@ check_eq "Transfer: account not found" "404" "$(curl $server/app/transfer/non-ex
 check_eq "Transfer: userTo not found" "404" "$(curl $server/app/transfer/$account_type0 -X POST $(cert_arg "user0") -H "Content-Type: application/json" --data-binary "{ \"value\": 40, \"user_id_to\": \"non-existing-user\", \"account_name_to\": \"$account_type1\" }" $only_status_code)"
 check_eq "Transfer: accountTo not found" "404" "$(curl $server/app/transfer/$account_type0 -X POST $(cert_arg "user0") -H "Content-Type: application/json" --data-binary "{ \"value\": 40, \"user_id_to\": \"$user1_id\", \"account_name_to\": \"non-existing-account\" }" $only_status_code)"
 check_eq "Balance: account not found" "404" "$(curl $server/app/balance/non-existing-account -X GET $(cert_arg "user0") $only_status_code)"
-
-echo "OK"
-kill -9 $sandbox_pid
 exit 0
