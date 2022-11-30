@@ -12,7 +12,7 @@ build: ## 🔨 Build the Application
 
 test: ## 🧪 Run tests, used for local development
 	@echo -e "\e[34m$@\e[0m" || true
-	@./scripts/run_test.sh
+	@./test/run_test.sh
 
 # Start hosting the application using `sandbox.sh` 
 start-host: build ## 🏃 Start the CCF network using Sandbox.sh
