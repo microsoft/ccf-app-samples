@@ -1,7 +1,7 @@
 name: "CCF App Samples Deployment"
 
 on:
-  push:
+  pull_request:
     branches: [main]
   workflow_dispatch:
 
