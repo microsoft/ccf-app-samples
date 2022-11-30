@@ -1,3 +1,3 @@
 # Application Demo
 
-Application Demo description 
+Application Demo description
