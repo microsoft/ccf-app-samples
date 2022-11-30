@@ -4,7 +4,7 @@
 
 Reconciliation in finance is the process of comparing different business entities, accounts, amounts, data points, etc. to find out if they are matching or to explain why there are differences between them.
 
-Data Reconciliation important because it will address a range of issues such as:
+Data Reconciliation is important because it will address a range of issues such as:
 
 - Missing records
 - Missing values
@@ -17,7 +17,7 @@ Data Reconciliation important because it will address a range of issues such as:
 
 ## Use case
 
-In the last few years, regulatory legislation has enforced a unique Legal Entity Identifier (LEI) which allows all financial industry participants to standardize how they reference counter-parties and clients. This law has been the impetus for all financial industry participants to clean up their reference data and adopt this new identification system. It has been inefficient and expensive for industry participants to maintain reference data. These datasets are critical for trade processing, risk management and regulatory reporting and therefore a high degree of accuracy is required. Yet the only way to have certainty regarding their accuracy is constant review and refresh against authoritative sources of all data, an enormous and costly task
+In the last few years, regulatory legislation has enforced a unique Legal Entity Identifier (LEI) which allows all financial industry participants to standardize how they reference counter-parties and clients. This law has been the impetus for all financial industry participants to clean up their reference data and adopt this new identification system. It has been inefficient and expensive for industry participants to maintain reference data. These datasets are critical for trade processing, risk management and regulatory reporting and therefore a high degree of accuracy is required. Yet the only way to have certainty regarding their accuracy is constant review and refresh against authoritative sources of all data, an enormous and costly task.
 
 Rather than collaborating with data providers and hiring human resources to keep these LEIs in sync, financial industry participants could leverage confidential compute platforms to create a consortium network and reconciliation service to clean up all their reference data. This would improve data quality in a compliant and cost-effective way through industry collaboration.
 
@@ -35,7 +35,7 @@ This solution is generic to handle scenarios of data collaboration amongst diffe
 - The schema must has a unique identifier and attributes associated with this identifier
 - The Data is compared across all members, no one source of truth
 - In order for our app to provide a report on the data, ~80% of members need to have submitted their data
-- If a record is determined to be out of consensus with other members in the network, you cannot share the value that other members had for that record (each member must have access to his own reconciled records only)
+- If a record is determined to be out of consensus with other members in the network, you cannot share the value that other members had for that record (each member can only have access to their own reconciled records)
 
 ## Application
 
