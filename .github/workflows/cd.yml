@@ -36,3 +36,11 @@ jobs:
           resourceGroupName: ${{ env.ResourceGroupName }}
           template: ./data-reconciliation-app/deploy/mccf.json
           parameters: ./data-reconciliation-app/deploy/parameters.json mccfMemberBasedSecurityPrincipals="[{\"cert\":\"${{ secrets.PUBLIC_CERT }}\", \"encryptionKey\":\"\"}]" resourceName="${{ env.ResourceGroupName }}"
+
+      - name: Delete Resource Group
+        uses: Azure/CLI@v1
+        with:
+          inlineScript: |
+            #!/bin/bash
+            echo "Delete resource group for the moment!"
+            az group delete --name ${{ env.ResourceGroupName }} --yes
