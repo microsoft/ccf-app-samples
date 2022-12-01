@@ -15,14 +15,10 @@ fi
 setup_type=$1
 app_path=$PWD
 app_name=${app_path##*/}
-#parent_path=`dirname $PWD`
 
-echo "-- Generating image for $setup_type" container.
+echo "-- Generating image for $setup_type container"
 
 mkdir -p $app_path/workspace/docker_certificates
-
-echo "-- Copying host config file to be used by docker in current directory"
-cp $app_path/config/cchost_config_${setup_type}_js.json $app_path/workspace/docker_certificates/.
 
 echo "-- generating member0 certificates"
 # This is directly related to the member described in host config file 
@@ -32,6 +28,3 @@ cd $app_path
 
 echo "-- Running docker build command"
 docker build -t $app_name:${setup_type} -f $app_path/docker/ccf_app_js.${setup_type} .
-
-echo "-- Removing host config files copies"
-rm $app_path/workspace/docker_certificates/cchost_config_${setup_type}_js.json
