@@ -44,7 +44,7 @@ jobs:
             #!/bin/bash
             mkdir -p ./banking-app/workspace/mccf_certificates
             echo -e ${{ secrets.PUBLIC_CERT }} > "./banking-app/workspace/mccf_certificates/member0_cert.pem"
-            echo -e ${{ secrets.PRIVATE_CERT }} > "./banking-app/workspace/mccf_certificates/member0_privk.pem"
+            cat ${{ secrets.PRIVATE_CERT }} > "./banking-app/workspace/mccf_certificates/member0_privk.pem"
             cd banking-app && ./scripts/test_mccf.sh --address neutrino.confidential-ledger.azure.com
 
       # - name: Delete Resource Group
