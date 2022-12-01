@@ -37,10 +37,20 @@ jobs:
           template: ./data-reconciliation-app/deploy/arm/mccf.json
           parameters: ./data-reconciliation-app/deploy/arm/parameters.json mccfMemberBasedSecurityPrincipals="[{\"cert\":\"${{ secrets.PUBLIC_CERT }}\", \"encryptionKey\":\"\"}]" resourceName="${{ env.ccfName }}"
 
-      - name: Delete Resource Group
-        uses: Azure/CLI@v1
+      - name: Build samples in DevContainer
+        uses: devcontainers/ci@v0.2
         with:
-          inlineScript: |
+          runCmd: |
             #!/bin/bash
-            echo "Delete resource group for the moment!"
-            az group delete --name ${{ env.ccfName }} --yes
+            mkdir -p ./banking-app/workspace/mccf_certificates
+            echo -e ${{ secrets.PUBLIC_CERT }} > "./banking-app/workspace/mccf_certificates/member0_cert.pem"
+            echo -e ${{ secrets.PRIVATE_CERT }} > "./banking-app/workspace/mccf_certificates/member0_privk.pem"
+            cd banking-app && ./scripts/test_mccf.sh --address neutrino.confidential-ledger.azure.com
+
+      # - name: Delete Resource Group
+      #   uses: Azure/CLI@v1
+      #   with:
+      #     inlineScript: |
+      #       #!/bin/bash
+      #       echo "Delete resource group for the moment!"
+      #       az group delete --name ${{ env.ccfName }} --yes
