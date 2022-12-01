@@ -34,8 +34,8 @@ jobs:
         uses: azure/arm-deploy@v1
         with:
           resourceGroupName: ${{ env.ccfName }}
-          template: ./data-reconciliation-app/deploy/mccf.json
-          parameters: ./data-reconciliation-app/deploy/parameters.json mccfMemberBasedSecurityPrincipals="[{\"cert\":\"${{ secrets.PUBLIC_CERT }}\", \"encryptionKey\":\"\"}]" resourceName="${{ env.ccfName }}"
+          template: ./data-reconciliation-app/deploy/arm/mccf.json
+          parameters: ./data-reconciliation-app/deploy/arm/parameters.json mccfMemberBasedSecurityPrincipals="[{\"cert\":\"${{ secrets.PUBLIC_CERT }}\", \"encryptionKey\":\"\"}]" resourceName="${{ env.ccfName }}"
 
       - name: Delete Resource Group
         uses: Azure/CLI@v1
