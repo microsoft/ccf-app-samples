@@ -16,7 +16,7 @@
             }
         },
         "mccfAppSourceUri": {
-            "defaultValue": "",
+            "defaultValue": "ThisMustHaveAValue",
             "type": "string",
             "metadata": {
                 "description": "MCCF App type"

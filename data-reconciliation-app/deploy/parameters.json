@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "resourceName": {
-            "value": "rosmith"
+            "value": "sample"
         },
         "location": {
             "value": "southcentralus"
@@ -12,7 +12,7 @@
             "value": "JS"
         },
         "mccfAppSourceUri": {
-            "value": "sample"
+            "value": "data-reconciliation"
         },
         "mccfMemberBasedSecurityPrincipals": {
             "value": [
