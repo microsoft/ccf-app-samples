@@ -10,34 +10,39 @@ build: ## 🔨 Build the Banking Application
 	@echo -e "\e[34m$@\e[0m" || true
 	@npm run build
 
-test: ## 🧪 Test the Banking Application
+test: build ## 🧪 Test the Banking Application in the sandbox
 	@echo -e "\e[34m$@\e[0m" || true
-	@./test.sh
+	@. ./scripts/test_sandbox.sh --nodeAddress 127.0.0.1:8000 --certificate_dir ./workspace/sandbox_common
 
-# Hack to use default resolve.js
-# It should be improved after '--no-default-constitution' is added to sandbox.sh.
-# NOTE: This hack replaces the content of /opt/ccf/bin/resolve.js
-# Run sandbox. Consider 3 members as 3 banks.
-start-host: build ## 🏃 Start the CCF Sandbox
+test-docker-virtual: build-virtual ## 🧪 Test the Banking Application in a Docker sandbox
 	@echo -e "\e[34m$@\e[0m" || true
-	@cp constitutions/resolve.js /opt/ccf/bin/resolve.js
-	@/opt/ccf/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count 3 --initial-user-count 0
+	@. ./scripts/test_docker.sh --virtual --serverIP 172.17.0.3 --port 8080
+
+test-docker-enclave: build-enclave ## 🧪 Test the Banking Application in a Docker enclave
+	@echo -e "\e[34m$@\e[0m" || true
+	@. ./scripts/test_docker.sh --enclave --serverIP 172.17.0.4 --port 8080
+
+# Run sandbox. Consider 3 members as 3 banks.
+# This is used in the demo scripts
+start-host: build ## 🏁 Start the CCF Sandbox for the demo
+	@echo -e "\e[34m$@\e[0m" || true
+	@/opt/ccf/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count 3 --initial-user-count 0 --constitution-dir ./constitution
 
 demo: ## 🎬 Demo the Banking Application
 	@echo -e "\e[34m$@\e[0m" || true
-	@./demo.sh
-	@./show_app_log.sh
+	@./scripts/demo.sh
+	@./scripts/show_app_log.sh
 
 clean: ## 🧹 Clean the working folders created during build/demo
 	@rm -rf .venv_ccf_sandbox
+	@rm -rf .venv_ccf_verify_receipt
 	@rm -rf workspace
 	@rm -rf dist
 
-build-virtual: ## 📦 Build Virtual container image from Dockerfile
+build-virtual: build ## 📦 Build Virtual container image from Dockerfile
 	@echo -e "\e[34m$@\e[0m" || true
 	@../build_image.sh virtual
 
-build-enclave: ## 📦 Build Enclave container image from Dockerfile
+build-enclave: build ## 📦 Build Enclave container image from Dockerfile
 	@echo -e "\e[34m$@\e[0m" || true
 	@../build_image.sh enclave
-	
