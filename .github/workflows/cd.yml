@@ -37,7 +37,7 @@ jobs:
           template: ./data-reconciliation-app/deploy/arm/mccf.json
           parameters: ./data-reconciliation-app/deploy/arm/parameters.json mccfMemberBasedSecurityPrincipals="[{\"cert\":\"${{ secrets.PUBLIC_CERT }}\", \"encryptionKey\":\"\"}]" resourceName="${{ env.ccfName }}"
 
-      - name: Build samples in DevContainer
+      - name: Deploy Banking Sample to mCCF
         uses: devcontainers/ci@v0.2
         with:
           runCmd: |
@@ -45,10 +45,11 @@ jobs:
             mkdir -p ./banking-app/workspace/mccf_certificates
             echo -e ${PUBLIC_CERT} > "./banking-app/workspace/mccf_certificates/member0_cert.pem"
             echo -e ${PRIVATE_CERT} > "./banking-app/workspace/mccf_certificates/member0_privk.pem"
-            cd banking-app && ./scripts/test_mccf.sh --address neutrino.confidential-ledger.azure.com
+            cd banking-app && ./scripts/test_mccf.sh --address ${CCF_NAME}.confidential-ledger.azure.com
           env: |
             PUBLIC_CERT=${{ secrets.PUBLIC_CERT }}
             PRIVATE_CERT=${{ secrets.PRIVATE_CERT }}
+            CCF_NAME=${{ env.ccfName }}
             
 
       # - name: Delete Resource Group
