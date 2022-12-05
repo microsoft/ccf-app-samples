@@ -28,10 +28,10 @@ function usage {
     echo ""
     echo "Generate set_member.json proposal for adding members to CCF."
     echo ""
-    echo "usage: ./add_member.sh --cert-file string --pubk-file string "
+    echo "usage: ./add_member.sh --cert-file string --pubk-file string"
     echo ""
-    echo "  --cert-file string     the certificate .pem file for the member"
-    echo "  --pubk-file string     the encryption public key .pem file for the member"
+    echo "  --cert-file     string     the certificate .pem file for the member"
+    echo "  --pubk-file     string     the encryption public key .pem file for the member"
     echo ""
     exit 0
 }
@@ -67,18 +67,19 @@ elif [ -z "$pubk_file" ]; then
 fi
 
 echo "Looking for certificate file..."
-certFile_exists=$(ls $cert_file 2>/dev/null || true)
-if [ -z "$certFile_exists" ]; then
+check_existence=$(ls $cert_file 2>/dev/null || true)
+if [ -z "$check_existence" ]; then
     echo "Cert file \"$cert_file\" does not exist."
     exit 0
 fi
 
 echo "Looking for public key file..."
-keyFile_exists=$(ls $pubk_file 2>/dev/null || true)
-if [ -z "$keyFile_exists" ]; then
+check_existence=$(ls $pubk_file 2>/dev/null || true)
+if [ -z "$check_existence" ]; then
     echo "Public key file \"$pubk_file\" does not exist."
     exit 0
 fi
+
 
 if [ ${cert_file##*.} != "pem" -o ${pubk_file##*.} != "pem" ]
 then

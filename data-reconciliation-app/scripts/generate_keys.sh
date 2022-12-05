@@ -5,10 +5,11 @@ function usage {
     echo ""
     echo "Generate a new certificate, private key, and encryption public key in an azure key-vault for user or member"
     echo ""
-    echo "usage: ./generate_keys.sh --vault-name string --cert-name string "
+    echo "usage: ./generate_keys.sh --vault-name string --cert-name string --policy <policy_file>"
     echo ""
-    echo "  --vault-name string       the key-vault name which will create certs on (example: kv-test)"
-    echo "  --cert-name string        certificate unique name (example: member1)"
+    echo "  --vault-name string     the key-vault name which will create certs on (example: kv-test)"
+    echo "  --cert-name  string     certificate unique name (example: member1)"
+    echo "  --policy     file       The identity certificate policy file (example: identity_cert_policy.json)"
     echo ""
     exit 0
 }
@@ -31,6 +32,7 @@ do
     case "--$name"  in
         --vault_name) vault_name="$2"; shift;;
         --cert_name) cert_name="$2"; shift;;
+        --policy) policy_file="$2"; shift;;
         --help) usage; exit 0; shift;;
         --) shift;;
     esac
@@ -42,6 +44,8 @@ if [ -z "$vault_name" ]; then
 	failed "Missing parameter --vault-name"
 elif [ -z "$cert_name" ]; then
 	failed "Missing parameter --cert-name"
+elif [ -z "$policy_file" ]; then
+	failed "Missing parameter --policy"
 fi
 
 IDENTITY_CERT_NAME="$cert_name"
@@ -50,7 +54,7 @@ ENCRYPTION_KEY_NAME="$cert_name-enc"
 cert_already_exists=$(az keyvault certificate show --vault-name $vault_name --name $IDENTITY_CERT_NAME --query id -o tsv 2>/dev/null || true)
 if [ -z "$cert_already_exists" ]; then
     echo "Creating certificate $IDENTITY_CERT_NAME..."
-    az keyvault certificate create --vault-name $vault_name --name $IDENTITY_CERT_NAME --policy @identity_cert_policy.json
+    az keyvault certificate create --vault-name $vault_name --name $IDENTITY_CERT_NAME --policy @${policy_file}
 else
     echo "Certificate $IDENTITY_CERT_NAME already exists."
 fi
