@@ -62,6 +62,127 @@ The reconciliation application will consist of three main services.
 
 ![reconciliation-sample diagram](reconciliation-sample.png)
 
+## Pseudo code
+
+Sample code in Typescript to demonstrate how to generate a voting-based data reconciliation report
+
+```typescript
+// generate a voting based data reconciliation report
+// memberId: the member who is requesting the report
+public getVotingSummaries(memberId: string) {
+
+    const summaries = new Map<string, VoteSummary>();
+
+    // iterate the key-value store to generate a data reconciliation summary record
+    // key-value store sample data record :
+    // key: Unique identifier, value : { attributes: {name: "XYZ", type: "string"}, votes: {"Member 1": A ,"Member 2": A ,"Member 3": A ,"Member 4": D  }}
+    // or
+    // key: Unique identifier, value : { attributes: {name: "XYZ", type: "number"}, votes: {"Member 1": 10 ,"Member 2": 20 ,"Member 3": 30 ,"Member 4": 40 }}
+    this.kvStore.forEach((val, key) => {
+        const type = val.attributes.type;
+        if(type == "string"){
+            summaries.set(key, getStringVotingSummary(memberId, key));
+        } else if(type == "number"){
+            summaries.set(key, getNumericVotingSummary(memberId, key));
+        }
+    });
+
+    return summaries;
+  }
+
+```
+
+### String Data Reconciliation
+
+```typescript
+// generate voting summary for string data type votes
+// memberId: the member who is requesting the data reconciliation summary report
+// recordId: the record identifier for the data to be reconciled
+function getStringVotingSummary(
+  memberId: string,
+  recordId: string
+): StringVoteSummary {
+  // record = { attributes: {name: "XYZ", type: "string"}, votes: {"Member 1": A ,"Member 2": A ,"Member 3": A ,"Member 4": D  }}
+  const record = this.kvStore.get(recordId);
+
+  // votes= {"Member 1": A ,"Member 2": A ,"Member 3": A ,"Member 4": D  }
+  const votes = record.votes;
+
+  // extract object properties as an array ["Member 1", "Member 2", "Member 3", "Member 4"]
+  const keys = Object.keys(votes);
+
+  // current member vote
+  const memberVote = record.votes[memberId];
+
+  // construct report summary object for
+  const summary: StringVoteSummary = {
+    type: "string",
+    vote: memberVote,
+    statistics: {
+      // Total votes count
+      count: keys.length,
+      // Count the number of members who agreed with the record vote value.
+      acceptedCount: keys.filter(
+        (key) => key != memberId && votes[key] == memberVote
+      ).length,
+      // Count the number of members who disagreed with the record vote value.
+      rejectedCount: keys.filter(
+        (key) => key != memberId && votes[key] != memberVote
+      ).length,
+    },
+  };
+
+  // generate the record status based on the calculated statistics and MINIMUM_VOTE_THRESHOLD
+  summary.status = getStatus(summary.statistics, MINIMUM_VOTE_THRESHOLD);
+  return summary;
+}
+```
+
+### Numeric Data Reconciliation
+
+```typescript
+// generate voting summary for numeric data type votes
+// memberId: the member who is requesting the data reconciliation summary report
+// recordId: the record identifier for the data to be reconciled
+function getNumericVotingSummary(
+  memberId: string,
+  recordId: string
+): NumericVoteSummary {
+  // record = { attributes: {name: "XYZ", type: "number"}, votes: {"Member 1": 10 ,"Member 2": 20 ,"Member 3": 30 ,"Member 4": 40  }}
+  const record = this.kvStore.get(recordId);
+
+  // votes= {"Member 1": 10 ,"Member 2": 20 ,"Member 3": 30 ,"Member 4": 40  }
+  const votes = record.votes;
+
+  // extract object properties as array ["Member 1", "Member 2", "Member 3", "Member 4"]
+  const keys = Object.keys(votes);
+
+  // extract object properties' values as an array [10, 20, 30, 40]
+  const values = Object.values(votes);
+
+  // current member vote
+  const memberVote = record.votes[memberId];
+
+  // construct numeric report summary object for the record
+  const summary: NumericVoteSummary = {
+    type: "number",
+    vote: memberVote,
+    statistics: {
+      // Total votes count
+      count: keys.length,
+      // calculate the mean or average deviation
+      mean: math.mean(values),
+      // calculate the standard deviation
+      std: math.std(values),
+    },
+  };
+
+  // generate the record status based on the calculated statistics and MINIMUM_VOTE_THRESHOLD
+  summary.status = getStatus(summary.statistics, MINIMUM_VOTE_THRESHOLD);
+  return summary;
+}
+```
+
 ## Resources
 
 - [Data reconciliation data schema](https://github.com/microsoft/ccf-app-samples/blob/main/data-reconciliation-app/docs/data-schema-data-flow.md)
