@@ -43,9 +43,13 @@ jobs:
           runCmd: |
             #!/bin/bash
             mkdir -p ./banking-app/workspace/mccf_certificates
-            echo -e ${{ secrets.PUBLIC_CERT }} > "./banking-app/workspace/mccf_certificates/member0_cert.pem"
-            echo -e ${{ secrets.PRIVATE_CERT }} > "./banking-app/workspace/mccf_certificates/member0_privk.pem"
+            echo -e ${PUBLIC_CERT} > "./banking-app/workspace/mccf_certificates/member0_cert.pem"
+            echo -e ${PRIVATE_CERT} > "./banking-app/workspace/mccf_certificates/member0_privk.pem"
             cd banking-app && ./scripts/test_mccf.sh --address neutrino.confidential-ledger.azure.com
+          env: |
+            PUBLIC_CERT=${{ secrets.PUBLIC_CERT }}
+            PRIVATE_CERT=${{ secrets.PRIVATE_CERT }}
+            
 
       # - name: Delete Resource Group
       #   uses: Azure/CLI@v1
