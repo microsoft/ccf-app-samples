@@ -41,6 +41,7 @@
             }
         },
         "tags": {
+            "defaultValue": {},
             "type": "object",
             "metadata": {
                 "description": "Additional Properties"
