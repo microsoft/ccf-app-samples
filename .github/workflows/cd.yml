@@ -9,7 +9,8 @@ jobs:
     runs-on: ubuntu-20.04
     environment: dev
     env:
-      ccfName: mCCF${{ github.run_number }}
+      # ccfName: mCCF${{ github.run_number }}
+      ccfName: mCCF20
       ResourceGroupLocation: "westeurope"
     steps:
       - name: Checkout repository
