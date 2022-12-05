@@ -62,6 +62,12 @@ The reconciliation application will consist of three main services.
 
 ![reconciliation-sample diagram](reconciliation-sample.png)
 
+## Pseudo code
+
+### String Data Reconciliation
+
+### Numeric Data Reconciliation
+
 ## Resources
 
 - [Data reconciliation data schema](https://github.com/microsoft/ccf-app-samples/blob/main/data-reconciliation-app/docs/data-schema-data-flow.md)
