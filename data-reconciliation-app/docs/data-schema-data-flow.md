@@ -60,7 +60,7 @@ Our main audience for our sample app is a developer. A developer could take our 
 
 ## Data Results Schema
 - MVP:
-  - Results data is categorial - input attributes value is a string, so status of attribute is `in_consensus`, `lack_of_consensus`, or `not_enough_votes`).
+  - Results data is categorial - input data attribute value is a string, so status of attribute relative to network will be `in_consensus`, `lack_of_consensus`, or `not_enough_votes`.
   - Results data will be returned as a CSV table to each members. 
   - Table will look like:
 
