@@ -64,7 +64,7 @@ The reconciliation application will consist of three main services.
 
 ## Pseudo code
 
-A Sample code in Typescript to demostrate how to generate a voting based data reconciliation report
+Sample code in Typescript to demonstrate how to generate a voting-based data reconciliation report
 
 ``` typescript
 // generate a voting based data reconciliation report
@@ -165,9 +165,9 @@ function getNumbericVotingSummary(memberId: string, recordId: string): NumericVo
        statistics: {
             // Total votes count
             count: keys.length,
-            // calculate mean or average deviation
+            // calculate the mean or average deviation
             mean: math.mean(values),
-            // calculate mean or average deviation
+            // calculate the standard deviation
             std: math.std(values)
        }
      };
