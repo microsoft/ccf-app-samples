@@ -22,9 +22,9 @@ test-docker-enclave: build-enclave ## 🧪 Test the Banking Application in a Doc
 	@echo -e "\e[34m$@\e[0m" || true
 	@. ./scripts/test_docker.sh --enclave --serverIP 172.17.0.4 --port 8080
 
-test-mccf:
+test-mccf: build
 	@echo -e "\e[34m$@\e[0m" || true
-	@. ./scripts/test_mccf.sh --address neutrino.confidential-ledger.azure.com
+	@. ./scripts/test_mccf.sh --address "${CCF_NAME}.confidential-ledger.azure.com"
 
 # Run sandbox. Consider 3 members as 3 banks.
 # This is used in the demo scripts

@@ -44,7 +44,7 @@ if [ -z $address ]; then
 fi
 server="https://${address}"
 
-echo "💤 Getting the Service cert.."
+echo "💤 Getting the Service cert from $server"
 # The node is not up yet and the certificate will not be created until it
 # return 200. We can't pass in the ca_cert hence why we use -k
 while [ "200" != "$(curl $server/node/network -k -s -o /dev/null -w %{http_code})" ]
@@ -54,6 +54,11 @@ done
 echo "🎉 Got the Service certificate"
 
 mkdir -p ${certificate_dir}
+echo -e ${PUBLIC_CERT} > "member0_cert.pem"
+echo -e ${PRIVATE_CERT} > "member0_privk.pem"
+echo "📂 Working directory (for certificates): ${certificate_dir}"
+ls -al
+
 certAsString=$(curl $server/node/network -k | jq -r .service_certificate)
 
 # Convert string with \n into file with new lines
