@@ -4,9 +4,9 @@ This is the repo for _CCF Data Reconciliation - sample_.
 
 ## Overview
 
-In the last few years, regulatory legislation has enforced a unique Legal Entity Identifier (LEI) which allows all financial industry participants to standardize how they reference counterparties and clients. This law has been the impetus for all financial industry participants to clean up their reference data and adopt this new identification system. It has been inefficient and expensive for industry participants to maintain reference data. These datasets are critical for trade processing, risk management and regulatory reporting and therefore a high degree of accuracy is required. Yet the only way to have certainty regarding their accuracy is constant review and refresh against authoritative sources of all data, an enormous and costly task.
+The CCF network will be used to host a reconciliation service where different parties with membership (banks and data providers) will be able to submit their own data to be reconciled against "each other's data" in a confidential manner without exposing the data to other members in the network.
 
-Rather than collaborating with data providers and hiring human resources to keep these LEIs in sync, financial industry participants could leverage confidential compute platforms to create a consortium network and reconciliation service to clean up all their reference data. This would improve data quality in a compliant and cost-effective way through industry collaboration.
+The sample will use the voting process to reconcile members' data; on the data submission, when new record is submitted the app will check if it does not exist in the key-value store, it will be added; otherwise, a vote is added to this record with a member ID, and the vote will be "agree" if data attributes match; otherwise, it will "disagree."
 
 ## Architecture
 
@@ -23,22 +23,29 @@ To get started run `cd data-reconciliation-app && make test` to run the applicat
 ```text
 📂
 ├── docs                Sample application documentation
-│   └── adrs            All Architecture design records (ADR)
+│   └── adrs            All Architecture decision records (ADR)
 │
 ├── governance
 │   └── constitution    CCF network constitution files
 │   └── vote            Contains proposal voting acceptance and rejection logic
-│   └── nodes           CCF network nodes config and docker files
+│   └── config          CCF network nodes configs
 │   └── scripts         All governance scripts
 │
-└── scripts             All the scripts to test, demo and deploy the application
 └── src                 Application source code
-    └── endpoints       Application endpoints implementation
+│    └── endpoints      Application endpoints implementation
+│
+└── test
+│    └── unit-test      Application unit tests
+│    └── e2e-test       Application end to end tests
+│
+└── deploy              Scripts to deploy to the application
+└── demo                Scripts to run demo
+
 ```
 
 ### Running Locally
 
-A makefile provides a frontend to interacting with the project, this is used both locally and during CI and GitHub Actions. This makefile is self documentating, and has the following targets:
+A makefile provides a frontend to interacting with the project, this is used both locally and during CI and GitHub Actions. This makefile is self documenting, and has the following targets:
 
 ```text
 help                 💬 This help message :)
