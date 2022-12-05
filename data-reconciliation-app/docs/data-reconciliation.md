@@ -83,7 +83,7 @@ public getVotingSummaries(memberId: string) {
         if(type == "string"){
             summaries.set(key, getStringVotingSummary(memberId, key));
         } else if(type == "number"){
-            summaries.set(key, getNumbericVotingSummary(memberId, key));
+            summaries.set(key, getNumericVotingSummary(memberId, key));
         }
     });
 
@@ -144,7 +144,7 @@ function getStringVotingSummary(
 // generate voting summary for numeric data type votes
 // memberId: the member who is requesting the data reconciliation summary report
 // recordId: the record identifier for the data to be reconciled
-function getNumbericVotingSummary(
+function getNumericVotingSummary(
   memberId: string,
   recordId: string
 ): NumericVoteSummary {
