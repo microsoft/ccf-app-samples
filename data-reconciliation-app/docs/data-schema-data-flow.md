@@ -13,7 +13,7 @@ Main idea: We build a generalized sample app for a bunch of institutions who wan
 Requirements:
 
 - Members will agree upon their schema in advance - the only requirement is that this schema has a unique idenifier and attributes associated with the unique identifier.
-- Our idenitifier and attributes will be strings.
+- MVP: Our idenitifier and attributes types will be strings.
 - MVP: We will only handle one attribute in this data reconciliation app. For example:
 
   | unique_id | attribute_1 |
@@ -23,6 +23,7 @@ Requirements:
   | A003      | XZ          |
 
 - TODO: Brent to provide initial sample data set
+- Stretch: Attribute types can be numerical as well.
 - Stretch: Multiple attributes per unique id
 
 ## Data Schema Validation
@@ -58,9 +59,15 @@ Our main audience for our sample app is a developer. A developer could take our 
 - If a record is determined out of consensus with other members in the network, you cannot share the value of what other members had for that record.
 
 ## Data Results Schema
+- MVP:
+  - Results data is categorial - input attributes value is a string, so status of attribute is `in_consensus`, `lack_of_consensus`, or `not_enough_votes`).
+  - Results data will be returned as a CSV table to each members. 
+  - Table will look like:
 
-- Results data will be returned as a CSV table to each members. Table for one member will look like:
+    | unique_id | attribute_n                 | my_status                                                                                               | count_of_unique_values                               | members_in_agreement                                              | majority_minority                                                                     |
+    | --------- | --------------------------- | ------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+    | key       | attribute value you inputed | With respect to group, is my attribute value `in_consensus`, `lack_of_consensus`, or `not_enough_votes` | number of different atribute values inputed by group | number of members who agree with the attribute value you provided | are you in the majority or minority with the value provided? (`majority`, `minority`) |
 
-| unique_id | attribute_n                 | my_status                                                                                               | count_of_unique_values                               | members_in_agreement                                              | majority_minority                                                                     |
-| --------- | --------------------------- | ------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
-| key       | attribute value you inputed | With respect to group, is my attribute value `in_consensus`, `lack_of_consensus`, or `not_enough_votes` | number of different atribute values inputed by group | number of members who agree with the attribute value you provided | are you in the majority or minority with the value provided? (`majority`, `minority`) |
+- Stretch: Results data is a numerical summary
+   - For example, instead of `my_status` being categorical, we would return the mean, std based on attribute value being numerical
+   - This is not in scope...if it becomes in scope, we would need to define a table similar to the above
