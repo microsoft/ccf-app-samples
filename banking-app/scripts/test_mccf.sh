@@ -54,15 +54,12 @@ done
 echo "🎉 Got the Service certificate"
 
 mkdir -p ${certificate_dir}
-echo -e ${PUBLIC_CERT} > "member0_cert.pem"
-echo -e ${PRIVATE_CERT} > "member0_privk.pem"
-echo "📂 Working directory (for certificates): ${certificate_dir}"
-ls -al
-
 certAsString=$(curl $server/node/network -k | jq -r .service_certificate)
 
 # Convert string with \n into file with new lines
 echo -e "$certAsString" > "${certificate_dir}/service_cert.pem"
+echo -e ${PUBLIC_CERT} > "${certificate_dir}/member0_cert.pem"
+echo -e ${PRIVATE_CERT} > "${certificate_dir}/member0_privk.pem"
 
 ./scripts/setup_governance.sh --nodeAddress ${address} --certificate_dir "$certificate_dir"
 ./scripts/test.sh --nodeAddress ${address} --certificate_dir "$certificate_dir"
