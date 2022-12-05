@@ -62,7 +62,7 @@ Our main audience for our sample app is a developer. A developer could take our 
 - MVP:
   - Results data is categorial - input data attribute value is a string, so status of attribute relative to network will be `in_consensus`, `lack_of_consensus`, or `not_enough_votes`.
   - Results data will be returned as a CSV table to each members. 
-  - Table will look like:
+  - Based on the member, table will look like:
 
     | unique_id | attribute_n                 | my_status                                                                                               | count_of_unique_values                               | members_in_agreement                                              | majority_minority                                                                     |
     | --------- | --------------------------- | ------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
