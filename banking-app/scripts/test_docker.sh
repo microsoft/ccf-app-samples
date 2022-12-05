@@ -6,7 +6,7 @@ declare certificate_dir="./workspace/docker_certificates"
 
 function usage {
     echo ""
-    echo "Start a CCF node in docker."
+    echo "Start a CCF node in docker and run the tests."
     echo ""
     echo "usage: ./test_docker.sh --serverIP <IPADDRESS> --port <PORT> [--virtual] [--enclave]"
     echo ""

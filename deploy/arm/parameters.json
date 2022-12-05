@@ -5,14 +5,8 @@
         "resourceName": {
             "value": "sample"
         },
-        "location": {
-            "value": "southcentralus"
-        },
-        "mccfAppLanguage": {
-            "value": "JS"
-        },
         "mccfAppSourceUri": {
-            "value": "data-reconciliation"
+            "value": "sample"
         },
         "mccfMemberBasedSecurityPrincipals": {
             "value": [
@@ -21,9 +15,6 @@
                     "encryptionKey": ""
                 }
             ]
-        },
-        "tags": {
-            "value": {}
         }
     }
 }

@@ -5,11 +5,13 @@ declare certificate_dir="./workspace/mccf_certificates"
 
 function usage {
     echo ""
-    echo "Start a CCF node in mCCF."
+    echo "Open a network in mCCF and then run the tests."
     echo ""
-    echo "usage: ./test_mccf.sh --address <ADDRESS>"
+    echo "usage: ./test_mccf.sh --address <ADDRESS> --signing-cert <CERT> --signing-key <CERT>"
     echo ""
-    echo "  --address  string      The address of the primary CCF node"
+    echo "  --address       string      The address of the primary CCF node"
+    echo "  --signing-cert  string      The signing certificate (member0)"
+    echo "  --signing-key   string      The signing key (member0)"
     echo ""
     exit 0
 }
@@ -21,7 +23,7 @@ function failed {
 
 # parse parameters
 
-if [ $# -gt 2 ]; then
+if [ $# -gt 6 ]; then
     usage
     exit 1
 fi
@@ -32,6 +34,8 @@ do
     name="${name/-/_}"
     case "--$name"  in
         --address) address="$2"; shift;;
+        --signing-cert) signing_cert="$2"; shift;;
+        --signing-key) signing_key="$2"; shift;;
         --help) usage; exit 0;;
         --) shift;;
     esac
@@ -39,6 +43,12 @@ do
 done
 
 # validate parameters
+if [ -z $signing_cert ]; then
+    failed "You must supply --signing-cert"
+fi
+if [ -z $signing_key ]; then
+    failed "You must supply --signing-key"
+fi
 if [ -z $address ]; then
     failed "You must supply --address"
 fi
@@ -57,12 +67,9 @@ mkdir -p ${certificate_dir}
 certAsString=$(curl $server/node/network -k | jq -r .service_certificate)
 
 # Convert string with \n into file with new lines
-echo -e "$certAsString" > "${certificate_dir}/service_cert.pem"
-
-# These environment variables have come from GitHub secrets
-# You will need to generate these before creating mCCF
-echo -e ${PUBLIC_CERT} > "${certificate_dir}/member0_cert.pem"
-echo -e ${PRIVATE_CERT} > "${certificate_dir}/member0_privk.pem"
+echo -e "${certAsString}" > "${certificate_dir}/service_cert.pem"
+echo -e ${signing_cert} > "${certificate_dir}/member0_cert.pem"
+echo -e ${signing_key} > "${certificate_dir}/member0_privk.pem"
 
 ./scripts/setup_governance.sh --nodeAddress ${address} --certificate_dir "$certificate_dir"
 ./scripts/test.sh --nodeAddress ${address} --certificate_dir "$certificate_dir"

@@ -1,4 +1,4 @@
-name: "CCF App Samples Deployment"
+name: "Test samples in mCCF environment"
 
 on:
   push:
@@ -36,8 +36,8 @@ jobs:
         uses: azure/arm-deploy@v1
         with:
           resourceGroupName: ${{ env.ccfName }}
-          template: ./data-reconciliation-app/deploy/arm/mccf.json
-          parameters: ./data-reconciliation-app/deploy/arm/parameters.json mccfMemberBasedSecurityPrincipals="[{\"cert\":\"${{ secrets.PUBLIC_CERT }}\", \"encryptionKey\":\"\"}]" resourceName="${{ env.ccfName }}"
+          template: ./deploy/arm/mccf.json
+          parameters: ./deploy/arm/parameters.json mccfMemberBasedSecurityPrincipals="[{\"cert\":\"${{ secrets.PUBLIC_CERT }}\", \"encryptionKey\":\"\"}]" resourceName="${{ env.ccfName }}"
 
       - name: Deploy Banking Sample to mCCF
         uses: devcontainers/ci@v0.2
