@@ -58,6 +58,9 @@ certAsString=$(curl $server/node/network -k | jq -r .service_certificate)
 
 # Convert string with \n into file with new lines
 echo -e "$certAsString" > "${certificate_dir}/service_cert.pem"
+
+# These environment variables have come from GitHub secrets
+# You will need to generate these before creating mCCF
 echo -e ${PUBLIC_CERT} > "${certificate_dir}/member0_cert.pem"
 echo -e ${PRIVATE_CERT} > "${certificate_dir}/member0_privk.pem"
 
