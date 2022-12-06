@@ -14,6 +14,12 @@ function finish {
 }
 trap finish EXIT
 
+check_existence=$(ls $app_dir/test/test.sh 2>/dev/null || true)
+if [ -z "$check_existence" ]; then
+    failed "You are missing a test.sh script in your application."
+    exit 0
+fi
+
 # If we source this - it will run in this process and honour
 # the argument parsing
 source $app_dir/test/test.sh

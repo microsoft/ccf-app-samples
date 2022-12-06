@@ -81,5 +81,17 @@ done
 docker cp "$containerId:/app/service_cert.pem" "$certificate_dir"
 
 # Call app-specific setup_governance and test scripts
+check_existence=$(ls $app_dir/governance/scripts/setup_governance.sh 2>/dev/null || true)
+if [ -z "$check_existence" ]; then
+    failed "You are missing a setup_governance script in your application"
+    exit 0
+fi
+
+check_existence=$(ls $app_dir/test/test.sh 2>/dev/null || true)
+if [ -z "$check_existence" ]; then
+    failed "You are missing a test.sh script in your application."
+    exit 0
+fi
+
 $app_dir/governance/scripts/setup_governance.sh --nodeAddress ${serverIP}:${port} --certificate_dir "$certificate_dir"
 $app_dir/test/test.sh --nodeAddress ${serverIP}:${port} --certificate_dir "$certificate_dir"
