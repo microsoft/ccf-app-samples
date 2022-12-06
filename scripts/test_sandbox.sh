@@ -3,8 +3,13 @@ set -euo pipefail
 
 declare app_dir=$PWD                   # application folder for reference
 
+if [ ! -d "$app_dir/constitution" ]; then
+  echo "💥 Constitution folder not found in $app_dir"
+  exit 1
+fi
+
 echo "▶️ Starting sandbox..."
-/opt/ccf/bin/sandbox.sh --js-app-bundle $app_dir/dist/ --initial-member-count 3 --initial-user-count 2 --constitution-dir $app_dir/constitution > /dev/null 2>&1 &
+/opt/ccf/bin/sandbox.sh --js-app-bundle "$app_dir/dist/" --initial-member-count 3 --initial-user-count 2 --constitution-dir "$app_dir/constitution" > /dev/null 2>&1 &
 sandbox_pid=$!
 echo "💤 Waiting for sandbox . . . (${sandbox_pid})"
 
@@ -14,12 +19,14 @@ function finish {
 }
 trap finish EXIT
 
-check_existence=$(ls $app_dir/test/test.sh 2>/dev/null || true)
-if [ -z "$check_existence" ]; then
-    failed "You are missing a test.sh script in your application."
-    exit 0
+testScript="$app_dir/test/test.sh"
+if [ ! -f "$testScript" ]; then
+    echo "💥📂 Test file $testScript not found."
+    exit 1
+else
+  # If we source this - it will run in this process and honour
+  # the argument parsing
+  # shellcheck source=/dev/null
+  source "${testScript}"
 fi
 
-# If we source this - it will run in this process and honour
-# the argument parsing
-source $app_dir/test/test.sh
