@@ -1,0 +1,58 @@
+name: "Test samples in mCCF environment"
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Managed CCF
+    runs-on: ubuntu-20.04
+    environment: dev
+    env:
+      ccfName: mCCF${{ github.run_number }}
+      ResourceGroupLocation: "westeurope"
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Azure Login
+        uses: Azure/login@v1.4.5
+        with:
+          creds: '{"clientId":"${{ secrets.ARM_CLIENT_ID }}","clientSecret":"${{ secrets.ARM_CLIENT_SECRET }}","subscriptionId":"${{ secrets.ARM_SUBSCRIPTION_ID }}","tenantId":"${{ secrets.ARM_TENANT_ID }}"}'  # editorconfig-checker-disable-line
+
+      - name: Create Resource Group
+        uses: Azure/CLI@v1
+        with:
+          inlineScript: |
+            #!/bin/bash
+            az group create --name ${{ env.ccfName }} --location ${{ env.ResourceGroupLocation }}
+
+      - name: Deploy
+        uses: azure/arm-deploy@v1
+        with:
+          resourceGroupName: ${{ env.ccfName }}
+          template: ./deploy/arm/mccf.json
+          parameters: ./deploy/arm/parameters.json mccfMemberBasedSecurityPrincipals="[{\"cert\":\"${{ secrets.PUBLIC_CERT }}\", \"encryptionKey\":\"\"}]" resourceName="${{ env.ccfName }}"
+
+      - name: Deploy Banking Sample to mCCF
+        uses: devcontainers/ci@v0.2
+        with:
+          runCmd: |
+            cd banking-app && make test-mccf
+          env: |
+            PUBLIC_CERT=${{ secrets.PUBLIC_CERT }}
+            PRIVATE_CERT=${{ secrets.PRIVATE_CERT }}
+            CCF_NAME=${{ env.ccfName }}            
+
+      - name: Delete Resource Group
+        uses: Azure/CLI@v1
+        with:
+          inlineScript: |
+            #!/bin/bash
+            echo "Delete resource group for the moment!"
+            az group delete --name ${{ env.ccfName }} --yes
