@@ -2,6 +2,7 @@
 set -euo pipefail
 
 declare enclave_type=""
+
 declare app_dir=$PWD                   # application folder for reference
 declare app_name=${app_dir##*/}        # application name (to be used in container commands)
 declare certificate_dir="${app_dir}/workspace/docker_certificates"

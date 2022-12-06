@@ -53,7 +53,7 @@ if [ -z $certificate_dir ]; then
     failed "You must supply --certificate_dir"
 fi
 if [ -z $constitution_dir ]; then
-    failed "You must supply --certificate_dir"
+    failed "You must supply --constitution_dir"
 fi
 
 
