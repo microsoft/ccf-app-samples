@@ -27,14 +27,14 @@ test-docker-virtual: build-virtual ## 🧪 Test the Banking Application in a Doc
 
 test-docker-enclave: build-enclave ## 🧪 Test the Banking Application in a Docker enclave
 	@echo -e "\e[34m$@\e[0m" || true
-	@. ./scripts/test_docker.sh --enclave --serverIP 172.17.0.4 --port 8080
+	@. ../scripts/test_docker.sh --enclave --serverIP 172.17.0.4 --port 8080
 
 test-mccf: build ## 🧪 Test the Banking Application in a Managed CCF environment
 	@echo -e "\e[34m$@\e[0m" || true
 	$(call check_defined, CCF_NAME)
 	$(call check_defined, PUBLIC_CERT)
 	$(call check_defined, PRIVATE_CERT)
-	@. ./scripts/test_mccf.sh --address "${CCF_NAME}.confidential-ledger.azure.com" --signing-cert "${PUBLIC_CERT}" --signing-key "${PRIVATE_CERT}"
+	@. ../scripts/test_mccf.sh --address "${CCF_NAME}.confidential-ledger.azure.com" --signing-cert "${PUBLIC_CERT}" --signing-key "${PRIVATE_CERT}"
 
 # Run sandbox. Consider 3 members as 3 banks.
 # This is used in the demo scripts

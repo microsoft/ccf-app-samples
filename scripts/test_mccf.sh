@@ -1,7 +1,9 @@
 #!/bin/bash
 set -euo pipefail
 
-declare certificate_dir="./workspace/mccf_certificates"
+declare app_dir=$PWD                   # application folder for reference
+declare app_name=${app_dir##*/}        # application name (to be used in container commands)
+declare certificate_dir="${app_dir}/workspace/mccf_certificates"
 
 function usage {
     echo ""
@@ -71,5 +73,5 @@ echo -e "${certAsString}" > "${certificate_dir}/service_cert.pem"
 echo -e ${signing_cert} > "${certificate_dir}/member0_cert.pem"
 echo -e ${signing_key} > "${certificate_dir}/member0_privk.pem"
 
-./scripts/setup_governance.sh --nodeAddress ${address} --certificate_dir "$certificate_dir"
-./scripts/test.sh --nodeAddress ${address} --certificate_dir "$certificate_dir"
+$app_dir/governance/setup_governance.sh --nodeAddress ${address} --certificate_dir "$certificate_dir"
+$app_dir/test/test.sh --nodeAddress ${address} --certificate_dir "$certificate_dir"
