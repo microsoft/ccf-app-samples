@@ -6,7 +6,7 @@ Proposed
 
 ## Context
 
-We need to build an API that ingests member data into our system. Once injected, we also need to store this data in the K-V store.
+We need to build an API that ingests member data into our system. Once ingested, we also need to store this data in the K-V store.
 
 Gathered requirements:
 
