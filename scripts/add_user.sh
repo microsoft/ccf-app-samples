@@ -1,27 +1,43 @@
 #!/bin/bash
 
+
+# create set_user json proposal file
+function create_user_proposal {
+    local certFile=$1
+    local setUserFile=$2
+
+    cert=$(< $certFile sed '$!G' | paste -sd '\\n' -)
+
+    cat <<JSON > $setUserFile
+{
+  "actions": [
+    {
+      "name": "set_user",
+      "args": {
+        "cert": "${cert}\n"
+      }
+    }
+  ]
+}
+JSON
+}
+
 function usage {
     echo ""
-    echo "Submit a ccf proposal and automatically vote with acceptance from submitter ."
+    echo "Generate set_user.json proposal for adding users to CCF."
     echo ""
-    echo "usage: ./submit_proposal.sh --network-url string --proposal-file string --service_cert string --signing-cert string --signing-key string "
+    echo "usage: ./add_user.sh --cert-file string "
     echo ""
-    echo "  --network-url   string      ccf network url (example: https://test.confidential-ledger.azure.com)"
-    echo "  --proposal-file string      path to any governance proposal to submit (example: dist/set_js_app.json)"
-    echo "  --service-cert  string      ccf network certificate file path (example: certs_path/service_cert.pem)"
-    echo "  --signing-cert  string      submitter member certificate file path (example: certs_path/member0_cert.pem)"
-    echo "  --signing-key   string      submitter member private key file path (example: certs_path/member0_private_key.pem)"
+    echo "  --cert-file string     the certificate .pem file for the user"
     echo ""
     exit 0
 }
-
 function failed {
     printf "Script failed: %s\n\n" "$1"
     exit 1
 }
 
 # parse parameters
-
 if [ $# -eq 0 ]; then
     usage
     exit 1
@@ -32,11 +48,7 @@ do
     name="${1/--/}"
     name="${name/-/_}"
     case "--$name"  in
-        --network_url) network_url="$2"; shift;;
-        --proposal_file) proposal_file="$2"; shift;;
-        --service_cert) service_cert="$2"; shift;;
-        --signing_cert) signing_cert="$2"; shift;;
-        --signing_key) signing_key="$2"; shift;;
+        --cert_file) cert_file="$2"; shift;;
         --help) usage; exit 0; shift;;
         --) shift;;
     esac
@@ -44,21 +56,31 @@ do
 done
 
 # validate parameters
-if [[ -z $network_url ]]; then
-    failed "Missing parameter --network-url"
-elif [[ -z $proposal_file ]]; then
-    failed "Missing parameter --proposal-file"
-elif [[ -z $service_cert ]]; then
-    failed "Missing parameter --service-cert"
-elif [[ -z $signing_cert ]]; then
-    failed "Missing parameter --signing-cert"
-elif [[ -z $signing_key ]]; then
-    failed "Missing parameter --signing-key"
+if [ -z "$cert_file" ]; then
+	failed "Missing parameter --cert-file"
 fi
 
-proposal0_out=$(/opt/ccf/bin/scurl.sh "$network_url/gov/proposals" --cacert $service_cert --signing-key $signing_key --signing-cert $signing_cert --data-binary @$proposal_file -H "content-type: application/json")
-proposal0_id=$( jq -r  '.proposal_id' <<< "${proposal0_out}" )
-echo $proposal0_id
 
-/opt/ccf/bin/scurl.sh "$network_url/gov/proposals/$proposal0_id/ballots" --cacert $service_cert --signing-key $signing_key --signing-cert $signing_cert --data-binary @../proposals/vote_accept.json -H "content-type: application/json" | jq
+echo "Looking for certificate file..."
+certFile_exists=$(ls $cert_file 2>/dev/null || true)
+if [ -z "$certFile_exists" ]; then
+    echo "Cert file \"$cert_file\" does not exist."
+    exit 0
+fi
 
+if [[ ${cert_file##*.} != "pem" ]]
+then
+    echo "Wrong file extension. Only \".pem\" files are supported."
+    exit 0
+fi
+
+certs_folder=`dirname $cert_file`
+proposal_json_file="${certs_folder}/set_user.json"
+
+echo "Creating user json proposal file..."
+create_user_proposal $cert_file $proposal_json_file
+
+user_id=$(openssl x509 -in "$cert_file" -noout -fingerprint -sha256 | cut -d "=" -f 2 | sed 's/://g' | awk '{print tolower($0)}')
+
+echo "proposal json file created: $proposal_json_file"
+echo "user id: $user_id"

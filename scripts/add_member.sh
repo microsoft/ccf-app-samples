@@ -80,14 +80,14 @@ if [ -z "$check_existence" ]; then
     exit 0
 fi
 
-
 if [ ${cert_file##*.} != "pem" -o ${pubk_file##*.} != "pem" ]
 then
     echo "Wrong file extensions. Only \".pem\" files are supported."
     exit 0
 fi
 
-proposal_json_file="set_member.json"
+certs_folder=`dirname $cert_file`
+proposal_json_file="${certs_folder}/set_member.json"
 
 echo "Creating member json proposal file..."
 create_member_proposal $cert_file $pubk_file $proposal_json_file
