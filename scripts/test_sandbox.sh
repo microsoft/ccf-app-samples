@@ -46,26 +46,22 @@ do
 done
 
 # validate parameters
-if [ -z $nodeAddress ]; then
+if [ -z "$nodeAddress" ]; then
     failed "You must supply --nodeAddress"
 fi
-if [ -z $certificate_dir ]; then
+if [ -z "$certificate_dir" ]; then
     failed "You must supply --certificate_dir"
 fi
-if [ -z $constitution_dir ]; then
+if [ -z "$constitution_dir" ]; then
     failed "You must supply --constitution_dir"
 fi
-
-
-
-
-if [ ! -d "$app_dir/constitution" ]; then
-  echo "💥 Constitution folder not found in $app_dir"
+if [ ! -d "$constitution_dir" ]; then
+  echo "💥📁 Constitution folder not found: $constitution_dir"
   exit 1
 fi
 
 echo "▶️ Starting sandbox..."
-/opt/ccf/bin/sandbox.sh --js-app-bundle $app_dir/dist/ --initial-member-count 3 --initial-user-count 2 --constitution-dir $constitution_dir > /dev/null 2>&1 &
+/opt/ccf/bin/sandbox.sh --js-app-bundle "$app_dir/dist/" --initial-member-count 3 --initial-user-count 2 --constitution-dir "$constitution_dir" > /dev/null 2>&1 &
 sandbox_pid=$!
 echo "💤 Waiting for sandbox . . . (${sandbox_pid})"
 
