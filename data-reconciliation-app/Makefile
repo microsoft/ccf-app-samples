@@ -10,25 +10,33 @@ build: ## 🔨 Build the Application
 	@echo -e "\e[34m$@\e[0m" || true
 	@npm run build
 
-test: ## 🧪 Run tests, used for local development
+test: build ## 🧪 Test the Data Reconciliation Application in the sandbox
 	@echo -e "\e[34m$@\e[0m" || true
-	@./test/run_test.sh
+	@. ../scripts/test_sandbox.sh --nodeAddress 127.0.0.1:8000 --certificate_dir ./workspace/sandbox_common --constitution_dir ./governance/constitution
+
+test-docker-virtual: build-virtual ## 🧪 Test the Data Reconciliation Application in a Docker sandbox
+	@echo -e "\e[34m$@\e[0m" || true
+	@. ../scripts/test_docker.sh --virtual --serverIP 172.17.0.3 --port 8080
+
+test-docker-enclave: build-enclave ## 🧪 Test the Data Reconciliation Application in a Docker enclave
+	@echo -e "\e[34m$@\e[0m" || true
+	@. ../scripts/test_docker.sh --enclave --serverIP 172.17.0.4 --port 8080
 
 # Start hosting the application using `sandbox.sh` 
 start-host: build ## 🏃 Start the CCF network using Sandbox.sh
 	@echo -e "\e[34m$@\e[0m" || true
-	@/opt/ccf/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count 3 --initial-user-count 0
+	@/opt/ccf/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count 3 --initial-user-count 2 --constitution-dir ./governance/constitution
 
 clean: ## 🧹 Clean the working folders created during build/demo
 	@rm -rf .venv_ccf_sandbox
 	@rm -rf workspace
 	@rm -rf dist
 
-build-virtual: ## 📦 Build Virtual container image from Dockerfile
+build-virtual: build ## 📦 Build Virtual container image from Dockerfile
 	@echo -e "\e[34m$@\e[0m" || true
 	@../build_image.sh virtual
 
-build-enclave: ## 📦 Build Enclave container image from Dockerfile
+build-enclave: build ## 📦 Build Enclave container image from Dockerfile
 	@echo -e "\e[34m$@\e[0m" || true
 	@../build_image.sh enclave
 

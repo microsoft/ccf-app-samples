@@ -12,7 +12,7 @@ build: ## 🔨 Build the Logging Application
 
 test: build ## 🧪 Test the Logging Application
 	@echo -e "\e[34m$@\e[0m" || true
-	@. ../scripts/test_sandbox.sh --nodeAddress 127.0.0.1:8000 --certificate_dir ./workspace/sandbox_common
+	@. ../scripts/test_sandbox.sh --nodeAddress 127.0.0.1:8000 --certificate_dir ./workspace/sandbox_common --constitution_dir ./constitution
 
 clean: ## 🧹 Clean the working folders created during build/demo
 	@rm -rf .venv_ccf_sandbox
