@@ -36,8 +36,8 @@ do
     name="${name/-/_}"
     case "--$name"  in
         --address) address="$2"; shift;;
-        --signing-cert) signing_cert="$2"; shift;;
-        --signing-key) signing_key="$2"; shift;;
+        --signing-cert) signing-cert="$2"; shift;;
+        --signing-key) signing-key="$2"; shift;;
         --help) usage; exit 0;;
         --) shift;;
     esac
@@ -45,10 +45,10 @@ do
 done
 
 # validate parameters
-if [ -z $signing_cert ]; then
+if [ -z ${signing-cert} ]; then
     failed "You must supply --signing-cert"
 fi
-if [ -z $signing_key ]; then
+if [ -z ${signing-key} ]; then
     failed "You must supply --signing-key"
 fi
 if [ -z $address ]; then
@@ -70,8 +70,8 @@ certAsString=$(curl $server/node/network -k | jq -r .service_certificate)
 
 # Convert string with \n into file with new lines
 echo -e "${certAsString}" > "${certificate_dir}/service_cert.pem"
-echo -e ${signing_cert} > "${certificate_dir}/member0_cert.pem"
-echo -e ${signing_key} > "${certificate_dir}/member0_privk.pem"
+echo -e ${signing-cert} > "${certificate_dir}/member0_cert.pem"
+echo -e ${signing-key} > "${certificate_dir}/member0_privk.pem"
 
-$app_dir/governance/setup_governance.sh --nodeAddress ${address} --certificate_dir "$certificate_dir"
+$app_dir/governance/scripts/setup_governance.sh --nodeAddress ${address} --certificate_dir "$certificate_dir"
 $app_dir/test/test.sh --nodeAddress ${address} --certificate_dir "$certificate_dir"

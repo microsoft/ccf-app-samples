@@ -14,8 +14,8 @@ You will need your public certificate that you created your CCF with.
 ```bash
 # Set parameters
 subscriptionId=xxxxx
-resourceGroup=mCCF
-mccf_instance_name=neutrino
+resourceGroup=xxxxx
+mccf_instance_name=xxxxx
 cert="-----BEGIN CERTIFICATE-----\nMIIByjCCXYZ\n-----END CERTIFICATE-----"
 
 # Create the body
