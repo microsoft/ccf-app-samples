@@ -19,11 +19,11 @@ build: ## 🔨 Build the Banking Application
 
 test: build ## 🧪 Test the Banking Application in the sandbox
 	@echo -e "\e[34m$@\e[0m" || true
-	@. ./scripts/test_sandbox.sh --nodeAddress 127.0.0.1:8000 --certificate_dir ./workspace/sandbox_common
+	@. ../scripts/test_sandbox.sh --nodeAddress 127.0.0.1:8000 --certificate_dir ./workspace/sandbox_common
 
 test-docker-virtual: build-virtual ## 🧪 Test the Banking Application in a Docker sandbox
 	@echo -e "\e[34m$@\e[0m" || true
-	@. ./scripts/test_docker.sh --virtual --serverIP 172.17.0.3 --port 8080
+	@. ../scripts/test_docker.sh --virtual --serverIP 172.17.0.3 --port 8080
 
 test-docker-enclave: build-enclave ## 🧪 Test the Banking Application in a Docker enclave
 	@echo -e "\e[34m$@\e[0m" || true
