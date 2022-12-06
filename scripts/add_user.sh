@@ -1,5 +1,6 @@
 #!/bin/bash
 
+set -euo pipefail
 
 # create set_user json proposal file
 function create_user_proposal {

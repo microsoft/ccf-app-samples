@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -euo pipefail
+
 # create set_member json proposal file
 function create_member_proposal {
     local certFile=$1

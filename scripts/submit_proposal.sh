@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -euo pipefail
+
 function usage {
     echo ""
     echo "Submit a ccf proposal and automatically vote with acceptance from submitter ."
