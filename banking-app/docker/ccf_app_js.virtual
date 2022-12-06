@@ -9,7 +9,7 @@ COPY --from=builder /opt/ccf/lib/libjs_generic.virtual.so /usr/lib/ccf
 
 # copy configuration into image
 COPY ./constitution/*.js /app/
-COPY ./workspace/docker_certificates/cchost_config_virtual_js.json /app/
+COPY ./config/cchost_config_virtual_js.json /app/
 COPY ./workspace/docker_certificates/member0_cert.pem /app/
 COPY ./workspace/docker_certificates/member0_enc_pubk.pem /app/
 
