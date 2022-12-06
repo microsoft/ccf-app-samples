@@ -75,5 +75,4 @@ curl $server/app/log?id=1 --cacert service_cert.pem
 echo ""
 echo "Test Completed..."
 echo "OK"
-# kill -9 $sandbox_pid
 exit 0

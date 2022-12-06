@@ -10,17 +10,17 @@ build: ## 🔨 Build the Application
 	@echo -e "\e[34m$@\e[0m" || true
 	@npm run build
 
-test: build ## 🧪 Test the Banking Application in the sandbox
+test: build ## 🧪 Test the Data Reconciliation Application in the sandbox
 	@echo -e "\e[34m$@\e[0m" || true
 	@. ../scripts/test_sandbox.sh --nodeAddress 127.0.0.1:8000 --certificate_dir ./workspace/sandbox_common --constitution_dir ./governance/constitution
 
-test-docker-virtual: build-virtual ## 🧪 Test the Banking Application in a Docker sandbox
+test-docker-virtual: build-virtual ## 🧪 Test the Data Reconciliation Application in a Docker sandbox
 	@echo -e "\e[34m$@\e[0m" || true
 	@. ../scripts/test_docker.sh --virtual --serverIP 172.17.0.3 --port 8080
 
-test-docker-enclave: build-enclave ## 🧪 Test the Banking Application in a Docker enclave
+test-docker-enclave: build-enclave ## 🧪 Test the Data Reconciliation Application in a Docker enclave
 	@echo -e "\e[34m$@\e[0m" || true
-	@. ./scripts/test_docker.sh --enclave --serverIP 172.17.0.4 --port 8080
+	@. ../scripts/test_docker.sh --enclave --serverIP 172.17.0.4 --port 8080
 
 # Start hosting the application using `sandbox.sh` 
 start-host: build ## 🏃 Start the CCF network using Sandbox.sh
