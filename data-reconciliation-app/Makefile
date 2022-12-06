@@ -36,7 +36,7 @@ build-virtual: build ## 📦 Build Virtual container image from Dockerfile
 	@echo -e "\e[34m$@\e[0m" || true
 	@../build_image.sh virtual
 
-build-enclave: ## 📦 Build Enclave container image from Dockerfile
+build-enclave: build ## 📦 Build Enclave container image from Dockerfile
 	@echo -e "\e[34m$@\e[0m" || true
 	@../build_image.sh enclave
 
