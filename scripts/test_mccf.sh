@@ -2,8 +2,9 @@
 set -euo pipefail
 
 declare app_dir=$PWD                   # application folder for reference
-declare app_name=${app_dir##*/}        # application name (to be used in container commands)
 declare certificate_dir="${app_dir}/workspace/mccf_certificates"
+declare signing_cert=""
+declare signing_key=""
 
 function usage {
     echo ""
@@ -32,26 +33,23 @@ fi
 
 while [ $# -gt 0 ]
 do
-    name="${1/--/}"
-    name="${name/-/_}"
-    case "--$name"  in
-        --address) address="$2"; shift;;
-        --signing-cert) signing-cert="$2"; shift;;
-        --signing-key) signing-key="$2"; shift;;
+    case "$1" in
+        --address) address="$2"; shift 2;;
+        --signing-cert) signing_cert="$2"; shift 2;;
+        --signing-key) signing_key="$2"; shift 2;;
         --help) usage; exit 0;;
-        --) shift;;
+        *) usage; exit 1;;
     esac
-    shift;
 done
 
 # validate parameters
-if [ -z ${signing-cert} ]; then
+if [ -z "${signing_cert}" ]; then
     failed "You must supply --signing-cert"
 fi
-if [ -z ${signing-key} ]; then
+if [ -z "${signing_key}" ]; then
     failed "You must supply --signing-key"
 fi
-if [ -z $address ]; then
+if [ -z "$address" ]; then
     failed "You must supply --address"
 fi
 server="https://${address}"
@@ -59,19 +57,18 @@ server="https://${address}"
 echo "💤 Getting the Service cert from $server"
 # The node is not up yet and the certificate will not be created until it
 # return 200. We can't pass in the ca_cert hence why we use -k
-while [ "200" != "$(curl $server/node/network -k -s -o /dev/null -w %{http_code})" ]
+while [ "200" != "$(curl "$server/node/network" -k -s -o /dev/null -w %{http_code})" ]
 do
     sleep 1
 done
 echo "🎉 Got the Service certificate"
 
-mkdir -p ${certificate_dir}
-certAsString=$(curl $server/node/network -k | jq -r .service_certificate)
+mkdir -p "${certificate_dir}"
+certAsString=$(curl "$server/node/network" -k | jq -r .service_certificate)
 
 # Convert string with \n into file with new lines
 echo -e "${certAsString}" > "${certificate_dir}/service_cert.pem"
-echo -e ${signing-cert} > "${certificate_dir}/member0_cert.pem"
-echo -e ${signing-key} > "${certificate_dir}/member0_privk.pem"
-
-$app_dir/governance/scripts/setup_governance.sh --nodeAddress ${address} --certificate_dir "$certificate_dir"
-$app_dir/test/test.sh --nodeAddress ${address} --certificate_dir "$certificate_dir"
+echo -e "${signing_cert}" > "${certificate_dir}/member0_cert.pem"
+echo -e "${signing_key}" > "${certificate_dir}/member0_privk.pem"
+"$app_dir/governance/scripts/setup_governance.sh" --nodeAddress "${address}" --certificate_dir "$certificate_dir"
+"$app_dir/test/test.sh" --nodeAddress "${address}" --certificate_dir "$certificate_dir"
