@@ -2,11 +2,14 @@
 set -euo pipefail
 
 declare enclave_type=""
-declare certificate_dir="./workspace/docker_certificates"
+
+declare app_dir=$PWD                   # application folder for reference
+declare app_name=${app_dir##*/}        # application name (to be used in container commands)
+declare certificate_dir="${app_dir}/workspace/docker_certificates"
 
 function usage {
     echo ""
-    echo "Start a CCF node in docker."
+    echo "Start a CCF node in docker and run the tests."
     echo ""
     echo "usage: ./test_docker.sh --serverIP <IPADDRESS> --port <PORT> [--virtual] [--enclave]"
     echo ""
@@ -58,14 +61,14 @@ fi
 declare server="https://${serverIP}:${port}"
 
 function finish {
-    containerId=$(docker ps -qf ancestor=banking-app:$enclave_type)
+    containerId=$(docker ps -qf ancestor=$app_name:$enclave_type)
     docker stop $containerId
     echo "💀 Killed container ${containerId}"
 }
 trap finish EXIT
 
-docker run --detach --ip $serverIP banking-app:$enclave_type
-containerId=$(docker ps -f ancestor=banking-app:$enclave_type -q)
+docker run --detach --ip $serverIP $app_name:$enclave_type
+containerId=$(docker ps -f ancestor=$app_name:$enclave_type -q)
 
 echo "💤 Waiting for CCF node to create the certificate..."
 # The node is not up yet and the certificate will not be created until it
@@ -77,5 +80,18 @@ done
 
 docker cp "$containerId:/app/service_cert.pem" "$certificate_dir"
 
-./scripts/setup_governance.sh --nodeAddress ${serverIP}:${port} --certificate_dir "$certificate_dir"
-./scripts/test.sh --nodeAddress ${serverIP}:${port} --certificate_dir "$certificate_dir"
+# Call app-specific setup_governance and test scripts
+check_existence=$(ls $app_dir/governance/scripts/setup_governance.sh 2>/dev/null || true)
+if [ -z "$check_existence" ]; then
+    failed "You are missing a setup_governance script in your application"
+    exit 0
+fi
+
+check_existence=$(ls $app_dir/test/test.sh 2>/dev/null || true)
+if [ -z "$check_existence" ]; then
+    failed "You are missing a test.sh script in your application."
+    exit 0
+fi
+
+$app_dir/governance/scripts/setup_governance.sh --nodeAddress ${serverIP}:${port} --certificate_dir "$certificate_dir"
+$app_dir/test/test.sh --nodeAddress ${serverIP}:${port} --certificate_dir "$certificate_dir"
