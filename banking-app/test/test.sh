@@ -41,10 +41,10 @@ do
 done
 
 # validate parameters
-if [ -z $nodeAddress ]; then
+if [ -z "$nodeAddress" ]; then
     failed "You must supply --nodeAddress"
 fi
-if [ -z $certificate_dir ]; then
+if [ -z "$certificate_dir" ]; then
     failed "You must supply --certificate_dir"
 fi
 
@@ -56,11 +56,10 @@ check_eq() {
     local test_name="$1"
     local expected="$2"
     local actual="$3"
-    echo -n "$test_name: "
     if [ "$expected" == "$actual" ]; then
-        echo "[Pass] ✅"
+        echo "✅ [Pass]: $test_name" 
     else
-        echo "[Fail] ❌: $expected expected, but got $actual"
+        echo "❌ [Fail]: $test_name: $expected expected, but got $actual."
         exit 1
     fi
 }
@@ -77,14 +76,14 @@ echo "💤 Waiting for the app frontend..."
 # There is a side effect here in the case of the sandbox as it creates the 'workspace/sandbox_common' everytime
 # it starts up. The following condition not only checks that this pem file has been created, it also checks it
 # is valid. Don't be caught out by the folder existing from a previous run.
-while [ "200" != "$(curl $server/app/commit --cacert "${certificate_dir}/service_cert.pem" $only_status_code)" ]
+while [ "200" != "$(curl "$server/app/commit" --cacert "${certificate_dir}/service_cert.pem" $only_status_code)" ]
 do
     sleep 1
 done
 
 # Only when this directory has been created (or refreshed), should we change to it
 # otherwise you can get permission issues.
-cd ${certificate_dir}
+cd "${certificate_dir}"
 
 user0_id=$(openssl x509 -in "user0_cert.pem" -noout -fingerprint -sha256 | cut -d "=" -f 2 | sed 's/://g' | awk '{print tolower($0)}')
 user1_id=$(openssl x509 -in "user1_cert.pem" -noout -fingerprint -sha256 | cut -d "=" -f 2 | sed 's/://g' | awk '{print tolower($0)}')
