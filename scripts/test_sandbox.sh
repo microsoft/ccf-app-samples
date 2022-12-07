@@ -76,6 +76,6 @@ if [ ! -f "$testScript" ]; then
     echo "💥📂 Test file $testScript not found."
     exit 1
 else
-  "$app_dir/test/test.sh" --nodeAddress "${nodeAddress}" \
+  "$testScript" --nodeAddress "${nodeAddress}" \
     --certificate_dir "$certificate_dir"
 fi
