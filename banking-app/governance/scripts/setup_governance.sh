@@ -73,7 +73,9 @@ curl "${server}/gov/ack/update_state_digest" \
 echo "Show digest"
 cat $certs/activation.json
 
-/opt/ccf/bin/scurl.sh "${server}/gov/ack" \
+ccf_prefix=/opt/ccf_virtual/bin
+
+$ccf_prefix/scurl.sh "${server}/gov/ack" \
     --cacert $certs/service_cert.pem \
     --signing-key $certs/member0_privk.pem \
     --signing-cert $certs/member0_cert.pem \
@@ -93,7 +95,7 @@ create_certificate(){
     local certName="$1"
     local certsFolder="$2"
     cd $certsFolder
-    /opt/ccf/bin/keygenerator.sh --name $certName --gen-enc-key
+    $ccf_prefix/keygenerator.sh --name $certName --gen-enc-key
     cd -
 }
 

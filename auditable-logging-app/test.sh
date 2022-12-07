@@ -7,7 +7,7 @@ npm run build > /dev/null 2>&1
 
 # Run sandbox.
 echo "Starting sandbox..."
-/opt/ccf/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count 1 --initial-user-count 1 > /dev/null 2>&1 &
+/opt/ccf_virtual/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count 1 --initial-user-count 1 > /dev/null 2>&1 &
 sandbox_pid=$!
 
 check_eq() {

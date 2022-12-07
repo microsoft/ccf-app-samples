@@ -58,11 +58,11 @@ elif [[ -z $signing_key ]]; then
     failed "Missing parameter --signing-key"
 fi
 
-proposal0_out=$(/opt/ccf/bin/scurl.sh "$network_url/gov/proposals" --cacert $service_cert --signing-key $signing_key --signing-cert $signing_cert --data-binary @$proposal_file -H "content-type: application/json")
+proposal0_out=$(/opt/ccf_virtual/bin/scurl.sh "$network_url/gov/proposals" --cacert $service_cert --signing-key $signing_key --signing-cert $signing_cert --data-binary @$proposal_file -H "content-type: application/json")
 proposal0_id=$( jq -r  '.proposal_id' <<< "${proposal0_out}" )
 echo $proposal0_id
 
 app_dir=$PWD  # application folder for reference
 
-/opt/ccf/bin/scurl.sh "$network_url/gov/proposals/$proposal0_id/ballots" --cacert $service_cert --signing-key $signing_key --signing-cert $signing_cert --data-binary @${app_dir}/governance/vote/vote_accept.json -H "content-type: application/json" | jq
+/opt/ccf_virtual/bin/scurl.sh "$network_url/gov/proposals/$proposal0_id/ballots" --cacert $service_cert --signing-key $signing_key --signing-cert $signing_cert --data-binary @${app_dir}/governance/vote/vote_accept.json -H "content-type: application/json" | jq
 
