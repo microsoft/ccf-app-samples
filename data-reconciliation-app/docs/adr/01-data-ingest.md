@@ -10,74 +10,63 @@ We need to build an API that ingests member data into our system. Once ingested,
 
 Gathered requirements:
 
-- Members will upload data via csv
-- Members will upload multiple records (batch) or single records via csv
-- Data will have one attribute, and we will only work with string attributes for now.
+- Members will decide upon a csv schema ahead of data ingest
+- Members will upload their data via csv, with headers
+  - csv will have 2 columns:
+    - one unique identifier (string)
+    - one attribute associated with the unique identifier (string)
+- There is likely going to be a UI on top of our ingest API...so we will treat our app like a backend system. Therefore, we will accept JSON into our ingest API.
 
 ## Decision
 
-### Endpoint
+## Model for K-V store
 
 ```
-POST  /csv
-// Endpoint ingests data into data reconciliation app
-	• URL Params
-        None
-	• Headers
-        Content-Type: application/json
-	• Request is ccfapp.Request object
-		○ Reuest Body = CSV text
-		○ Request UserID =
-	• Status: 200
-    • Status Text: "Data has been successfully recorded"
+//psuedo code for model based off forum app
+
+// this is unique for each user
+type User = string;
+
+interface AttributeBase {
+  votes: Record<User, T>;
+}
+
+interface StringAttribute extends AttributeBase<string> {
+  type: "string";
+}
+
+interface NumericAttribute extends AttributeBase<number> {
+  type: "number";
+}
+
+type Attribute = StringAttribute | NumericAttribute;
+
+type AttributeMap = ccfapp.TypedKvMap<string, Attribute>;
 ```
 
-### Service Layer - CSV Service
+### Sample Ingest Data
 
-```
-// injects member data into CCF K-V store
-SubmitData(userId, csv body))
-	• Parse spreadsheet
-		○ Any validation error
-        ○ Grab headers of spreadsheet
-		○ Check if key exists
-            - if exists, update vote
-            - else, save to K-V Store
-```
+For example, from Member 1:
 
-### K-V Store data structure
-
-- Key: Unique Id (string)
-- Value: Attribute object
-  - id: attribute header (string)
-  - type: string or number (string for our MVP)
-  - votes: Map<UserID (string), Attribute Value (string)>
-
-### Sample Data
-
-From Member 1:
-
-| lei   | company_name |
+| id    | company_name |
 | ----- | ------------ |
 | A0128 | microsoft    |
 | A0129 | google       |
 | A0130 | amazon       |
 
-From Member 2:
-| lei | company_name |
+For example, from Member 2:
+| id | company_name |
 |---|---|
 | A0128 | microsoft |
 |A0129 | alphabet |
 | A0130 | amazon |
 
-### Sample store
+### Domain Model Sample - String Attribute
 
 ```json
 {
-  "key": "A0129",
-  "value": {
-    "id": "company_name",
-    "type": "string",
+  "Key": "A0129",
+  "Attribute": {
     "votes": {
       "Member 1": "google",
       "Member 2": "alphabet"
@@ -86,54 +75,53 @@ From Member 2:
 }
 ```
 
+### API Endpoint
+
+- Description
+  - Adds member data into K-V store, enabling each member to vote on records
+- Path
+  - /votes
+- HTTP Method
+  - POST
+- URL Params
+  - N/A
+- Headers
+  - content-type: application/json
+  - x-api-key: {UUID}
+- Request will be a ccfapp.Request Object, which contains:
+  - user = <User>request.caller
+  - csv = request.body.text()
+- HTTP Status Codes
+  - OK
+    - Status: 200
+    - Status Text: "Votes have been successfully recorded"
+  - Unauthorized
+    - Status: 401
+    - Status Text: "Unauthorized"
+  - Validation Error
+    - Status: 400
+    - Status Text: "Incorrect format"
+
+### Service
+
+```
+submitVotes(userId: string, csv: string)
+```
+
+- Service will leverage repository layer defined below
+- Service will contain business logic: - Check if key already exists via repository `read` - if so, update model & repository `insert` - else, create new model & repository `insert`
+
+### Repository
+
+Leverage ccf framework to read and write from kv::Map objects.
+
+- `insert`
+  - Creates new record in AttributeMap
+- `read`
+  - Given key, retrieves record from AttributeMap
+
+Reference: https://microsoft.github.io/CCF/main/build_apps/kv/api.html#_CPPv4N2kv18WriteableMapHandle3putERK1KRK1V
+
 ## Consequences
 
-It is only in scope to handle data with one attribute. It is possible in the future, the app may handle muliple attributes of string or numeric types. If that becomes a requirement in the future, we should have another ADR. But it was part of the conversation...so I'll capture some initial thoughts here:
-
-### Many Attributes -- Out of Scope
-
-- Key: Unique Id (string)
-- Value:
-  - schema_def: JSON Schema for attributes
-  - votes: Map<UserID (string), Attribute Values (string)>
-
-From Member 1:
-
-| lei   | company_name | zip_code |
-| ----- | ------------ | -------- |
-| A0128 | microsoft    | 12361    |
-| A0129 | google       | 12121    |
-| A0130 | amazon       | 12456    |
-
-From Member 2:
-| lei | company_name |zip_code
-|---|---|---|
-| A0128 | microsoft |12361
-|A0129 | alphabet |12122
-| A0130 | amazon |12456
-
-```json
-{
-  "key": "A0129",
-  "value": {
-    "schema_def": {
-      "company_name": {
-        "type": "string"
-      },
-      "zip_code": {
-        "type": "number"
-      }
-    },
-    "votes": {
-      "Member 1": {
-        "company_name": "google",
-        "zip_code": "12121"
-      },
-      "Member 2": {
-        "company_name": "alphabet",
-        "city": "12122"
-      }
-    }
-  }
-}
-```
+It is only in scope to handle data with one attribute. It is possible in the future, the app may handle muliple attributes of string or numeric types. If that becomes a requirement in the future, we should update the model and complete another ADR.
