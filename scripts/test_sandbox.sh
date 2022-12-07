@@ -46,21 +46,22 @@ do
 done
 
 # validate parameters
-if [ -z $nodeAddress ]; then
+if [ -z "$nodeAddress" ]; then
     failed "You must supply --nodeAddress"
 fi
-if [ -z $certificate_dir ]; then
+if [ -z "$certificate_dir" ]; then
     failed "You must supply --certificate_dir"
 fi
-if [ -z $constitution_dir ]; then
+if [ -z "$constitution_dir" ]; then
     failed "You must supply --constitution_dir"
 fi
-
-
-
+if [ ! -d "$constitution_dir" ]; then
+  echo "💥📁 Constitution folder not found: $constitution_dir"
+  exit 1
+fi
 
 echo "▶️ Starting sandbox..."
-/opt/ccf_virtual/bin/sandbox.sh --js-app-bundle $app_dir/dist/ --initial-member-count 3 --initial-user-count 2 --constitution-dir $constitution_dir > /dev/null 2>&1 &
+/opt/ccf_virtual/bin/sandbox.sh --js-app-bundle "$app_dir/dist/" --initial-member-count 3 --initial-user-count 2 --constitution-dir "$constitution_dir" > /dev/null 2>&1 &
 sandbox_pid=$!
 echo "💤 Waiting for sandbox . . . (${sandbox_pid})"
 
@@ -70,11 +71,11 @@ function finish {
 }
 trap finish EXIT
 
-# Call app-specific setup_governance and test scripts
-check_existence=$(ls $app_dir/test/test.sh 2>/dev/null || true)
-if [ -z "$check_existence" ]; then
-    failed "You are missing a test.sh script in your application."
-    exit 0
+testScript="$app_dir/test/test.sh"
+if [ ! -f "$testScript" ]; then
+    echo "💥📂 Test file $testScript not found."
+    exit 1
+else
+  "$testScript" --nodeAddress "${nodeAddress}" \
+    --certificate_dir "$certificate_dir"
 fi
-
-$app_dir/test/test.sh --nodeAddress ${nodeAddress} --certificate_dir "$certificate_dir"

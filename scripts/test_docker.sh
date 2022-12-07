@@ -52,28 +52,28 @@ done
 if [ -z $enclave_type ]; then
     failed "You must supply --virtual or --enclave"
 fi
-if [ -z $serverIP ]; then
+if [ -z "$serverIP" ]; then
     failed "You must supply --serverIP"
 fi
-if [ -z $port ]; then
+if [ -z "$port" ]; then
     failed "You must supply --port"
 fi
 declare server="https://${serverIP}:${port}"
 
 function finish {
-    containerId=$(docker ps -qf ancestor=$app_name:$enclave_type)
-    docker stop $containerId
+    containerId=$(docker ps -qf ancestor="$app_name:$enclave_type")
+    docker stop "$containerId"
     echo "💀 Killed container ${containerId}"
 }
 trap finish EXIT
 
-docker run --detach --ip $serverIP $app_name:$enclave_type
-containerId=$(docker ps -f ancestor=$app_name:$enclave_type -q)
+docker run --detach --ip "$serverIP" "$app_name:$enclave_type"
+containerId=$(docker ps -f ancestor="$app_name:$enclave_type" -q)
 
 echo "💤 Waiting for CCF node to create the certificate..."
 # The node is not up yet and the certificate will not be created until it
 # return 200. We can't pass in the ca_cert hence why we use -k
-while [ "200" != "$(curl $server/node/network -k -s -o /dev/null -w %{http_code})" ]
+while [ "200" != "$(curl "$server/node/network" -k -s -o /dev/null -w %{http_code})" ]
 do
     sleep 1
 done
@@ -81,17 +81,17 @@ done
 docker cp "$containerId:/app/service_cert.pem" "$certificate_dir"
 
 # Call app-specific setup_governance and test scripts
-check_existence=$(ls $app_dir/governance/scripts/setup_governance.sh 2>/dev/null || true)
-if [ -z "$check_existence" ]; then
-    failed "You are missing a setup_governance script in your application"
-    exit 0
+governanceScript="$app_dir/governance/scripts/setup_governance.sh"
+if [ ! -f "$governanceScript" ]; then
+    echo "💥📂 Governance file $governanceScript not found."
+    exit 1
 fi
 
-check_existence=$(ls $app_dir/test/test.sh 2>/dev/null || true)
-if [ -z "$check_existence" ]; then
-    failed "You are missing a test.sh script in your application."
-    exit 0
+testScript="$app_dir/test/test.sh"
+if [ ! -f "$testScript" ]; then
+    echo "💥📂 Test file $testScript not found."
+    exit 1
 fi
 
-$app_dir/governance/scripts/setup_governance.sh --nodeAddress ${serverIP}:${port} --certificate_dir "$certificate_dir"
-$app_dir/test/test.sh --nodeAddress ${serverIP}:${port} --certificate_dir "$certificate_dir"
+"$governanceScript" --nodeAddress "${serverIP}:${port}" --certificate_dir "$certificate_dir"
+"$testScript" --nodeAddress "${serverIP}:${port}" --certificate_dir "$certificate_dir"

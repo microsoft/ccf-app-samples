@@ -4,7 +4,8 @@
   "extensions": [
     "ms-vscode.cpptools",
     "vsls-contrib.codetour",
-    "esbenp.prettier-vscode"
+    "esbenp.prettier-vscode",
+    "timonwong.shellcheck"
   ],
   "postCreateCommand": "npm install --prefix=banking-app && npm install --prefix=auditable-logging-app && cp sandbox.sh /opt/ccf/bin/sandbox.sh",
   "features": {
