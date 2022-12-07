@@ -1,6 +1,6 @@
 {
   "name": "CCF Sample DevContainer",
-  "image": "mcr.microsoft.com/ccf/app/dev:3.0.0-dev6-sgx",
+  "image": "mcr.microsoft.com/ccf/app/dev:3.0.0-virtual",
   "extensions": [
     "ms-vscode.cpptools",
     "vsls-contrib.codetour",
