@@ -139,7 +139,7 @@ npm run build # Transpile the TypeScript code to JavaScript and copy the output 
 
 initial_number_of_banks=3
 initial_number_of_users=2
-/opt/ccf/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count $initial_number_of_banks --initial-user-count $initial_number_of_users
+/opt/ccf_virtual/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count $initial_number_of_banks --initial-user-count $initial_number_of_users
 ```
 
 You can find example commands to use against the application in `./demo.sh`.
