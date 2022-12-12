@@ -21,11 +21,12 @@ If you receive any errors when running the above commands, it may be that your s
 The files in this directory will help you deploy an Azure Managed CCF instance from the command line. You can also create an instance from the portal. Both ARM and Bicep are supplied here, but this guide shows the Bicep deployment.
 
 At it's simplest, you need 2 things to create an Azure Managed CCF instance:
+
 - it's name
 - the certificate for the initial member
 
 !!! Note
-    The following commands assume you have created some pem files and they are in the deploy folder.
+The following commands assume you have created some pem files and they are in the deploy folder.
 
 ```bash
 cd deploy
@@ -49,7 +50,7 @@ az deployment group create \
 Deploying a CCF application to Azure Managed CCF is very similar to deploying a CCF application to a local CCF instance. You can deploy any of the samples in this repository to Azure Managed CCF. The following commands will execute the same commands that are run in our Continuous Deployment.
 
 !!! Note
-    The following commands assume you have created some pem files.
+The following commands assume you have created some pem files.
 
 ```bash
 export CCF_NAME=myccf
