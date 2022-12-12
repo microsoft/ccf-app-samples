@@ -23,7 +23,7 @@ jobs:
       - name: Azure Login
         uses: Azure/login@v1.4.5
         with:
-          creds: '{"clientId":"${{ secrets.ARM_CLIENT_ID }}","clientSecret":"${{ secrets.ARM_CLIENT_SECRET }}","subscriptionId":"${{ secrets.ARM_SUBSCRIPTION_ID }}","tenantId":"${{ secrets.ARM_TENANT_ID }}"}'  # editorconfig-checker-disable-line
+          creds: '{"clientId":"${{ secrets.ARM_CLIENT_ID }}","clientSecret":"${{ secrets.ARM_CLIENT_SECRET }}","subscriptionId":"${{ secrets.ARM_SUBSCRIPTION_ID }}","tenantId":"${{ secrets.ARM_TENANT_ID }}"}' # editorconfig-checker-disable-line
 
       - name: Create Resource Group
         uses: Azure/CLI@v1
@@ -47,7 +47,7 @@ jobs:
           env: |
             PUBLIC_CERT=${{ secrets.PUBLIC_CERT }}
             PRIVATE_CERT=${{ secrets.PRIVATE_CERT }}
-            CCF_NAME=${{ env.ccfName }}            
+            CCF_NAME=${{ env.ccfName }}
 
       - name: Delete Resource Group
         uses: Azure/CLI@v1
