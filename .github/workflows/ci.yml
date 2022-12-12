@@ -42,3 +42,18 @@ jobs:
         with:
           runCmd: |
             cd auditable-logging-app && make test
+
+  data-reconciliation-app-sample:
+    name: Data Reconciliation app sample
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Build samples in DevContainer
+        uses: devcontainers/ci@v0.2
+        with:
+          runCmd: |
+            cd data-reconciliation-app && make test
