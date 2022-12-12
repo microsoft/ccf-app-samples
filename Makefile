@@ -8,11 +8,11 @@ help: ## 💬 This help message :)
 
 lint: ## 🔍 Lint the code base (but don't fix)
 	@echo -e "\e[34m$@\e[0m" || true
-	@./lint.sh
+	@./scripts/lint.sh
 
 lint-fix: ## 🌟 Lint and fix the code base
 	@echo -e "\e[34m$@\e[0m" || true
-	@./lint.sh -f
+	@./scripts/lint.sh -f
 
 build: ## 🔨 Build an Application
 	@echo -e "\e[34mPlease change directory to the sample you wish to build.\e[0m" || true

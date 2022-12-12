@@ -34,11 +34,11 @@ clean: ## 🧹 Clean the working folders created during build/demo
 
 build-virtual: build ## 📦 Build Virtual container image from Dockerfile
 	@echo -e "\e[34m$@\e[0m" || true
-	@../build_image.sh virtual
+	@../scripts/build_image.sh virtual
 
 build-enclave: build ## 📦 Build Enclave container image from Dockerfile
 	@echo -e "\e[34m$@\e[0m" || true
-	@../build_image.sh enclave
+	@../scripts/build_image.sh enclave
 
 deploy: ## 📦 Deploy application to mCCF
 	@echo -e "\e[34m Not Implemented \e[0m" || true
