@@ -24,7 +24,7 @@ jobs:
           runCmd: |
             git config --global --add safe.directory "$GITHUB_WORKSPACE"
             make lint
-            cd banking-app && make test
+            cd banking-app && make test && make test-docker-virtual
           env: |
             GITHUB_WORKSPACE
 
