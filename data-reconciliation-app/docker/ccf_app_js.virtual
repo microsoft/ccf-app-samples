@@ -1,11 +1,11 @@
 # Build
-FROM mcr.microsoft.com/ccf/app/dev:2.0.7-sgx as builder
+FROM mcr.microsoft.com/ccf/app/dev:3.0.1-virtual as builder
 
 # Run
-FROM mcr.microsoft.com/ccf/app/run-js:2.0.7-sgx
+FROM mcr.microsoft.com/ccf/app/run-js:3.0.1-virtual
 
 # Note: libjs_generic.virtual is not included in run-js container
-COPY --from=builder /opt/ccf/lib/libjs_generic.virtual.so /usr/lib/ccf
+COPY --from=builder /opt/ccf_virtual/lib/libjs_generic.virtual.so /usr/lib/ccf
 
 # copy configuration into image
 COPY ./governance/constitution/*.js /app/

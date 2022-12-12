@@ -3,11 +3,13 @@ set -euox pipefail
 
 declare server="https://127.0.0.1:8000"
 
+ccf_prefix=/opt/ccf_virtual/bin
+
 create_certificate(){
     local certName="$1"
     local certFile="${1}_cert.pem"
     local setUserFile="set_${1}.json"
-    /opt/ccf/bin/keygenerator.sh --name $certName
+    $ccf_prefix/keygenerator.sh --name $certName
 
     cert=$(< $certFile sed '$!G' | paste -sd '\\n' -)
 
@@ -37,7 +39,7 @@ cp ../../vote/* ./
 # Add users
 
 # Proposal for user0
-proposal0_out=$(/opt/ccf/bin/scurl.sh ${server}/gov/proposals \
+proposal0_out=$(${ccf_prefix}/bin/scurl.sh ${server}/gov/proposals \
   --cacert service_cert.pem \
   --signing-key member0_privk.pem \
   --signing-cert member0_cert.pem \
@@ -47,7 +49,7 @@ proposal0_id=$( jq -r  '.proposal_id' <<< "${proposal0_out}" )
 echo $proposal0_id
 
 # Vote by member 1
-/opt/ccf/bin/scurl.sh ${server}/gov/proposals/$proposal0_id/ballots \
+$ccf_prefix/scurl.sh ${server}/gov/proposals/$proposal0_id/ballots \
   --cacert service_cert.pem \
   --signing-key member1_privk.pem \
   --signing-cert member1_cert.pem \
@@ -55,7 +57,7 @@ echo $proposal0_id
   -H "content-type: application/json" | jq
 
 # Vote by member 2
-/opt/ccf/bin/scurl.sh ${server}/gov/proposals/$proposal0_id/ballots \
+$ccf_prefix/scurl.sh ${server}/gov/proposals/$proposal0_id/ballots \
   --cacert service_cert.pem \
   --signing-key member2_privk.pem \
   --signing-cert member2_cert.pem \
@@ -63,12 +65,12 @@ echo $proposal0_id
   -H "content-type: application/json" | jq
 
 # Proposal for user1
-proposal1_out=$(/opt/ccf/bin/scurl.sh ${server}/gov/proposals --cacert service_cert.pem --signing-key member0_privk.pem --signing-cert member0_cert.pem --data-binary @set_user1.json -H "content-type: application/json")
+proposal1_out=$(${ccf_prefix}/scurl.sh ${server}/gov/proposals --cacert service_cert.pem --signing-key member0_privk.pem --signing-cert member0_cert.pem --data-binary @set_user1.json -H "content-type: application/json")
 proposal1_id=$( jq -r  '.proposal_id' <<< "${proposal1_out}" )
 echo $proposal0_id
 
 # Vote by member 1
-/opt/ccf/bin/scurl.sh ${server}/gov/proposals/$proposal1_id/ballots \
+$ccf_prefix/scurl.sh ${server}/gov/proposals/$proposal1_id/ballots \
   --cacert service_cert.pem \
   --signing-key member1_privk.pem \
   --signing-cert member1_cert.pem \
@@ -76,7 +78,7 @@ echo $proposal0_id
   -H "content-type: application/json" | jq
 
 # Vote by member 2
-/opt/ccf/bin/scurl.sh ${server}/gov/proposals/$proposal1_id/ballots \
+$ccf_prefix/scurl.sh ${server}/gov/proposals/$proposal1_id/ballots \
   --cacert service_cert.pem \
   --signing-key member2_privk.pem \
   --signing-cert member2_cert.pem \
