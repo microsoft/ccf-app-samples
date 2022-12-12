@@ -1,0 +1,79 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "resourceName": {
+            "type": "string",
+            "metadata": {
+                "description": "Resource Name"
+            }
+        },
+        "location": {
+            "defaultValue": "southcentralus",
+            "type": "string",
+            "metadata": {
+                "description": "Azure Region"
+            }
+        },
+        "mccfAppSourceUri": {
+            "defaultValue": "ThisMustHaveAValue",
+            "type": "string",
+            "metadata": {
+                "description": "MCCF App type"
+            }
+        },
+        "mccfAppLanguage": {
+            "defaultValue": "JS",
+            "allowedValues": [
+                "JS",
+                "CPP"
+            ],
+            "type": "string",
+            "metadata": {
+                "description": "MCCF Language Runtime"
+            }
+        },
+        "mccfMemberBasedSecurityPrincipals": {
+            "defaultValue": [],
+            "type": "array",
+            "metadata": {
+                "description": "Member identities"
+            }
+        },
+        "tags": {
+            "defaultValue": {},
+            "type": "object",
+            "metadata": {
+                "description": "Additional Properties"
+            }
+        }
+    },
+    "variables": {
+        "copy": [
+            {
+                "name": "memberBasedSecurityPrincipals",
+                "count": "[length(parameters('mccfMemberBasedSecurityPrincipals'))]",
+                "input": {
+                    "certificate": "[last(take(parameters('mccfMemberBasedSecurityPrincipals'),copyIndex('memberBasedSecurityPrincipals',1))).cert]",
+                    "encryptionkey": "[last(take(parameters('mccfMemberBasedSecurityPrincipals'),copyIndex('memberBasedSecurityPrincipals',1))).encryptionKey]"
+                }
+            }
+        ]
+    },
+    "resources": [
+        {
+            "type": "Microsoft.ConfidentialLedger/ManagedCCFs",
+            "apiversion": "2022-09-08-preview",
+            "name": "[parameters('resourceName')]",
+            "location": "[parameters('location')]",
+            "tags": "[if(contains(parameters('tags'),'Microsoft.ConfidentialLedger/ManagedCCFs'),parameters('tags')['Microsoft.ConfidentialLedger/ManagedCCFs'],json('{}'))]",
+            "properties": {
+                "deploymentType": {
+                    "languageRuntime": "[parameters('mccfAppLanguage')]",
+                    "appSourceUri": "[parameters('mccfAppSourceUri')]"
+                },
+                "memberIdentityCertificates": "[variables('memberBasedSecurityPrincipals')]"
+            }
+        }
+    ]
+}

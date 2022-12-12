@@ -1,6 +1,8 @@
 #!/bin/bash
 set -euo pipefail
 
+ccf_prefix=/opt/ccf_virtual/bin
+
 if [ $# -eq 0 ]
   then
     echo "No argument supplied. Define either 'virtual' or 'enclave'";
@@ -23,7 +25,7 @@ mkdir -p $app_path/workspace/docker_certificates
 echo "-- generating member0 certificates"
 # This is directly related to the member described in host config file 
 cd $app_path/workspace/docker_certificates
-/opt/ccf/bin/keygenerator.sh --name member0 --gen-enc-key
+$ccf_prefix/keygenerator.sh --name member0 --gen-enc-key
 cd $app_path
 
 echo "-- Running docker build command"

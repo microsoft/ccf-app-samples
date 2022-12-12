@@ -1,12 +1,13 @@
 {
   "name": "CCF Sample DevContainer",
-  "image": "mcr.microsoft.com/ccf/app/dev:3.0.0-dev6-sgx",
+  "image": "mcr.microsoft.com/ccf/app/dev:3.0.1-virtual",
   "extensions": [
     "ms-vscode.cpptools",
     "vsls-contrib.codetour",
-    "esbenp.prettier-vscode"
+    "esbenp.prettier-vscode",
+    "timonwong.shellcheck"
   ],
-  "postCreateCommand": "npm install --prefix=banking-app && npm install --prefix=auditable-logging-app && cp sandbox.sh /opt/ccf/bin/sandbox.sh",
+  "postCreateCommand": "npm install --prefix=banking-app && npm install --prefix=auditable-logging-app",
   "features": {
     "ghcr.io/devcontainers/features/docker-from-docker:1": {
       "version": "20.10.8"
