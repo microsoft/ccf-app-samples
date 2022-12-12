@@ -1,7 +1,8 @@
 {
     "enclave": {
       "file": "/app/libccf_app.virtual.so",
-      "type": "Virtual"
+      "type": "Virtual",
+      "platform": "Virtual"
     },
     "network": {
       "node_to_node_interface": { "bind_address": "127.0.0.1:8081" },
