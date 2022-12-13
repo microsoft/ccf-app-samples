@@ -56,4 +56,4 @@ jobs:
         uses: devcontainers/ci@v0.2
         with:
           runCmd: |
-            cd data-reconciliation-app && make test
+            cd data-reconciliation-app && make test && make test-docker-virtual
