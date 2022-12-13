@@ -1,27 +1,49 @@
 {
   "endpoints": {
+
     "/votes": {
       "post": {
         "js_module": "endpoints/ingest.js",
-        "js_function": "post",
+        "js_function": "submitData",
         "forwarding_required": "always",
         "authn_policies": ["member_cert"],
         "mode": "readwrite",
         "openapi": {
           "responses": {
-            "204": {
-              "description": "Ok"
+            "200": {
+              "description": "Ok",
+              "content": {
+                "application/json": {
+                  "schema": { "type": "object" }
+                }
+              }
             }
           },
-          "security": [],
-          "parameters": [],
           "requestBody": {
             "required": true,
             "content": {
               "application/json": {
-                "schema": {
-                  "properties": {},
-                  "type": "object"
+                "schema": {  "type": "array" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/report": {
+      "get": {
+        "js_module": "endpoints/reporting.js",
+        "js_function": "getDataSummary",
+        "forwarding_required": "always",
+        "authn_policies": ["member_cert"],
+        "mode": "readonly",
+        "openapi": {
+          "responses": {
+            "200": {
+              "description": "Ok",
+              "content": {
+                "application/json": {
+                  "schema": { "type": "object" }
                 }
               }
             }
