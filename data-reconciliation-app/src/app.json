@@ -1,6 +1,6 @@
 {
   "endpoints": {
-    "/log": {
+    "/votes": {
       "get": {
         "js_module": "endpoints/sample.js",
         "js_function": "read",
