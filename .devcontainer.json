@@ -7,7 +7,7 @@
     "esbenp.prettier-vscode",
     "timonwong.shellcheck"
   ],
-  "postCreateCommand": "npm install --prefix=banking-app && npm install --prefix=auditable-logging-app",
+  "postCreateCommand": "scripts/initialise_devContainer.sh",
   "features": {
     "ghcr.io/devcontainers/features/docker-from-docker:1": {
       "version": "20.10.8"
