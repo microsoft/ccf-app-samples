@@ -16,7 +16,6 @@ export class ReportingService implements IReportingService {
   }
 
   public getData(userId: User): ServiceResult<object> {
-   
     const result = {};
     result[userId] = this.keyValueRepo.get(userId);
     return ServiceResult.Succeeded(result);

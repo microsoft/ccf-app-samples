@@ -6,26 +6,31 @@ export class DataFieldSchema {
 }
 
 export class DataSchema {
-
-  key: DataFieldSchema
+  key: DataFieldSchema;
   value: DataFieldSchema;
 
   // map ingested data model to data-record model based on the schema
-  static mapDataRecord(dataRecord: object, schema : DataSchema): DataRecord {
+  static mapDataRecord(dataRecord: object, schema: DataSchema): DataRecord {
     const key: string = dataRecord[schema.key.name];
     const value: DataAttributeType = dataRecord[schema.value.name];
     return DataRecord.create(key, value);
   }
 
-   // map ingested data-models to data-record model based on the schema
-   static mapDataRecords(dataRecords: object[]): DataRecord[] {
+  // map ingested data-models to data-record model based on the schema
+  static mapDataRecords(dataRecords: object[]): DataRecord[] {
     const schema = DataSchema.getDefaultDataSchema();
-    const mappedRecords = dataRecords.map((item)=> DataSchema.mapDataRecord(item, schema))
+    const mappedRecords = dataRecords.map((item) =>
+      DataSchema.mapDataRecord(item, schema)
+    );
     return mappedRecords;
   }
 
-  private static hasValidSchema(dataRecord: object, schema : DataSchema): boolean {
-    return (dataRecord.hasOwnProperty(schema.key.name) &&
+  private static hasValidSchema(
+    dataRecord: object,
+    schema: DataSchema
+  ): boolean {
+    return (
+      dataRecord.hasOwnProperty(schema.key.name) &&
       dataRecord.hasOwnProperty(schema.value.name)
     );
   }

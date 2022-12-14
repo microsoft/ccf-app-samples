@@ -51,7 +51,11 @@ export class AuthenticationService implements IAuthenticationService {
   // Check if member exists https://microsoft.github.io/CCF/main/audit/builtin_maps.html#users-info
   public isMember(memberId: string): ServiceResult<boolean> {
     try {
-      const membersCerts = ccfapp.typedKv("public:ccf.gov.members.certs", ccfapp.arrayBuffer, ccfapp.arrayBuffer);
+      const membersCerts = ccfapp.typedKv(
+        "public:ccf.gov.members.certs",
+        ccfapp.arrayBuffer,
+        ccfapp.arrayBuffer
+      );
       return ServiceResult.Succeeded(membersCerts.has(ccf.strToBuf(memberId)));
     } catch (ex) {
       return ServiceResult.Failed({

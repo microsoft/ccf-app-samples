@@ -16,8 +16,10 @@ export class IngestService implements IIngestService {
   }
 
   // map and store data to kv-store
-  public submitData( userId: User,dataRecords: DataRecord[]): ServiceResult<string> {
-
+  public submitData(
+    userId: User,
+    dataRecords: DataRecord[]
+  ): ServiceResult<string> {
     const recordsMap = this.convertToMap(dataRecords);
     this.keyValueRepo.set(userId, recordsMap);
 

@@ -39,7 +39,7 @@ export class KeyValueRepository<T> implements IKeyValueRepository<T> {
   public keys(): string[] {
     const keys: string[] = [];
     this.kvStore.forEach((val, key) => {
-        keys.push(key);
+      keys.push(key);
     });
     return keys;
   }
@@ -48,7 +48,7 @@ export class KeyValueRepository<T> implements IKeyValueRepository<T> {
   public values(): T[] {
     const values: T[] = [];
     this.kvStore.forEach((val, key) => {
-        values.push(val);
+      values.push(val);
     });
     return values;
   }
@@ -59,7 +59,7 @@ export class KeyValueRepository<T> implements IKeyValueRepository<T> {
   }
 
   // get key-value store item count
-  public get size(): number{
+  public get size(): number {
     return this.kvStore.size;
   }
 

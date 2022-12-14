@@ -1,4 +1,3 @@
-
 export type DataAttributeType = string | number;
 export class DataRecord {
   key: string;

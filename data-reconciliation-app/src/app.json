@@ -1,6 +1,5 @@
 {
   "endpoints": {
-
     "/ingest": {
       "post": {
         "js_module": "endpoints/ingest.js",
@@ -23,7 +22,7 @@
             "required": true,
             "content": {
               "application/json": {
-                "schema": {  "type": "array" }
+                "schema": { "type": "array" }
               }
             }
           }
