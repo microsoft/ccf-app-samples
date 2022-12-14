@@ -83,7 +83,7 @@ done
 
 # Only when this directory has been created (or refreshed), should we change to it
 # otherwise you can get permission issues.
-cd ${certificate_dir}
+cd "${certificate_dir}"
 
 # -------------------------- Test cases --------------------------
 echo "Test start"

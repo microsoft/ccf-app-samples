@@ -54,8 +54,8 @@ The following commands assume you have created some pem files.
 
 ```bash
 export CCF_NAME=myccf
-export PUBLIC_CERT=$(cat member0_cert.pem)
-export PRIVATE_KEY=$(cat member0_privk.pem)
+export PUBLIC_CERT=$(< member0_cert.pem sed '$!G' | paste -sd '\\n' -)
+export PRIVATE_CERT=$(< member0_privk.pem sed '$!G' | paste -sd '\\n' -)
 
 cd <sample_path>
 make test-mccf
