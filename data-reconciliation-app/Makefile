@@ -22,6 +22,13 @@ test-docker-enclave: build-enclave ## 🧪 Test the Data Reconciliation Applicat
 	@echo -e "\e[34m$@\e[0m" || true
 	@. ../scripts/test_docker.sh --enclave --serverIP 172.17.0.4 --port 8080
 
+test-mccf: build ## 🧪 Test the Data Reconciliation Application in a Managed CCF environment
+	@echo -e "\e[34m$@\e[0m" || true
+	$(call check_defined, CCF_NAME)
+	$(call check_defined, PUBLIC_CERT)
+	$(call check_defined, PRIVATE_CERT)
+	@. ../scripts/test_mccf.sh --address "${CCF_NAME}.confidential-ledger.azure.com" --signing-cert "${PUBLIC_CERT}" --signing-key "${PRIVATE_CERT}"
+
 # Start hosting the application using `sandbox.sh` 
 start-host: build ## 🏃 Start the CCF network using Sandbox.sh
 	@echo -e "\e[34m$@\e[0m" || true
