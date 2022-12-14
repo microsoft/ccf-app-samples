@@ -4,8 +4,8 @@ import * as jscrypto from "crypto";
 import {
   IKeyValueRepository,
   KeyValueRepository,
-} from "../../src/repositories/kv-repository";
-import { DataRecord } from "../../src/models/data-record";
+} from "../../../src/repositories/kv-repository";
+import { DataRecord } from "../../../src/models/data-record";
 import { describe, expect, test, beforeEach, afterEach } from "@jest/globals";
 
 describe("Key value pair Repository", () => {
@@ -22,11 +22,11 @@ describe("Key value pair Repository", () => {
 
   test("Should add a new key-value pair", () => {
     // Act
+    
+    // Assert
     const result = keyValueRepo.set(testKey, testDataRecord);
 
     // Assert
-    console.log(result);
-
     expect(result).not.toBeNull();
     expect(result.value).toBe(testDataRecord.value);
     expect(result.type).toBe(testDataRecord.type);

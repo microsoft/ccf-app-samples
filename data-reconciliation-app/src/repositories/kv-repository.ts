@@ -1,5 +1,4 @@
 import * as ccfapp from "@microsoft/ccf-app";
-import { User } from "../models/user";
 
 export interface IKeyValueRepository<T> {
   set(key: string, value: T): T;

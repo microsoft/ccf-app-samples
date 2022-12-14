@@ -154,7 +154,7 @@ export default {
   //   "**/__tests__/**/*.[jt]s?(x)",
   //   "**/?(*.)+(spec|test).[tj]s?(x)"
   // ],
-  testMatch: ["**/test/unit-test/*.test.(ts|js|mjs)"],
+  testMatch: ["**/test/unit-test/**/*.test.(ts|js|mjs)"],
 
   // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
   testPathIgnorePatterns: ["/node_modules/", "/lib/"],
