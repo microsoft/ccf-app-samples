@@ -89,19 +89,23 @@ cd ${certificate_dir}
 echo "Test start"
 
 printf "\n\n▶️  Member 0 - data ingestion \n"
-curl $server/app/votes -X POST $(cert_arg "member0") -H "Content-Type: application/json" --data-binary "@../../data-samples/member0_data.json"
+curl $server/app/ingest -X POST $(cert_arg "member0") -H "Content-Type: application/json" --data-binary "@../../data-samples/member0_data.json"
 
 printf "\n\n▶️  Member 1 - data ingestion \n"
-curl $server/app/votes -X POST $(cert_arg "member1") -H "Content-Type: application/json" --data-binary "@../../data-samples/member1_data.json"
+curl $server/app/ingest -X POST $(cert_arg "member1") -H "Content-Type: application/json" --data-binary "@../../data-samples/member1_data.json"
 
 printf "\n\n▶️  Member 2 - data ingestion \n"
-curl $server/app/votes -X POST $(cert_arg "member2") -H "Content-Type: application/json" --data-binary "@../../data-samples/member2_data.json"
+curl $server/app/ingest -X POST $(cert_arg "member2") -H "Content-Type: application/json" --data-binary "@../../data-samples/member2_data.json"
 
 printf "\n\n✅ Member 0 - read data report \n"
 curl $server/app/report -X GET $(cert_arg "member0")
 
+printf "\n\n✅ Member 1 - read data report \n"
+curl $server/app/report -X GET $(cert_arg "member1")
 
-# check_eq "Member0: Submit data" "200" "$(curl $server/app/votes -X POST $(cert_arg "member0") -H "Content-Type: application/json" --data-binary '@../../data-samples/member0_data.json' $only_status_code)"
+printf "\n\n✅ Member 2 - read data report \n"
+curl $server/app/report -X GET $(cert_arg "member2")
+
 # ----------------------------------------------------
 
 printf "\n\n✅ Test Completed...\n"

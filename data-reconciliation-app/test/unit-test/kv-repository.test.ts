@@ -10,7 +10,7 @@ describe('Key value pair Repository', () => {
     let keyValueRepo: IKeyValueRepository<DataRecord>;
     const userId = jscrypto.randomUUID();
     const testKey = jscrypto.randomUUID();
-    const testDataRecord: DataRecord = DataRecord.create(testKey, "test",userId);
+    const testDataRecord: DataRecord = DataRecord.create(testKey, "test");
 
     beforeEach(() => {
         keyValueRepo = new KeyValueRepository<DataRecord>()
@@ -31,7 +31,6 @@ describe('Key value pair Repository', () => {
         expect(result).not.toBeNull();
         expect(result.value).toBe(testDataRecord.value);
         expect(result.type).toBe(testDataRecord.type);
-        expect(result.votes).toBe(testDataRecord.votes);
         
     });
 
@@ -45,7 +44,6 @@ describe('Key value pair Repository', () => {
         expect(result).not.toBeNull();
         expect(result.value).toBe(testDataRecord.value);
         expect(result.type).toBe(testDataRecord.type);
-        expect(result.votes).toBe(testDataRecord.votes);
 
     });
 
@@ -53,7 +51,7 @@ describe('Key value pair Repository', () => {
         
 
         // Arrange
-        const newTestDataRecord: DataRecord = DataRecord.create(testKey, "test 2",userId);
+        const newTestDataRecord: DataRecord = DataRecord.create(testKey, "test 2");
 
 
         keyValueRepo?.set(testKey, newTestDataRecord);
@@ -65,6 +63,5 @@ describe('Key value pair Repository', () => {
         expect(result).not.toBeNull();
         expect(result.value).toBe(newTestDataRecord.value);
         expect(result.type).toBe(newTestDataRecord.type);
-        expect(result.votes).toBe(newTestDataRecord.votes);
     });
 });

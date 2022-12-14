@@ -32,8 +32,7 @@ export class ServiceResult<T> {
     }
 
     public static Failed<T>(error: ErrorResponse): ServiceResult<T> {
-        const result = new ServiceResult<T>(null, error, false, StatusCode.BAD_REQUEST);
-        return result;
+        return new ServiceResult<T>(null, error, false, StatusCode.BAD_REQUEST);
     }
 
     public static Unauthorized<T>(message : string = "Unauthorized"): ServiceResult<T> {
@@ -41,7 +40,7 @@ export class ServiceResult<T> {
             errorMessage: message, 
             errorType: "Unauthorized"
         };
-        const result = new ServiceResult<T>(null, error, false, StatusCode.UNAUTHORIZED);
-        return result;
+
+        return new ServiceResult<T>(null, error, false, StatusCode.UNAUTHORIZED);
     }
 }

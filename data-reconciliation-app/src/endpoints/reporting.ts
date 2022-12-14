@@ -1,20 +1,28 @@
 import * as ccfapp from "@microsoft/ccf-app";
 import { ServiceResult } from "../utils/service-result";
-import { reportingService,authenticationService } from "../utils/DI";
+import { reportingService,authenticationService } from "../utils/dependencies";
+import { ApiResult } from "../utils/api-result";
 
 export function getDataSummary(request: ccfapp.Request<any>): ccfapp.Response<any> {
   try {
 
-    const userId = authenticationService.getCallerId(request);
-    if (!authenticationService.isMember(userId)) {
-      return ServiceResult.Unauthorized();
+    const getCallerId = authenticationService.getCallerId(request);
+    if(getCallerId.failure)
+    {
+      return ApiResult.Response(getCallerId);
     }
 
-    const response = reportingService.getData(userId);
-    return { statusCode: response.statusCode, body:response };
+    const callerId = getCallerId.content;
+    const isMember = authenticationService.isMember(callerId)
+    if (isMember.failure || !isMember.content) {
+      return ApiResult.Response(ServiceResult.Unauthorized());
+    }
+
+    const response = reportingService.getData(callerId);
+    return ApiResult.Response(response);
 
   } catch (ex) {
     const response = ServiceResult.Failed({errorMessage: ex.message, errorType: "DataIngestError", details: ex })
-    return { statusCode: response.statusCode , body: response };
+    return ApiResult.Response(response);
   }
 }

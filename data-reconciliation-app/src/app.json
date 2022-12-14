@@ -1,7 +1,7 @@
 {
   "endpoints": {
 
-    "/votes": {
+    "/ingest": {
       "post": {
         "js_module": "endpoints/ingest.js",
         "js_function": "submitData",
