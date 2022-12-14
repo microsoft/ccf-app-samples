@@ -39,7 +39,7 @@ cp ../../vote/* ./
 # Add users
 
 # Proposal for user0
-proposal0_out=$(${ccf_prefix}/bin/scurl.sh ${server}/gov/proposals \
+proposal0_out=$(${ccf_prefix}/scurl.sh ${server}/gov/proposals \
   --cacert service_cert.pem \
   --signing-key member0_privk.pem \
   --signing-cert member0_cert.pem \
