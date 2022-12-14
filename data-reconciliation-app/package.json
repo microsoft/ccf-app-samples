@@ -3,7 +3,7 @@
   "scripts": {
     "build": "del-cli -f dist/ && rollup --config && cp src/app.json dist/ && node build_bundle.js dist/",
     "bundle": "node build_bundle.js dist",
-    "test": "jest --collect-coverage"
+    "unit-test": "jest --collect-coverage"
   },
   "type": "module",
   "engines": {

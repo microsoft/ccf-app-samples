@@ -1,4 +1,5 @@
-import { DataRecord, NumericDataRecord, StringDataRecord, User } from "../models/data-record";
+import { DataRecord } from "../models/data-record";
+import { User } from "../models/user";
 import { ServiceResult } from "../utils/service-result";
 import { IKeyValueRepository } from "../repositories/kv-repository";
 import { DataSchema, DataFieldSchema } from "../models/data-schema";
@@ -6,7 +7,6 @@ import { DataSchema, DataFieldSchema } from "../models/data-schema";
 export interface IIngestService {
   submitData(userId: string, dataRecords: any[]): ServiceResult<string>;
 }
-
 
 export class IngestService implements IIngestService {
   private keyValueRepo: IKeyValueRepository<DataRecord>;
@@ -22,33 +22,38 @@ export class IngestService implements IIngestService {
   }
 
   // map and store data to kv-store
-  public submitData(userId: User, dataRecords: object[]): ServiceResult<string> {
+  public submitData(
+    userId: User,
+    dataRecords: object[]
+  ): ServiceResult<string> {
     dataRecords.forEach((record) => {
-      const mappedRecord = this.mapDataRecord(record, userId);
-      if (this.keyValueRepo.has(mappedRecord.key)) {
-        const existingRecord = this.keyValueRepo.get(mappedRecord.key);
-        existingRecord.votes[userId] = mappedRecord.value;
-        this.keyValueRepo.set(mappedRecord.key, existingRecord);
-      } else {
-        this.keyValueRepo.set(mappedRecord.key, mappedRecord);
+      if (this.hasValidSchema(record)) {
+        const mappedRecord = this.mapDataRecord(record, userId);
+        if (this.keyValueRepo.has(mappedRecord.key)) {
+          const existingRecord = this.keyValueRepo.get(mappedRecord.key);
+          existingRecord.votes[userId] = mappedRecord.value;
+          this.keyValueRepo.set(mappedRecord.key, existingRecord);
+        } else {
+          this.keyValueRepo.set(mappedRecord.key, mappedRecord);
+        }
       }
     });
 
     return ServiceResult.Succeeded("data has ingested successfully");
   }
-  
+
   // map ingested data model to data-record model based on the schema
   private mapDataRecord(dataRecord: object, userId: User): DataRecord {
-    let mappedRecord: DataRecord =
-      this.valueSchema.type == "number"
-        ? new NumericDataRecord()
-        : new StringDataRecord();
+    const key: string = dataRecord[this.keySchema.name];
+    const value: string | number = dataRecord[this.valueSchema.name];
+    return DataRecord.create(key, value, userId);
+  }
 
-    mappedRecord.key = dataRecord[this.keySchema.name];
-    mappedRecord.value = dataRecord[this.valueSchema.name];
-    mappedRecord.votes[userId] = mappedRecord.value;
-
-    return mappedRecord;
+  private hasValidSchema(dataRecord: object): boolean {
+    return (
+      dataRecord.hasOwnProperty(this.keySchema.name) &&
+      dataRecord.hasOwnProperty(this.valueSchema.name)
+    );
   }
 
   // get data schema to mapped ingested data model

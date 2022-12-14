@@ -1,6 +1,6 @@
 import * as ccfapp from "@microsoft/ccf-app";
 import { ccf } from "@microsoft/ccf-app/global";
-import { User } from "../models/data-record";
+import { User } from "../models/user";
 
 
 interface Caller {

@@ -2,19 +2,16 @@ import * as polyfill from '@microsoft/ccf-app/polyfill.js';
 
 import * as jscrypto from "crypto";
 import { IKeyValueRepository, KeyValueRepository } from "../../src/repositories/kv-repository";
-import { DataRecord , StringDataRecord} from "../../src/models/data-record";
+import { DataRecord } from "../../src/models/data-record";
 import {describe, expect, test, beforeEach, afterEach} from '@jest/globals';
 
 
 describe('Key value pair Repository', () => {
     let keyValueRepo: IKeyValueRepository<DataRecord>;
+    const userId = jscrypto.randomUUID();
     const testKey = jscrypto.randomUUID();
-    const testValue: StringDataRecord =  {
-        key: testKey,
-        value : "test",
-        type : "string",
-        votes: [{}] 
-    };
+    const testDataRecord: DataRecord = DataRecord.create(testKey, "test",userId);
+
     beforeEach(() => {
         keyValueRepo = new KeyValueRepository<DataRecord>()
     });
@@ -26,15 +23,15 @@ describe('Key value pair Repository', () => {
     test('Should add a new key-value pair', () => {
         
         // Act
-        const result = keyValueRepo.set(testKey, testValue);
+        const result = keyValueRepo.set(testKey, testDataRecord);
 
         // Assert
         console.log(result);
 
         expect(result).not.toBeNull();
-        expect(result.value).toBe(testValue.value);
-        expect(result.type).toBe(testValue.type);
-        expect(result.votes).toBe(testValue.votes);
+        expect(result.value).toBe(testDataRecord.value);
+        expect(result.type).toBe(testDataRecord.type);
+        expect(result.votes).toBe(testDataRecord.votes);
         
     });
 
@@ -46,9 +43,9 @@ describe('Key value pair Repository', () => {
 
         // Assert
         expect(result).not.toBeNull();
-        expect(result.value).toBe(testValue.value);
-        expect(result.type).toBe(testValue.type);
-        expect(result.votes).toBe(testValue.votes);
+        expect(result.value).toBe(testDataRecord.value);
+        expect(result.type).toBe(testDataRecord.type);
+        expect(result.votes).toBe(testDataRecord.votes);
 
     });
 
@@ -56,18 +53,18 @@ describe('Key value pair Repository', () => {
         
 
         // Arrange
-        const newTestValue:StringDataRecord = JSON.parse(JSON.stringify(testValue));
-        newTestValue.value = "test 2"
+        const newTestDataRecord: DataRecord = DataRecord.create(testKey, "test 2",userId);
 
-        keyValueRepo?.set(testKey, newTestValue);
+
+        keyValueRepo?.set(testKey, newTestDataRecord);
 
         // Act
         const result = keyValueRepo?.get(testKey);
 
         // Assert
         expect(result).not.toBeNull();
-        expect(result.value).toBe(newTestValue.value);
-        expect(result.type).toBe(newTestValue.type);
-        expect(result.votes).toBe(newTestValue.votes);
+        expect(result.value).toBe(newTestDataRecord.value);
+        expect(result.type).toBe(newTestDataRecord.type);
+        expect(result.votes).toBe(newTestDataRecord.votes);
     });
 });

@@ -1,4 +1,5 @@
-import { DataRecord, User} from "../models/data-record";
+import { DataRecord} from "../models/data-record";
+import { User } from "../models/user";
 import { ServiceResult } from "../utils/service-result";
 import { IKeyValueRepository } from "../repositories/kv-repository";
 

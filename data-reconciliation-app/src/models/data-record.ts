@@ -1,24 +1,26 @@
 import * as ccfapp from "@microsoft/ccf-app";
+import { User } from "./user";
 
-// this is unique for each user
-export type User = string;
+export type DataAttributeType = string | number;
 
-export class DataRecordBase<T> {
-  key: string
-  value: T;
-  type:  "string" | "number";
+export class DataRecord {
+  key: string;
+  value: DataAttributeType;
   votes: object = {};
-}
 
-export class StringDataRecord extends DataRecordBase<string> {
-  type: "string";
-}
+  get type() {
+    return typeof this.value;
+  }
 
-export class NumericDataRecord extends DataRecordBase<number> {
-  type: "number";
-}
+  public static create(key: string, value: DataAttributeType, userId: User): DataRecord {
+    let newRecord: DataRecord = new DataRecord();
+    
+    newRecord.key = key;
+    newRecord.value = value;
+    newRecord.votes[userId] = value;
 
-export type DataRecord = StringDataRecord | NumericDataRecord;
+    return newRecord;
+  }
+}
 
 export type DataRecordMap = ccfapp.TypedKvMap<string, DataRecord>;
-
