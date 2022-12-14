@@ -22,7 +22,7 @@ describe("Key value pair Repository", () => {
 
   test("Should add a new key-value pair", () => {
     // Act
-    
+
     // Assert
     const result = keyValueRepo.set(testKey, testDataRecord);
 
