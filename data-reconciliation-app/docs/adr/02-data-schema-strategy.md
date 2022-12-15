@@ -14,7 +14,7 @@ There are multiple strategies for data schema definition and usage. In this docu
 
 ### Option1: Fully Flexible Data Schema
 
-In this strategy, members define their data schema and submit it at each request as part of data ingestion. API will take the schema and map it to internal universal schema before storing in the K-V store. When a member requests data reconciliation report, API will generate the report using the internal universal schema. This will result in member to understand the schema of the report and possibly convert it back to their custom format to use at their side.
+In this strategy, members define their data schema and submit it as part of data ingestion. The API will take the schema and map it to an internal universal schema before storing in the K-V store. When a member requests a data reconciliation report, the API will generate the report using the internal universal schema. This will result in member to understand the schema of the report and possibly convert it back to their custom format to use at their side.
 
 Data ingestion API payload could become:
 
