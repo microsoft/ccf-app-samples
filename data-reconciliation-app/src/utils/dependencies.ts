@@ -1,30 +1,7 @@
-import {
-  IKeyValueRepository,
-  KeyValueRepository,
-} from "../repositories/kv-repository";
-import {
-  AuthenticationService,
-  IAuthenticationService,
-} from "../services/authentication-service";
-import {
-  ReportingService,
-  IReportingService,
-} from "../services/reporting-service";
-import { DataRecordMap } from "../models/data-record";
-import { IIngestService, IngestService } from "../services/ingest-service";
+import { IRepository, KeyValueRepository} from "../repositories/kv-repository";
+import { ReconciledRecord } from "../models/reconcilied-record";
 
-const keyValueRepository: IKeyValueRepository<DataRecordMap> =
-  new KeyValueRepository<DataRecordMap>();
-const ingestService: IIngestService = new IngestService(keyValueRepository);
-const reportingService: IReportingService = new ReportingService(
-  keyValueRepository
-);
-const authenticationService: IAuthenticationService =
-  new AuthenticationService();
-
-export {
-  keyValueRepository,
-  ingestService,
-  reportingService,
-  authenticationService,
-};
+import * as ccfapp from "@microsoft/ccf-app";
+const kvStore = ccfapp.typedKv("data",ccfapp.string,ccfapp.json<ReconciledRecord>());
+const keyValueRepository: IRepository<ReconciledRecord> = new KeyValueRepository<ReconciledRecord>(kvStore);
+export { keyValueRepository };

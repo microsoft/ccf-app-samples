@@ -1,6 +1,6 @@
 import * as ccfapp from "@microsoft/ccf-app";
 
-export interface IKeyValueRepository<T> {
+export interface IRepository<T> {
   set(key: string, value: T): T;
   get(key: string): T;
   has(key: string): boolean;
@@ -10,12 +10,11 @@ export interface IKeyValueRepository<T> {
 }
 
 // generic key-value repository wrapping ccf TypedKvMap interaction
-export class KeyValueRepository<T> implements IKeyValueRepository<T> {
+export class KeyValueRepository<T> implements IRepository<T> {
   private kvStore: ccfapp.TypedKvMap<string, T>;
 
-  public constructor() {
-    this.kvStore = this.getDataMap();
-    console.log(this.kvStore);
+  public constructor(kvStore: ccfapp.TypedKvMap<string, T>) {
+    this.kvStore = kvStore;
   }
 
   // update key-value pair or create new record if key not exists
@@ -61,9 +60,5 @@ export class KeyValueRepository<T> implements IKeyValueRepository<T> {
   public get size(): number {
     return this.kvStore.size;
   }
-
-  // create a typed key-value map of type "AttributeMap"
-  private getDataMap(): ccfapp.TypedKvMap<string, T> {
-    return ccfapp.typedKv("data", ccfapp.string, ccfapp.json<T>());
-  }
 }
+

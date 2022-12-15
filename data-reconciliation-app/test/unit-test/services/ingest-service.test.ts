@@ -1,7 +1,7 @@
 import { describe, expect, test, beforeEach, afterEach } from "@jest/globals";
 import * as jscrypto from "crypto";
-import { ingestService } from "../../../src/utils/dependencies";
 import { DataRecord } from "../../../src/models/data-record";
+import ingestService from "../../../src/services/ingest-service";
 
 describe("Data Ingestion Service", () => {
   const userId = jscrypto.randomUUID();
@@ -13,9 +13,9 @@ describe("Data Ingestion Service", () => {
   test("Should ingest data successfully", () => {
     // Act
     const testDataRecords: DataRecord[] = [
-      DataRecord.create("1", "test1"),
-      DataRecord.create("2", "test2"),
-      DataRecord.create("3", "test3"),
+      DataRecord.create({key:"1", value: "test1"}).content,
+      DataRecord.create({key:"2", value: "test2"}).content,
+      DataRecord.create({key:"3", value: "test3"}).content,
     ];
 
     // Assert

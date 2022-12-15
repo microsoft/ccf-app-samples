@@ -1,32 +1,40 @@
 import * as ccfapp from "@microsoft/ccf-app";
 import { ServiceResult } from "../utils/service-result";
-import { ingestService, authenticationService } from "../utils/dependencies";
 import { ApiResult } from "../utils/api-result";
 import { DataSchema } from "../models/data-schema";
+import authenticationService from "../services/authentication-service";
+import ingestService from "../services/ingest-service";
 
-export function submitData(request: ccfapp.Request<any>): ccfapp.Response<any> {
+export function postHandler(
+  request: ccfapp.Request<any>
+): ccfapp.Response<any> {
   try {
     const getCallerId = authenticationService.getCallerId(request);
     if (getCallerId.failure) {
-      return ApiResult.Response(getCallerId);
+      return ApiResult.Failed(getCallerId);
     }
 
     const callerId = getCallerId.content;
-    const isMember = authenticationService.isMember(callerId);
-    if (isMember.failure || !isMember.content) {
-      return ApiResult.Response(ServiceResult.Unauthorized());
+    const isValidIdentity = authenticationService.isValidIdentity(callerId);
+    if (isValidIdentity.failure || !isValidIdentity.content) {
+      return ApiResult.Unauthorized();
     }
 
     const data = request.body.json();
-    const dataRecords = DataSchema.mapDataRecords(data);
-    const response = ingestService.submitData(callerId, dataRecords);
-    return ApiResult.Response(response);
+    const mapDataRecords = DataSchema.mapDataRecords(data);
+    if (mapDataRecords.failure) {
+      return ApiResult.Failed(mapDataRecords);
+    }
+
+    const response = ingestService.submitData(callerId, mapDataRecords.content);
+    return ApiResult.Succeeded(response);
   } catch (ex) {
     const response = ServiceResult.Failed({
       errorMessage: ex.message,
       errorType: "DataIngestError",
       details: ex,
     });
-    return ApiResult.Response(response);
+
+    return ApiResult.Failed(response);
   }
 }

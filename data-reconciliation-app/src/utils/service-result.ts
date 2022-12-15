@@ -4,12 +4,6 @@ export interface ErrorResponse {
   details?: unknown;
 }
 
-export enum StatusCode {
-  OK = 200,
-  BAD_REQUEST = 400,
-  UNAUTHORIZED = 401,
-}
-
 export class ServiceResult<T> {
   public readonly success: boolean;
   public readonly failure: boolean;
@@ -22,7 +16,7 @@ export class ServiceResult<T> {
     content: T | null,
     error: ErrorResponse | null,
     success: boolean,
-    statusCode: StatusCode
+    statusCode: number
   ) {
     this.content = content;
     this.error = error;
@@ -33,21 +27,10 @@ export class ServiceResult<T> {
   }
 
   public static Succeeded<T>(content: T): ServiceResult<T> {
-    return new ServiceResult<T>(content, null, true, StatusCode.OK);
+    return new ServiceResult<T>(content, null, true, 200);
   }
 
-  public static Failed<T>(error: ErrorResponse): ServiceResult<T> {
-    return new ServiceResult<T>(null, error, false, StatusCode.BAD_REQUEST);
-  }
-
-  public static Unauthorized<T>(
-    message: string = "Unauthorized"
-  ): ServiceResult<T> {
-    const error = {
-      errorMessage: message,
-      errorType: "Unauthorized",
-    };
-
-    return new ServiceResult<T>(null, error, false, StatusCode.UNAUTHORIZED);
+  public static Failed<T>(error: ErrorResponse, statusCode: number = 400): ServiceResult<T> {
+    return new ServiceResult<T>(null, error, false, statusCode);
   }
 }

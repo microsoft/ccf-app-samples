@@ -1,23 +1,24 @@
-import { DataRecord, DataRecordMap } from "../models/data-record";
-import { User } from "../models/user";
+import { ReconciledRecord } from "../models/reconcilied-record";
 import { ServiceResult } from "../utils/service-result";
-import { IKeyValueRepository } from "../repositories/kv-repository";
-import { ReconciledRecord } from "../models/recon-record";
+import { keyValueRepository } from "../utils/dependencies";
+import { IRepository } from "../repositories/kv-repository";
 
 export interface IReportingService {
-  getData(userId: User): ServiceResult<object>;
+  getData(userId: string): ServiceResult<object>;
 }
 
 export class ReportingService implements IReportingService {
-  private keyValueRepo: IKeyValueRepository<DataRecordMap>;
+  private keyValueRepo: IRepository<ReconciledRecord>;
 
-  constructor(keyValueRepo: IKeyValueRepository<DataRecordMap>) {
+  constructor(keyValueRepo: IRepository<ReconciledRecord>) {
     this.keyValueRepo = keyValueRepo;
   }
 
-  public getData(userId: User): ServiceResult<object> {
-    const result = {};
-    result[userId] = this.keyValueRepo.get(userId);
+  public getData(userId: string): ServiceResult<object> {
+    const result = this.keyValueRepo.values();
     return ServiceResult.Succeeded(result);
   }
 }
+
+const reportingService: IReportingService = new ReportingService(keyValueRepository);
+export default reportingService;

@@ -3,7 +3,7 @@
     "/ingest": {
       "post": {
         "js_module": "endpoints/ingest.js",
-        "js_function": "submitData",
+        "js_function": "postHandler",
         "forwarding_required": "always",
         "authn_policies": ["member_cert"],
         "mode": "readwrite",
@@ -32,7 +32,7 @@
     "/report": {
       "get": {
         "js_module": "endpoints/reporting.js",
-        "js_function": "getDataSummary",
+        "js_function": "getHandler",
         "forwarding_required": "always",
         "authn_policies": ["member_cert"],
         "mode": "readonly",

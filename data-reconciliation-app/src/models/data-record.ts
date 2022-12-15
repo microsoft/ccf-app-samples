@@ -1,18 +1,37 @@
+import { ServiceResult } from "../utils/service-result";
+
 export type DataAttributeType = string | number;
-export class DataRecord {
+export interface DataRecordProps {
   key: string;
   value: DataAttributeType;
-
-  get type() {
-    return typeof this.value;
-  }
-
-  public static create(key: string, value: DataAttributeType): DataRecord {
-    let newRecord: DataRecord = new DataRecord();
-    newRecord.key = key;
-    newRecord.value = value;
-    return newRecord;
-  }
 }
 
-export type DataRecordMap = Object;
+export class DataRecord implements DataRecordProps {
+  public readonly key: string;
+  public readonly value: DataAttributeType;
+  public readonly type: string;
+
+  private constructor(props: DataRecordProps) {
+    this.key = props.key;
+    this.value = props.value;
+    this.type = typeof this.value;
+  }
+
+  public static create(props: DataRecordProps): ServiceResult<DataRecord> {
+    if (!props.key)
+      return ServiceResult.Failed({
+        errorMessage: "Error: key value cannot be null or empty",
+        errorType: "InvalidDataRecord",
+      });
+      
+    if (!props.value)
+      return ServiceResult.Failed({
+        errorMessage: "Error: value cannot be null or empty",
+        errorType: "InvalidDataRecord",
+      });
+
+    const dataRecord = new DataRecord(props);
+    return ServiceResult.Succeeded(dataRecord);
+  }
+
+}

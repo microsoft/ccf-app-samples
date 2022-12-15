@@ -1,21 +1,20 @@
 import * as polyfill from "@microsoft/ccf-app/polyfill.js";
 
-import * as jscrypto from "crypto";
-import {
-  IKeyValueRepository,
-  KeyValueRepository,
-} from "../../../src/repositories/kv-repository";
-import { DataRecord } from "../../../src/models/data-record";
+import { randomUUID } from "crypto";
+import { IRepository, KeyValueRepository } from "../../../src/repositories/kv-repository";
 import { describe, expect, test, beforeEach, afterEach } from "@jest/globals";
+import { ReconciledRecord } from "../../../src/models/reconcilied-record";
+import { DataRecord } from "../../../src/models/data-record";
 
 describe("Key value pair Repository", () => {
-  let keyValueRepo: IKeyValueRepository<DataRecord>;
-  const userId = jscrypto.randomUUID();
-  const testKey = jscrypto.randomUUID();
-  const testDataRecord: DataRecord = DataRecord.create(testKey, "test");
+  let keyValueRepo: IRepository<ReconciledRecord>;
+  let userId = randomUUID();
+  let testKey = randomUUID();
+  let testRecord: DataRecord = DataRecord.create({key: testKey, value: "test"}).content;
+  let testReconRecord: ReconciledRecord = ReconciledRecord.create(testRecord, userId).content;
 
   beforeEach(() => {
-    keyValueRepo = new KeyValueRepository<DataRecord>();
+    //keyValueRepo = new KeyValueRepository<DataRecord>();
   });
 
   afterEach(() => {});
@@ -24,12 +23,12 @@ describe("Key value pair Repository", () => {
     // Act
 
     // Assert
-    const result = keyValueRepo.set(testKey, testDataRecord);
+    const result = keyValueRepo.set(testKey, testReconRecord);
 
     // Assert
     expect(result).not.toBeNull();
-    expect(result.value).toBe(testDataRecord.value);
-    expect(result.type).toBe(testDataRecord.type);
+    expect(result.key).toBe(testReconRecord.key);
+    expect(result.values).toBe(testReconRecord.values);
   });
 
   test("Should retrieve key-value pair", () => {
@@ -39,22 +38,23 @@ describe("Key value pair Repository", () => {
 
     // Assert
     expect(result).not.toBeNull();
-    expect(result.value).toBe(testDataRecord.value);
-    expect(result.type).toBe(testDataRecord.type);
+    expect(result.key).toBe(testReconRecord.key);
+    expect(result.values).toBe(testReconRecord.values);
   });
 
   test("Should update key-value pair", () => {
     // Arrange
-    const newTestDataRecord: DataRecord = DataRecord.create(testKey, "test 2");
+    let newRecord: DataRecord = DataRecord.create({key: testKey, value: "test-update"}).content;
+    let newTestReconRecord: ReconciledRecord = ReconciledRecord.create(newRecord, userId).content;
 
-    keyValueRepo?.set(testKey, newTestDataRecord);
+    keyValueRepo?.set(testKey, newTestReconRecord);
 
     // Act
     const result = keyValueRepo?.get(testKey);
 
     // Assert
     expect(result).not.toBeNull();
-    expect(result.value).toBe(newTestDataRecord.value);
-    expect(result.type).toBe(newTestDataRecord.type);
+    expect(result.key).toBe(newTestReconRecord.key);
+    expect(result.values).toBe(newTestReconRecord.values);
   });
 });

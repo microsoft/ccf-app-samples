@@ -88,23 +88,29 @@ cd "${certificate_dir}"
 # -------------------------- Test cases --------------------------
 echo "Test start"
 
-printf "\n\n▶️  Member 0 - data ingestion \n"
-curl $server/app/ingest -X POST $(cert_arg "member0") -H "Content-Type: application/json" --data-binary "@../../data-samples/member0_data.json"
+ingestUrl="$server/app/ingest";
 
-printf "\n\n▶️  Member 1 - data ingestion \n"
-curl $server/app/ingest -X POST $(cert_arg "member1") -H "Content-Type: application/json" --data-binary "@../../data-samples/member1_data.json"
+memberName="member0"
+check_eq "$memberName - data ingest succeed" "200" "$(curl $ingestUrl -X POST $(cert_arg $memberName) -H "Content-Type: application/json" --data-binary "@../../data-samples/${memberName}_data.json" $only_status_code)"
 
-printf "\n\n▶️  Member 2 - data ingestion \n"
-curl $server/app/ingest -X POST $(cert_arg "member2") -H "Content-Type: application/json" --data-binary "@../../data-samples/member2_data.json"
+memberName="member1"
+check_eq "$memberName - data ingest succeed" "200" "$(curl $ingestUrl -X POST $(cert_arg $memberName) -H "Content-Type: application/json" --data-binary "@../../data-samples/${memberName}_data.json" $only_status_code)"
 
-printf "\n\n✅ Member 0 - read data report \n"
-curl $server/app/report -X GET $(cert_arg "member0")
+memberName="member2"
+check_eq "$memberName - data ingest succeed" "200" "$(curl $ingestUrl -X POST $(cert_arg $memberName) -H "Content-Type: application/json" --data-binary "@../../data-samples/${memberName}_data.json" $only_status_code)"
 
-printf "\n\n✅ Member 1 - read data report \n"
-curl $server/app/report -X GET $(cert_arg "member1")
+memberName="member2"
+check_eq "$memberName - data ingest failed (data length is zero)" "400" "$(curl $ingestUrl -X POST $(cert_arg $memberName) -H "Content-Type: application/json" --data-binary "[]" $only_status_code)"
 
-printf "\n\n✅ Member 2 - read data report \n"
-curl $server/app/report -X GET $(cert_arg "member2")
+memberName="member2"
+check_eq "$memberName - data ingest failed (data is null or empty)" "400" "$(curl $ingestUrl -X POST $(cert_arg $memberName) -H "Content-Type: application/json" --data-binary "" $only_status_code)"
+
+
+# printf "\n\n✅ Member 1 - read data report \n"
+# curl $server/app/report -X GET $(cert_arg "member1")
+
+# printf "\n\n✅ Member 2 - read data report \n"
+# curl $server/app/report -X GET $(cert_arg "member2")
 
 # ----------------------------------------------------
 
