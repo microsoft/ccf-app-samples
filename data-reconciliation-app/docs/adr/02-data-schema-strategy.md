@@ -75,7 +75,7 @@ While this option provides great flexibility for members, it introduces lots of 
 
 ### Option3: Defining Data Schema via Deployment
 
-In this strategy, a new data schema is defined at the code level and deployed into CCF network. This also includes implementing data schema validation at the endpoint, service and repository layers before the deployment. It can produce a breaking change or backwards compatible change depending on the changes. This will require all members update their integrations to submit data and to produce reconciliation reports when a new version of the application is deployed. However, data will be consistent end to end from endpoints all the way to the reporting.
+In this strategy, a new data schema is defined at the code level and deployed into CCF network. This also includes implementing data schema validation at the endpoint, service and repository layers before the deployment. It can produce a breaking change or backwards compatible change depending on the changes. This will require all members update their integrations to submit data and to produce reconciliation reports when a new version of the application is deployed. However, data will be consistent end to end from the endpoints all the way to the reporting.
 
 Data schema definition at the API could become:
 
