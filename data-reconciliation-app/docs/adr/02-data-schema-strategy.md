@@ -71,7 +71,7 @@ POST /submit-data
 
 This option requires a member to reset their previously submitted data and resubmit again when they change their schema.
 
-While this option provides great flexibility for members, it introduces lots of data mapping and validation challenges which will not be feasible with in the project timeline
+While this option provides great flexibility for members, it introduces lots of data mapping and validation challenges which will not be feasible within the project timeline
 
 ### Option3: Defining Data Schema via Deployment
 
