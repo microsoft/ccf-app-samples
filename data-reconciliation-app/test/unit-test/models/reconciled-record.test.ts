@@ -1,5 +1,5 @@
 import { randomUUID } from 'crypto';
-import { DataRecord, DataRecordProps } from '../../../src/models/data-record';
+import { DataRecord } from '../../../src/models/data-record';
 import { ReconciledRecord } from '../../../src/models/reconciled-record';
 
 describe('Reconciled Record Model', () => {
@@ -9,7 +9,7 @@ describe('Reconciled Record Model', () => {
         const dataRecord = DataRecord.create({
             key: randomUUID(),
             value: "Test Value",
-        }).content;
+        }).content!;
         
         // Act
         const createReconcRecord = ReconciledRecord.create(dataRecord,userId);
@@ -17,25 +17,25 @@ describe('Reconciled Record Model', () => {
 
         // Assert
         expect(reconRecord).not.toBeNull();
-        expect(reconRecord.key).toBe(dataRecord.key);
-        expect(reconRecord.values[userId]).toBe(dataRecord.value);
+        expect(reconRecord?.key).toBe(dataRecord.key);
+        expect(reconRecord?.values[userId]).toBe(dataRecord.value);
        
     });
 
     test('Should Update', () => {
         // Arrange
         const userId = randomUUID();
-        const dataRecord = DataRecord.create({key: randomUUID(), value: "Test Value" }).content;
+        const dataRecord = DataRecord.create({key: randomUUID(), value: "Test Value" })?.content!;
         
         // Act
-        const createReconRecord = ReconciledRecord.create(dataRecord,userId).content;
-        const updateDataRecord = DataRecord.create({key: dataRecord.key,value: "Updated Test Value"}).content;
+        const createReconRecord = ReconciledRecord.create(dataRecord,userId).content!;
+        const updateDataRecord = DataRecord.create({key: dataRecord.key,value: "Updated Test Value"}).content!;
         const updateReconRecord = ReconciledRecord.update(createReconRecord,updateDataRecord,userId).content;
 
         // Assert
         expect(updateReconRecord).not.toBeNull();
-        expect(updateReconRecord.key).toBe(dataRecord.key);
-        expect(updateReconRecord.values[userId]).toBe(updateDataRecord.value);
+        expect(updateReconRecord?.key).toBe(dataRecord?.key);
+        expect(updateReconRecord?.values[userId]).toBe(updateDataRecord?.value);
        
     });
 

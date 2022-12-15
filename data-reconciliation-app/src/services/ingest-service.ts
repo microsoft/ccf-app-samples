@@ -22,12 +22,12 @@ class IngestService implements IIngestService {
         const reconRecord = this.keyValueRepo.get(record.key);
         const updateReconRecord = ReconciledRecord.update(reconRecord,record, userId);
         if(updateReconRecord.success){
-          this.keyValueRepo.set(record.key, updateReconRecord.content);
+          this.keyValueRepo.set(record.key, updateReconRecord.content!);
         }
       }else{
         const createReconRecord = ReconciledRecord.create(record, userId);
         if(createReconRecord.success){
-          this.keyValueRepo.set(record.key, createReconRecord.content);
+          this.keyValueRepo.set(record.key, createReconRecord.content!);
         }
       }
     });

@@ -15,15 +15,16 @@ describe('Data Record Model', () => {
 
         // Assert
         expect(dataRecord).not.toBeNull();
-        expect(dataRecord.key).toBe(props.key);
-        expect(dataRecord.value).toBe(props.value);
-        expect(dataRecord.type).toBe(typeof props.value);
+        expect(dataRecord?.key).toBe(props.key);
+        expect(dataRecord?.value).toBe(props.value);
+        expect(dataRecord?.type).toBe(typeof props.value);
        
     });
 
     test('Should Fail To Create With Empty Key', () => {
         // Arrange
         const props: DataRecordProps = {
+            // @ts-ignore
             key: null,
             value: "Test Value",
         };
