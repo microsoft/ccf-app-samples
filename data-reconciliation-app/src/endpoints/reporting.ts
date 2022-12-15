@@ -14,7 +14,7 @@ export function getHandler(request: ccfapp.Request<any>): ccfapp.Response<CCFRes
     const callerId = getCallerId.content;
     const isValidIdentity = authenticationService.isValidIdentity(callerId);
     if (isValidIdentity.failure || !isValidIdentity.content) {
-      return ApiResult.Unauthorized();
+      return ApiResult.AuthFailure();
     }
 
     const response = reportingService.getData(callerId);

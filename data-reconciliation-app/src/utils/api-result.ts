@@ -29,7 +29,7 @@ export class ApiResult {
     return response;
   }
 
-  public static Unauthorized(): CCFResponse {
+  public static AuthFailure(): CCFResponse {
     const response: CCFResponse = {
       statusCode: StatusCode.UNAUTHORIZED,
       body: ServiceResult.Failed({

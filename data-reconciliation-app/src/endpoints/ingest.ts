@@ -15,7 +15,7 @@ export function postHandler(request: ccfapp.Request<any>): ccfapp.Response<CCFRe
     const callerId = getCallerId.content;
     const isValidIdentity = authenticationService.isValidIdentity(callerId);
     if (isValidIdentity.failure || !isValidIdentity.content) {
-      return ApiResult.Unauthorized();
+      return ApiResult.AuthFailure();
     }
 
     const data = request.body.json();
