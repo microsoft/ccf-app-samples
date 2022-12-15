@@ -41,7 +41,7 @@ While this option provides the maximum flexibility for members to submit data in
 
 ### Option2: Defining Data Schema via API
 
-In this strategy, members define their data schema using a dedicated endpoint and API store their schema definition in the K-V store. When new data is submitted by a member, API gathers the data schema from the K-V store and then runs validation, data reconciliation etc. using that schema. When a member requests data reconciliation report, API will generate the report using their registered data schema format.
+In this strategy, the members define their data schema using a dedicated endpoint and API to store their schema definition in the K-V store. When new data is submitted by a member, API gathers the data schema from the K-V store and then runs validate, data reconciliation etc. using that schema. When a member requests a data reconciliation report, the API will generate the report using their registered data schema format.
 
 Data schema registry API payload could become:
 
