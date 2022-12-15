@@ -14,8 +14,7 @@ export interface IAuthenticationService {
 }
 
 // Authentication Service
-export class CertBasedAuthenticationService
-  implements IAuthenticationService
+class CertBasedAuthenticationService implements IAuthenticationService
 {
   // get caller id
   // Note that the following way of getting caller ID doesn't work for 'jwt' auth policy and 'no_auth' auth policy.

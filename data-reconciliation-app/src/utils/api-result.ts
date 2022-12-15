@@ -6,31 +6,31 @@ export enum StatusCode {
   UNAUTHORIZED = 401,
 }
 
-export interface CCFResult {
+export interface CCFResponse {
   statusCode: number;
   body: any;
 }
 
 export class ApiResult {
 
-  public static Succeeded<T>(result: ServiceResult<T>): CCFResult {
-    const response: CCFResult = {
+  public static Succeeded<T>(result: ServiceResult<T>): CCFResponse {
+    const response: CCFResponse = {
       statusCode: result.statusCode,
       body: result,
     };
     return response;
   }
 
-  public static Failed<T>(result: ServiceResult<T>): CCFResult {
-    const response: CCFResult = {
+  public static Failed<T>(result: ServiceResult<T>): CCFResponse {
+    const response: CCFResponse = {
       statusCode: result.statusCode,
       body: result,
     };
     return response;
   }
 
-  public static Unauthorized(): CCFResult {
-    const response: CCFResult = {
+  public static Unauthorized(): CCFResponse {
+    const response: CCFResponse = {
       statusCode: StatusCode.UNAUTHORIZED,
       body: ServiceResult.Failed({
         errorMessage: "Unauthorized",

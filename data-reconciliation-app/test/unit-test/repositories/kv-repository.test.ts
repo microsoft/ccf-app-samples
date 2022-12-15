@@ -1,7 +1,5 @@
-import * as polyfill from "@microsoft/ccf-app/polyfill.js";
-
 import { randomUUID } from "crypto";
-import { IRepository, KeyValueRepository } from "../../../src/repositories/kv-repository";
+import { IRepository } from "../../../src/repositories/kv-repository";
 import { describe, expect, test, beforeEach, afterEach } from "@jest/globals";
 import { ReconciledRecord } from "../../../src/models/reconcilied-record";
 import { DataRecord } from "../../../src/models/data-record";

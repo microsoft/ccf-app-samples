@@ -7,7 +7,7 @@ export interface IReportingService {
   getData(userId: string): ServiceResult<object>;
 }
 
-export class ReportingService implements IReportingService {
+class ReportingService implements IReportingService {
   private keyValueRepo: IRepository<ReconciledRecord>;
 
   constructor(keyValueRepo: IRepository<ReconciledRecord>) {

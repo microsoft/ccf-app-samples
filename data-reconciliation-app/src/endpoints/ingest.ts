@@ -1,13 +1,11 @@
 import * as ccfapp from "@microsoft/ccf-app";
 import { ServiceResult } from "../utils/service-result";
-import { ApiResult } from "../utils/api-result";
+import { ApiResult, CCFResponse } from "../utils/api-result";
 import { DataSchema } from "../models/data-schema";
 import authenticationService from "../services/authentication-service";
 import ingestService from "../services/ingest-service";
 
-export function postHandler(
-  request: ccfapp.Request<any>
-): ccfapp.Response<any> {
+export function postHandler(request: ccfapp.Request<any>): ccfapp.Response<CCFResponse> {
   try {
     const getCallerId = authenticationService.getCallerId(request);
     if (getCallerId.failure) {

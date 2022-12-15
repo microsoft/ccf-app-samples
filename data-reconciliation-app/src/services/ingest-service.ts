@@ -8,7 +8,7 @@ export interface IIngestService {
   submitData(userId: string, dataRecords: DataRecord[]): ServiceResult<string>;
 }
 
-export class IngestService implements IIngestService {
+class IngestService implements IIngestService {
   private keyValueRepo: IRepository<ReconciledRecord>;
   constructor(keyValueRepo: IRepository<ReconciledRecord>) {
     this.keyValueRepo = keyValueRepo;
