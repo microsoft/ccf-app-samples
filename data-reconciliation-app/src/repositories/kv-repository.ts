@@ -1,5 +1,5 @@
 import * as ccfapp from "@microsoft/ccf-app";
-import { ReconciledRecord } from "../models/reconcilied-record";
+import { ReconciledRecord } from "../models/reconciled-record";
 
 export interface IRepository<T> {
   set(key: string, value: T): T;

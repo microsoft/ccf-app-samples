@@ -12,12 +12,16 @@ export class ReconciledRecord implements ReconciledRecordProps {
   key: string;
   values: ReconciliationMap = {};
 
+  private constructor() {}
+
   public static create(
     record: DataRecord,
     userId: string
   ): ServiceResult<ReconciledRecord> {
-    let newRecord: ReconciledRecord = new ReconciledRecord();
+    const newRecord: ReconciledRecord = new ReconciledRecord();
+
     newRecord.key = record.key;
+    newRecord.values = {};
     newRecord.values[userId] = record.value;
     return ServiceResult.Succeeded(newRecord);
   }
@@ -27,7 +31,9 @@ export class ReconciledRecord implements ReconciledRecordProps {
     newRecordValue: DataRecord,
     userId: string
   ): ServiceResult<ReconciledRecord> {
-    record.values[userId] = newRecordValue.key;
+
+    record.key = newRecordValue.key;
+    record.values[userId] = newRecordValue.value;
     return ServiceResult.Succeeded(record);
   }
 }

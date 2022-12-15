@@ -1,5 +1,5 @@
 import { DataRecord } from "../models/data-record";
-import { ReconciledRecord } from "../models/reconcilied-record";
+import { ReconciledRecord } from "../models/reconciled-record";
 import { ServiceResult } from "../utils/service-result";
 import { IRepository} from "../repositories/kv-repository";
 import { keyValueRepository } from "../utils/dependencies";

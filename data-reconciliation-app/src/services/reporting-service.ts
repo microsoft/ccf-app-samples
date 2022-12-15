@@ -1,4 +1,4 @@
-import { ReconciledRecord } from "../models/reconcilied-record";
+import { ReconciledRecord } from "../models/reconciled-record";
 import { ServiceResult } from "../utils/service-result";
 import { keyValueRepository } from "../utils/dependencies";
 import { IRepository } from "../repositories/kv-repository";

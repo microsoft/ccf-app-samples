@@ -20,14 +20,14 @@ export class DataRecord implements DataRecordProps {
   public static create(props: DataRecordProps): ServiceResult<DataRecord> {
     if (!props.key)
       return ServiceResult.Failed({
-        errorMessage: "Error: key value cannot be null or empty",
-        errorType: "InvalidDataRecord",
+        errorMessage: "Error: key cannot be null or empty",
+        errorType: "InvalidRecordKey",
       });
       
     if (!props.value)
       return ServiceResult.Failed({
         errorMessage: "Error: value cannot be null or empty",
-        errorType: "InvalidDataRecord",
+        errorType: "InvalidRecordValue",
       });
 
     const dataRecord = new DataRecord(props);

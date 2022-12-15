@@ -1,7 +1,7 @@
 import { randomUUID } from "crypto";
 import { IRepository } from "../../../src/repositories/kv-repository";
 import { describe, expect, test, beforeEach, afterEach } from "@jest/globals";
-import { ReconciledRecord } from "../../../src/models/reconcilied-record";
+import { ReconciledRecord } from "../../../src/models/reconciled-record";
 import { DataRecord } from "../../../src/models/data-record";
 
 describe("Key value pair Repository", () => {
