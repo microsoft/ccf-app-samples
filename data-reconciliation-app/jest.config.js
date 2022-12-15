@@ -4,7 +4,6 @@
  */
 
 export default {
-
   // Indicates whether the coverage information should be collected while executing the test
   collectCoverage: true,
 
@@ -15,7 +14,16 @@ export default {
   coverageDirectory: "test/coverage",
 
   // An array of file extensions your modules use
-  moduleFileExtensions: ["js","mjs","cjs","jsx","ts","tsx","json","node"],
+  moduleFileExtensions: [
+    "js",
+    "mjs",
+    "cjs",
+    "jsx",
+    "ts",
+    "tsx",
+    "json",
+    "node",
+  ],
 
   // A preset that is used as a base for Jest's configuration
   // preset: undefined,
@@ -41,5 +49,4 @@ export default {
 
   // Indicates whether each individual test should be reported during the run
   verbose: true,
-
 };

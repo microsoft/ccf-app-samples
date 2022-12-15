@@ -12,7 +12,6 @@ export interface CCFResponse {
 }
 
 export class ApiResult {
-
   public static Succeeded<T>(result: ServiceResult<T>): CCFResponse {
     const response: CCFResponse = {
       statusCode: result.statusCode,
@@ -32,10 +31,13 @@ export class ApiResult {
   public static AuthFailure(): CCFResponse {
     const response: CCFResponse = {
       statusCode: StatusCode.UNAUTHORIZED,
-      body: ServiceResult.Failed({
-        errorMessage: "Unauthorized",
-        errorType: "Unauthorized",
-      },StatusCode.UNAUTHORIZED),
+      body: ServiceResult.Failed(
+        {
+          errorMessage: "Unauthorized",
+          errorType: "Unauthorized",
+        },
+        StatusCode.UNAUTHORIZED
+      ),
     };
     return response;
   }

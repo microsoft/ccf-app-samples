@@ -4,27 +4,18 @@ import { ApiResult, CCFResponse } from "../utils/api-result";
 import authenticationService from "../services/authentication-service";
 import reportingService from "../services/reporting-service";
 
-export function getHandler(request: ccfapp.Request<any>): ccfapp.Response<CCFResponse> {
-  try {
-    const getCallerId = authenticationService.getCallerId(request);
-    if (getCallerId.failure) {
-      return ApiResult.Failed(getCallerId);
-    }
+export function getHandler(
+  request: ccfapp.Request<any>
+): ccfapp.Response<CCFResponse> {
+  const getCallerId = authenticationService.getCallerId(request);
+  if (getCallerId.failure) return ApiResult.Failed(getCallerId);
 
-    const callerId = getCallerId.content;
-    const isValidIdentity = authenticationService.isValidIdentity(callerId);
-    if (isValidIdentity.failure || !isValidIdentity.content) {
-      return ApiResult.AuthFailure();
-    }
+  const callerId = getCallerId.content;
 
-    const response = reportingService.getData(callerId);
-    return ApiResult.Succeeded(response);
-  } catch (ex) {
-    const response = ServiceResult.Failed({
-      errorMessage: ex.message,
-      errorType: "DataIngestError",
-      details: ex,
-    });
-    return ApiResult.Failed(response);
-  }
+  const isValidIdentity = authenticationService.isValidIdentity(callerId);
+  if (isValidIdentity.failure || !isValidIdentity.content)
+    return ApiResult.AuthFailure();
+
+  const response = reportingService.getData(callerId);
+  return ApiResult.Succeeded(response);
 }

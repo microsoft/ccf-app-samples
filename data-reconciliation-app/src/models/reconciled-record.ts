@@ -31,7 +31,6 @@ export class ReconciledRecord implements ReconciledRecordProps {
     newRecordValue: DataRecord,
     userId: string
   ): ServiceResult<ReconciledRecord> {
-
     record.key = newRecordValue.key;
     record.values[userId] = newRecordValue.value;
     return ServiceResult.Succeeded(record);

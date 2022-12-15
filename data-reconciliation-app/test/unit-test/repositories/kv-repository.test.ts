@@ -10,8 +10,14 @@ describe("Key value pair Repository", () => {
   let keyValueRepo: IRepository<ReconciledRecord>;
   let userId = randomUUID();
   let testKey = randomUUID();
-  let testRecord: DataRecord = DataRecord.create({key: testKey, value: "test"}).content!;
-  let testReconRecord: ReconciledRecord = ReconciledRecord.create(testRecord, userId).content!;
+  let testRecord: DataRecord = DataRecord.create({
+    key: testKey,
+    value: "test",
+  }).content!;
+  let testReconRecord: ReconciledRecord = ReconciledRecord.create(
+    testRecord,
+    userId
+  ).content!;
 
   beforeEach(() => {
     //keyValueRepo = new KeyValueRepository<DataRecord>();
@@ -21,10 +27,8 @@ describe("Key value pair Repository", () => {
 
   test("Should add a new key-value pair", () => {
     // // Act
-
     // // Assert
     // const result = keyValueRepo.set(testKey, testReconRecord);
-
     // // Assert
     // expect(result).not.toBeNull();
     // expect(result.key).toBe(testReconRecord.key);

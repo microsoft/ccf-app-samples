@@ -23,7 +23,7 @@ export class DataRecord implements DataRecordProps {
         errorMessage: "Error: key cannot be null or empty",
         errorType: "InvalidRecordKey",
       });
-      
+
     if (!props.value)
       return ServiceResult.Failed({
         errorMessage: "Error: value cannot be null or empty",
@@ -33,5 +33,4 @@ export class DataRecord implements DataRecordProps {
     const dataRecord = new DataRecord(props);
     return ServiceResult.Succeeded(dataRecord);
   }
-
 }

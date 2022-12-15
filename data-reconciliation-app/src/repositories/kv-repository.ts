@@ -63,7 +63,11 @@ export class KeyValueRepository<T> implements IRepository<T> {
   }
 }
 
-const kvStore = ccfapp.typedKv("data",ccfapp.string,ccfapp.json<ReconciledRecord>());
-const keyValueRepository: IRepository<ReconciledRecord> = new KeyValueRepository<ReconciledRecord>(kvStore);
+const kvStore = ccfapp.typedKv(
+  "data",
+  ccfapp.string,
+  ccfapp.json<ReconciledRecord>()
+);
+const keyValueRepository: IRepository<ReconciledRecord> =
+  new KeyValueRepository<ReconciledRecord>(kvStore);
 export default keyValueRepository;
-

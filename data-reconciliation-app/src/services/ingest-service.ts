@@ -1,7 +1,7 @@
 import { DataRecord } from "../models/data-record";
 import { ReconciledRecord } from "../models/reconciled-record";
 import { ServiceResult } from "../utils/service-result";
-import { IRepository} from "../repositories/kv-repository";
+import { IRepository } from "../repositories/kv-repository";
 import { keyValueRepository } from "../utils/dependencies";
 
 export interface IIngestService {
@@ -15,18 +15,24 @@ class IngestService implements IIngestService {
   }
 
   // map and store data to kv-store
-  public submitData(userId: string, dataRecords: DataRecord[]): ServiceResult<string> {
-
-    dataRecords.forEach((record)=> {
-      if(this.keyValueRepo.has(record.key)){
+  public submitData(
+    userId: string,
+    dataRecords: DataRecord[]
+  ): ServiceResult<string> {
+    dataRecords.forEach((record) => {
+      if (this.keyValueRepo.has(record.key)) {
         const reconRecord = this.keyValueRepo.get(record.key);
-        const updateReconRecord = ReconciledRecord.update(reconRecord,record, userId);
-        if(updateReconRecord.success){
+        const updateReconRecord = ReconciledRecord.update(
+          reconRecord,
+          record,
+          userId
+        );
+        if (updateReconRecord.success) {
           this.keyValueRepo.set(record.key, updateReconRecord.content!);
         }
-      }else{
+      } else {
         const createReconRecord = ReconciledRecord.create(record, userId);
-        if(createReconRecord.success){
+        if (createReconRecord.success) {
           this.keyValueRepo.set(record.key, createReconRecord.content!);
         }
       }

@@ -20,5 +20,7 @@ class ReportingService implements IReportingService {
   }
 }
 
-const reportingService: IReportingService = new ReportingService(keyValueRepository);
+const reportingService: IReportingService = new ReportingService(
+  keyValueRepository
+);
 export default reportingService;

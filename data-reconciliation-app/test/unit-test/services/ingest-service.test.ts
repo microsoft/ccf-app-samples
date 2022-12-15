@@ -19,10 +19,8 @@ describe("Data Ingestion Service", () => {
     //   DataRecord.create({key:"2", value: "test2"}).content!,
     //   DataRecord.create({key:"3", value: "test3"}).content!,
     // ];
-
     // // Assert
     // const result = ingestService.submitData(userId, testDataRecords);
-
     // // Assert
     // expect(result).not.toBeNull();
     // expect(result.success).toBe(true);

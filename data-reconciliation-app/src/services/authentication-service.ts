@@ -14,8 +14,7 @@ export interface IAuthenticationService {
 }
 
 // Authentication Service
-class CertBasedAuthenticationService implements IAuthenticationService
-{
+class CertBasedAuthenticationService implements IAuthenticationService {
   // get caller id
   // Note that the following way of getting caller ID doesn't work for 'jwt' auth policy and 'no_auth' auth policy.
   public getCallerId(request: ccfapp.Request<any>): ServiceResult<string> {
@@ -40,7 +39,6 @@ class CertBasedAuthenticationService implements IAuthenticationService
   // Check if user exists https://microsoft.github.io/CCF/main/audit/builtin_maps.html#users-info
   public isUser(userId: string): ServiceResult<boolean> {
     try {
-
       if (!userId) {
         return ServiceResult.Failed({
           errorMessage: "Error: invalid user id",
@@ -67,7 +65,6 @@ class CertBasedAuthenticationService implements IAuthenticationService
   // Check if member exists https://microsoft.github.io/CCF/main/audit/builtin_maps.html#users-info
   public isMember(memberId: string): ServiceResult<boolean> {
     try {
-
       if (!memberId) {
         return ServiceResult.Failed({
           errorMessage: "Error: invalid member id",
@@ -94,7 +91,6 @@ class CertBasedAuthenticationService implements IAuthenticationService
 
   // Check if call is member or user
   public isValidIdentity(identityId: string): ServiceResult<boolean> {
-
     if (!identityId) {
       return ServiceResult.Failed({
         errorMessage: "Error: invalid caller identity",

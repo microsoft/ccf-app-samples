@@ -30,7 +30,10 @@ export class ServiceResult<T> {
     return new ServiceResult<T>(content, null, true, 200);
   }
 
-  public static Failed<T>(error: ErrorResponse, statusCode: number = 400): ServiceResult<T> {
+  public static Failed<T>(
+    error: ErrorResponse,
+    statusCode: number = 400
+  ): ServiceResult<T> {
     return new ServiceResult<T>(null, error, false, statusCode);
   }
 }
