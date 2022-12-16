@@ -91,6 +91,7 @@ echo "Test start"
 ingestUrl="$server/app/ingest";
 
 memberName="member0"
+curl $ingestUrl -X POST $(cert_arg $memberName) -H "Content-Type: application/json" --data-binary "@../../data-samples/${memberName}_data.json"
 check_eq "$memberName - data ingest succeed" "200" "$(curl $ingestUrl -X POST $(cert_arg $memberName) -H "Content-Type: application/json" --data-binary "@../../data-samples/${memberName}_data.json" $only_status_code)"
 
 memberName="member1"
