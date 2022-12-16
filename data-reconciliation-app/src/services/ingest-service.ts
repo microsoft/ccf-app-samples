@@ -15,9 +15,11 @@ export class IngestService implements IIngestService {
   }
 
   // map and store data to kv-store
-  public submitData( userId: string, dataRecords: DataRecord[]): ServiceResult<string> {
+  public submitData(
+    userId: string,
+    dataRecords: DataRecord[]
+  ): ServiceResult<string> {
     for (const record of dataRecords) {
-
       const hasRecord = this.keyValueRepo.has(record.key);
       if (hasRecord.failure) return ServiceResult.Failed(hasRecord.error);
 
@@ -25,18 +27,30 @@ export class IngestService implements IIngestService {
         const getRecord = this.keyValueRepo.get(record.key);
         if (getRecord.failure) return ServiceResult.Failed(getRecord.error);
 
-        const updateRecord = ReconciledRecord.update(getRecord.content, record, userId);
-        if (updateRecord.failure) return ServiceResult.Failed(updateRecord.error);
+        const updateRecord = ReconciledRecord.update(
+          getRecord.content,
+          record,
+          userId
+        );
+        if (updateRecord.failure)
+          return ServiceResult.Failed(updateRecord.error);
 
-        const saveRecord = this.keyValueRepo.set(record.key, updateRecord.content);
+        const saveRecord = this.keyValueRepo.set(
+          record.key,
+          updateRecord.content
+        );
         if (saveRecord.failure) return ServiceResult.Failed(saveRecord.error);
-
       } else {
         const createRecord = ReconciledRecord.create(record, userId);
-        if (createRecord.failure) return ServiceResult.Failed(createRecord.error);
+        if (createRecord.failure)
+          return ServiceResult.Failed(createRecord.error);
 
-        const saveReconRecord = this.keyValueRepo.set(record.key, createRecord.content);
-        if (saveReconRecord.failure) return ServiceResult.Failed(saveReconRecord.error);
+        const saveReconRecord = this.keyValueRepo.set(
+          record.key,
+          createRecord.content
+        );
+        if (saveReconRecord.failure)
+          return ServiceResult.Failed(saveReconRecord.error);
       }
     }
 

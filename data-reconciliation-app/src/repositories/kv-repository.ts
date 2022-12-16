@@ -22,10 +22,8 @@ export class KeyValueRepository<T> implements IRepository<T> {
   // update key-value pair or create new record if key not exists
   public set(key: string, value: T): ServiceResult<T> {
     try {
-
       this.kvStore.set(key, value);
       return ServiceResult.Succeeded(value);
-
     } catch (ex) {
       return ServiceResult.Failed({
         errorMessage: "Error: unable to set value to the kvstore",
@@ -38,9 +36,7 @@ export class KeyValueRepository<T> implements IRepository<T> {
   // retrieve key value from kv-store
   public get(key: string): ServiceResult<T> {
     try {
-
       return ServiceResult.Succeeded(this.kvStore.get(key));
-
     } catch (ex) {
       return ServiceResult.Failed({
         errorMessage: "Error: unable to read value from the kvstore",
@@ -53,9 +49,7 @@ export class KeyValueRepository<T> implements IRepository<T> {
   // check if key exists
   public has(key: string): ServiceResult<boolean> {
     try {
-
       return ServiceResult.Succeeded(this.kvStore.has(key));
-
     } catch (ex) {
       return ServiceResult.Failed({
         errorMessage: "Error: unable to check if key exists  in the kvstore",
@@ -69,7 +63,9 @@ export class KeyValueRepository<T> implements IRepository<T> {
   public keys(): ServiceResult<string[]> {
     try {
       const keys: string[] = [];
-      this.kvStore.forEach((val, key) => { keys.push(key); });
+      this.kvStore.forEach((val, key) => {
+        keys.push(key);
+      });
       return ServiceResult.Succeeded(keys);
     } catch (ex) {
       return ServiceResult.Failed({
@@ -84,7 +80,9 @@ export class KeyValueRepository<T> implements IRepository<T> {
   public values(): ServiceResult<T[]> {
     try {
       const values: T[] = [];
-      this.kvStore.forEach((val, key) => { values.push(val); });
+      this.kvStore.forEach((val, key) => {
+        values.push(val);
+      });
       return ServiceResult.Succeeded(values);
     } catch (ex) {
       return ServiceResult.Failed({
@@ -122,6 +120,11 @@ export class KeyValueRepository<T> implements IRepository<T> {
   }
 }
 
-const kvStore = ccfapp.typedKv("data", ccfapp.string, ccfapp.json<ReconciledRecord>());
-const keyValueRepository: IRepository<ReconciledRecord> = new KeyValueRepository<ReconciledRecord>(kvStore);
+const kvStore = ccfapp.typedKv(
+  "data",
+  ccfapp.string,
+  ccfapp.json<ReconciledRecord>()
+);
+const keyValueRepository: IRepository<ReconciledRecord> =
+  new KeyValueRepository<ReconciledRecord>(kvStore);
 export default keyValueRepository;

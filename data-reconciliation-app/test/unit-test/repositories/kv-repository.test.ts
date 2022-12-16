@@ -23,7 +23,7 @@ describe("Key value pair Repository", () => {
     //keyValueRepo = new KeyValueRepository<ReconciledRecord>(kvStore);
   });
 
-  afterEach(() => { });
+  afterEach(() => {});
 
   test("Should add a new key-value pair", () => {
     // // Act
