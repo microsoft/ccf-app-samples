@@ -42,33 +42,91 @@ Each record will have all members' opinions for it. So for each record the recon
 
 ```json
 {
-  "Key": "A0129",
-  "Attribute": {
-    "opinions": {
+  "key": "A0129",
+  "values": {
       "Member 1": "google",
       "Member 2": "alphabet",
       ...
       "Member N": "...",
     }
-  }
 }
 ```
-### For each record in the KV Storage :
+### Voting Threshold
+
+Reconciliation logic is considered only if a specified number of opinions for a record is submitted. The `voting_threshold` determines if the record has received enough opinions to be reconciled. This will be configurable and can be set by members of the network, depending on the size of the network.
+
+
+### For each record in the KV Storage
 First check to be made is whether the current User has submitted an opinion for this record. If not, this record can and will be skipped straightaway.
 
-If we have an opinion, then reconciliation can have 3 possible results:
-- `NOT_ENOUGH_VOTES` : If number of votes does not reach the minimum threshold.
+If we have an opinion, then reconciliation can have 3 possible status:
+- `NOT_ENOUGH_DATA` : If number of opinions does not reach  `voting_threshold`.
 - `LACK_OF_CONSENSUS`: If threshhold is met and data is not equal among all opinions.
 - `IN_CONSENSUS`: If threshold is met and data is equal among all opinions.
 
 **A single different record is already a reason for the result to be `LACK_OF_CONSENSUS`.**
 
-Statistics will be retrieved based on the votes for the record and later reported.
+This status is the one that will be reported as the `group_status` field in the final Report.
+
+
+### Sample Summary Result Schema and Report Mapping
+
+In addition to `group_status`, additional statistics will be retrieved for the record to be later consolidated in the Report:
+
 - Total number of opinions (this number helps reporting but shall not be public)
-- Number of unique opinions
+- Number of unique opinions (count of different opinions for the record)
 - Number of members that agree with the current User
 
-Information will be consolidated in a Summary object that will be used by the Reporting API.
+Information will be consolidated in a Summary Result object that will be used by the Reporting API.
+The following proposed schema represents a reconciled record. The output Report will then be generated based on this data.
+
+```json
+{
+  "key": "<record key>",
+  "user_opinion": "<value informed by User>",
+  "group_status": "<value>"
+  "statistics": {
+      "count": "#",           // total opinions count
+      "unique_opinions": "#", // count of unique values
+      "accepted_count": "#",  // # of members in agreement with the User value
+    }
+}
+```
+Where: 
+```typescript
+record = // current record being reconciled
+userId = // user requesting reconciliation
+totalUsersInNetwork = // number of users in the system
+
+key = record.key;
+
+user_opinion = record.values[userId]
+
+// Number of opinions
+statistics.count = record.values.length
+
+// removing duplicates from Users opinions
+statistics.unique_opinions = (new Set(Object.values(record.values)).length
+
+// Filtering all similar votes to the current User
+statistics.accepted_count = 
+    Object.keys(record.values).filter(
+        (key) => key != userId && record.values[key] == user_opinion
+    ).length
+
+// Defining reconciliation status
+group_status = (count/totalUsersInNetwork) < voting_threshold 
+                ? 'NOT_ENOUGH_DATA'
+                : (unique_opinions.size() != 1) ? 'LACK_OF_CONSENSUS' : 'IN_CONSENSUS'
+```
+Report Column | Object Mapping | description 
+--------------|----------------|------------
+KEY |key | Record Id
+ATTRIBUTE_N | user_opinion | Value submitted by User
+GROUP_STATUS |group_status| Reconciliation result
+UNIQUE_VALUES |statistics.unique_opinions| Number of Distinct values submitted for this record
+MEMBERS_IN_AGREEMENT | statistics.acceptedCount| Number of members with same data as User
+MINORITY_MAJORITY | statistics.acceptedCount/statistics.count| Comparison between agreement total votes
 
 ## Pseudo Code
 
