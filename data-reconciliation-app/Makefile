@@ -55,4 +55,7 @@ destroy: ## 📦 Destroy application
 
 e2e-test: ## 📦 Run end to end tests
 	@echo -e "\e[34m Not Implemented \e[0m" || true
-	
+
+unit-test: ## 🔨 Run the Application unit-test
+	@echo -e "\e[34m$@\e[0m" || true
+	@npm run unit-test

@@ -85,10 +85,37 @@ done
 # otherwise you can get permission issues.
 cd "${certificate_dir}"
 
-echo "Starting Test..."
-res_post_item0=$(curl "$server/app/votes?id=1" -X POST $(cert_arg "member0") -H "Content-Type: application/json" --data '{ "msg": "Hello Data-reconciliation-app!" }' -i --silent)
-check_eq "Posting item0 returns 200" "200" "$(echo "$res_post_item0" | grep -i HTTP/1.1 | awk '{print $2}' | sed -e 's/\r//g')"
-check_eq "Get item0" "Hello Data-reconciliation-app!" "$(curl "$server/app/votes?id=1" -X GET $(cert_arg "user0") --silent)"
-echo "Test Completed..."
-echo "OK"
+# -------------------------- Test cases --------------------------
+echo "Test start"
+
+ingestUrl="$server/app/ingest";
+
+memberName="member0"
+check_eq "$memberName - data ingest succeed" "200" "$(curl $ingestUrl -X POST $(cert_arg $memberName) -H "Content-Type: application/json" --data-binary "@../../data-samples/${memberName}_data.json" $only_status_code)"
+
+memberName="member1"
+check_eq "$memberName - data ingest succeed" "200" "$(curl $ingestUrl -X POST $(cert_arg $memberName) -H "Content-Type: application/json" --data-binary "@../../data-samples/${memberName}_data.json" $only_status_code)"
+
+memberName="member2"
+check_eq "$memberName - data ingest succeed" "200" "$(curl $ingestUrl -X POST $(cert_arg $memberName) -H "Content-Type: application/json" --data-binary "@../../data-samples/${memberName}_data.json" $only_status_code)"
+
+memberName="member2"
+check_eq "$memberName - data ingest failed (data length is zero)" "400" "$(curl $ingestUrl -X POST $(cert_arg $memberName) -H "Content-Type: application/json" --data-binary "[]" $only_status_code)"
+
+memberName="member2"
+check_eq "$memberName - data ingest failed (data is null or empty)" "400" "$(curl $ingestUrl -X POST $(cert_arg $memberName) -H "Content-Type: application/json" --data-binary "" $only_status_code)"
+
+
+# printf "\n\n✅ Member 1 - read data report \n"
+# curl $server/app/report -X GET $(cert_arg "member1")
+
+# printf "\n\n✅ Member 2 - read data report \n"
+# curl $server/app/report -X GET $(cert_arg "member2")
+
+# ----------------------------------------------------
+
+printf "\n\n✅ Test Completed...\n"
 exit 0
+
+# ----------------------------------------------------
+

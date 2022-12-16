@@ -1,0 +1,54 @@
+{
+  "endpoints": {
+    "/ingest": {
+      "post": {
+        "js_module": "endpoints/ingest.js",
+        "js_function": "postHandler",
+        "forwarding_required": "always",
+        "authn_policies": ["member_cert", "user_cert"],
+        "mode": "readwrite",
+        "openapi": {
+          "responses": {
+            "200": {
+              "description": "Ok",
+              "content": {
+                "application/json": {
+                  "schema": { "type": "object" }
+                }
+              }
+            }
+          },
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": { "type": "array" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/report": {
+      "get": {
+        "js_module": "endpoints/reporting.js",
+        "js_function": "getHandler",
+        "forwarding_required": "always",
+        "authn_policies": ["member_cert", "user_cert"],
+        "mode": "readonly",
+        "openapi": {
+          "responses": {
+            "200": {
+              "description": "Ok",
+              "content": {
+                "application/json": {
+                  "schema": { "type": "object" }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
