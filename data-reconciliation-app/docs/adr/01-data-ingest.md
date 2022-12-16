@@ -77,24 +77,25 @@ export interface DataRecordProps {
 
 ### Repository Model
 
-Our repository will be a K-V store and defined by the `ReconciledRecord` model. A `ReconciledRecord` represents all of the `DataRecords` across the network and each member/users' opinion of the record.
-
-The `ReconciledRecord` key will be the unique id for the data record and the `ReconciliationMap` will be a map of each member/user ID and their opinion of the record.
+Our repository will be a K-V store. Our K-V store will be defined as:
 
 ```
-export type ReconciliationMap = Object;
+const kvStore = ccfapp.typedKv(
+  "data",
+  ccfapp.string,
+  ccfapp.json<ReconciledRecord>()
+);
+```
 
-export interface ReconciledRecordProps {
-  key: string;
-  values: ReconciliationMap;
-}
+A `ReconciledRecord` represents all of users who submittted data on the record and their opinion of the record.
 
+```
 export class ReconciledRecord implements ReconciledRecordProps {
   key: string;
   values: ReconciliationMap = {};
 ```
 
-For example,
+The `ReconciliationMap` is a map where key is the user ID and value is the record submitted by the user. For example,
 
 ```json
 {
