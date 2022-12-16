@@ -1,13 +1,12 @@
 import { ReconciledRecord } from "../models/reconciled-record";
 import { ServiceResult } from "../utils/service-result";
-import { keyValueRepository } from "../utils/dependencies";
-import { IRepository } from "../repositories/kv-repository";
+import keyValueRepository, { IRepository } from "../repositories/kv-repository";
 
 export interface IReportingService {
   getData(userId: string): ServiceResult<object>;
 }
 
-class ReportingService implements IReportingService {
+export class ReportingService implements IReportingService {
   private keyValueRepo: IRepository<ReconciledRecord>;
 
   constructor(keyValueRepo: IRepository<ReconciledRecord>) {

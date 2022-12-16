@@ -1,14 +1,13 @@
 import { DataRecord } from "../models/data-record";
 import { ReconciledRecord } from "../models/reconciled-record";
 import { ServiceResult } from "../utils/service-result";
-import { IRepository } from "../repositories/kv-repository";
-import { keyValueRepository } from "../utils/dependencies";
+import keyValueRepository, { IRepository } from "../repositories/kv-repository";
 
 export interface IIngestService {
   submitData(userId: string, dataRecords: DataRecord[]): ServiceResult<string>;
 }
 
-class IngestService implements IIngestService {
+export class IngestService implements IIngestService {
   private keyValueRepo: IRepository<ReconciledRecord>;
   constructor(keyValueRepo: IRepository<ReconciledRecord>) {
     this.keyValueRepo = keyValueRepo;

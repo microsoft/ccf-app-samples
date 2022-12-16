@@ -1,10 +1,14 @@
 // TODO: need to use ccf polyfill to solve the issue of key-value map with unit-test
-// import "@microsoft/ccf-app/polyfill";
+import "@microsoft/ccf-app/polyfill.js";
 
 import { randomUUID } from "crypto";
-import { IRepository } from "../../../src/repositories/kv-repository";
+import {
+  IRepository,
+  KeyValueRepository,
+} from "../../../src/repositories/kv-repository";
 import { ReconciledRecord } from "../../../src/models/reconciled-record";
 import { DataRecord } from "../../../src/models/data-record";
+import { kvStore } from "../../../src/utils/dependencies";
 
 describe("Key value pair Repository", () => {
   let keyValueRepo: IRepository<ReconciledRecord>;
@@ -20,7 +24,7 @@ describe("Key value pair Repository", () => {
   ).content!;
 
   beforeEach(() => {
-    //keyValueRepo = new KeyValueRepository<DataRecord>();
+    keyValueRepo = new KeyValueRepository<ReconciledRecord>(kvStore);
   });
 
   afterEach(() => {});

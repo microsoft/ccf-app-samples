@@ -8,29 +8,38 @@ import ingestService from "../services/ingest-service";
 export function postHandler(
   request: ccfapp.Request<any>
 ): ccfapp.Response<CCFResponse> {
+  // get caller identity
   const getCallerId = authenticationService.getCallerId(request);
   if (getCallerId.failure) return ApiResult.Failed(getCallerId);
   const callerId = getCallerId.content;
 
+  // check if caller has a valid identity
   const isValidIdentity = authenticationService.isValidIdentity(callerId);
   if (isValidIdentity.failure || !isValidIdentity.content)
     return ApiResult.AuthFailure();
 
-  let data: any | null = null;
+  // read data from request body as json
+  let getJsonData = getBodyAsJson(request);
+  if (getJsonData.failure) return ApiResult.Failed(getJsonData);
+  const data = getJsonData.content;
+
+  // map input data-model to data-record model
+  const mapDataRecords = DataSchema.mapDataRecords(data);
+  if (mapDataRecords.failure) return ApiResult.Failed(mapDataRecords);
+
+  // submit data to be save to data-store
+  const response = ingestService.submitData(callerId, mapDataRecords.content);
+  return ApiResult.Succeeded(response);
+}
+
+function getBodyAsJson(request: ccfapp.Request<any>): ServiceResult<any> {
   try {
-    data = request.body.json();
+    return ServiceResult.Succeeded(request.body.json());
   } catch (ex) {
-    const response = ServiceResult.Failed({
+    return ServiceResult.Failed({
       errorMessage: ex.message,
       errorType: "InvalidJSON",
       details: ex,
     });
-    return ApiResult.Failed(response);
   }
-
-  const mapDataRecords = DataSchema.mapDataRecords(data);
-  if (mapDataRecords.failure) return ApiResult.Failed(mapDataRecords);
-
-  const response = ingestService.submitData(callerId, mapDataRecords.content);
-  return ApiResult.Succeeded(response);
 }

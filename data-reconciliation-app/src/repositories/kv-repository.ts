@@ -1,5 +1,6 @@
 import * as ccfapp from "@microsoft/ccf-app";
 import { ReconciledRecord } from "../models/reconciled-record";
+import { kvStore } from "../utils/dependencies";
 
 export interface IRepository<T> {
   set(key: string, value: T): T;
@@ -63,11 +64,6 @@ export class KeyValueRepository<T> implements IRepository<T> {
   }
 }
 
-const kvStore = ccfapp.typedKv(
-  "data",
-  ccfapp.string,
-  ccfapp.json<ReconciledRecord>()
-);
 const keyValueRepository: IRepository<ReconciledRecord> =
   new KeyValueRepository<ReconciledRecord>(kvStore);
 export default keyValueRepository;
