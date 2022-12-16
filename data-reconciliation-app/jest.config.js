@@ -5,7 +5,7 @@
 
 export default {
   // Indicates whether the coverage information should be collected while executing the test
-  collectCoverage: true,
+  collectCoverage: false,
 
   // An array of glob patterns indicating a set of files for which coverage information should be collected
   collectCoverageFrom: ["./src/**/*.ts"],
@@ -45,7 +45,9 @@ export default {
 
   // A map from regular expressions to paths to transformers
   // transform: undefined,
-  transform: { "^.+\\.ts$": "ts-jest" },
+  transform: { "^.+\\.[t|j]sx?$": "babel-jest" },
+  
+  extensionsToTreatAsEsm: ['.ts'],
 
   // Indicates whether each individual test should be reported during the run
   verbose: true,

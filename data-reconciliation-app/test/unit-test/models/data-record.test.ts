@@ -20,7 +20,7 @@ describe("Data Record Model", () => {
     expect(dataRecord?.type).toBe(typeof props.value);
   });
 
-  test("Should Fail To Create With Empty Key", () => {
+  test("Should fail to create with empty key", () => {
     // Arrange
     const props: DataRecordProps = {
       // @ts-ignore
