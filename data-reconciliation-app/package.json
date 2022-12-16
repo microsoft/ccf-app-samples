@@ -3,7 +3,7 @@
   "scripts": {
     "build": "del-cli -f dist/ && rollup --config && cp src/endpoints/app.json dist/ && node build_bundle.js dist/",
     "bundle": "node build_bundle.js dist",
-    "unit-test": "node --experimental-vm-modules node_modules/.bin/jest"
+    "unit-test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
   "type": "module",
   "engines": {
