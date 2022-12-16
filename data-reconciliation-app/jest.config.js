@@ -1,6 +1,9 @@
 /*
  * For a detailed explanation regarding each configuration property and type check, visit:
  * https://jestjs.io/docs/configuration
+ * https://jestjs.io/docs/ecmascript-modules
+ * https://microsoft.github.io/CCF/main/js/ccf-app/modules/polyfill.html
+ * To Run: Add to package.json > "scripts": {"unit-test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"}
  */
 
 export default {
