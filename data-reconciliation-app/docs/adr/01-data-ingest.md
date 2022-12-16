@@ -23,7 +23,7 @@ Gathered requirements:
 ### Endpoint
 
 - Description
-  - Ingest data into our application and add data to K-V store
+  - Ingest member or user data into our application and add data to K-V store
 - Path
   - /ingest
 - HTTP Method
@@ -79,7 +79,7 @@ export interface DataRecordProps {
 
 Our repository will be a K-V store and defined by the `ReconciledRecord` model. A `ReconciledRecord` represents all of the `DataRecords` across the network and each member/users' opinion of the record.
 
-The `ReconciledRecord` key will be the unique id for the data record and the `ReconciliationMap` will be a map of each member/users' and their opinion of the record.
+The `ReconciledRecord` key will be the unique id for the data record and the `ReconciliationMap` will be a map of each member/user ID and their opinion of the record.
 
 ```
 export type ReconciliationMap = Object;
@@ -107,7 +107,7 @@ For example,
 }
 ```
 
-Depending if the unqiue id (key) exists, a `ReconciledRecord`can be `updated` or `created` new via ingest.
+Depending if the key exists, a `ReconciledRecord` can be `updated` or `created` new via ingest.
 
 ## Service
 
@@ -140,12 +140,12 @@ Reference: https://microsoft.github.io/CCF/main/build_apps/kv/api.html#_CPPv4N2k
 
 ## Consequences
 
-The consequences outlined below may be areas of improvement for our application.
+The consequences outlined below may be future areas of improvement for our application.
 
-1. This ingest design does not store the originally ingested data by each member. Rather, the ingest api has the responsibility of storing a `ReconciledRecord`. This may cause a number of issues:
+1. This design does not allow flexibility for schema definition. Reference [adr](./02-data-schema-strategy.md#option3-defining-data-schema-via-deployment)
+2. This design does not store the originally ingested data by each member. Rather, the ingest api has the responsibility of storing a `ReconciledRecord`. This may cause a number of issues:
    - There is no way to audit and members/users cannot see the original data they ingested. Is this a concern?
    - By only storing the `ReconciledRecord`, we make updating or removal of a key for a particular member harder. Is the data immutable?
    - When we create a report on the reconciled data, members/users will only receive a report on the keys they submitted. By using the `ReconciledRecord`, we will have to check the values for each key.
-2. This design does not allow flexibility for schema definition. Reference [adr](./02-data-schema-strategy.md#option3-defining-data-schema-via-deployment)
 
-We need to talk to our Product Owner to determine whether or not data ingested is immutable or if auditing is a concern. We also need to test how expensive creating a report is based on our `ReconciledRecord` model.
+We need to talk to our Product Owner to determine if the data ingested is immutable and/or if auditing is a concern. We also need to see how expensive creating a report is given our `ReconciledRecord` model.
