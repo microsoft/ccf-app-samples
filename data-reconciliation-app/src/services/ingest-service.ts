@@ -15,12 +15,16 @@ export class IngestService implements IIngestService {
   }
 
   // map and store data to kv-store
-  public submitData(userId: string, dataRecords: DataRecord[]): ServiceResult<string> {
-
-    if(!dataRecords) return ServiceResult.Failed({
-      errorMessage: "Error: input data cannot be null",
-      errorType: "InvalidInput",
-    })
+  public submitData(
+    userId: string,
+    dataRecords: DataRecord[]
+  ): ServiceResult<string> {
+    if (!dataRecords) {
+      return ServiceResult.Failed({
+        errorMessage: "Error: ingestion data cannot be null",
+        errorType: "InvalidIngestionData",
+      });
+    }
 
     for (const record of dataRecords) {
       const hasRecord = this.keyValueRepo.has(record.key);

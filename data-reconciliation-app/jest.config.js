@@ -49,8 +49,8 @@ export default {
   // A map from regular expressions to paths to transformers
   // transform: undefined,
   transform: { "^.+\\.[t|j]sx?$": "babel-jest" },
-  
-  extensionsToTreatAsEsm: ['.ts'],
+
+  extensionsToTreatAsEsm: [".ts"],
 
   // Indicates whether each individual test should be reported during the run
   verbose: true,

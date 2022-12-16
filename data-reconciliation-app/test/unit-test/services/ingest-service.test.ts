@@ -14,9 +14,9 @@ describe("Data Ingestion Service", () => {
   test("Should ingest data successfully", () => {
     // Act
     const testDataRecords: DataRecord[] = [
-      DataRecord.create({key:"1", value: "test1"}).content!,
-      DataRecord.create({key:"2", value: "test2"}).content!,
-      DataRecord.create({key:"3", value: "test3"}).content!,
+      DataRecord.create({ key: "1", value: "test1" }).content!,
+      DataRecord.create({ key: "2", value: "test2" }).content!,
+      DataRecord.create({ key: "3", value: "test3" }).content!,
     ];
     // Assert
     const result = ingestService.submitData(userId, testDataRecords);

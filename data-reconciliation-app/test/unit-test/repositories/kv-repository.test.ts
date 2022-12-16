@@ -2,12 +2,14 @@
 import "@microsoft/ccf-app/polyfill.js";
 
 import { randomUUID } from "crypto";
-import keyValueRepository, { IRepository } from "../../../src/repositories/kv-repository";
+import keyValueRepository, {
+  IRepository,
+} from "../../../src/repositories/kv-repository";
 import { ReconciledRecord } from "../../../src/models/reconciled-record";
 import { DataRecord } from "../../../src/models/data-record";
 
 describe("Key value pair Repository", () => {
-  let keyValueRepo: IRepository<ReconciledRecord>= keyValueRepository;
+  let keyValueRepo: IRepository<ReconciledRecord> = keyValueRepository;
   let userId = randomUUID();
   let testKey = randomUUID();
   let testRecord: DataRecord = DataRecord.create({
@@ -15,7 +17,10 @@ describe("Key value pair Repository", () => {
     value: "test",
   }).content!;
 
-  let testReconRecord: ReconciledRecord = ReconciledRecord.create(testRecord,userId).content!;
+  let testReconRecord: ReconciledRecord = ReconciledRecord.create(
+    testRecord,
+    userId
+  ).content!;
 
   beforeEach(() => {});
   afterEach(() => {});
@@ -45,8 +50,14 @@ describe("Key value pair Repository", () => {
 
   test("Should update key-value pair", () => {
     // Arrange
-    let newRecord: DataRecord = DataRecord.create({key: testKey, value: "test-update"}).content!;
-    let newTestReconRecord: ReconciledRecord = ReconciledRecord.create(newRecord, userId).content!;
+    let newRecord: DataRecord = DataRecord.create({
+      key: testKey,
+      value: "test-update",
+    }).content!;
+    let newTestReconRecord: ReconciledRecord = ReconciledRecord.create(
+      newRecord,
+      userId
+    ).content!;
 
     keyValueRepo?.set(testKey, newTestReconRecord);
 
@@ -56,6 +67,8 @@ describe("Key value pair Repository", () => {
     // Assert
     expect(result.content).not.toBeNull();
     expect(result.content.key).toBe(newTestReconRecord.key);
-    expect(result.content.values[userId]).toBe(newTestReconRecord.values[userId]);
+    expect(result.content.values[userId]).toBe(
+      newTestReconRecord.values[userId]
+    );
   });
 });
