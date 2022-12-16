@@ -81,8 +81,8 @@ Data schema definition at the API could become:
 
 ```typescript
 export interface DataSchema {
-    key: string;
-    value: string | number;
+  key: string;
+  value: string | number;
 }
 ```
 
@@ -109,12 +109,11 @@ While this option provides limited flexibility for members, it introduces maximu
 
 This the summary of alternatives by their complexity and flexibility.
 
-| Options   | Flexibility | Data Reset on Schema Changes | Integration Changes on Schema Changes | Implementation Complexity |
-| ---------:| -----------:| ----------------------------:| -------------------------------------:| -------------------------:|
-| Option 1  | Maximum     |  ✓                           |  ✓                                    | Hard                      |
-| Option 2  | Moderate    |  ✓                           |  ✓                                    | Medium                    |
-| Option 3  | Minimum     |  ✓                           |  ✓                                    | Easy                      |
-
+|  Options | Flexibility | Data Reset on Schema Changes | Integration Changes on Schema Changes | Implementation Complexity |
+| -------: | ----------: | ---------------------------: | ------------------------------------: | ------------------------: |
+| Option 1 |     Maximum |                            ✓ |                                     ✓ |                      Hard |
+| Option 2 |    Moderate |                            ✓ |                                     ✓ |                    Medium |
+| Option 3 |     Minimum |                            ✓ |                                     ✓ |                      Easy |
 
 Considering project timelines from implementation complexity angle, **we have decided to implement Option 3 in this application.**
 

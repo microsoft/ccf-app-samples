@@ -100,9 +100,8 @@ For example,
 {
   "key": "A0129",
   "value": {
-      "Member 1": "google",
-      "Member 2": "alphabet"
-    }
+    "Member 1": "google",
+    "Member 2": "alphabet"
   }
 }
 ```

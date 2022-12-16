@@ -50,7 +50,8 @@ Our main audience for our sample app is developers. A developer could take our s
 - API Endpoint: Each members will query for their reconciled data. We can only report out on data ingested by the member. Members/users can query by:
   - key on a specific record
   - all data
-- In order for our app to provide a report on the data, a certain percentage of members need to have submited data on a particular record. A `voting_threshold` may change based on the scenario and number of members. - `voting_threshold` must be configurable
+- In order for our app to provide a report on the data, a certain percentage of members need to have submited data on a particular record. A `voting_threshold` may change based on the scenario and number of members.
+- `voting_threshold` should be configurable
 - For example, if `voting_threshold`=0.8,
   - Consortium of 5 members -> 4/5 members have to vote
   - Consortium of 3 members -> 2/3 members have to vote
