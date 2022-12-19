@@ -4,6 +4,7 @@ import authenticationService from "../services/authentication-service";
 import reportingService from "../services/reporting-service";
 
 export function getHandler(request: ccfapp.Request<any>): ccfapp.Response<CCFResponse> {
+  console.log("Reporting endpoint called");
   const getCallerId = authenticationService.getCallerId(request);
   if (getCallerId.failure) return ApiResult.Failed(getCallerId);
 
