@@ -7,19 +7,13 @@ export interface IReportingService {
 }
 
 export class ReportingService implements IReportingService {
-  private keyValueRepo: IRepository<ReconciledRecord>;
-
-  constructor(keyValueRepo: IRepository<ReconciledRecord>) {
-    this.keyValueRepo = keyValueRepo;
-  }
+  constructor(private readonly repository: IRepository<ReconciledRecord>) {}
 
   public getData(userId: string): ServiceResult<object> {
-    const result = this.keyValueRepo.values();
+    const result = this.repository.values();
     return ServiceResult.Succeeded(result);
   }
 }
 
-const reportingService: IReportingService = new ReportingService(
-  keyValueRepository
-);
+const reportingService: IReportingService = new ReportingService(keyValueRepository);
 export default reportingService;
