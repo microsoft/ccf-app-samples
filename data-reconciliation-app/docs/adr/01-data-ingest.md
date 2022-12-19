@@ -36,7 +36,7 @@ Gathered requirements:
 - API Status Codes
   - OK
     - Status: 200
-    - Status Text: "Votes have been successfully recorded"
+    - Status Text: "Data has been ingested"
   - UNAUTHORIZED
     - Status: 401
     - Status Text: "Unauthorized"
