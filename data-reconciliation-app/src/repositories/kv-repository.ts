@@ -40,7 +40,7 @@ export class KeyValueRepository<T> implements IRepository<T> {
       if (value === undefined) {
         return ServiceResult.Failed({
           errorMessage: "Error: key does not exist",
-          errorType: "KeyValueStoreError"
+          errorType: "KeyValueStoreError",
         });
       }
 

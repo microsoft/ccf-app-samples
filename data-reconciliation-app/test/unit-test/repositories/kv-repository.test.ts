@@ -26,7 +26,7 @@ describe("Key value pair Repository", () => {
   afterEach(() => {});
 
   test("Should add a new key-value pair", () => {
-    // Arrange 
+    // Arrange
     // Act
     const result = keyValueRepo.set(testKey, testReconRecord);
 

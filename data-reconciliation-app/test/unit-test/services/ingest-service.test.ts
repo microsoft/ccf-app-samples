@@ -38,7 +38,6 @@ describe("Data Ingestion Service", () => {
     expect(result.failure).toBe(true);
   });
 
-
   test("Should fail to ingest empty data", () => {
     // Act
     const testDataRecords: DataRecord[] = [];
@@ -50,5 +49,4 @@ describe("Data Ingestion Service", () => {
     expect(result.content).toBeNull();
     expect(result.failure).toBe(true);
   });
-
 });
