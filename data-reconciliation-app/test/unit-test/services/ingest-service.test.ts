@@ -26,19 +26,6 @@ describe("Data Ingestion Service", () => {
     expect(result.content).toBe("data has ingested successfully");
   });
 
-  test("Should ingest empty data successfully", () => {
-    // Act
-    const testDataRecords: DataRecord[] = [];
-
-    // Assert
-    const result = ingestService.submitData(userId, testDataRecords);
-
-    // Assert
-    expect(result).not.toBeNull();
-    expect(result.success).toBe(true);
-    expect(result.content).toBe("data has ingested successfully");
-  });
-
   test("Should fail to ingest null data", () => {
     // Act
     const testDataRecords: DataRecord[] = null;
@@ -50,4 +37,18 @@ describe("Data Ingestion Service", () => {
     expect(result.content).toBeNull();
     expect(result.failure).toBe(true);
   });
+
+
+  test("Should fail to ingest empty data", () => {
+    // Act
+    const testDataRecords: DataRecord[] = [];
+
+    // Assert
+    const result = ingestService.submitData(userId, testDataRecords);
+
+    // Assert
+    expect(result.content).toBeNull();
+    expect(result.failure).toBe(true);
+  });
+
 });

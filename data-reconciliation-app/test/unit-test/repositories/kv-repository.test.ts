@@ -26,8 +26,8 @@ describe("Key value pair Repository", () => {
   afterEach(() => {});
 
   test("Should add a new key-value pair", () => {
+    // Arrange 
     // Act
-    // Assert
     const result = keyValueRepo.set(testKey, testReconRecord);
 
     // Assert
@@ -70,5 +70,16 @@ describe("Key value pair Repository", () => {
     expect(result.content.values[userId]).toBe(
       newTestReconRecord.values[userId]
     );
+  });
+
+  test("Should fail to retrieve a non-existent key", () => {
+    // Arrange
+
+    // Act
+    const result = keyValueRepository.get("key1");
+
+    // Assert
+    expect(result.failure).toBe(true);
+    expect(result.error.errorMessage).toBe("Error: key does not exist");
   });
 });

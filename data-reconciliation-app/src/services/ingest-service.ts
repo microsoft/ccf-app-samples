@@ -19,7 +19,7 @@ export class IngestService implements IIngestService {
     userId: string,
     dataRecords: DataRecord[]
   ): ServiceResult<string> {
-    if (!dataRecords) {
+    if (!dataRecords || dataRecords.length == 0) {
       return ServiceResult.Failed({
         errorMessage: "Error: ingestion data cannot be null",
         errorType: "InvalidIngestionData",
