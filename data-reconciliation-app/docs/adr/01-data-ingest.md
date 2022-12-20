@@ -2,126 +2,150 @@
 
 ## Status
 
-Proposed
+Approved
 
 ## Context
 
-We need to build an API that ingests member data into our system. Once ingested, we also need to store this data in the K-V store.
+We need to build an API that ingests data into our system. Once ingested, we also need to store this data in the K-V store so we can reconcile and report out on the data.
 
 Gathered requirements:
 
-- Members will decide upon a csv schema ahead of data ingest
-- Members will upload their data via csv, with headers
-  - csv will have 2 columns:
-    - one unique identifier (string)
-    - one attribute associated with the unique identifier (string)
+- Members of the network will decide on a data schema ahead of ingest.
+- Members and Users of the network can ingest data via the API. Data will be ingested via JSON which will include:
+  - one unique identifier (string)
+  - one attribute associated with the unique identifier (string)
 - There is likely going to be a UI on top of our ingest API...so we will treat our app like a backend system. Therefore, we will accept JSON into our ingest API.
 
 ## Decision
 
-## Model for K-V store
+## API
 
-```
-//psuedo code for model based off forum app
-
-// this is unique for each user
-type User = string;
-
-interface AttributeBase {
-  votes: Record<User, T>;
-}
-
-interface StringAttribute extends AttributeBase<string> {
-  type: "string";
-}
-
-interface NumericAttribute extends AttributeBase<number> {
-  type: "number";
-}
-
-type Attribute = StringAttribute | NumericAttribute;
-
-type AttributeMap = ccfapp.TypedKvMap<string, Attribute>;
-```
-
-### Sample Ingest Data
-
-For example, from Member 1:
-
-| id    | company_name |
-| ----- | ------------ |
-| A0128 | microsoft    |
-| A0129 | google       |
-| A0130 | amazon       |
-
-For example, from Member 2:
-| id | company_name |
-|---|---|
-| A0128 | microsoft |
-|A0129 | alphabet |
-| A0130 | amazon |
-
-### Domain Model Sample - String Attribute
-
-```json
-{
-  "Key": "A0129",
-  "Attribute": {
-    "votes": {
-      "Member 1": "google",
-      "Member 2": "alphabet"
-    }
-  }
-}
-```
-
-### API Endpoint
+### Endpoint
 
 - Description
-  - Adds member data into K-V store, enabling each member to vote on records
+  - Ingest member or user data into our application and add data to K-V store
 - Path
-  - /votes
+  - /ingest
 - HTTP Method
   - POST
 - URL Params
   - N/A
 - Headers
   - content-type: application/json
-  - x-api-key: {UUID}
-- Request will be a ccfapp.Request Object, which contains:
-  - user = <User>request.caller
-  - csv = request.body.text()
-- HTTP Status Codes
+- Request will be a `ccfapp.Request Object`. We will interrogate the `ccfapp.Request Object` to extract the user or member and [authenticate them via certficates](#security). We will read the request body as a JSON.
+- API Status Codes
   - OK
     - Status: 200
-    - Status Text: "Votes have been successfully recorded"
-  - Unauthorized
+    - Status Text: "Data has been ingested"
+  - UNAUTHORIZED
     - Status: 401
     - Status Text: "Unauthorized"
-  - Validation Error
+  - BAD_REQUEST
     - Status: 400
-    - Status Text: "Incorrect format"
+    - Status Text: "Validation Error"
 
-### Service
+### Security
+
+Users will be authenticated via certificates, which is natively supported by the CCF framework.
+
+//TODO Add reference to this future ADR: https://github.com/microsoft/ccf-app-samples/issues/102
+
+## Models
+
+### Data Schema Model
+
+The ingest model has been documented by [this ADR](./02-data-schema-strategy.md#option3-defining-data-schema-via-deployment). Our ingest data model will look like:
 
 ```
-submitVotes(userId: string, csv: string)
+export interface DataSchema {
+    key: string;
+    value: string | number;
+}
+```
+
+### Data Record Model
+
+Upon ingest, `DataSchema` records will be mapped to a `DataRecord` model. `DataRecord`s can be string or numeric.
+
+```
+export type DataAttributeType = string | number;
+export interface DataRecordProps {
+  key: string;
+  value: DataAttributeType;
+}
+```
+
+### Repository Model
+
+Our repository will be a K-V store. Our K-V store will be defined as:
+
+```
+const kvStore = ccfapp.typedKv(
+  "data",
+  ccfapp.string,
+  ccfapp.json<ReconciledRecord>()
+);
+```
+
+A `ReconciledRecord` represents all of users who submittted data on the record and their opinion of the record.
+
+```
+export class ReconciledRecord implements ReconciledRecordProps {
+  key: string;
+  values: ReconciliationMap = {};
+```
+
+The `ReconciliationMap` is a map where key is the user ID and value is the record submitted by the user. For example,
+
+```json
+{
+  "key": "A0129",
+  "value": {
+    "Member 1": "google",
+    "Member 2": "alphabet"
+  }
+}
+```
+
+Depending if the key exists, a `ReconciledRecord` can be `updated` or `created` new via ingest.
+
+## Service
+
+### Ingest Service
+
+The ingest service will `update` or `create` a `ReconciledRecord` from `DataRecord`s before saving to the K-V store.
+
+```
+submitData(userId: string, dataRecords: DataRecord[])
 ```
 
 - Service will leverage repository layer defined below
-- Service will contain business logic: - Check if key already exists via repository `read` - if so, update model & repository `insert` - else, create new model & repository `insert`
+- Service will contain business logic:
+  - Check if key already exists via repository `get`
+    - if it exists, `update` the `reconciled-record` & repository `set`
+    - else, `create` new `reconciled-record` & repository `set`
 
-### Repository
+## Repository
 
-Leverage ccf framework to read and write from kv::Map objects.
+### K-V Repository
 
-- `insert`
-  - Creates new record in AttributeMap
-- `read`
-  - Given key, retrieves record from AttributeMap
+We will leverage the ccf framework to read and write from kv::Map objects.
+
+- `set`
+  - Creates new record
+- `get`
+  - Given key, retrieves record
 
 Reference: https://microsoft.github.io/CCF/main/build_apps/kv/api.html#_CPPv4N2kv18WriteableMapHandle3putERK1KRK1V
 
 ## Consequences
 
-It is only in scope to handle data with one attribute. It is possible in the future, the app may handle muliple attributes of string or numeric types. If that becomes a requirement in the future, we should update the model and complete another ADR.
+The consequences outlined below may be future areas of improvement for our application.
+
+1. This design does not allow flexibility for schema definition. Reference [adr](./02-data-schema-strategy.md#option3-defining-data-schema-via-deployment)
+2. This design does not store the originally ingested data by each member. Rather, the ingest api has the responsibility of storing a `ReconciledRecord`. This may cause a number of issues:
+   - There is no way to audit and members/users cannot see the original data they ingested. Is this a concern?
+   - By only storing the `ReconciledRecord`, we make updating or removal of a key for a particular member harder. Is the data immutable?
+   - When we create a report on the reconciled data, members/users will only receive a report on the keys they submitted. By using the `ReconciledRecord`, we will have to check the values for each key.
+
+We need to talk to our Product Owner to determine if the data ingested is immutable and/or if auditing is a concern. We also need to see how expensive creating a report is given our `ReconciledRecord` model.
