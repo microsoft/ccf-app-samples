@@ -38,7 +38,7 @@ We will go with **Certificate Authentication** implementation because it will ac
 
 ## Consequences
 
-Implementing authentication service based on CCF certificate authentication to identifies users and members on each request.
+Implementing authentication service based on CCF certificate authentication to identify users and members on each request.
 
 ## Resource 
 
