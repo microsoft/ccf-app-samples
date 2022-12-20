@@ -32,7 +32,7 @@ CCF provides support for managing public token signing keys required for validat
 ## Decision
 
 We will go with **Certificate Authentication** implementation because it will achieve the following point.
-- Time and effort effective, as we alreay have an existing impelementation sample on banking-app
+- Time and effort effective, as we already have an existing implementation sample on banking-app
 - The least reliant on external components, which will keep our sample simple (no need for an identity provider to issue and validate tokens)
 - No UI implementation in current phase. (later if we're going to create a UI, it is better to go with **JWT Authentication** implementation)
 
