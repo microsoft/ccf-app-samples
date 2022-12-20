@@ -49,6 +49,27 @@
           }
         }
       }
+    },
+    "/report/{id}": {
+      "get": {
+        "js_module": "endpoints/reporting.js",
+        "js_function": "getByIdHandler",
+        "forwarding_required": "always",
+        "authn_policies": ["member_cert", "user_cert"],
+        "mode": "readonly",
+        "openapi": {
+          "responses": {
+            "200": {
+              "description": "Ok",
+              "content": {
+                "application/json": {
+                  "schema": { "type": "object" }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
