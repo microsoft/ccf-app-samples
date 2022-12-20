@@ -1,6 +1,9 @@
 /*
  * For a detailed explanation regarding each configuration property and type check, visit:
  * https://jestjs.io/docs/configuration
+ * https://jestjs.io/docs/ecmascript-modules
+ * https://microsoft.github.io/CCF/main/js/ccf-app/modules/polyfill.html
+ * To Run: Add to package.json > "scripts": {"unit-test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"}
  */
 
 export default {
@@ -45,7 +48,9 @@ export default {
 
   // A map from regular expressions to paths to transformers
   // transform: undefined,
-  transform: { "^.+\\.ts$": "ts-jest" },
+  transform: { "^.+\\.[t|j]sx?$": "babel-jest" },
+
+  extensionsToTreatAsEsm: [".ts"],
 
   // Indicates whether each individual test should be reported during the run
   verbose: true,

@@ -19,6 +19,13 @@ export class IngestService implements IIngestService {
     userId: string,
     dataRecords: DataRecord[]
   ): ServiceResult<string> {
+    if (!dataRecords || dataRecords.length == 0) {
+      return ServiceResult.Failed({
+        errorMessage: "Error: ingestion data cannot be null",
+        errorType: "InvalidIngestionData",
+      });
+    }
+
     for (const record of dataRecords) {
       const hasRecord = this.keyValueRepo.has(record.key);
       if (hasRecord.failure) return ServiceResult.Failed(hasRecord.error);

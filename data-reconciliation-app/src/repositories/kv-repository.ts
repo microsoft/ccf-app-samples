@@ -36,7 +36,15 @@ export class KeyValueRepository<T> implements IRepository<T> {
   // retrieve key value from kv-store
   public get(key: string): ServiceResult<T> {
     try {
-      return ServiceResult.Succeeded(this.kvStore.get(key));
+      const value = this.kvStore.get(key);
+      if (value === undefined) {
+        return ServiceResult.Failed({
+          errorMessage: "Error: key does not exist",
+          errorType: "KeyValueStoreError",
+        });
+      }
+
+      return ServiceResult.Succeeded(value);
     } catch (ex) {
       return ServiceResult.Failed({
         errorMessage: "Error: unable to read value from the kvstore",
