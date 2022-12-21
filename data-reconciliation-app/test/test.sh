@@ -106,8 +106,13 @@ memberName="member2"
 check_eq "$memberName - data ingest failed (data is null or empty)" "400" "$(curl $ingestUrl -X POST $(cert_arg $memberName) -H "Content-Type: application/json" --data-binary "" $only_status_code)"
 
 
-# printf "\n\n✅ Member 1 - read data report \n"
-# curl $server/app/report -X GET $(cert_arg "member1")
+ printf "\n\n✅ Member 1 - report all data  \n"
+
+curl $server/app/report -X GET $(cert_arg "member1")
+
+ printf "\n\n✅ Member 1 - report one record by key  \n"
+
+curl $server/app/report/5 -X GET $(cert_arg "member1")
 
 # printf "\n\n✅ Member 2 - read data report \n"
 # curl $server/app/report -X GET $(cert_arg "member2")
