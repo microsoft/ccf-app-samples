@@ -61,7 +61,7 @@ if [ ! -d "$constitution_dir" ]; then
 fi
 
 echo "▶️ Starting sandbox..."
-/opt/ccf_virtual/bin/sandbox.sh --js-app-bundle "$app_dir/dist/" --initial-member-count 3 --initial-user-count 2 --constitution-dir "$constitution_dir" > /dev/null 2>&1 &
+/opt/ccf_virtual/bin/sandbox.sh --js-app-bundle "$app_dir/dist/" --initial-member-count 3 --initial-user-count 0 --constitution-dir "$constitution_dir" > /dev/null 2>&1 &
 sandbox_pid=$!
 echo "💤 Waiting for sandbox . . . (${sandbox_pid})"
 
