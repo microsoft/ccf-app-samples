@@ -108,7 +108,7 @@ export class SummaryRecord implements SummaryRecordProps {
         membersInAgreementCount,
         membersInDisagreementCount
       ),
-      groupStatus: this.getGroupStatus(votesCount, membersInAgreementCount),
+      groupStatus: this.getGroupStatus(votesCount, uniqueValues.size),
       membersInAgreementCount: membersInAgreementCount,
       membersInDisagreementCount: membersInDisagreementCount,
       votesCount: votesCount,
@@ -133,11 +133,11 @@ export class SummaryRecord implements SummaryRecordProps {
   // get group status (NotEnoughVotes,LackOfConsensus, InConsensus)
   private static getGroupStatus(
     votesCount: number,
-    membersInAgreementCount: number
+    uniqueValuesCount: number
   ) {
     if (votesCount < MINIMUM_VOTES_THRESHOLD) {
       return SummaryGroupStatus.NotEnoughVotes;
-    } else if (membersInAgreementCount <= votesCount / 2) {
+    } else if (uniqueValuesCount != 1) {
       return SummaryGroupStatus.LackOfConsensus;
     }
     return SummaryGroupStatus.InConsensus;

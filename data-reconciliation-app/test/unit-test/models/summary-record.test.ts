@@ -77,7 +77,7 @@ describe("Summary Record Model", () => {
     reconRecord.values = {};
     reconRecord.values[memberId1] = "Test Value";
     reconRecord.values[memberId2] = "Test Value";
-    reconRecord.values[memberId3] = "Test Value3";
+    reconRecord.values[memberId3] = "Test Value";
 
     // Act
     const createSummaryRecord = SummaryRecord.create(memberId1, reconRecord);
@@ -90,8 +90,8 @@ describe("Summary Record Model", () => {
   test("Should return GroupStatus equal to 'LackOfConsensus'", () => {
     // Arrange
     reconRecord.values = {};
-    reconRecord.values[memberId1] = "Test Value1";
-    reconRecord.values[memberId2] = "Test Value2";
+    reconRecord.values[memberId1] = "Test Value";
+    reconRecord.values[memberId2] = "Test Value";
     reconRecord.values[memberId3] = "Test Value3";
 
     // Act
