@@ -34,7 +34,7 @@ describe("Summary Record Model", () => {
     expect(summaryRecord.key).toBe(reconRecord.key);
     expect(summaryRecord.value).toBe(reconRecord.values[memberId1]);
     expect(summaryRecord.type).toBe(reconRecord.type);
-    expect(summaryRecord.status).toBe(SummaryStatus.Majority);
+    expect(summaryRecord.minorityMajorityStatus).toBe(SummaryStatus.Majority);
     expect(summaryRecord.groupStatus).toBe(SummaryGroupStatus.InConsensus);
     expect(summaryRecord.membersInAgreementCount).toBe(3);
     expect(summaryRecord.membersInDisagreementCount).toBe(0);
@@ -54,7 +54,7 @@ describe("Summary Record Model", () => {
     const summaryRecord = createSummaryRecord.content;
 
     // Assert
-    expect(summaryRecord.status).toBe(SummaryStatus.Minority);
+    expect(summaryRecord.minorityMajorityStatus).toBe(SummaryStatus.Minority);
   });
 
   test("Should return Status equal to 'Majority'", () => {
@@ -69,7 +69,7 @@ describe("Summary Record Model", () => {
     const summaryRecord = createSummaryRecord.content;
 
     // Assert
-    expect(summaryRecord.status).toBe(SummaryStatus.Majority);
+    expect(summaryRecord.minorityMajorityStatus).toBe(SummaryStatus.Majority);
   });
 
   test("Should return GroupStatus equal to 'InConsensus'", () => {

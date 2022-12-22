@@ -18,7 +18,7 @@ export interface SummaryRecordProps {
   key: string;
   value: DataAttributeType;
   type: string;
-  status: SummaryStatus;
+  minorityMajorityStatus: SummaryStatus;
   groupStatus: SummaryGroupStatus;
   membersInAgreementCount: number;
   membersInDisagreementCount: number;
@@ -30,7 +30,7 @@ export class SummaryRecord implements SummaryRecordProps {
   readonly key: string;
   readonly value: DataAttributeType;
   readonly type: string;
-  readonly status: SummaryStatus;
+  readonly minorityMajorityStatus: SummaryStatus;
   readonly groupStatus: SummaryGroupStatus;
   readonly membersInAgreementCount: number;
   readonly membersInDisagreementCount: number;
@@ -42,7 +42,7 @@ export class SummaryRecord implements SummaryRecordProps {
     this.key = summaryRecord.key;
     this.value = summaryRecord.value;
     this.type = summaryRecord.type;
-    this.status = summaryRecord.status;
+    this.minorityMajorityStatus = summaryRecord.minorityMajorityStatus;
     this.groupStatus = summaryRecord.groupStatus;
     this.membersInAgreementCount = summaryRecord.membersInAgreementCount;
     this.membersInDisagreementCount = summaryRecord.membersInDisagreementCount;
@@ -104,7 +104,7 @@ export class SummaryRecord implements SummaryRecordProps {
       key: record.key,
       value: memberValue,
       type: record.type,
-      status: this.getStatus(
+      minorityMajorityStatus: this.getSubDivisionStatus(
         membersInAgreementCount,
         membersInDisagreementCount
       ),
@@ -120,7 +120,7 @@ export class SummaryRecord implements SummaryRecordProps {
   }
 
   // get the status of current value is it in (Majority or Minority) group
-  private static getStatus(
+  private static getSubDivisionStatus(
     membersInAgreementCount: number,
     membersInDisagreementCount: number
   ) {

@@ -1,112 +1,82 @@
 [
   {
-    "key": "1",
-    "value": "test1",
-    "type": "string",
-    "status": "Majority",
-    "groupStatus": "IN_CONSENSUS",
-    "membersInAgreementCount": 3,
-    "membersInDisagreementCount": 0,
-    "votesCount": 3,
-    "uniqueValuesCount": 1
+    "group_status": "IN_CONSENSUS",
+    "majority_minority": "Majority",
+    "count_of_unique_values": 1,
+    "members_in_agreement": 3,
+    "lei": "1",
+    "nace": "test1"
   },
   {
-    "key": "2",
-    "value": "test2",
-    "type": "string",
-    "status": "Majority",
-    "groupStatus": "IN_CONSENSUS",
-    "membersInAgreementCount": 3,
-    "membersInDisagreementCount": 0,
-    "votesCount": 3,
-    "uniqueValuesCount": 1
+    "group_status": "IN_CONSENSUS",
+    "majority_minority": "Majority",
+    "count_of_unique_values": 1,
+    "members_in_agreement": 3,
+    "lei": "2",
+    "nace": "test2"
   },
   {
-    "key": "3",
-    "value": "test3",
-    "type": "string",
-    "status": "Majority",
-    "groupStatus": "IN_CONSENSUS",
-    "membersInAgreementCount": 3,
-    "membersInDisagreementCount": 0,
-    "votesCount": 3,
-    "uniqueValuesCount": 1
+    "group_status": "IN_CONSENSUS",
+    "majority_minority": "Majority",
+    "count_of_unique_values": 1,
+    "members_in_agreement": 3,
+    "lei": "3",
+    "nace": "test3"
   },
   {
-    "key": "4",
-    "value": "test4",
-    "type": "string",
-    "status": "Majority",
-    "groupStatus": "LACK_OF_CONSENSUS",
-    "membersInAgreementCount": 2,
-    "membersInDisagreementCount": 1,
-    "votesCount": 3,
-    "uniqueValuesCount": 2
+    "group_status": "LACK_OF_CONSENSUS",
+    "majority_minority": "Majority",
+    "count_of_unique_values": 2,
+    "members_in_agreement": 2,
+    "lei": "4",
+    "nace": "test4"
   },
   {
-    "key": "5",
-    "value": "test5",
-    "type": "string",
-    "status": "Majority",
-    "groupStatus": "LACK_OF_CONSENSUS",
-    "membersInAgreementCount": 2,
-    "membersInDisagreementCount": 1,
-    "votesCount": 3,
-    "uniqueValuesCount": 2
+    "group_status": "LACK_OF_CONSENSUS",
+    "majority_minority": "Majority",
+    "count_of_unique_values": 2,
+    "members_in_agreement": 2,
+    "lei": "5",
+    "nace": "test5"
   },
   {
-    "key": "6",
-    "value": "test6",
-    "type": "string",
-    "status": "Majority",
-    "groupStatus": "NOT_ENOUGH_VOTES",
-    "membersInAgreementCount": 2,
-    "membersInDisagreementCount": 0,
-    "votesCount": 2,
-    "uniqueValuesCount": 1
+    "group_status": "NOT_ENOUGH_VOTES",
+    "majority_minority": "Majority",
+    "count_of_unique_values": 1,
+    "members_in_agreement": 2,
+    "lei": "6",
+    "nace": "test6"
   },
   {
-    "key": "7",
-    "value": "test7",
-    "type": "string",
-    "status": "Majority",
-    "groupStatus": "NOT_ENOUGH_VOTES",
-    "membersInAgreementCount": 2,
-    "membersInDisagreementCount": 0,
-    "votesCount": 2,
-    "uniqueValuesCount": 1
+    "group_status": "NOT_ENOUGH_VOTES",
+    "majority_minority": "Majority",
+    "count_of_unique_values": 1,
+    "members_in_agreement": 2,
+    "lei": "7",
+    "nace": "test7"
   },
   {
-    "key": "8",
-    "value": "test8",
-    "type": "string",
-    "status": "Majority",
-    "groupStatus": "NOT_ENOUGH_VOTES",
-    "membersInAgreementCount": 2,
-    "membersInDisagreementCount": 0,
-    "votesCount": 2,
-    "uniqueValuesCount": 1
+    "group_status": "NOT_ENOUGH_VOTES",
+    "majority_minority": "Majority",
+    "count_of_unique_values": 1,
+    "members_in_agreement": 2,
+    "lei": "8",
+    "nace": "test8"
   },
   {
-    "key": "9",
-    "value": "test9",
-    "type": "string",
-    "status": "Majority",
-    "groupStatus": "NOT_ENOUGH_VOTES",
-    "membersInAgreementCount": 2,
-    "membersInDisagreementCount": 0,
-    "votesCount": 2,
-    "uniqueValuesCount": 1
+    "group_status": "NOT_ENOUGH_VOTES",
+    "majority_minority": "Majority",
+    "count_of_unique_values": 1,
+    "members_in_agreement": 2,
+    "lei": "9",
+    "nace": "test9"
   },
   {
-    "key": "10",
-    "value": "test10",
-    "type": "string",
-    "status": "Majority",
-    "groupStatus": "NOT_ENOUGH_VOTES",
-    "membersInAgreementCount": 2,
-    "membersInDisagreementCount": 0,
-    "votesCount": 2,
-    "uniqueValuesCount": 1
+    "group_status": "NOT_ENOUGH_VOTES",
+    "majority_minority": "Majority",
+    "count_of_unique_values": 1,
+    "members_in_agreement": 2,
+    "lei": "10",
+    "nace": "test10"
   }
 ]

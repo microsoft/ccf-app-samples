@@ -1,7 +1,7 @@
 [
-  { "id": "1", "value": "test1" },
-  { "id": "2", "value": "test2" },
-  { "id": "3", "value": "test3" },
-  { "id": "4", "value": "test44" },
-  { "id": "5", "value": "test55" }
+  { "lei": "1", "nace": "test1" },
+  { "lei": "2", "nace": "test2" },
+  { "lei": "3", "nace": "test3" },
+  { "lei": "4", "nace": "test44" },
+  { "lei": "5", "nace": "test55" }
 ]

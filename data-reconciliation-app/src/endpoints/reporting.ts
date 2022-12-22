@@ -2,9 +2,9 @@ import * as ccfapp from "@microsoft/ccf-app";
 import { ApiResult, CCFResponse } from "../utils/api-result";
 import authenticationService from "../services/authentication-service";
 import reportingService from "../services/reporting-service";
-import { ServiceResult } from "../utils/service-result";
+import { DataSchema } from "../models/data-schema";
 
-export function getHandler(
+export function getAllHandler(
   request: ccfapp.Request<any>
 ): ccfapp.Response<CCFResponse> {
   const getCallerId = authenticationService.getCallerId(request);
@@ -19,7 +19,10 @@ export function getHandler(
   const response = reportingService.getData(callerId);
   if (response.failure) return ApiResult.Failed(response);
 
-  return ApiResult.Succeeded(response);
+  // map summary data-model to result model
+  const mappedRecords = DataSchema.mapSummaryRecords(response.content);
+
+  return ApiResult.Succeeded(mappedRecords);
 }
 
 export function getByIdHandler(
@@ -39,5 +42,8 @@ export function getByIdHandler(
   const response = reportingService.getDataById(callerId, key);
   if (response.failure) return ApiResult.Failed(response);
 
-  return ApiResult.Succeeded(response);
+  // map summary data-model to result model
+  const mappedRecords = DataSchema.mapSummaryRecord(response.content);
+
+  return ApiResult.Succeeded(mappedRecords);
 }
