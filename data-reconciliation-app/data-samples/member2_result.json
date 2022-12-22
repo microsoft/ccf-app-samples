@@ -1,0 +1,57 @@
+[
+  {
+    "key": "1",
+    "value": "test1",
+    "type": "string",
+    "status": "Majority",
+    "groupStatus": "IN_CONSENSUS",
+    "membersInAgreementCount": 3,
+    "membersInDisagreementCount": 0,
+    "votesCount": 3,
+    "uniqueValuesCount": 1
+  },
+  {
+    "key": "2",
+    "value": "test2",
+    "type": "string",
+    "status": "Majority",
+    "groupStatus": "IN_CONSENSUS",
+    "membersInAgreementCount": 3,
+    "membersInDisagreementCount": 0,
+    "votesCount": 3,
+    "uniqueValuesCount": 1
+  },
+  {
+    "key": "3",
+    "value": "test3",
+    "type": "string",
+    "status": "Majority",
+    "groupStatus": "IN_CONSENSUS",
+    "membersInAgreementCount": 3,
+    "membersInDisagreementCount": 0,
+    "votesCount": 3,
+    "uniqueValuesCount": 1
+  },
+  {
+    "key": "4",
+    "value": "test44",
+    "type": "string",
+    "status": "Minority",
+    "groupStatus": "LACK_OF_CONSENSUS",
+    "membersInAgreementCount": 1,
+    "membersInDisagreementCount": 2,
+    "votesCount": 3,
+    "uniqueValuesCount": 2
+  },
+  {
+    "key": "5",
+    "value": "test55",
+    "type": "string",
+    "status": "Minority",
+    "groupStatus": "LACK_OF_CONSENSUS",
+    "membersInAgreementCount": 1,
+    "membersInDisagreementCount": 2,
+    "votesCount": 3,
+    "uniqueValuesCount": 2
+  }
+]

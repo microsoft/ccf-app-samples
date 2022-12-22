@@ -126,6 +126,18 @@ printf "\n -------- Test Reporting Service --------  \n\n"
 
 reportingUrl="$server/app/report";
 
+memberName="member0"
+check_eq "$memberName - Getting all data records should succeed" "200" "$(curl $reportingUrl -X GET $(cert_arg $memberName) -H "Content-Type: application/json" $only_status_code)"
+printf " Response: "
+curl $server/app/report -X GET $(cert_arg $memberName)
+printf "\n\n"
+
+memberName="member1"
+check_eq "$memberName - Getting all data records should succeed" "200" "$(curl $reportingUrl -X GET $(cert_arg $memberName) -H "Content-Type: application/json" $only_status_code)"
+printf " Response: "
+curl $server/app/report -X GET $(cert_arg $memberName)
+printf "\n\n"
+
 memberName="member2"
 check_eq "$memberName - Getting all data records should succeed" "200" "$(curl $reportingUrl -X GET $(cert_arg $memberName) -H "Content-Type: application/json" $only_status_code)"
 printf " Response: "
