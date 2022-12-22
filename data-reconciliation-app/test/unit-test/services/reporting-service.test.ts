@@ -42,69 +42,68 @@ describe("Data Reporting Service", () => {
   ];
 
   beforeAll(() => {
+    ingestService.submitData(memberId1, member1_DataRecords);
 
-   ingestService.submitData(memberId1, member1_DataRecords);
+    ingestService.submitData(memberId2, member2_DataRecords);
 
-   ingestService.submitData(memberId2, member2_DataRecords);
+    ingestService.submitData(memberId3, member3_DataRecords);
 
-   ingestService.submitData(memberId3, member3_DataRecords);
-
-   ingestService.submitData(memberId4, member4_DataRecords);
-
+    ingestService.submitData(memberId4, member4_DataRecords);
   });
 
   test("Should get all data successfully", () => {
-    // Arrange 
-    
+    // Arrange
+
     // Act
     const result = reportingService.getData(memberId1);
 
     // Assert
     expect(result.success).toBe(true);
     expect(result.content.length).toBe(member1_DataRecords.length);
-
   });
 
   test("Should get data record by key successfully", () => {
-    // Arrange 
+    // Arrange
     const comparisonRecord = member1_DataRecords[0];
-    
+
     // Act
-    const result = reportingService.getDataById(memberId1,comparisonRecord.key);
+    const result = reportingService.getDataById(
+      memberId1,
+      comparisonRecord.key
+    );
 
     // Assert
     expect(result.success).toBe(true);
     expect(result.content.key).toBe(comparisonRecord.key);
     expect(result.content.value).toBe(comparisonRecord.value);
     expect(result.content.type).toBe(comparisonRecord.type);
-
   });
 
   test("Should fail to get data record by key not exists in member data", () => {
-    // Arrange 
+    // Arrange
     const key_NotExist = "5";
-    
+
     // Act
-    const result = reportingService.getDataById(memberId1,key_NotExist);
+    const result = reportingService.getDataById(memberId1, key_NotExist);
 
     // Assert
     expect(result.failure).toBe(true);
     expect(result.error.errorMessage).toBe("Error: The key does not exist");
     expect(result.content).toBeNull();
-
   });
 
   test("Should fail to get data record by key that is null or empty", () => {
-    // Arrange 
+    // Arrange
     const key_Empty = "";
-    
+
     // Act
-    const result = reportingService.getDataById(memberId1,key_Empty);
+    const result = reportingService.getDataById(memberId1, key_Empty);
 
     // Assert
     expect(result.failure).toBe(true);
-    expect(result.error.errorMessage).toBe("Error: key cannot be null or empty");
+    expect(result.error.errorMessage).toBe(
+      "Error: key cannot be null or empty"
+    );
     expect(result.content).toBeNull();
-
   });
 });

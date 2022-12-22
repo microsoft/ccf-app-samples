@@ -14,7 +14,6 @@ export enum SummaryStatus {
   Minority = "Minority",
 }
 
-
 export interface SummaryRecordProps {
   key: string;
   value: DataAttributeType;
@@ -51,7 +50,10 @@ export class SummaryRecord implements SummaryRecordProps {
     this.uniqueValuesCount = summaryRecord.uniqueValuesCount;
   }
 
-  public static create(memberId: string, record: ReconciledRecord): ServiceResult<SummaryRecord> {
+  public static create(
+    memberId: string,
+    record: ReconciledRecord
+  ): ServiceResult<SummaryRecord> {
     if (!record.key) {
       return ServiceResult.Failed({
         errorMessage: "Error: key cannot be null or empty",
@@ -102,12 +104,15 @@ export class SummaryRecord implements SummaryRecordProps {
       key: record.key,
       value: memberValue,
       type: record.type,
-      status: this.getStatus(membersInAgreementCount, membersInDisagreementCount),
+      status: this.getStatus(
+        membersInAgreementCount,
+        membersInDisagreementCount
+      ),
       groupStatus: this.getGroupStatus(votesCount, membersInAgreementCount),
       membersInAgreementCount: membersInAgreementCount,
       membersInDisagreementCount: membersInDisagreementCount,
       votesCount: votesCount,
-      uniqueValuesCount: uniqueValues.size
+      uniqueValuesCount: uniqueValues.size,
     };
 
     const dataRecord = new SummaryRecord(summary);
@@ -137,5 +142,4 @@ export class SummaryRecord implements SummaryRecordProps {
     }
     return SummaryGroupStatus.InConsensus;
   }
-
 }
