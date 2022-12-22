@@ -20,7 +20,6 @@ export class KeyValueRepository<T> implements IRepository<T> {
     this.kvStore = kvStore;
   }
 
-
   // update key-value pair or create new record if key not exists
   public set(key: string, value: T): ServiceResult<T> {
     try {
@@ -117,15 +116,15 @@ export class KeyValueRepository<T> implements IRepository<T> {
   }
 
   // iterate through kv-store
-  public forEach(callback: (key: string, value: T) => void): ServiceResult<string> {
+  public forEach(
+    callback: (key: string, value: T) => void
+  ): ServiceResult<string> {
     try {
-
       this.kvStore.forEach((val, key) => {
         callback(key, val);
       });
 
       return ServiceResult.Succeeded("");
-
     } catch (ex) {
       return ServiceResult.Failed({
         errorMessage: "Error: unable to clear kvstore values",

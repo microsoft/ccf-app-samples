@@ -1,35 +1,38 @@
 import { ReconciledRecord } from "../models/reconciled-record";
 import { ServiceResult } from "../utils/service-result";
 import keyValueRepository, { IRepository } from "../repositories/kv-repository";
-import { ISummaryRecord, SummaryRecord } from "../models/data-summary";
+import { SummaryRecord } from "../models/summary-record";
 
 export interface IReportingService {
-  getData(userId: string): ServiceResult<ISummaryRecord[]>;
-  getDataById(userId: string, key: string): ServiceResult<ISummaryRecord>;
+  getData(memberId: string): ServiceResult<SummaryRecord[]>;
+  getDataById(memberId: string, key: string): ServiceResult<SummaryRecord>;
 }
 
 export class ReportingService implements IReportingService {
-
-  constructor(private readonly repository: IRepository<ReconciledRecord>) {
-
-  }
+  constructor(private readonly repository: IRepository<ReconciledRecord>) {}
 
   // get reconciliation summary report for one user's data record
-  getDataById(userId: string, key: string): ServiceResult<ISummaryRecord> {
+  getDataById(memberId: string, key: string): ServiceResult<SummaryRecord> {
+    if (!key || key.length == 0)
+      return ServiceResult.Failed({
+        errorMessage: "Error: key cannot be null or empty",
+        errorType: "InvalidKey",
+      });
+
     const record = this.repository.get(key);
 
     if (record.failure)
       return ServiceResult.Failed(record.error, record.statusCode);
 
-    return SummaryRecord.create(userId, record.content);
+    return SummaryRecord.create(memberId, record.content);
   }
 
   // get reconciliation summary report for all user's data records
-  public getData(userId: string): ServiceResult<ISummaryRecord[]> {
-    const result: ISummaryRecord[] = [];
+  public getData(memberId: string): ServiceResult<SummaryRecord[]> {
+    const result: SummaryRecord[] = [];
 
     this.repository.forEach((key, value) => {
-      const summary = SummaryRecord.create(userId, value);
+      const summary = SummaryRecord.create(memberId, value);
       if (summary.success) result.push(summary.content);
     });
 
@@ -37,5 +40,7 @@ export class ReportingService implements IReportingService {
   }
 }
 
-const reportingService: IReportingService = new ReportingService(keyValueRepository);
+const reportingService: IReportingService = new ReportingService(
+  keyValueRepository
+);
 export default reportingService;

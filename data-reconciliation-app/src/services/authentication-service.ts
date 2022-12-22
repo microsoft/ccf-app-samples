@@ -50,7 +50,11 @@ export class CertBasedAuthenticationService implements IAuthenticationService {
         });
       }
 
-      const usersCerts = ccfapp.typedKv("public:ccf.gov.users.certs", ccfapp.arrayBuffer, ccfapp.arrayBuffer);
+      const usersCerts = ccfapp.typedKv(
+        "public:ccf.gov.users.certs",
+        ccfapp.arrayBuffer,
+        ccfapp.arrayBuffer
+      );
       const result = usersCerts.has(ccf.strToBuf(userId));
       return ServiceResult.Succeeded(result);
     } catch (ex) {
@@ -79,7 +83,7 @@ export class CertBasedAuthenticationService implements IAuthenticationService {
       );
 
       const isMember = membersCerts.has(ccf.strToBuf(memberId));
-      
+
       const membersInfo = ccfapp.typedKv(
         "public:ccf.gov.members.info",
         ccfapp.arrayBuffer,
@@ -89,7 +93,6 @@ export class CertBasedAuthenticationService implements IAuthenticationService {
       const memberInfoBuf = membersInfo.get(ccf.strToBuf(memberId));
       const memberInfo = ccf.bufToJsonCompatible(memberInfoBuf) as CCFMember;
       const isActiveMember = memberInfo && memberInfo.status === "Active";
-
 
       return ServiceResult.Succeeded(isActiveMember && isMember);
     } catch (ex) {

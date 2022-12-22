@@ -66,7 +66,7 @@ export class DataSchema {
     );
   }
 
-  // get data schema to mapped ingested data model
+  // get data schema to map the ingested data model
   private static getDefaultDataSchema(): DataSchema {
     const schema: DataSchema = {
       key: { name: "id", type: "string" },
