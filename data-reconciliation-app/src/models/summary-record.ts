@@ -131,10 +131,7 @@ export class SummaryRecord implements SummaryRecordProps {
   }
 
   // get group status (NotEnoughVotes,LackOfConsensus, InConsensus)
-  private static getGroupStatus(
-    votesCount: number,
-    uniqueValuesCount: number
-  ) {
+  private static getGroupStatus(votesCount: number, uniqueValuesCount: number) {
     if (votesCount < MINIMUM_VOTES_THRESHOLD) {
       return SummaryGroupStatus.NotEnoughVotes;
     } else if (uniqueValuesCount != 1) {
