@@ -53,6 +53,7 @@ fi
 app_dir=$PWD                    # application folder for reference
 root_dir=`dirname $PWD`         # root (parent) folder 
 server="https://${nodeAddress}" # ccf network address
+ccf_prefix=/opt/ccf_virtual/bin # ccf infra related scripts location
 
 
 ##############################################
@@ -73,8 +74,6 @@ curl "${server}/gov/ack/update_state_digest" \
 echo "Show digest"
 cat $certs/activation.json
 
-ccf_prefix=/opt/ccf_virtual/bin
-
 $ccf_prefix/scurl.sh "${server}/gov/ack" \
     --cacert $certs/service_cert.pem \
     --signing-key $certs/member0_privk.pem \
@@ -87,7 +86,7 @@ curl ${server}/gov/members --cacert $certs/service_cert.pem | jq
 
 
 ##############################################
-# Creating and adding members/users to network
+# Creating and adding new members to network
 ##############################################
 
 # create certificate files
@@ -119,37 +118,6 @@ $root_dir/scripts/add_member.sh --cert-file $certs/${cert_name}_cert.pem --pubk-
 echo "Adding Member2 step 2/2: submit proposal to network and vote as accepted"
 $root_dir/scripts/submit_proposal.sh --network-url  ${server} \
   --proposal-file $certs/set_member.json --service-cert $certs/service_cert.pem \
-  --signing-cert $certs/member0_cert.pem --signing-key $certs/member0_privk.pem
-
-#---------------------
-echo "Adding user0 step 1/2: create certificate and proposal"
-cert_name="user0" 
-create_certificate "${cert_name}" "${certs}"
-$root_dir/scripts/add_user.sh --cert-file $certs/${cert_name}_cert.pem
-
-echo "Adding user0 step 2/2: submit proposal to network and vote as accepted"
-$root_dir/scripts/submit_proposal.sh --network-url  ${server} \
-  --proposal-file $certs/set_user.json --service-cert $certs/service_cert.pem \
-  --signing-cert $certs/member0_cert.pem --signing-key $certs/member0_privk.pem
-
-echo "Adding user1 step 1/2: create certificate and proposal"
-cert_name="user1" 
-create_certificate "${cert_name}" "${certs}"
-$root_dir/scripts/add_user.sh --cert-file $certs/${cert_name}_cert.pem
-
-echo "Adding user1 step 2/2: submit proposal to network and vote as accepted"
-$root_dir/scripts/submit_proposal.sh --network-url  ${server} \
-  --proposal-file $certs/set_user.json --service-cert $certs/service_cert.pem \
-  --signing-cert $certs/member0_cert.pem --signing-key $certs/member0_privk.pem
-
-echo "Adding user2 step 1/2: create certificate and proposal"
-cert_name="user2" 
-create_certificate "${cert_name}" "${certs}"
-$root_dir/scripts/add_user.sh --cert-file $certs/${cert_name}_cert.pem
-
-echo "Adding user2 step 2/2: submit proposal to network and vote as accepted"
-$root_dir/scripts/submit_proposal.sh --network-url  ${server} \
-  --proposal-file $certs/set_user.json --service-cert $certs/service_cert.pem \
   --signing-cert $certs/member0_cert.pem --signing-key $certs/member0_privk.pem
 
 
@@ -199,4 +167,28 @@ $root_dir/scripts/submit_proposal.sh --network-url  ${server} \
   --proposal-file ${app_dir}/dist/set_js_app.json $certs/network_open_proposal.json --service-cert $certs/service_cert.pem \
   --signing-cert $certs/member0_cert.pem --signing-key $certs/member0_privk.pem
 
+
+##############################################
+# Activating new members in network
+##############################################
+
+#---------------------
+memberName="member1"
+echo "Activating Member1 step 1/2: member being added update state digest with his own keys"
+curl "${server}/gov/ack/update_state_digest" -X POST --cacert $certs/service_cert.pem --key $certs/${memberName}_privk.pem \
+  --cert $certs/${memberName}_cert.pem --silent | jq > $certs/activation.json
+
+echo "Activating Member1 step 2/2: member being added acknoledges himself, becoming active"
+$ccf_prefix/scurl.sh "${server}/gov/ack" --cacert $certs/service_cert.pem --signing-key $certs/${memberName}_privk.pem --signing-cert $certs/${memberName}_cert.pem \
+    --header "Content-Type: application/json" --data-binary @$certs/activation.json
+
+#---------------------
+memberName="member2"
+echo "Activating Member2 step 1/2: member being added update state digest with his own keys"
+curl "${server}/gov/ack/update_state_digest" -X POST --cacert $certs/service_cert.pem --key $certs/${memberName}_privk.pem \
+  --cert $certs/${memberName}_cert.pem --silent | jq > $certs/activation.json
+
+echo "Activating Member1 step 2/2: member being added acknoledges himself, becoming active"
+$ccf_prefix/scurl.sh "${server}/gov/ack" --cacert $certs/service_cert.pem --signing-key $certs/${memberName}_privk.pem --signing-cert $certs/${memberName}_cert.pem \
+    --header "Content-Type: application/json" --data-binary @$certs/activation.json
 
