@@ -136,7 +136,7 @@ describe("Summary Record Model", () => {
     expect(summaryRecord.uniqueValuesCount).toBe(3);
   });
 
-  test("Should fail with 'key is not exists'", () => {
+  test("Should fail with 'key does not exist'", () => {
     // Arrange
     reconRecord.values = {};
     reconRecord.values[memberId2] = "Test Value";

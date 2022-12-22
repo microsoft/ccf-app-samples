@@ -118,11 +118,6 @@ export class CertBasedAuthenticationService implements IAuthenticationService {
       return ServiceResult.Succeeded(true);
     }
 
-    const isUser = this.isUser(identityId);
-    if (isUser.success && isUser.content) {
-      return ServiceResult.Succeeded(true);
-    }
-
     return ServiceResult.Failed({
       errorMessage: "Error: invalid caller identity",
       errorType: "AuthenticationError",

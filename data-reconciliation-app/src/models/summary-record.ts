@@ -68,6 +68,7 @@ export class SummaryRecord implements SummaryRecordProps {
       });
     }
 
+    // handle the case of: a member requesting a report for a key that he didn't submit data for it
     if (!record.values.hasOwnProperty(memberId)) {
       return ServiceResult.Failed({
         errorMessage: "Error: The key does not exist",

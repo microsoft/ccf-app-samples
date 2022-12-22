@@ -14,7 +14,7 @@ export function postHandler(
   const callerId = getCallerId.content;
 
   // check if caller has a valid identity
-  const isValidIdentity = authenticationService.isActiveMember(callerId);
+  const isValidIdentity = authenticationService.isValidIdentity(callerId);
   if (isValidIdentity.failure || !isValidIdentity.content)
     return ApiResult.AuthFailure();
 

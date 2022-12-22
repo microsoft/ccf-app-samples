@@ -12,7 +12,7 @@ export function getAllHandler(
 
   const callerId = getCallerId.content;
 
-  const isValidIdentity = authenticationService.isActiveMember(callerId);
+  const isValidIdentity = authenticationService.isValidIdentity(callerId);
   if (isValidIdentity.failure || !isValidIdentity.content)
     return ApiResult.AuthFailure();
 
@@ -33,7 +33,7 @@ export function getByIdHandler(
 
   const callerId = getCallerId.content;
 
-  const isValidIdentity = authenticationService.isActiveMember(callerId);
+  const isValidIdentity = authenticationService.isValidIdentity(callerId);
   if (isValidIdentity.failure || !isValidIdentity.content)
     return ApiResult.AuthFailure();
 

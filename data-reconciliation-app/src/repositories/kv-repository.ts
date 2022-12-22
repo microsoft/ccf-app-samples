@@ -127,7 +127,7 @@ export class KeyValueRepository<T> implements IRepository<T> {
       return ServiceResult.Succeeded("");
     } catch (ex) {
       return ServiceResult.Failed({
-        errorMessage: "Error: unable to clear kvstore values",
+        errorMessage: "Error: unable to iterate the kvstore pairs",
         errorType: "KeyValueStoreError",
         details: ex,
       });
