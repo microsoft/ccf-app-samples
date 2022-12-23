@@ -102,7 +102,7 @@ describe("Summary Record Model", () => {
     expect(summaryRecord.groupStatus).toBe(SummaryGroupStatus.LackOfConsensus);
   });
 
-  test("Should return GroupStatus equal to 'NotEnoughVotes'", () => {
+  test("Should return GroupStatus equal to 'NotEnoughData'", () => {
     // Arrange
     reconRecord.values = {};
     reconRecord.values[memberId1] = "Test Value1";
@@ -113,7 +113,7 @@ describe("Summary Record Model", () => {
     const summaryRecord = createSummaryRecord.content;
 
     // Assert
-    expect(summaryRecord.groupStatus).toBe(SummaryGroupStatus.NotEnoughVotes);
+    expect(summaryRecord.groupStatus).toBe(SummaryGroupStatus.NotEnoughData);
   });
 
   test("Should return the counts correctly", () => {

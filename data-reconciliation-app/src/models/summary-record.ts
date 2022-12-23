@@ -4,7 +4,7 @@ import { DataAttributeType } from "./data-record";
 import { ReconciledRecord } from "./reconciled-record";
 
 export enum SummaryGroupStatus {
-  NotEnoughVotes = "NOT_ENOUGH_VOTES",
+  NotEnoughData = "NOT_ENOUGH_DATA",
   LackOfConsensus = "LACK_OF_CONSENSUS",
   InConsensus = "IN_CONSENSUS",
 }
@@ -134,7 +134,7 @@ export class SummaryRecord implements SummaryRecordProps {
   // get group status (NotEnoughVotes,LackOfConsensus, InConsensus)
   private static getGroupStatus(votesCount: number, uniqueValuesCount: number) {
     if (votesCount < MINIMUM_VOTES_THRESHOLD) {
-      return SummaryGroupStatus.NotEnoughVotes;
+      return SummaryGroupStatus.NotEnoughData;
     } else if (uniqueValuesCount != 1) {
       return SummaryGroupStatus.LackOfConsensus;
     }
