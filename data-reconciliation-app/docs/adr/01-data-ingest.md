@@ -142,10 +142,32 @@ Reference: https://microsoft.github.io/CCF/main/build_apps/kv/api.html#_CPPv4N2k
 
 The consequences outlined below may be future areas of improvement for our application.
 
-1. This design does not allow flexibility for schema definition. Reference [adr](./02-data-schema-strategy.md#option3-defining-data-schema-via-deployment)
-2. This design does not store the originally ingested data by each member. Rather, the ingest api has the responsibility of storing a `ReconciledRecord`. This may cause a number of issues:
-   - There is no way to audit and members/users cannot see the original data they ingested. Is this a concern?
-   - By only storing the `ReconciledRecord`, we make updating or removal of a key for a particular member harder. Is the data immutable?
-   - When we create a report on the reconciled data, members/users will only receive a report on the keys they submitted. By using the `ReconciledRecord`, we will have to check the values for each key.
+### 1. Schema Flexibility
 
-We need to talk to our Product Owner to determine if the data ingested is immutable and/or if auditing is a concern. We also need to see how expensive creating a report is given our `ReconciledRecord` model.
+This design does not allow flexibility for schema definition. Reference [adr](./02-data-schema-strategy.md#option3-defining-data-schema-via-deployment)
+
+### 2. No Ingest Model Stored
+
+This design does not store the originally ingested data by each member. Rather, the ingest api has the responsibility of storing a `ReconciledRecord`. This may cause a number of issues:
+
+Q: There is no way to audit and members/users cannot see the original data they ingested. Is this a concern?
+
+A: Members will not use the data reconciliation k-v store for audit. Members have their data on-prem or managed elsewhere. This app is solely for data reconciliation, not auditing. Realistically, if a member needed to get a snapshot of the data they inputed into the data reconciliation app at a certain time, the ledger is actually tracking the historic transactions on the k-v store. This should be possible/a capability provided by CCF. Auditing is not a capability we need to build or factor into design decisions.
+
+### 3. Ingest Design - Data Mutability?
+
+Q: Is data mutable?
+
+A: Data records are mutable! When new data is submitted by a member, the data could be a mix of records that need to be created new or conceptually "updated" or "deleted". However, our K-V store is append-only. We can only read and write to the local store. When a record needs to be "updating", we will really just be re-writing to the K-V Store.
+
+When working with an append-only store, there is no concept of [deleting](https://microsoft.github.io/CCF/main/build_apps/kv/kv_how_to.html#removing-a-key) or updating. Members will never want to delete data records. If a member stops submitting data on a record in subsequent data ingests, we will continue to report on that record. We will not delete the record from the K-V store; therefore, we will report on all records ever submitted by the member. Yes, this means the ledger will grow in size.
+
+An E2E data flow is captured [here](../../demo/images/data_recon_sample.png) with input from our PO. Hopefully this clears up some confusion.
+
+### 4. K-V Design - Expensive to Reconcile & Report
+
+By only storing the `ReconciledRecord`, we make "updating" of a key for a particular member harder. Addititionally, when we create a report on the reconciled data, members/users will only receive a report on the keys they submitted. By using the `ReconciledRecord`, we will have to check the values for each key to create the report.
+
+Q: Is there a better way to design our system to increase performance on reconciling and reporting?
+
+A: Probably! Our current design requires us to scan and read from the entire K-V store to generate a member's report. This is an expensive operation Adding a ticket to the backlog to investigate improvements to our design.
