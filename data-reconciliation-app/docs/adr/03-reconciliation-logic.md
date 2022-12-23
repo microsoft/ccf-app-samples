@@ -80,6 +80,7 @@ In addition to `group_status`, additional statistics will be retrieved for the r
 - Total number of opinions (this number helps reporting but shall not be public)
 - Number of unique opinions (count of different opinions for the record)
 - Number of members that agree with the current User
+- If the member's opinion is in accordance with the majority or minority of votes
 
 Information will be consolidated in a Summary Result object that will be used by the Reporting API.
 The following proposed schema represents a reconciled record. The output Report will then be generated based on this data.
@@ -87,14 +88,13 @@ The following proposed schema represents a reconciled record. The output Report 
 ```json
 {
   "key": "<record key>",
-  "user_opinion": "<value informed by User>",
-  "group_status": "<value>"
-  "statistics": {
-      "count": "#",           // total opinions count
-      "unique_opinions": "#", // count of unique values
-      "accepted_count": "#",  // # of members in agreement with the User value
-    }
-}
+  "value": "<value informed by User>",
+  "group_status": "<value>",
+  "total_votes_count": "#",                 // total opinions count - initially comented (DEMO CHANGE)
+  "count_of_unique_values": "#",            // count of unique values
+  "members_in_agreement": "#",              // # of members in agreement with the User value
+  "majority_minority": "<calculated value>" // relative to the number of active members in the network
+} 
 ```
 
 Where:
@@ -103,37 +103,41 @@ Where:
 record = // current record being reconciled
 userId = // user requesting reconciliation
 totalUsersInNetwork = // number of users in the system
+voting_threshold = // specified value for threshold needed for our calculations
 
 key = record.key;
 
-user_opinion = record.values[userId]
+value = record.values[userId]
 
 // Number of opinions
-statistics.count = record.values.length
+total_votes_count = record.values.length
 
 // removing duplicates from Users opinions
-statistics.unique_opinions = (new Set(Object.values(record.values)).length
+count_of_unique_values = (new Set(Object.values(record.values)).length
 
 // Filtering all similar votes to the current User
-statistics.accepted_count =
+members_in_agreement = 
     Object.keys(record.values).filter(
         (key) => key != userId && record.values[key] == user_opinion
     ).length
 
 // Defining reconciliation status
-group_status = (count/totalUsersInNetwork) < voting_threshold
+group_status = (total_votes_count/totalUsersInNetwork) < voting_threshold 
                 ? 'NOT_ENOUGH_DATA'
                 : (unique_opinions.size() != 1) ? 'LACK_OF_CONSENSUS' : 'IN_CONSENSUS'
-```
 
-| Report Column        | Object Mapping                            | description                                         |
-| -------------------- | ----------------------------------------- | --------------------------------------------------- |
-| KEY                  | key                                       | Record Id                                           |
-| ATTRIBUTE_N          | user_opinion                              | Value submitted by User                             |
-| GROUP_STATUS         | group_status                              | Reconciliation result                               |
-| UNIQUE_VALUES        | statistics.unique_opinions                | Number of Distinct values submitted for this record |
-| MEMBERS_IN_AGREEMENT | statistics.acceptedCount                  | Number of members with same data as User            |
-| MINORITY_MAJORITY    | statistics.acceptedCount/statistics.count | Comparison between agreement total votes            |
+// Majority/minority classification according to network
+majority_minority = (members_in_agreement / totalUsersInNetwork) > 0.5 ? 'majority' : 'minority'
+
+```
+Report Column         | Object Mapping        | description 
+----------------------|-----------------------|------------
+KEY                   |key                    | Record Id
+ATTRIBUTE_N           | value                 | Value submitted by User
+GROUP_STATUS          |group_status           | Reconciliation result
+UNIQUE_VALUES         |count_of_unique_values | Number of Distinct values submitted for this record
+MEMBERS_IN_AGREEMENT  | members_in_agreement  | Number of members with same data as User
+MINORITY_MAJORITY     | majority_minority     | Comparison between agreement total votes
 
 ## Pseudo Code
 
