@@ -9,6 +9,7 @@ export interface IRepository<T> {
   keys(): ServiceResult<string[]>;
   values(): ServiceResult<T[]>;
   get size(): ServiceResult<number>;
+  forEach(callback: (key: string, value: T) => void): ServiceResult<string>;
 }
 
 // generic key-value repository wrapping ccf TypedKvMap interaction
@@ -108,6 +109,25 @@ export class KeyValueRepository<T> implements IRepository<T> {
     } catch (ex) {
       return ServiceResult.Failed({
         errorMessage: "Error: unable to clear kvstore values",
+        errorType: "KeyValueStoreError",
+        details: ex,
+      });
+    }
+  }
+
+  // iterate through kv-store
+  public forEach(
+    callback: (key: string, value: T) => void
+  ): ServiceResult<string> {
+    try {
+      this.kvStore.forEach((val, key) => {
+        callback(key, val);
+      });
+
+      return ServiceResult.Succeeded("");
+    } catch (ex) {
+      return ServiceResult.Failed({
+        errorMessage: "Error: unable to iterate the kvstore pairs",
         errorType: "KeyValueStoreError",
         details: ex,
       });

@@ -8,11 +8,7 @@ export interface IIngestService {
 }
 
 export class IngestService implements IIngestService {
-  private keyValueRepo: IRepository<ReconciledRecord>;
-
-  constructor(keyValueRepo: IRepository<ReconciledRecord>) {
-    this.keyValueRepo = keyValueRepo;
-  }
+  constructor(private readonly keyValueRepo: IRepository<ReconciledRecord>) {}
 
   // map and store data to kv-store
   public submitData(

@@ -1,5 +1,6 @@
 import { ServiceResult } from "../utils/service-result";
 import { DataAttributeType, DataRecord } from "./data-record";
+import { SummaryRecord } from "./summary-record";
 
 export class DataFieldSchema {
   name: string;
@@ -55,6 +56,45 @@ export class DataSchema {
     return ServiceResult.Succeeded(mappedRecords);
   }
 
+  // map summary data model to report model based on the schema
+  static mapSummaryRecord(
+    summaryRecord: SummaryRecord,
+    schema?: DataSchema
+  ): ServiceResult<object> {
+    if (!schema) {
+      schema = DataSchema.getDefaultDataSchema();
+    }
+    const result = {
+      group_status: summaryRecord.groupStatus,
+      majority_minority: summaryRecord.minorityMajorityStatus,
+      count_of_unique_values: summaryRecord.uniqueValuesCount,
+      members_in_agreement: summaryRecord.membersInAgreementCount,
+      //total_votes_count: summaryRecord.votesCount
+    };
+
+    result[schema.key.name] = summaryRecord.key;
+    result[schema.value.name] = summaryRecord.value;
+
+    return ServiceResult.Succeeded(result);
+  }
+
+  // map summary data models to report models based on the schema
+  static mapSummaryRecords(
+    summaryRecords: SummaryRecord[]
+  ): ServiceResult<object[]> {
+    const schema = DataSchema.getDefaultDataSchema();
+    const results: object[] = [];
+    if (summaryRecords && summaryRecords.length > 0) {
+      summaryRecords.forEach((record) => {
+        const mappedRecord = DataSchema.mapSummaryRecord(record, schema);
+        if (mappedRecord.success) {
+          results.push(mappedRecord.content);
+        }
+      });
+    }
+    return ServiceResult.Succeeded(results);
+  }
+
   // validate input object schema
   private static hasValidSchema(
     dataRecord: object,
@@ -66,11 +106,11 @@ export class DataSchema {
     );
   }
 
-  // get data schema to mapped ingested data model
+  // get data schema to map the ingested data model
   private static getDefaultDataSchema(): DataSchema {
     const schema: DataSchema = {
-      key: { name: "id", type: "string" },
-      value: { name: "value", type: "string" },
+      key: { name: "lei", type: "string" },
+      value: { name: "nace", type: "string" },
     };
     return schema;
   }

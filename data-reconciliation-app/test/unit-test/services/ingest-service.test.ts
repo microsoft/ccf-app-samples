@@ -5,21 +5,23 @@ import { DataRecord } from "../../../src/models/data-record";
 import ingestService from "../../../src/services/ingest-service";
 
 describe("Data Ingestion Service", () => {
-  const userId = jscrypto.randomUUID();
+  const memberId = jscrypto.randomUUID();
 
   beforeEach(() => {});
 
   afterEach(() => {});
 
   test("Should ingest data successfully", () => {
-    // Act
+    // Arrange
     const testDataRecords: DataRecord[] = [
       DataRecord.create({ key: "1", value: "test1" }).content!,
       DataRecord.create({ key: "2", value: "test2" }).content!,
       DataRecord.create({ key: "3", value: "test3" }).content!,
     ];
-    // Assert
-    const result = ingestService.submitData(userId, testDataRecords);
+
+    // Act
+    const result = ingestService.submitData(memberId, testDataRecords);
+
     // Assert
     expect(result).not.toBeNull();
     expect(result.success).toBe(true);
@@ -27,11 +29,11 @@ describe("Data Ingestion Service", () => {
   });
 
   test("Should fail to ingest null data", () => {
-    // Act
+    // Arrange
     const testDataRecords: DataRecord[] = null;
 
-    // Assert
-    const result = ingestService.submitData(userId, testDataRecords);
+    // Act
+    const result = ingestService.submitData(memberId, testDataRecords);
 
     // Assert
     expect(result.content).toBeNull();
@@ -39,11 +41,11 @@ describe("Data Ingestion Service", () => {
   });
 
   test("Should fail to ingest empty data", () => {
-    // Act
+    // Arrange
     const testDataRecords: DataRecord[] = [];
 
-    // Assert
-    const result = ingestService.submitData(userId, testDataRecords);
+    // Act
+    const result = ingestService.submitData(memberId, testDataRecords);
 
     // Assert
     expect(result.content).toBeNull();

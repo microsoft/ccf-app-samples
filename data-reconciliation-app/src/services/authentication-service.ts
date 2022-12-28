@@ -6,11 +6,15 @@ interface Caller {
   id: string;
 }
 
+export interface CCFMember {
+  status: string;
+}
+
 export interface IAuthenticationService {
   getCallerId(request: ccfapp.Request<any>): ServiceResult<string>;
   isUser(userId: string): ServiceResult<boolean>;
-  isMember(memberId: string): ServiceResult<boolean>;
   isValidIdentity(identityId: string): ServiceResult<boolean>;
+  isActiveMember(memberId: string): ServiceResult<boolean>;
 }
 
 // Authentication Service
@@ -51,8 +55,8 @@ export class CertBasedAuthenticationService implements IAuthenticationService {
         ccfapp.arrayBuffer,
         ccfapp.arrayBuffer
       );
-
-      return ServiceResult.Succeeded(usersCerts.has(ccf.strToBuf(userId)));
+      const result = usersCerts.has(ccf.strToBuf(userId));
+      return ServiceResult.Succeeded(result);
     } catch (ex) {
       return ServiceResult.Failed({
         errorMessage: "Error getting caller identity",
@@ -63,7 +67,7 @@ export class CertBasedAuthenticationService implements IAuthenticationService {
   }
 
   // Check if member exists https://microsoft.github.io/CCF/main/audit/builtin_maps.html#users-info
-  public isMember(memberId: string): ServiceResult<boolean> {
+  public isActiveMember(memberId: string): ServiceResult<boolean> {
     try {
       if (!memberId) {
         return ServiceResult.Failed({
@@ -79,7 +83,18 @@ export class CertBasedAuthenticationService implements IAuthenticationService {
       );
 
       const isMember = membersCerts.has(ccf.strToBuf(memberId));
-      return ServiceResult.Succeeded(isMember);
+
+      const membersInfo = ccfapp.typedKv(
+        "public:ccf.gov.members.info",
+        ccfapp.arrayBuffer,
+        ccfapp.arrayBuffer
+      );
+
+      const memberInfoBuf = membersInfo.get(ccf.strToBuf(memberId));
+      const memberInfo = ccf.bufToJsonCompatible(memberInfoBuf) as CCFMember;
+      const isActiveMember = memberInfo && memberInfo.status === "Active";
+
+      return ServiceResult.Succeeded(isActiveMember && isMember);
     } catch (ex) {
       return ServiceResult.Failed({
         errorMessage: "Error: getting caller identity",
@@ -98,13 +113,8 @@ export class CertBasedAuthenticationService implements IAuthenticationService {
       });
     }
 
-    const isMember = this.isMember(identityId);
+    const isMember = this.isActiveMember(identityId);
     if (isMember.success && isMember.content) {
-      return ServiceResult.Succeeded(true);
-    }
-
-    const isUser = this.isUser(identityId);
-    if (isUser.success && isUser.content) {
       return ServiceResult.Succeeded(true);
     }
 

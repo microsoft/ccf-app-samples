@@ -88,29 +88,57 @@ cd "${certificate_dir}"
 # -------------------------- Test cases --------------------------
 echo "Test start"
 
+printf "\n  -------- Test Ingestion Service --------  \n\n"
+
 ingestUrl="$server/app/ingest";
 
 memberName="member0"
-check_eq "$memberName - data ingest succeed" "200" "$(curl $ingestUrl -X POST $(cert_arg $memberName) -H "Content-Type: application/json" --data-binary "@../../data-samples/${memberName}_data.json" $only_status_code)"
+check_eq "$memberName - data ingest should succeed" "200" "$(curl $ingestUrl -X POST $(cert_arg $memberName) -H "Content-Type: application/json" --data-binary "@../../test/data-samples/${memberName}_data.json" $only_status_code)"
 
 memberName="member1"
-check_eq "$memberName - data ingest succeed" "200" "$(curl $ingestUrl -X POST $(cert_arg $memberName) -H "Content-Type: application/json" --data-binary "@../../data-samples/${memberName}_data.json" $only_status_code)"
+check_eq "$memberName - data ingest should succeed" "200" "$(curl $ingestUrl -X POST $(cert_arg $memberName) -H "Content-Type: application/json" --data-binary "@../../test/data-samples/${memberName}_data.json" $only_status_code)"
+
 
 memberName="member2"
-check_eq "$memberName - data ingest succeed" "200" "$(curl $ingestUrl -X POST $(cert_arg $memberName) -H "Content-Type: application/json" --data-binary "@../../data-samples/${memberName}_data.json" $only_status_code)"
+check_eq "$memberName - data ingest should succeed" "200" "$(curl $ingestUrl -X POST $(cert_arg $memberName) -H "Content-Type: application/json" --data-binary "@../../test/data-samples/${memberName}_data.json" $only_status_code)"
 
 memberName="member2"
-check_eq "$memberName - data ingest failed (data length is zero)" "400" "$(curl $ingestUrl -X POST $(cert_arg $memberName) -H "Content-Type: application/json" --data-binary "[]" $only_status_code)"
+check_eq "$memberName - data ingest should fail (data length is zero)" "400" "$(curl $ingestUrl -X POST $(cert_arg $memberName) -H "Content-Type: application/json" --data-binary "[]" $only_status_code)"
 
 memberName="member2"
-check_eq "$memberName - data ingest failed (data is null or empty)" "400" "$(curl $ingestUrl -X POST $(cert_arg $memberName) -H "Content-Type: application/json" --data-binary "" $only_status_code)"
+check_eq "$memberName - data ingest should fail (data is null)" "400" "$(curl $ingestUrl -X POST $(cert_arg $memberName) -H "Content-Type: application/json" --data-binary "" $only_status_code)"
 
 
-# printf "\n\n✅ Member 1 - read data report \n"
-# curl $server/app/report -X GET $(cert_arg "member1")
+printf "\n -------- Test Reporting Service --------  \n\n"
 
-# printf "\n\n✅ Member 2 - read data report \n"
-# curl $server/app/report -X GET $(cert_arg "member2")
+reportingUrl="$server/app/report";
+
+memberName="member0"
+check_eq "$memberName - Getting all data records should succeed" "200" "$(curl $reportingUrl -X GET $(cert_arg $memberName) -H "Content-Type: application/json" $only_status_code)"
+printf " Response: "
+curl $server/app/report -X GET $(cert_arg $memberName)
+printf "\n\n"
+
+memberName="member1"
+check_eq "$memberName - Getting all data records should succeed" "200" "$(curl $reportingUrl -X GET $(cert_arg $memberName) -H "Content-Type: application/json" $only_status_code)"
+printf " Response: "
+curl $server/app/report -X GET $(cert_arg $memberName)
+printf "\n\n"
+
+memberName="member2"
+check_eq "$memberName - Getting all data records should succeed" "200" "$(curl $reportingUrl -X GET $(cert_arg $memberName) -H "Content-Type: application/json" $only_status_code)"
+printf " Response: "
+curl $server/app/report -X GET $(cert_arg $memberName)
+printf "\n\n"
+
+check_eq "$memberName - Getting data record by key should succeed" "200" "$(curl $reportingUrl/5 -X GET $(cert_arg $memberName) -H "Content-Type: application/json" $only_status_code)"
+printf " Response: "
+curl $server/app/report/5 -X GET $(cert_arg $memberName)
+printf "\n\n"
+
+check_eq "$memberName - Getting data record by key_not_exist should fail" "400" "$(curl $reportingUrl/10 -X GET $(cert_arg $memberName) -H "Content-Type: application/json" $only_status_code)"
+printf " Response: "
+curl $server/app/report/10 -X GET $(cert_arg $memberName)
 
 # ----------------------------------------------------
 

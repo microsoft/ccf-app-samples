@@ -5,11 +5,13 @@ export type ReconciliationMap = Object;
 
 export interface ReconciledRecordProps {
   key: string;
+  type: string;
   values: ReconciliationMap;
 }
 
 export class ReconciledRecord implements ReconciledRecordProps {
   key: string;
+  type: string;
   values: ReconciliationMap = {};
 
   private constructor() {}
@@ -21,6 +23,7 @@ export class ReconciledRecord implements ReconciledRecordProps {
     const newRecord: ReconciledRecord = new ReconciledRecord();
 
     newRecord.key = record.key;
+    newRecord.type = record.type;
     newRecord.values = {};
     newRecord.values[userId] = record.value;
     return ServiceResult.Succeeded(newRecord);

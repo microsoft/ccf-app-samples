@@ -12,8 +12,8 @@ describe("Reconciled Record Model", () => {
     }).content!;
 
     // Act
-    const createReconcRecord = ReconciledRecord.create(dataRecord, userId);
-    const reconRecord = createReconcRecord.content;
+    const createReconRecord = ReconciledRecord.create(dataRecord, userId);
+    const reconRecord = createReconRecord.content;
 
     // Assert
     expect(reconRecord).not.toBeNull();
