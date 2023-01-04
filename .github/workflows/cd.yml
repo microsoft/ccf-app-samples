@@ -39,21 +39,21 @@ jobs:
           template: ./deploy/arm/mccf.json
           parameters: ./deploy/arm/parameters.json mccfMemberBasedSecurityPrincipals="[{\"cert\":\"${{ secrets.PUBLIC_CERT }}\", \"encryptionKey\":\"\"}]" resourceName="${{ env.ccfName }}"
 
-      - name: Deploy Data Reconciliation Sample to mCCF
-        uses: devcontainers/ci@v0.2
-        with:
-          runCmd: |
-            cd data-reconciliation-app && make test-mccf
-          env: |
-            PUBLIC_CERT=${{ secrets.PUBLIC_CERT }}
-            PRIVATE_CERT=${{ secrets.PRIVATE_CERT }}
-            CCF_NAME=${{ env.ccfName }}
-
       - name: Deploy Banking Sample to mCCF
         uses: devcontainers/ci@v0.2
         with:
           runCmd: |
             cd banking-app && make test-mccf
+          env: |
+            PUBLIC_CERT=${{ secrets.PUBLIC_CERT }}
+            PRIVATE_CERT=${{ secrets.PRIVATE_CERT }}
+            CCF_NAME=${{ env.ccfName }}
+
+      - name: Deploy Data Reconciliation Sample to mCCF
+        uses: devcontainers/ci@v0.2
+        with:
+          runCmd: |
+            cd data-reconciliation-app && make test-mccf
           env: |
             PUBLIC_CERT=${{ secrets.PUBLIC_CERT }}
             PRIVATE_CERT=${{ secrets.PRIVATE_CERT }}
