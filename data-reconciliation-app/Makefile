@@ -60,6 +60,8 @@ unit-test: ## 🔨 Run the Application unit-test
 	@echo -e "\e[34m$@\e[0m" || true
 	@npm run unit-test
 	
+# Run `make start-host` in another terminal before running this.
+# To build and start a ccf network and automatically deploy your application on it.
 demo-code: ## Demo
 	@echo -e "\e[34m$@\e[0m" || true
 	@./demo/scripts/01-data_ingest_demo.sh
