@@ -59,3 +59,9 @@ e2e-test: ## 📦 Run end to end tests
 unit-test: ## 🔨 Run the Application unit-test
 	@echo -e "\e[34m$@\e[0m" || true
 	@npm run unit-test
+	
+demo-code: ## Demo
+	@echo -e "\e[34m$@\e[0m" || true
+	@./demo/scripts/01-data_ingest_demo.sh
+	@./demo/scripts/02-report_change_demo.sh
+	@./demo/scripts/03-code_change_demo.sh
