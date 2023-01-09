@@ -71,7 +71,7 @@ The reconciliation application will consist of three main services.
 
 ![Overview](reconciliation-sample.png)
 
-![Detailed Steps](../demo/images/data_recon_sample.png)
+![Detailed Steps](../demo-app/images/data_recon_sample.png)
 
 ## Managed CCF (mCCF)
 
