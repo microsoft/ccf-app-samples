@@ -13,7 +13,7 @@ addCheckpoint "✅ Member1 successfully ingested data"
 
 # printf "Member2 trying to ingest empty data \n"
 check_eq "Member2 - data ingest failed (data is null or empty)" "400" "$(curl $ingestUrl -X POST $(cert_arg member1) -H "Content-Type: application/json" --data-binary "" $only_status_code)"
-addCheckpoint "❌ Member2 failed to ingest empty data"
+addCheckpoint "✅ Member2 correctly failed to ingest empty data"
 
 # printf "Member2 trying to ingest data \n" 
 check_eq "Member2 - data ingest succeed" "200" "$(curl $ingestUrl -X POST $(cert_arg member1) -H "Content-Type: application/json" --data-binary "@../../demo/data/member2_demo.json" $only_status_code)"
