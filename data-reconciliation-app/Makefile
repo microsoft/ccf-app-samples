@@ -62,8 +62,8 @@ unit-test: ## 🔨 Run the Application unit-test
 	
 # Run `make start-host` in another terminal before running this.
 # To build and start a ccf network and automatically deploy your application on it.
-demo-code: ## Demo
+demo: ## Demo
 	@echo -e "\e[34m$@\e[0m" || true
-	@./demo/scripts/01-data_ingest_demo.sh
-	@./demo/scripts/02-report_change_demo.sh
-	@./demo/scripts/03-code_change_demo.sh
+	@./demo-app/scripts/01-data_ingest_demo.sh
+	@./demo-app/scripts/02-report_change_demo.sh
+	@./demo-app/scripts/03-code_change_demo.sh
