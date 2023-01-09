@@ -27,7 +27,7 @@ Members will not use the data reconciliation k-v store for audit. Members have t
 - Member B ingests 1000 records
 - Member A reconciles and receives 100 results back
 - Member A ingests 2000 records
-- Member A reconciles and receives 2000 results back
+- Member A reconciles and receives 2000-2100 results back
 - Member B reconciles and receives 1000 results back
 
 Of the 2000 newly ingested records by member 1, these records could be a mix of records that are completely new, or updated values on the previous 100 records submitted. We cannot assume the 100 original records are a subset of the 2000 records.
