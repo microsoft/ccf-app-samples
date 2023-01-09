@@ -32,7 +32,7 @@ test-mccf: build ## 🧪 Test the Data Reconciliation Application in a Managed C
 # Start hosting the application using `sandbox.sh` 
 start-host: build ## 🏃 Start the CCF network using Sandbox.sh
 	@echo -e "\e[34m$@\e[0m" || true
-	@/opt/ccf_virtual/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count 3 --initial-user-count 2 --constitution-dir ./governance/constitution
+	@/opt/ccf_virtual/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count 3 --initial-user-count 0 --constitution-dir ./governance/constitution
 
 clean: ## 🧹 Clean the working folders created during build/demo
 	@rm -rf .venv_ccf_sandbox
@@ -55,4 +55,7 @@ destroy: ## 📦 Destroy application
 
 e2e-test: ## 📦 Run end to end tests
 	@echo -e "\e[34m Not Implemented \e[0m" || true
-	
+
+unit-test: ## 🔨 Run the Application unit-test
+	@echo -e "\e[34m$@\e[0m" || true
+	@npm run unit-test

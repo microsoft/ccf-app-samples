@@ -1,0 +1,42 @@
+[
+  {
+    "group_status": "IN_CONSENSUS",
+    "majority_minority": "Majority",
+    "count_of_unique_values": 1,
+    "members_in_agreement": 3,
+    "lei": "1",
+    "nace": "test1"
+  },
+  {
+    "group_status": "IN_CONSENSUS",
+    "majority_minority": "Majority",
+    "count_of_unique_values": 1,
+    "members_in_agreement": 3,
+    "lei": "2",
+    "nace": "test2"
+  },
+  {
+    "group_status": "IN_CONSENSUS",
+    "majority_minority": "Majority",
+    "count_of_unique_values": 1,
+    "members_in_agreement": 3,
+    "lei": "3",
+    "nace": "test3"
+  },
+  {
+    "group_status": "LACK_OF_CONSENSUS",
+    "majority_minority": "Minority",
+    "count_of_unique_values": 2,
+    "members_in_agreement": 1,
+    "lei": "4",
+    "nace": "test44"
+  },
+  {
+    "group_status": "LACK_OF_CONSENSUS",
+    "majority_minority": "Minority",
+    "count_of_unique_values": 2,
+    "members_in_agreement": 1,
+    "lei": "5",
+    "nace": "test55"
+  }
+]

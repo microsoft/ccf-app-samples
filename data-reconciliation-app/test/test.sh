@@ -85,10 +85,65 @@ done
 # otherwise you can get permission issues.
 cd "${certificate_dir}"
 
-echo "Starting Test..."
-res_post_item0=$(curl "$server/app/votes?id=1" -X POST $(cert_arg "member0") -H "Content-Type: application/json" --data '{ "msg": "Hello Data-reconciliation-app!" }' -i --silent)
-check_eq "Posting item0 returns 200" "200" "$(echo "$res_post_item0" | grep -i HTTP/1.1 | awk '{print $2}' | sed -e 's/\r//g')"
-check_eq "Get item0" "Hello Data-reconciliation-app!" "$(curl "$server/app/votes?id=1" -X GET $(cert_arg "user0") --silent)"
-echo "Test Completed..."
-echo "OK"
+# -------------------------- Test cases --------------------------
+echo "Test start"
+
+printf "\n  -------- Test Ingestion Service --------  \n\n"
+
+ingestUrl="$server/app/ingest";
+
+memberName="member0"
+check_eq "$memberName - data ingest should succeed" "200" "$(curl $ingestUrl -X POST $(cert_arg $memberName) -H "Content-Type: application/json" --data-binary "@../../test/data-samples/${memberName}_data.json" $only_status_code)"
+
+memberName="member1"
+check_eq "$memberName - data ingest should succeed" "200" "$(curl $ingestUrl -X POST $(cert_arg $memberName) -H "Content-Type: application/json" --data-binary "@../../test/data-samples/${memberName}_data.json" $only_status_code)"
+
+
+memberName="member2"
+check_eq "$memberName - data ingest should succeed" "200" "$(curl $ingestUrl -X POST $(cert_arg $memberName) -H "Content-Type: application/json" --data-binary "@../../test/data-samples/${memberName}_data.json" $only_status_code)"
+
+memberName="member2"
+check_eq "$memberName - data ingest should fail (data length is zero)" "400" "$(curl $ingestUrl -X POST $(cert_arg $memberName) -H "Content-Type: application/json" --data-binary "[]" $only_status_code)"
+
+memberName="member2"
+check_eq "$memberName - data ingest should fail (data is null)" "400" "$(curl $ingestUrl -X POST $(cert_arg $memberName) -H "Content-Type: application/json" --data-binary "" $only_status_code)"
+
+
+printf "\n -------- Test Reporting Service --------  \n\n"
+
+reportingUrl="$server/app/report";
+
+memberName="member0"
+check_eq "$memberName - Getting all data records should succeed" "200" "$(curl $reportingUrl -X GET $(cert_arg $memberName) -H "Content-Type: application/json" $only_status_code)"
+printf " Response: "
+curl $server/app/report -X GET $(cert_arg $memberName)
+printf "\n\n"
+
+memberName="member1"
+check_eq "$memberName - Getting all data records should succeed" "200" "$(curl $reportingUrl -X GET $(cert_arg $memberName) -H "Content-Type: application/json" $only_status_code)"
+printf " Response: "
+curl $server/app/report -X GET $(cert_arg $memberName)
+printf "\n\n"
+
+memberName="member2"
+check_eq "$memberName - Getting all data records should succeed" "200" "$(curl $reportingUrl -X GET $(cert_arg $memberName) -H "Content-Type: application/json" $only_status_code)"
+printf " Response: "
+curl $server/app/report -X GET $(cert_arg $memberName)
+printf "\n\n"
+
+check_eq "$memberName - Getting data record by key should succeed" "200" "$(curl $reportingUrl/5 -X GET $(cert_arg $memberName) -H "Content-Type: application/json" $only_status_code)"
+printf " Response: "
+curl $server/app/report/5 -X GET $(cert_arg $memberName)
+printf "\n\n"
+
+check_eq "$memberName - Getting data record by key_not_exist should fail" "400" "$(curl $reportingUrl/10 -X GET $(cert_arg $memberName) -H "Content-Type: application/json" $only_status_code)"
+printf " Response: "
+curl $server/app/report/10 -X GET $(cert_arg $memberName)
+
+# ----------------------------------------------------
+
+printf "\n\n✅ Test Completed...\n"
 exit 0
+
+# ----------------------------------------------------
+

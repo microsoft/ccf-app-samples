@@ -1,0 +1,82 @@
+[
+  {
+    "group_status": "IN_CONSENSUS",
+    "majority_minority": "Majority",
+    "count_of_unique_values": 1,
+    "members_in_agreement": 3,
+    "lei": "1",
+    "nace": "test1"
+  },
+  {
+    "group_status": "IN_CONSENSUS",
+    "majority_minority": "Majority",
+    "count_of_unique_values": 1,
+    "members_in_agreement": 3,
+    "lei": "2",
+    "nace": "test2"
+  },
+  {
+    "group_status": "IN_CONSENSUS",
+    "majority_minority": "Majority",
+    "count_of_unique_values": 1,
+    "members_in_agreement": 3,
+    "lei": "3",
+    "nace": "test3"
+  },
+  {
+    "group_status": "LACK_OF_CONSENSUS",
+    "majority_minority": "Majority",
+    "count_of_unique_values": 2,
+    "members_in_agreement": 2,
+    "lei": "4",
+    "nace": "test4"
+  },
+  {
+    "group_status": "LACK_OF_CONSENSUS",
+    "majority_minority": "Majority",
+    "count_of_unique_values": 2,
+    "members_in_agreement": 2,
+    "lei": "5",
+    "nace": "test5"
+  },
+  {
+    "group_status": "NOT_ENOUGH_VOTES",
+    "majority_minority": "Majority",
+    "count_of_unique_values": 1,
+    "members_in_agreement": 2,
+    "lei": "6",
+    "nace": "test6"
+  },
+  {
+    "group_status": "NOT_ENOUGH_VOTES",
+    "majority_minority": "Majority",
+    "count_of_unique_values": 1,
+    "members_in_agreement": 2,
+    "lei": "7",
+    "nace": "test7"
+  },
+  {
+    "group_status": "NOT_ENOUGH_VOTES",
+    "majority_minority": "Majority",
+    "count_of_unique_values": 1,
+    "members_in_agreement": 2,
+    "lei": "8",
+    "nace": "test8"
+  },
+  {
+    "group_status": "NOT_ENOUGH_VOTES",
+    "majority_minority": "Majority",
+    "count_of_unique_values": 1,
+    "members_in_agreement": 2,
+    "lei": "9",
+    "nace": "test9"
+  },
+  {
+    "group_status": "NOT_ENOUGH_VOTES",
+    "majority_minority": "Majority",
+    "count_of_unique_values": 1,
+    "members_in_agreement": 2,
+    "lei": "10",
+    "nace": "test10"
+  }
+]
