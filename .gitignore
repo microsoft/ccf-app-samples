@@ -9,3 +9,4 @@ package-lock.json
 *.pfx
 **/dist
 **/coverage
+data-reconciliation-app/demo-app/Reports/
