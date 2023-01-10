@@ -61,7 +61,7 @@ export class KeyValueRepository<T> implements IRepository<T> {
       return ServiceResult.Succeeded(this.kvStore.has(key));
     } catch (ex) {
       return ServiceResult.Failed({
-        errorMessage: "Error: unable to check if key exists  in the kvstore",
+        errorMessage: "Error: unable to check if key exists in the kvstore",
         errorType: "KeyValueStoreError",
         details: ex,
       });
