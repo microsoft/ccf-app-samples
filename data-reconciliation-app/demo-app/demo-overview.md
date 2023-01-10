@@ -50,6 +50,14 @@ The solution will use a unique key and voting process to reconcile members' data
 
 This solution is generic to handle scenarios of data collaboration amongst different parties, and share reconciled results out on that data.
 
+![architecture](../docs/architecture.png)
+
+## Requirements
+- Each member can submit data as single or batch records
+- Each member can update data
+- Each member can request a report for all records or spec record (by Unique)
+- No member can access other member's data
+
 ### Application
 
 The reconciliation application will consist of three main parts.
