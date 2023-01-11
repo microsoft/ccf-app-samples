@@ -46,9 +46,9 @@ In secure multi-party computing, encrypted data goes into the enclave. The encla
 
 **Use Case:** Allow multi parties (organisations - Banks - companies) to process their confidential data **without exposing the input data to other parties**. This type of secure computation enables scenarios such as anti-money laundering, fraud-detection, and secure analysis of healthcare data. 
 
-In secure multi-party computing, encrypted data goes into the enclave. The enclave decrypts the data using a key, performs analysis, gets a result, and sends back an encrypted result that a party can decrypt with the designated key.
-
 **Proposed Solution:** A **data reconciliation service** will be hosted on a CCF network where members can submit their data to be reconciled against "each other's data" in a confidential manner, to performs analysis and generate some data-insights. 
+
+In secure multi-party computing, encrypted data goes into the enclave. The enclave decrypts the data using a key, performs analysis, gets a result, and sends back an encrypted result that a party can decrypt with the designated key.
 
 **Data Schema:** Data schema will be agreed by members 
 - Unique key: uniquely identifying each record.
@@ -66,8 +66,6 @@ In secure multi-party computing, encrypted data goes into the enclave. The encla
 
 ### Application
 
-When a new record(s) is submitted, the application will search the key-value store by record's key; if this key does not exist, it will be added; otherwise, a vote is added to this record with a member ID and the submitted value.
-
 The reconciliation application will consist of three main parts.
 
 - Data ingestion
@@ -80,6 +78,8 @@ The reconciliation application will consist of three main parts.
   - API Endpoint: Members will query for results
     - Query by specific record by `a unique identifier`
     - Query all data
+ 
+When a new record(s) is submitted through ingestion endpoints, the application will search the key-value store by the record's key; if this key does not exist, it will be added; otherwise, a vote is added to this record with a member ID and the submitted value.
 
 ![Detailed Steps](../docs/images/data_recon_sample.png)
 
