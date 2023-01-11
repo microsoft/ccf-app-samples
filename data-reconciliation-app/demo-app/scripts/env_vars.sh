@@ -6,6 +6,10 @@ ingestUrl="$server/app/ingest"
 reportUrl="$server/app/report"
 proposalUrl="$server/gov/proposals"
 only_status_code="-s -o /dev/null -w %{http_code}"
+id="9845001D460PEJE54159"
+id1="984500E1B2CA1D4EKG67"
+id2="984500BA57A56NBD3A24"
+id3="9845001D460PEJE54159"
 
 check_eq() {
     local test_name="$1"
