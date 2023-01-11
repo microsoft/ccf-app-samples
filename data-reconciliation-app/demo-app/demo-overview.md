@@ -37,7 +37,7 @@ In secure multi-party computing, encrypted data goes into the enclave. The encla
 
 ## Data Reconciliation Application
 
-**Use Case:** Allow multiple parties (organisations - Banks - companies) to process their confidential data **without exposing the input data to other parties**. This type of secure computation enables scenarios such as anti-money laundering, fraud-detection, and secure analysis of healthcare data. 
+**Use Case:** Multiple parties (organisations - Banks - companies) need to process their confidential data **without exposing the input data to other parties**. This type of secure computation enables scenarios such as anti-money laundering, fraud-detection, and secure analysis of healthcare data. 
 
 **Proposed Solution:** A **data reconciliation service** will be hosted on a CCF network where members can submit their data to be reconciled against "each other's data" in a confidential manner, to performs analysis and generate some data-insights. 
 
@@ -81,6 +81,12 @@ When a new record(s) is submitted through ingestion endpoints, the application w
 ## Managed CCF (mCCF)
 
 ![MCCF](https://techcommunity.microsoft.com/t5/image/serverpage/image-id/411970i6E4FE2814D429D03/image-size/large?v=v2&px=999)
+
+## Samples Repo
+
+A sample application for a bank consortium: A bank system that can be run by multiple banks
+
+https://github.com/microsoft/ccf-app-samples
 
 ## Resources
 
