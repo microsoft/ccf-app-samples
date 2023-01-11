@@ -1,12 +1,5 @@
 # CCF (Confidential Consortium Framework) Demo
 
-## Context
-
-We are the Neutrino team, currently working on internal engagement with the CCF product team to
-- Upskilling on CCF concept and application 
-- Create a new application sample (data reconciliation).
-- Give our feedback on developer experience and documentation for CCF team.
-
 ## What is CCF?
 
 The Confidential Consortium Framework (CCF) is an open-source framework for building a new category of **secure**, **highly-available**, and **performant applications** that focus on **multi-party** compute and data.
@@ -88,12 +81,6 @@ When a new record(s) is submitted through ingestion endpoints, the application w
 ## Managed CCF (mCCF)
 
 ![MCCF](https://techcommunity.microsoft.com/t5/image/serverpage/image-id/411970i6E4FE2814D429D03/image-size/large?v=v2&px=999)
-
-## Samples Repo
-
-A sample application for a bank consortium: A bank system that can be run by multiple banks
-
-https://github.com/microsoft/ccf-app-samples
 
 ## Resources
 
