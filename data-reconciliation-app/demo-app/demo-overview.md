@@ -44,7 +44,7 @@ In secure multi-party computing, encrypted data goes into the enclave. The encla
 
 ## Data Reconciliation Application
 
-**Use Case:** Allow multi parties (organisations - Banks - companies) to process their confidential data **without exposing the input data to other parties**. This type of secure computation enables scenarios such as anti-money laundering, fraud-detection, and secure analysis of healthcare data. 
+**Use Case:** Allow multiple parties (organisations - Banks - companies) to process their confidential data **without exposing the input data to other parties**. This type of secure computation enables scenarios such as anti-money laundering, fraud-detection, and secure analysis of healthcare data. 
 
 **Proposed Solution:** A **data reconciliation service** will be hosted on a CCF network where members can submit their data to be reconciled against "each other's data" in a confidential manner, to performs analysis and generate some data-insights. 
 
@@ -59,9 +59,9 @@ In secure multi-party computing, encrypted data goes into the enclave. The encla
 ![Output Report](../docs/images/report.png)
 
 ## Functional  Requirements
-- Members can submit their data as single or batch records
+- Members can submit their data as a single record or a batch
 - Members can update their data
-- Each member can request a reconciliation report for all records or spec record (by Unique)
+- Each member can request a reconciliation report for all records or specific record (by UniqueId)
 - No member can access other member's data
 
 ### Application
