@@ -1,6 +1,9 @@
-import IngestData from "./ingest-data";
+import Api from './api';
+import https from 'https';
+import fs from 'fs';
+import { member0DataPart1, member1Data, member2Data } from './data';
 
-const serverUrl = "https://127.0.0.1:8000";
+const serverUrl = 'https://127.0.0.1:8000';
 
 export interface DemoProps {
     ingestUrl: string;
@@ -8,19 +11,64 @@ export interface DemoProps {
     proposalUrl: string;
 }
 
-class Demo {
+export interface DemoMemberProps {
+    id: string;
+    data: unknown;
+    httpsAgent: https.Agent;
+}
 
+class Demo {
     private readonly demoProps: DemoProps = {
         ingestUrl: `${serverUrl}/app/ingest`,
         reportUrl: `${serverUrl}/app/report`,
-        proposalUrl: `${serverUrl}/gov/proposals`
-    }
+        proposalUrl: `${serverUrl}/gov/proposals`,
+    };
 
-    start() {
+    private readonly members = Array<DemoMemberProps>();
+
+    async start() {
         console.log('\n\n===============================\n\n');
-        console.log('🏁 Starting demo...');
+        console.log('🏁 Starting demo...\n');
 
-        IngestData.run(this.demoProps);
+        const member0: DemoMemberProps = {
+            id: 'Member 0',
+            data: member0DataPart1,
+            httpsAgent: new https.Agent({
+                cert: fs.readFileSync(`../workspace/sandbox_common/member0_cert.pem`),
+                key: fs.readFileSync(`../workspace/sandbox_common/member0_privk.pem`),
+                ca: fs.readFileSync('../workspace/sandbox_common/service_cert.pem'),
+            }),
+        };
+
+        const member1: DemoMemberProps = {
+            id: 'Member 1',
+            data: member1Data,
+            httpsAgent: new https.Agent({
+                cert: fs.readFileSync(`../workspace/sandbox_common/member1_cert.pem`),
+                key: fs.readFileSync(`../workspace/sandbox_common/member1_privk.pem`),
+                ca: fs.readFileSync('../workspace/sandbox_common/service_cert.pem'),
+            }),
+        };
+
+        const member2: DemoMemberProps = {
+            id: 'Member 2',
+            data: member2Data,
+            httpsAgent: new https.Agent({
+                cert: fs.readFileSync(`../workspace/sandbox_common/member2_cert.pem`),
+                key: fs.readFileSync(`../workspace/sandbox_common/member2_privk.pem`),
+                ca: fs.readFileSync('../workspace/sandbox_common/service_cert.pem'),
+            }),
+        };
+
+        this.members.push(member0, member1, member2);
+
+        for (const member of this.members) {
+            await Api.ingest(this.demoProps, member);
+        }
+
+        for (const member of this.members) {
+            await Api.report(this.demoProps, member);
+        }
     }
 }
 
