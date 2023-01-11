@@ -15,12 +15,12 @@ We have sample sets [here](./data/) for the FSI Demo. Brent will provide real da
 1. Deploy data reconciliation
    - Inputs: Constitution, Activate initial n members (certs), Initial App​ deployed
    - Output: mCCF network running latest build of reconciliation app, default constitution, 3 members have equal votes on decision, unanimous approval to advance proposals.
-2. [Member 1](./data/member1_demo_pt1.json), [Member 2](./data/member2_demo.json) & [Member 3](./data/member3_demo.json) upload their data (JSON)
+2. [Member 1](./data/member0_demo_pt1.json), [Member 2](./data/member2_demo.json) & [Member 3](./data/member3_demo.json) upload their data (JSON)
 3. Each member queries for their data report (JSON returned)
 
 ## Part 2: Change in data
 
-5. [Member 1](./data/member1_demo_pt2.json) uploads a small change to the existing dataset (JSON)
+5. [Member 1](./data/member0_demo_pt2.json) uploads a small change to the existing dataset (JSON)
 6. Members 1, 2, 3 are able to see the change in their respective reports
 
 ## Part 3: Code update
@@ -32,4 +32,4 @@ We have sample sets [here](./data/) for the FSI Demo. Brent will provide real da
 
 ## Reference
 
-What will this demo look like? For reference, [here](./images/data_recon_sample.png) is an simplified example (2 members, smaller, simplified data set).
+What will this demo look like? For reference, ![here](../docs/images/data_recon_sample.png) is an simplified example (2 members, smaller, simplified data set).

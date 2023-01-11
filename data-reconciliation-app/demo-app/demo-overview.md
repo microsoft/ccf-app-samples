@@ -33,7 +33,7 @@ CCF is based on web technologies; clients interact with CCF JavaScript applicati
 
 Business transactions and project collaboration require sharing information amongst multiple parties. Often, the data being shared is confidential. The data may be personal information, financial records, medical records, private citizen data, etc. Public and private organizations require their data be protected from unauthorized access. Sometimes these organizations even want to protect data from computing infrastructure operators or engineers.
 
-Azure confidential computing lets you process data from multiple sources **without exposing the input data to other parties**. This type of secure computation enables scenarios such as anti-money laundering, fraud-detection, and secure analysis of healthcare data.
+Azure confidential computing lets you process data from multiple sources without exposing the input data to other parties. This type of secure computation enables scenarios such as anti-money laundering, fraud-detection, and secure analysis of healthcare data.
 
 In secure multi-party computing, encrypted data goes into the enclave. The enclave decrypts the data using a key, performs analysis, gets a result, and sends back an encrypted result that a party can decrypt with the designated key.
 
@@ -44,19 +44,29 @@ In secure multi-party computing, encrypted data goes into the enclave. The encla
 
 ## Data Reconciliation Application
 
-Data reconciliation service will be hosted on a CCF network where members can submit their data to be reconciled against "each other's data" in a confidential manner and protected from unauthorised access, to generate some data-insights. 
+**Use Case:** Allow multi parties (organisations - Banks - companies) to process their confidential data **without exposing the input data to other parties**. This type of secure computation enables scenarios such as anti-money laundering, fraud-detection, and secure analysis of healthcare data. 
 
-The solution will use a unique key and voting process to reconcile members' data. When a new record(s) is submitted, the application will search for the key inside the key-value store; if this key does not exist, it will be added; otherwise, a vote is added to this record with a member ID and the submitted value.
+In secure multi-party computing, encrypted data goes into the enclave. The enclave decrypts the data using a key, performs analysis, gets a result, and sends back an encrypted result that a party can decrypt with the designated key.
 
-This solution is generic to handle scenarios of data collaboration amongst different parties, and share reconciled results out on that data.
+**Proposed Solution:** A **data reconciliation service** will be hosted on a CCF network where members can submit their data to be reconciled against "each other's data" in a confidential manner, to performs analysis and generate some data-insights. 
 
-## Business Requirements
+**Data Schema:** Data schema will be agreed by members 
+- Unique key: uniquely identifying each record.
+- Value: to be reconciled with other members' data. 
+
+![Input Data](../docs/images/data.png)
+
+![Output Report](../docs/images/report.png)
+
+## Functional  Requirements
 - Members can submit their data as single or batch records
 - Members can update their data
 - Each member can request a reconciliation report for all records or spec record (by Unique)
 - No member can access other member's data
 
 ### Application
+
+When a new record(s) is submitted, the application will search the key-value store by record's key; if this key does not exist, it will be added; otherwise, a vote is added to this record with a member ID and the submitted value.
 
 The reconciliation application will consist of three main parts.
 
@@ -71,9 +81,9 @@ The reconciliation application will consist of three main parts.
     - Query by specific record by `a unique identifier`
     - Query all data
 
-![Detailed Steps](./images/data_recon_sample.png)
+![Detailed Steps](../docs/images/data_recon_sample.png)
 
-![Overview](../docs/reconciliation-sample.png)
+![Overview](../docs/images/reconciliation-sample.png)
 
 ## Managed CCF (mCCF)
 
