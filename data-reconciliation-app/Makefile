@@ -60,3 +60,7 @@ demo: ## 🎬 Demo the Data Reconciliation Application
 	@echo -e "\e[34m$@\e[0m" || true
 	@./demo-app/scripts/01-data_ingest_demo.sh
 	@./demo-app/scripts/02-report_change_demo.sh
+
+demo-code-change: build ## 🎬 Demo the Data Reconciliation Application
+	@echo -e "\e[34m$@\e[0m" || true
+	@./demo-app/scripts/03-code_change_demo.sh
