@@ -10,16 +10,7 @@ export default class Api {
 
             console.log(`📝 [${member.id}] Response...\n\t ✅ [${result.status}] - ${result.data.content}\n`);
         } catch (error) {
-            if (axios.isAxiosError(error)) {
-                const errorDetails = {
-                    cause: error.cause,
-                    code: error.code,
-                    message: error.message,
-                    status: error.status,
-                    statusText: error.response?.status,
-                };
-                console.error('🛑 ...Error...\n', errorDetails);
-            }
+            this.printError(error);
         }
     }
 
@@ -32,16 +23,20 @@ export default class Api {
             console.log(`📝 [${member.id}] Response...\n\t ✅ [${result.status}]\n`);
             console.table(result.data.content);
         } catch (error) {
-            if (axios.isAxiosError(error)) {
-                const errorDetails = {
-                    cause: error.cause,
-                    code: error.code,
-                    message: error.message,
-                    status: error.status,
-                    statusText: error.response?.status,
-                };
-                console.error('🛑 ...Error...\n', errorDetails);
-            }
+            this.printError(error);
+        }
+    }
+
+    private static printError(error: unknown) {
+        if (axios.isAxiosError(error)) {
+            const errorDetails = {
+                cause: error.cause,
+                code: error.code,
+                message: error.message,
+                status: error.status,
+                statusText: error.response?.status,
+            };
+            console.error('🛑 ...Error...\n', errorDetails);
         }
     }
 }
