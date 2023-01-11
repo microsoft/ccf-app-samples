@@ -2,7 +2,43 @@
 set -euo pipefail
 
 declare certificate_dir="./workspace/mccf_certificates"
-declare server="https://fsdemo.confidential-ledger.azure.com"
+
+function usage {
+    echo ""
+    echo "Open a network in mCCF and then run the tests."
+    echo ""
+    echo "usage: ./code_change_demo.sh --address <ADDRESS>"
+    echo ""
+    echo "  --address       string      The address of the primary CCF node"
+    echo ""
+}
+
+function failed {
+    printf "💥 Script failed: %s\n\n" "$1"
+    exit 1
+}
+
+# parse parameters
+
+if [ $# -gt 2 ]; then
+    usage
+    exit 1
+fi
+
+while [ $# -gt 0 ]
+do
+    case "$1" in
+        --address) address="$2"; shift 2;;
+        --help) usage; exit 0;;
+        *) usage; exit 1;;
+    esac
+done
+
+# validate parameters
+if [ -z "$address" ]; then
+    failed "You must supply --address"
+fi
+server="https://${address}"
 
 # shellcheck disable=SC1091
 . "./demo-app/scripts/env_vars.sh"
