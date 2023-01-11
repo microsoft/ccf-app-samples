@@ -1,7 +1,7 @@
 import Api from './api';
 import https from 'https';
 import fs from 'fs';
-import { member0DataPart1, member1Data, member2Data } from './data';
+import { member0DataPart1, member0DataPart2, member1Data, member2Data } from './data';
 
 const serverUrl = 'https://127.0.0.1:8000';
 
@@ -60,6 +60,9 @@ class Demo {
             }),
         };
 
+        console.log('\n\n===============================\n\n');
+        console.log('👀 Part 1: Ingestion & Reporting...\n');
+
         this.members.push(member0, member1, member2);
 
         for (const member of this.members) {
@@ -69,6 +72,13 @@ class Demo {
         for (const member of this.members) {
             await Api.report(this.demoProps, member);
         }
+
+        console.log('\n\n===============================\n\n');
+        console.log('👀 Part 2: Report Changes...\n');
+
+        member0.data = member0DataPart2;
+        await Api.ingest(this.demoProps, member0);
+        await Api.report(this.demoProps, member0);
     }
 }
 
