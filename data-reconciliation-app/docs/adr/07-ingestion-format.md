@@ -36,7 +36,7 @@ This option would be a courtesy utility rather than enhancing the data-reconcili
 
 ## Decision
 
-This the summary of alternatives by their complexity and flexibility.
+This is the summary of alternatives by their flexibility and complexity.
 
 |  Options | Flexibility | Test Harness complexity | API Complexity |
 | -------: | ----------: | ----------------------: | -------------: |
@@ -44,9 +44,9 @@ This the summary of alternatives by their complexity and flexibility.
 | Option 2 |    Moderate |                  Medium |            N/A |
 | Option 3 |     Minimum |                     N/A |            N/A |
 
-Considering project timelines and keeping the implementation in a single place, **we have decided to implement Option 1 in this application.**
+Considering the project timelines and keeping the implementation in a single place, **we have decided to implement Option 1 in this application.**
 
 ## Consequences
 
 1. By implementing csv parsing logic in the API we will have to amend the demo to have at least one member ingesting over the csv ingest endpoint to ensure it is tested.
-1. Any schema changes, although localised to the ingest endpoint, will have to made for both functions.
+1. Any schema changes, although localised to the ingest endpoint, will have to made for both functions; this was already a consequence that was decided in the Data Schema Strategy.
