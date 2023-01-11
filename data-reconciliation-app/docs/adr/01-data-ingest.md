@@ -162,7 +162,7 @@ A: Data records are mutable! When new data is submitted by a member, the data co
 
 When working with an append-only store, there is no concept of [deleting](https://microsoft.github.io/CCF/main/build_apps/kv/kv_how_to.html#removing-a-key) or updating. Members will never want to delete data records. If a member stops submitting data on a record in subsequent data ingests, we will continue to report on that record. We will not delete the record from the K-V store; therefore, we will report on all records ever submitted by the member. Yes, this means the ledger will grow in size.
 
-An E2E data flow is captured [here](../../demo/images/data_recon_sample.png) with input from our PO. Hopefully this clears up some confusion.
+An E2E data flow is captured [here](../images/data_recon_sample.png) with input from our PO. Hopefully this clears up some confusion.
 
 ### 4. K-V Design - Expensive to Reconcile & Report
 
