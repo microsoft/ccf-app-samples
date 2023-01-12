@@ -5,7 +5,7 @@ import { member0DataPart1, member0DataPart2, member1Data, member2Data } from './
 import Host from './host';
 
 const serverUrl = 'https://127.0.0.1:8000';
-const certificateStorePath = '../../workspace/sandbox_common';
+const certificateStorePath = './workspace/sandbox_common';
 
 export interface DemoProps {
     ingestUrl: string;
@@ -34,6 +34,12 @@ class Demo {
     private static readonly members = Array<DemoMemberProps>();
 
     public static async start() {
+
+        /**
+         * Change working directory to the root of the project
+         * All paths and process execution will be relative to root
+         */
+        process.chdir('../../');
 
         this.printTestSectionHeader('🏁 Starting e2e Tests...');
 

@@ -1,13 +1,13 @@
-import { ChildProcess, exec, spawn } from 'child_process';
+import { exec, execSync } from 'child_process';
 
 
-const buildCommand = 'cd ../../ && npm run build';
-const startHostCommand = 'cd ../../ && /opt/ccf_virtual/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count 3 --initial-user-count 0 --constitution-dir ./governance/constitution'
+const buildCommand = 'npm run build';
+const startHostCommand = '/opt/ccf_virtual/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count 3 --initial-user-count 0 --constitution-dir ./governance/constitution'
 
 export default class Host {
-    private static readonly processes = new Array<ChildProcess>();
 
     public static async start(): Promise<void> {
+        //
         console.log(`📀 [Running] - Build App`);
         await this.run(buildCommand);
 
@@ -17,44 +17,39 @@ export default class Host {
         console.log(`✅ [Done] - Testing Environment Ready!`);
     }
 
-    public static async stop(): Promise<void> {
+    public static stop() {
         console.log(`\n📀 [Running] - Stop Host\n`);
-        this.processes.forEach((process) => {
-            if (!process.exitCode) {
-                try { 
-                process.stdin?.end();
-                }
-                catch (e) {
-                    console.log(e);
-                }
-            }
-        });
+
+        /**
+         * Sandbox script spins up the host in a child process using python
+         * We query the python processes and kill it
+         * This makes sure the host is stopped and the sandbox is cleaned up
+         * This also makes the e2e test script idempotent
+         */
+        execSync('kill -9 $(pgrep python)');
     }
 
     private static run(command: string): Promise<void> {
         try {
             return new Promise((resolve, reject) => {
-
-                const process = exec(command, (error, stdout, stderr) => {
-                    if (error) {
+                const childProcess = exec(command, (error) => {
+                    if (error && error.code !== 137) {
                         console.error(error);
                         reject(error);
+                        return;
                     }
 
                     resolve();
                    });
 
                
-                process.stdout?.on('data', (data) => {
+                childProcess.stdout?.on('data', (data) => {
                     console.log(data);
 
                     if (data.includes('Press Ctrl+C')) {
                         resolve();
                     }
-                });
-
-                this.processes.push(process);
-                
+                });          
             });
         } catch (e) {
             console.log(e);
