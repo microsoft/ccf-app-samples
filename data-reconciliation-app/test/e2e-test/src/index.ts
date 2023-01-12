@@ -56,7 +56,38 @@ class Demo {
         const member0 = this.members[0];
         member0.data = member0DataPart2;
         await Api.ingest(this.demoProps, member0);
-        await Api.report(this.demoProps, member0);
+
+        const reportItems = await Api.report(this.demoProps, member0);
+
+        if (reportItems.length !== 12) {
+            throw new Error(`🛑 [TEST FAILURE]: Unexpected number of items in the report: ${reportItems.length}`);
+        }
+        else {
+            console.log(`✅ [PASS] - ${reportItems.length} items in the report`);
+        }
+
+        const reportItem = reportItems[3];
+
+        if(reportItem.group_status !== 'IN_CONSENSUS') {
+            throw new Error(`🛑 [TEST FAILURE]: Unexpected group status ${reportItem.group_status}. Expected: IN_CONSENSUS`);
+        }
+        else {
+            console.log(`✅ [PASS] - ${reportItem.lei} ${reportItem.group_status} group status`);
+        }
+
+        if(reportItem.majority_minority !== 'Majority') {
+            throw new Error(`🛑 [TEST FAILURE]: Unexpected majority/minority ${reportItem.majority_minority}. Expected: Majority`);
+        }
+        else {
+            console.log(`✅ [PASS] - ${reportItem.lei} ${reportItem.majority_minority} majority/minority`);
+        }
+
+        if(reportItem.members_in_agreement !== 3) {
+            throw new Error(`🛑 [TEST FAILURE]: Unexpected members in agreement ${reportItem.members_in_agreement}. Expected: 3`);
+        }
+        else {
+            console.log(`✅ [PASS] - ${reportItem.lei} ${reportItem.members_in_agreement} members in agreement`);
+        }
     }
 
     private static createMember(memberId: string): DemoMemberProps {
