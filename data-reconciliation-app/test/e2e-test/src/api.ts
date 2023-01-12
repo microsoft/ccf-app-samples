@@ -3,40 +3,27 @@ import axios from 'axios';
 
 export default class Api {
     public static async ingest(props: DemoProps, member: DemoMemberProps) {
-        console.log(`📝 [${member.id}] Ingesting Data...`);
+        console.log(`📝 ${member.name} Ingesting Data...`);
 
-        try {
-            const result = await axios.post(props.ingestUrl, member.data, { httpsAgent: member.httpsAgent });
+        const result = await axios.post(props.ingestUrl, member.data, { httpsAgent: member.httpsAgent });
 
-            console.log(`📝 [${member.id}] Response...\n\t ✅ [${result.status}] - ${result.data.content}\n`);
-        } catch (error) {
-            this.printError(error);
+        if(result.status !== 200) {
+            throw new Error(`🛑 [TEST FAILURE]: Unexpected status code: ${result.status}`);
         }
+
+        console.log(`✅ [PASS] [${result.status} : ${result.statusText}] - ${member.name} ${result.data.content}\n`);
     }
 
     public static async report(props: DemoProps, member: DemoMemberProps) {
-        console.log(`📝 [${member.id}] Reporting Data...`);
+        console.log(`📝 ${member.name} Reporting Data...`);
 
-        try {
-            const result = await axios.get(props.reportUrl, { httpsAgent: member.httpsAgent });
+        const result = await axios.get(props.reportUrl, { httpsAgent: member.httpsAgent });
 
-            console.log(`📝 [${member.id}] Response...\n\t ✅ [${result.status}]\n`);
-            console.table(result.data.content);
-        } catch (error) {
-            this.printError(error);
+        if(result.status !== 200) {
+            throw new Error(`🛑 [TEST FAILURE]: Unexpected status code: ${result.status}`);
         }
-    }
 
-    private static printError(error: unknown) {
-        if (axios.isAxiosError(error)) {
-            const errorDetails = {
-                cause: error.cause,
-                code: error.code,
-                message: error.message,
-                status: error.status,
-                statusText: error.response?.status,
-            };
-            console.error('🛑 ...Error...\n', errorDetails);
-        }
+        console.log(`✅ [PASS] [${result.status} : ${result.statusText}] - ${member.name}\n`);
+        console.table(result.data.content);
     }
 }
