@@ -88,6 +88,8 @@ class Demo {
         else {
             console.log(`✅ [PASS] - ${reportItem.lei} ${reportItem.members_in_agreement} members in agreement`);
         }
+
+        this.printTestSectionHeader('🎉 All Tests Passed...');
     }
 
     private static createMember(memberId: string): DemoMemberProps {
