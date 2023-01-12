@@ -2,6 +2,7 @@ import Api from './api';
 import https from 'https';
 import fs from 'fs';
 import { member0DataPart1, member0DataPart2, member1Data, member2Data } from './data';
+import Host from './host';
 
 const serverUrl = 'https://127.0.0.1:8000';
 const certificateStorePath = '../../workspace/sandbox_common';
@@ -35,6 +36,10 @@ class Demo {
     public static async start() {
 
         this.printTestSectionHeader('🏁 Starting e2e Tests...');
+
+        this.printTestSectionHeader('🤖 Starting Host...');
+        
+        await Host.start();
 
         for(const memberId of this.memberIds) {
             const member = this.createMember(memberId);
