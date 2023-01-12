@@ -94,6 +94,8 @@ class Demo {
             console.log(`✅ [PASS] - ${reportItem.lei} ${reportItem.members_in_agreement} members in agreement`);
         }
 
+        Host.stop();
+
         this.printTestSectionHeader('🎉 All Tests Passed...');
     }
 

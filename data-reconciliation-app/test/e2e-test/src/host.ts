@@ -20,7 +20,14 @@ export default class Host {
     public static async stop(): Promise<void> {
         console.log(`\n📀 [Running] - Stop Host\n`);
         this.processes.forEach((process) => {
-            if (!process.killed) process.kill();
+            if (!process.exitCode) {
+                try { 
+                process.stdin?.end();
+                }
+                catch (e) {
+                    console.log(e);
+                }
+            }
         });
     }
 
