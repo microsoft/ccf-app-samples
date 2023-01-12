@@ -48,7 +48,7 @@ build-enclave: build ## 📦 Build Enclave container image from Dockerfile
 	@../scripts/build_image.sh enclave
 
 e2e-test: ## 📦 Run end to end tests
-	@echo -e "\e[34m Not Implemented \e[0m" || true
+	@cd ./test/e2e-test/ && npm run start
 
 unit-test: ## 🔨 Run the Application unit-test
 	@echo -e "\e[34m$@\e[0m" || true
@@ -60,8 +60,3 @@ demo: ## 🎬 Demo the Data Reconciliation Application
 	@echo -e "\e[34m$@\e[0m" || true
 	@./demo-app/scripts/01-data_ingest_demo.sh
 	@./demo-app/scripts/02-report_change_demo.sh
-
-# Run `make start-host` in another terminal before running this.
-# To build and start a ccf network and automatically deploy your application on it.
-demo-alt: ## 🎬 Demo the Data Reconciliation Application
-	@cd ./demo-app/ && npm run start
