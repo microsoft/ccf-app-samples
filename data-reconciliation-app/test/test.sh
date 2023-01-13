@@ -139,6 +139,12 @@ printf "\n\n"
 check_eq "$memberName - Getting data record by key_not_exist should fail" "400" "$(curl $reportingUrl/10 -X GET $(cert_arg $memberName) -H "Content-Type: application/json" $only_status_code)"
 printf " Response: "
 curl $server/app/report/10 -X GET $(cert_arg $memberName)
+printf "\n\n"
+
+userName="user0"
+check_eq "$userName - Getting report without ingesting data should fail as 'No Data to Report' " "400" "$(curl $reportingUrl -X GET $(cert_arg $userName) -H "Content-Type: application/json" $only_status_code)"
+printf " Response: "
+curl $server/app/report -X GET $(cert_arg $userName)
 
 # ----------------------------------------------------
 
