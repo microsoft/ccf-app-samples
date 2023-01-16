@@ -104,7 +104,7 @@ export class CertBasedAuthenticationService implements IAuthenticationService {
     }
   }
 
-  // Check if call is member or user
+  // Check if caller is an active member or an user registered in the network
   public isValidIdentity(identityId: string): ServiceResult<boolean> {
     if (!identityId) {
       return ServiceResult.Failed({
@@ -115,6 +115,11 @@ export class CertBasedAuthenticationService implements IAuthenticationService {
 
     const isMember = this.isActiveMember(identityId);
     if (isMember.success && isMember.content) {
+      return ServiceResult.Succeeded(true);
+    }
+
+    const isUser = this.isUser(identityId);
+    if (isUser.success && isUser.content) {
       return ServiceResult.Succeeded(true);
     }
 

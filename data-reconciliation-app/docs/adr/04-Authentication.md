@@ -9,6 +9,13 @@ CCF provides a native support for two common user authentication schemes:
 - JWT Authentication
 - Certificate Authentication
 
+## Roles and Responsibilities
+
+In CCF, Members are capable of performing governance actions, whereas Users can only interact with the application endpoints.
+
+In the Data-Reconciliation Application, Members can also interact with the application endpoints. From a application perspective, Members and Users have the same roles (both are capable of ingesting/reporting data and there is no distinction between them). For governance actions related to the Data-Reconciliation App (submitting and voting for proposals), again, only members will be able to interact with the governance-specific endpoints.
+
+
 ## Options
 
 ### Option1: Certificate Authentication
