@@ -17,7 +17,7 @@ export default class Api {
 
         const result = await axios.post(props.ingestUrl, member.data, { httpsAgent: member.httpsAgent });
 
-        if(result.status !== 200) {
+        if (result.status !== 200) {
             throw new Error(`🛑 [TEST FAILURE]: Unexpected status code: ${result.status}`);
         }
 
@@ -29,7 +29,7 @@ export default class Api {
 
         const result = await axios.get(props.reportUrl, { httpsAgent: member.httpsAgent });
 
-        if(result.status !== 200) {
+        if (result.status !== 200) {
             throw new Error(`🛑 [TEST FAILURE]: Unexpected status code: ${result.status}`);
         }
 
