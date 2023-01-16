@@ -19,7 +19,7 @@ Some potential use cases may involve:
 - In finance, a number of financial institutions coming together to reconcile reference data or ticker symbols.
 - In healthcare, a number of hospitals coming together to reconcile hospital records for patients.
 
-![reconciliation diagram](data-reconciliation.png)
+![reconciliation diagram](./images/data-reconciliation.png)
 
 ## Proposed solution
 
@@ -60,7 +60,7 @@ The reconciliation application will consist of three main services.
 - For each member, a list of a reconciled records can be requested
 - The data mapping and reference will depend on `a unique identifier`
 
-![reconciliation-sample diagram](reconciliation-sample.png)
+![reconciliation-sample diagram](./images/reconciliation-sample.png)
 
 ## Pseudo code
 

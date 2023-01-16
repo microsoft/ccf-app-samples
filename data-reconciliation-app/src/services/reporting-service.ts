@@ -36,6 +36,12 @@ export class ReportingService implements IReportingService {
       if (summary.success) result.push(summary.content);
     });
 
+    if (result.length == 0)
+      return ServiceResult.Failed({
+        errorMessage: "Error: No data to Report",
+        errorType: "NoDataToReport",
+      });
+
     return ServiceResult.Succeeded(result);
   }
 }
