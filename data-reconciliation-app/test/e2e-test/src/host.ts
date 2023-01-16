@@ -1,6 +1,5 @@
 import { exec, execSync } from 'child_process';
 
-
 const buildCommand = 'npm run build';
 const startHostCommand = '/opt/ccf_virtual/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count 3 --initial-user-count 0 --constitution-dir ./governance/constitution'
 
