@@ -48,6 +48,7 @@ build-enclave: build ## 📦 Build Enclave container image from Dockerfile
 	@../scripts/build_image.sh enclave
 
 e2e-test: ## 📦 Run end to end tests
+	@echo -e "\e[34m$@\e[0m" || true
 	@cd ./test/e2e-test/ && npm install && npm run start
 
 unit-test: ## 🔨 Run the Application unit-test
