@@ -6,7 +6,7 @@ Proposed
 
 ## Context
 
-The purpose of this ADR is to improve the [current design](https://github.com/microsoft/ccf-app-samples/blob/main/data-reconciliation-app/docs/adr/01-data-ingest.md#data-ingest-api) in order to increase performance on reconciling and reporting.
+The purpose of this ADR is to improve performance on reconciling and reporting.
 
 ## Options
 
@@ -23,47 +23,6 @@ When a member calls an ingest API, for each key in the request body our ingest s
 - Generate the summary record for that key
 - Add / Update the summary record for all the members who have ingested the current key
 
-The data in KV-store will look like -
-
-```json
-{
-  "key": "Member 1",
-  "value": {
-      "A0129": {
-                  "key": "<record key>",
-                  "value": "<value informed by User>",
-                  "group_status": "<value>",
-                  "total_votes_count": "#",                 
-                  "count_of_unique_values": "#",            
-                  "members_in_agreement": "#",              
-                  "majority_minority": "<calculated value>" 
-                },
-    
-      "A0124": {
-                  "key": "<record key>",
-                  "value": "<value informed by User>",
-                  "group_status": "<value>",
-                  "total_votes_count": "#",                 
-                  "count_of_unique_values": "#",            
-                  "members_in_agreement": "#",              
-                  "majority_minority": "<calculated value>" 
-                } 
-  }
-  "key": "Member 2",
-  "value": {
-      "A0129": {
-                  "key": "<record key>",
-                  "value": "<value informed by User>",
-                  "group_status": "<value>",
-                  "total_votes_count": "#",                 
-                  "count_of_unique_values": "#",            
-                  "members_in_agreement": "#",              
-                  "majority_minority": "<calculated value>" 
-                }
-  }
-}
-```
-
 #### Consequences
 
 - Will degrade the performance of ingest API heavily 
@@ -79,18 +38,6 @@ We can store all the keys ingested by each member in the KV store in addition to
 #### Implementation
 
 While ingesting data for a member we can add all the keys in the request in our KV-store in addition to the current implementation in ingest API.
-
-The KV-store will now contain two kind of data. One is the `ReconciliationRecord` and the other `IngestionRecord` which will be similar to the below example:
-
-```json
-{
-  "key": "Member 1",
-  "value": [
-    "A0129",
-    "A0124"
-  ]
-}
-```
 
 To generate report for a member, we can follow the steps below:
 
@@ -113,4 +60,4 @@ We can discard option 1 as it will degrade the performance of ingest API heavily
 
 Option 2 will be an improvement on the current design for reconciliation and reporting in the application. However it will slow down the performance of ingest API by O(n), n being the number of key-value pairs in the request body.
 
-Depending on whether our data-reconciliation app is write heavy or read heavy, we can either go with the current design or go with option 2. We can also add pagination in our current design for reconciliation and reporting as the volume of data will be quite heavy.
+Depending on whether our data-reconciliation app is write heavy or read heavy, we can either go with the [current design](./01-data-ingest.md) or go with option 2. We can also add pagination in our current design for reconciliation and reporting as the volume of data will be quite heavy.
