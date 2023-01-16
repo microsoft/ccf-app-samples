@@ -38,3 +38,4 @@ First option will be selected because
 ## Consequences
 
 Developers will request `$server/app/api` to get the documentation of endpoints that require authentication with a valid user identity.
+We need to support JWT authentication to allow endpoint testing through Swagger-UI because it does not support mutual TLS authentication (certificate base).
