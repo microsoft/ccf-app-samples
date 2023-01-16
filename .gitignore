@@ -10,3 +10,4 @@ package-lock.json
 **/dist
 **/coverage
 data-reconciliation-app/demo-app/Reports/
+data-reconciliation-app/test/e2e-test/.DS_Store
