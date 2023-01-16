@@ -6,11 +6,11 @@ Proposed
 
 ## Context
 
-We need to build an API that reports the members' reconciled dataset back to them.
+We need to build an API that reports the members/users' reconciled dataset back to them.
 
 ## Requirements:
 - A report can be requested for a single or for all records.
-- Members will receive a report only for data they have ingested.
+- Members and Users will receive a report only for data they have ingested.
 - A reconciliation report can be requested at anytime, by any member, and the report result will be presented based on the most recent data present in the KV-store for the entire network.
 - Rules for reconciliation are described in [Reconciliation Logic ADR](https://github.com/microsoft/ccf-app-samples/blob/main/data-reconciliation-app/docs/adr/03-reconciliation-logic.md).
 - If a report turns out to be empty, an Error message shall be returned saying that user has no data to be reconciled 
@@ -69,7 +69,7 @@ We need to build an API that reports the members' reconciled dataset back to the
 
 ### Security
 
-Users will be authenticated via certificates, which is natively supported by the CCF framework.
+Users and Members will be authenticated via certificates, which is natively supported by the CCF framework.
 
 //TODO Add reference to this future ADR: https://github.com/microsoft/ccf-app-samples/issues/102
 
