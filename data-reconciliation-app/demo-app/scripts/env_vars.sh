@@ -1,7 +1,6 @@
 #!/bin/bash
+set -euo pipefail
 
-certs="./workspace/sandbox_common"
-server="https://127.0.0.1:8000"
 ingestUrl="$server/app/ingest"
 reportUrl="$server/app/report"
 proposalUrl="$server/gov/proposals"
