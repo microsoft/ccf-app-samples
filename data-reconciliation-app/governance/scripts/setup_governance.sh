@@ -86,7 +86,7 @@ curl ${server}/gov/members --cacert $certs/service_cert.pem | jq
 
 
 ##############################################
-# Creating and adding new members to network
+# Creating and adding new members/users to network
 ##############################################
 
 # create certificate files
@@ -120,6 +120,16 @@ $root_dir/scripts/submit_proposal.sh --network-url  ${server} \
   --proposal-file $certs/set_member.json --service-cert $certs/service_cert.pem \
   --signing-cert $certs/member0_cert.pem --signing-key $certs/member0_privk.pem
 
+#---------------------
+echo "Adding user0 step 1/2: create certificate and proposal"
+cert_name="user0"
+create_certificate "${cert_name}" "${certs}"
+$root_dir/scripts/add_user.sh --cert-file $certs/${cert_name}_cert.pem --pubk-file $certs/${cert_name}_enc_pubk.pem
+
+echo "Adding user0 step 2/2: submit proposal to network and vote as accepted"
+$root_dir/scripts/submit_proposal.sh --network-url  ${server} \
+  --proposal-file $certs/set_user.json --service-cert $certs/service_cert.pem \
+  --signing-cert $certs/member0_cert.pem --signing-key $certs/member0_privk.pem
 
 ##############################################
 # Propose and Open Network

@@ -106,4 +106,17 @@ describe("Data Reporting Service", () => {
     );
     expect(result.content).toBeNull();
   });
+
+  test("Should fail to get data for a member/user that did not ingest anything", () => {
+    // Arrange
+    const userId1 = jscrypto.randomUUID(); // user who does not ingest data but asks for a report
+
+    // Act
+    const result = reportingService.getData(userId1);
+
+    // Assert
+    expect(result.failure).toBe(true);
+    expect(result.error.errorMessage).toBe("Error: No data to Report");
+    expect(result.content).toBeNull();
+  });
 });
