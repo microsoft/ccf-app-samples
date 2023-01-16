@@ -1,4 +1,28 @@
 {
+  "info": {
+    "description": "Data reconciliation application",
+    "title": "Data reconciliation application",
+    "version": "0.0.1"
+  },
+  "schemas": {
+    "ServiceResult": {
+      "type": "object",
+      "properties": {
+        "content": { "type": "object" },
+        "error": {
+          "type": "object",
+          "properties": {
+            "errorMessage": { "type": "string" },
+            "errorType": { "type": "string" }
+          }
+        },
+        "success": { "type": "boolean" },
+        "failure": { "type": "boolean" },
+        "statusCode": { "type": "number" },
+        "Error": { "type": "string" }
+      }
+    }
+  },
   "endpoints": {
     "/ingest": {
       "post": {
@@ -13,7 +37,23 @@
               "description": "Ok",
               "content": {
                 "application/json": {
-                  "schema": { "type": "object" }
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "content": { "type": "object" },
+                      "error": {
+                        "type": "object",
+                        "properties": {
+                          "errorMessage": { "type": "string" },
+                          "errorType": { "type": "string" }
+                        }
+                      },
+                      "success": { "type": "boolean" },
+                      "failure": { "type": "boolean" },
+                      "statusCode": { "type": "number" },
+                      "status": { "type": "string" }
+                    }
+                  }
                 }
               }
             }
@@ -22,10 +62,21 @@
             "required": true,
             "content": {
               "application/json": {
-                "schema": { "type": "array" }
+                "schema": {
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "lei": { "type": "string" },
+                      "nace": { "type": "string" }
+                    }
+                  },
+                  "type": "array"
+                }
               }
             }
-          }
+          },
+          "summary": "Ingest data to be reconciled",
+          "description": "Users or members submit their data to be reconciled"
         }
       }
     },
@@ -42,11 +93,38 @@
               "description": "Ok",
               "content": {
                 "application/json": {
-                  "schema": { "type": "object" }
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "content": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "lei": { "type": "string" },
+                            "nace": { "type": "string" }
+                          }
+                        }
+                      },
+                      "error": {
+                        "type": "object",
+                        "properties": {
+                          "errorMessage": { "type": "string" },
+                          "errorType": { "type": "string" }
+                        }
+                      },
+                      "success": { "type": "boolean" },
+                      "failure": { "type": "boolean" },
+                      "statusCode": { "type": "number" },
+                      "status": { "type": "string" }
+                    }
+                  }
                 }
               }
             }
-          }
+          },
+          "summary": "Get the data reconciliation report for all ingested data",
+          "description": "Get the data reconciliation report for all ingested data"
         }
       }
     },
@@ -58,16 +136,48 @@
         "authn_policies": ["member_cert", "user_cert"],
         "mode": "readonly",
         "openapi": {
+          "parameters": [
+            {
+              "in": "path",
+              "name": "id",
+              "required": true,
+              "schema": { "type": "string" }
+            }
+          ],
           "responses": {
             "200": {
               "description": "Ok",
               "content": {
                 "application/json": {
-                  "schema": { "type": "object" }
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "content": {
+                        "type": "object",
+                        "properties": {
+                          "lei": { "type": "string" },
+                          "nace": { "type": "string" }
+                        }
+                      },
+                      "error": {
+                        "type": "object",
+                        "properties": {
+                          "errorMessage": { "type": "string" },
+                          "errorType": { "type": "string" }
+                        }
+                      },
+                      "success": { "type": "boolean" },
+                      "failure": { "type": "boolean" },
+                      "statusCode": { "type": "number" },
+                      "status": { "type": "string" }
+                    }
+                  }
                 }
               }
             }
-          }
+          },
+          "summary": "Get the data reconciliation report for specified record",
+          "description": "Get the data reconciliation report for specified record by supplying record id"
         }
       }
     }
