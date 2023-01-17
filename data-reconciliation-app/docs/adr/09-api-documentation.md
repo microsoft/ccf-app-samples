@@ -33,7 +33,7 @@ Create a new separate backend application that returns an OpenAPI documentation 
 
 First option will be selected because
 - It has the least development and maintenance effort
-- As it is leveraging the build-in feature of CCF, it will evolved and be updated automatically.
+- As it is leveraging the built-in feature of CCF, it will evolve and be updated automatically.
 
 ## Consequences
 
