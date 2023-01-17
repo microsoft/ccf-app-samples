@@ -33,7 +33,7 @@ When a member calls an ingest API, for each key in the request body our ingest s
 
 We can store all the keys ingested by each member in the KV store in addition to the `ReconciliationMap`. To generate a report for a particular member 
  - Retrieve the keys from the KV store for that member
- - Fetch the `ReconciliationRecord` for each retrieved keys and generate the summary record as a    response.
+ - Fetch the `ReconciliationRecord` for each retrieved key and generate the summary record as a response.
 
 #### Implementation
 
