@@ -60,4 +60,4 @@ We can discard option 1 as it will degrade the performance of ingest API heavily
 
 Option 2 will be an improvement on the current design for reconciliation and reporting in the application. However it will slow down the performance of ingest API by O(n), n being the number of key-value pairs in the request body.
 
-Depending on whether our data-reconciliation app is write heavy or read heavy, we can either go with the [current design](./01-data-ingest.md) or go with option 2. We can also add pagination in our current design for reconciliation and reporting as the volume of data will be quite heavy.
+Depending on whether our data-reconciliation app is write heavy or read heavy, we can either go with the [current design](./01-data-ingest.md) or go with option 2. We can also add pagination in our current design for reconciliation and reporting as the volume of data could be large.
