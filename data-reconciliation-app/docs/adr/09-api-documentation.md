@@ -18,7 +18,7 @@ CCF exposes a built-in endpoint, [`$server/app/api`](https://microsoft.github.io
 
 This document can be imported into [`https://editor.swagger.io/`](https://editor.swagger.io/) to generate a UI that allows developers to explore and test the application endpoints.
 
-currently CCF implementation is lacking the methodology for deploying the different options supported by OpenAPI as a part of application bundle `app.json`, like (info, schemes, securityDefinitions, host)
+Currently CCF implementation is lacking the methodology for deploying the different options supported by OpenAPI as a part of application bundle `app.json`, like (info, schemes, securityDefinitions, host).
 
 
 ### Option2: New backend application
