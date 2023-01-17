@@ -170,4 +170,4 @@ By only storing the `ReconciledRecord`, we make "updating" of a key for a partic
 
 Q: Is there a better way to design our system to increase performance on reconciling and reporting?
 
-A: Probably! Our current design requires us to scan and read from the entire K-V store to generate a member's report. This is an expensive operation Adding a ticket to the backlog to investigate improvements to our design.
+A: Probably! Our current design requires us to scan and read from the entire K-V store to generate a member's report. Please see further discussion here: [improve-performance adr](./08-improve-performance.md). We have considered the data-reconciliation app to be write heavy, therefore, we have implemented the current approach which is write-efficient.
