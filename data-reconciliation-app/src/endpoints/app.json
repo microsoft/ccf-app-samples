@@ -1,28 +1,4 @@
 {
-  "info": {
-    "description": "Data reconciliation application",
-    "title": "Data reconciliation application",
-    "version": "0.0.1"
-  },
-  "schemas": {
-    "ServiceResult": {
-      "type": "object",
-      "properties": {
-        "content": { "type": "object" },
-        "error": {
-          "type": "object",
-          "properties": {
-            "errorMessage": { "type": "string" },
-            "errorType": { "type": "string" }
-          }
-        },
-        "success": { "type": "boolean" },
-        "failure": { "type": "boolean" },
-        "statusCode": { "type": "number" },
-        "Error": { "type": "string" }
-      }
-    }
-  },
   "endpoints": {
     "/ingest": {
       "post": {
