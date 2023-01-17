@@ -1,10 +1,9 @@
 import { exec, execSync } from 'child_process';
 
 const buildCommand = 'npm run build';
-const startHostCommand = '/opt/ccf_virtual/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count 3 --initial-user-count 0 --constitution-dir ./governance/constitution'
+const startHostCommand = '/opt/ccf_virtual/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count 3 --initial-user-count 0 --constitution-dir ./governance/constitution';
 
 export default class Host {
-
     public static async start(): Promise<void> {
         //
         console.log(`📀 [Running] - Build App`);
@@ -39,20 +38,25 @@ export default class Host {
                     }
 
                     resolve();
-                   });
+                });
 
-               
                 childProcess.stdout?.on('data', (data) => {
                     console.log(data);
 
+                    /**
+                     * Currently there is no other straightforward way of understanding if host is ready.
+                     * Alternatively, I could have created a setTimeout based or while(true) based polling. 
+                     * However, this looked much more practical and quicker to implement.
+                     * If host changes their sandbox logs, this code would require a fix.
+                     */
                     if (data.includes('Press Ctrl+C')) {
                         resolve();
                     }
-                });          
+                });
             });
         } catch (e) {
             console.log(e);
-            throw new Error("🛑 [TEST FAILURE]: Failed to start host");   
+            throw new Error('🛑 [TEST FAILURE]: Failed to start host');
         }
     }
 }
