@@ -41,7 +41,7 @@ fi
 server="https://${address}"
 
 # shellcheck disable=SC1091
-. "./demo-app/scripts/env_vars.sh"
+. "./test/env_vars.sh"
 
 cd "${certificate_dir}"
 

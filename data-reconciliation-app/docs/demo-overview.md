@@ -47,9 +47,9 @@ In secure multi-party computing, encrypted data goes into the enclave. The encla
 - Unique key: uniquely identifying each record.
 - Value: to be reconciled with other members' data. 
 
-![Input Data](../docs/images/data.png)
+![Input Data](./images/data.png)
 
-![Output Report](../docs/images/report.png)
+![Output Report](./images/report.png)
 
 ## Functional  Requirements
 - Members can submit their data as a single record or a batch
@@ -74,19 +74,13 @@ The reconciliation application will consist of three main parts.
  
 When a new record(s) is submitted through ingestion endpoints, the application will search the key-value store by the record's key; if this key does not exist, it will be added; otherwise, a vote is added to this record with a member ID and the submitted value.
 
-![Detailed Steps](../docs/images/data_recon_sample.png)
+![Detailed Steps](./images/data_recon_sample.png)
 
-![Overview](../docs/images/reconciliation-sample.png)
+![Overview](./images/reconciliation-sample.png)
 
 ## Managed CCF (mCCF)
 
 ![MCCF](https://techcommunity.microsoft.com/t5/image/serverpage/image-id/411970i6E4FE2814D429D03/image-size/large?v=v2&px=999)
-
-## Samples Repo
-
-A sample application for a bank consortium: A bank system that can be run by multiple banks
-
-https://github.com/microsoft/ccf-app-samples
 
 ## Resources
 

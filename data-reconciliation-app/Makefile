@@ -58,10 +58,10 @@ unit-test: ## 🔨 Run the Application unit-test
 # To build and start a ccf network and automatically deploy your application on it.
 demo: ## 🎬 Demo the Data Reconciliation Application
 	@echo -e "\e[34m$@\e[0m" || true
-	@./demo-app/scripts/01-data_ingest_demo.sh
-	@./demo-app/scripts/02-report_change_demo.sh
+	@./test/01-data_ingest_demo.sh
+	@./test/02-report_change_demo.sh
 
 demo-code-change: build ## 🎬 Demo the Data Reconciliation Application Code Change
 	@echo -e "\e[34m$@\e[0m" || true
 	$(call check_defined, CCF_NAME)
-	@./demo-app/scripts/03-code_change_demo.sh --address "${CCF_NAME}.confidential-ledger.azure.com"
+	@./test/03-code_change_demo.sh --address "${CCF_NAME}.confidential-ledger.azure.com"
