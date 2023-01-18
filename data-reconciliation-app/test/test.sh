@@ -91,9 +91,10 @@ echo "Test start"
 printf "\n  -------- Test Ingestion Service --------  \n\n"
 
 ingestUrl="$server/app/ingest";
+ingestCsvUrl="$server/app/csv/ingest";
 
 memberName="member0"
-check_eq "$memberName - data ingest should succeed" "200" "$(curl $ingestUrl -X POST $(cert_arg $memberName) -H "Content-Type: application/json" --data-binary "@../../test/data-samples/${memberName}_data.json" $only_status_code)"
+check_eq "$memberName - data ingest through CSV should succeed" "200" "$(curl $ingestCsvUrl -X POST $(cert_arg $memberName) -H "Content-Type: text/csv" --data-binary "@../../test/data-samples/${memberName}_data.csv" $only_status_code)"
 
 memberName="member1"
 check_eq "$memberName - data ingest should succeed" "200" "$(curl $ingestUrl -X POST $(cert_arg $memberName) -H "Content-Type: application/json" --data-binary "@../../test/data-samples/${memberName}_data.json" $only_status_code)"
