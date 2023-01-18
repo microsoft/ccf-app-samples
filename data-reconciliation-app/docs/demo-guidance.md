@@ -13,7 +13,7 @@ We will be demonstrating a reference data set where lei as a unique identifier a
 1. Deploy data reconciliation
    - Inputs: Constitution, Activate initial n members (certs), Initial App​ deployed
    - Output: mCCF network running latest build of reconciliation app, default constitution, 3 members have equal votes on decision, unanimous approval to advance proposals.
-2. [Member 1](../test/data-samples/member0_demo_pt1.json), [Member 2](../test/data-samples/member2_demo.json) & [Member 3](../test/data-samples/member3_demo.json) upload their data (JSON)
+2. [Member 0](../test/data-samples/member0_demo_pt1.json), [Member 1](../test/data-samples/member1_demo.json) & [Member 2](../test/data-samples/member2_demo.json) upload their data (JSON)
 3. Each member queries for their data report (JSON returned)
 
 ## Part 2: Change in data
