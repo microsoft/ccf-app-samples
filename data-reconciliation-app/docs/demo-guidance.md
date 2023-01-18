@@ -18,7 +18,7 @@ We will be demonstrating a reference data set where lei as a unique identifier a
 
 ## Part 2: Change in data
 
-5. [Member 1](../test/data-samples/member0_demo_pt2.json) uploads a small change to the existing dataset (JSON)
+5. [Member 0](../test/data-samples/member0_demo_pt2.json) uploads a small change to the existing dataset (JSON)
 6. Members 1, 2, 3 are able to see the change in their respective reports
 
 ## Part 3: Code update
