@@ -110,7 +110,7 @@ check_eq "member0 - Getting report without ingesting data should fail as 'No Dat
 
 printf "\n  -------- Test Ingestion Service --------  \n\n"
 
-check_eq "Member0 - data ingest through CSV should succeed" "200" "$(curl $ingestCsvUrl -X POST $(cert_arg member0) -H "Content-Type: text/csv" --data-binary "@../../test/data-samples/${memberName}_data.csv" $only_status_code)"
+check_eq "Member0 - data ingest through CSV should succeed" "200" "$(curl $ingestCsvUrl -X POST $(cert_arg member0) -H "Content-Type: text/csv" --data-binary "@../../test/data-samples/member0_data.csv" $only_status_code)"
 
 check_eq "Member1 - data ingest failed (data length is zero)" "400" "$(curl $ingestUrl -X POST $(cert_arg member1) -H "Content-Type: application/json" --data-binary "[]" $only_status_code)"
 

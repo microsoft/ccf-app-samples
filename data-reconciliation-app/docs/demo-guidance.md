@@ -1,8 +1,6 @@
 # Data Reconciliation Demo
 
-In the future, this demo could have a UI to demonstrate how easy it is to deploy a mCCF network and highlight mCCF’s governance capabilities.
-
-However this demo will be via the command-line (APIs, no UI) as well as JSON, not CSV.
+In the future, this demo could have a UI to demonstrate how easy it is to deploy a mCCF network and highlight mCCF’s governance capabilities. However this demo will be via the command-line.
 
 ## Data
 
