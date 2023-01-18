@@ -58,8 +58,7 @@ unit-test: ## 🔨 Run the Application unit-test
 # To build and start a ccf network and automatically deploy your application on it.
 demo: ## 🎬 Demo the Data Reconciliation Application
 	@echo -e "\e[34m$@\e[0m" || true
-	@./test/01-data_ingest_demo.sh
-	@./test/02-report_change_demo.sh
+	@./test/test.sh --nodeAddress 127.0.0.1:8000 --certificate_dir ./workspace/sandbox_common --interactive
 
 demo-code-change: build ## 🎬 Demo the Data Reconciliation Application Code Change
 	@echo -e "\e[34m$@\e[0m" || true
