@@ -47,10 +47,10 @@ build-enclave: build ## 📦 Build Enclave container image from Dockerfile
 	@echo -e "\e[34m$@\e[0m" || true
 	@../scripts/build_image.sh enclave
 
-e2e-test: ## 📦 Run end to end tests
+e2e-test: ## 🧪 Run end to end tests
 	@echo -e "\e[34m Not Implemented \e[0m" || true
 	
-unit-test: ## 🔨 Run the Application unit-test
+unit-test: ## 🧪 Run the Application unit-test
 	@echo -e "\e[34m$@\e[0m" || true
 	@npm run unit-test
 	
