@@ -62,7 +62,7 @@ demo: ## 🎬 Demo the Data Reconciliation Application
 demo-code-change: build ## 🎬 Demo the Data Reconciliation Application Code Change
 	@echo -e "\e[34m$@\e[0m" || true
 	$(call check_defined, CCF_NAME)
-	@./test/code_change_demo.sh --address "${CCF_NAME}.confidential-ledger.azure.com"
+	@./test/code_change_demo.sh --address "${CCF_NAME}.confidential-ledger.azure.com" --interactive
 
 clean: ## 🧹 Clean the working folders created during build/demo
 	@rm -rf .venv_ccf_sandbox

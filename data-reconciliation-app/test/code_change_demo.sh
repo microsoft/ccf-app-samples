@@ -2,6 +2,7 @@
 set -euo pipefail
 
 declare certificate_dir="./workspace/mccf_certificates"
+declare interactive=0
 
 function usage {
     echo ""
@@ -10,6 +11,7 @@ function usage {
     echo "usage: ./code_change_demo.sh --address <ADDRESS>"
     echo ""
     echo "  --address       string      The address of the primary CCF node"
+    echo "  --interactive   boolean     Optional. Run in Demo mode"
     echo ""
 }
 
@@ -18,9 +20,22 @@ function failed {
     exit 1
 }
 
+function addCheckpoint {
+    if [ $interactive -eq 1 ]; then
+        printf "%s\n\n" "${1}"
+        read -n1 -r -p "- Press any key to continue..."
+        printf "\n"
+    fi
+}
+
+cert_arg() {
+    caller="$1"
+    echo "--cacert service_cert.pem --cert ${caller}_cert.pem --key ${caller}_privk.pem"
+}
+
 # parse parameters
 
-if [ $# -gt 2 ]; then
+if [ $# -gt 3 ]; then
     usage
     exit 1
 fi
@@ -29,6 +44,7 @@ while [ $# -gt 0 ]
 do
     case "$1" in
         --address) address="$2"; shift 2;;
+        --interactive) interactive=1; shift;;
         --help) usage; exit 0;;
         *) usage; exit 1;;
     esac
@@ -40,8 +56,9 @@ if [ -z "$address" ]; then
 fi
 server="https://${address}"
 
-# shellcheck disable=SC1091
-. "./test/env_vars.sh"
+reportUrl="$server/app/report"
+proposalUrl="$server/gov/proposals"
+id="9845001D460PEJE54159"
 
 cd "${certificate_dir}"
 
