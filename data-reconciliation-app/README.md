@@ -45,18 +45,18 @@ A makefile provides a frontend to interacting with the project, this is used bot
 ```text
 help                 💬 This help message :)
 build                🔨 Build the Application
+build-virtual        📦 Build Virtual container image from Dockerfile
+build-enclave        📦 Build Enclave container image from Dockerfile
+start-host           🏃 Start the CCF network using Sandbox.sh
 test                 🧪 Test the Data Reconciliation Application in the sandbox
 test-docker-virtual  🧪 Test the Data Reconciliation Application in a Docker sandbox
 test-docker-enclave  🧪 Test the Data Reconciliation Application in a Docker enclave
 test-mccf            🧪 Test the Data Reconciliation Application in a Managed CCF environment
-start-host           🏃 Start the CCF network using Sandbox.sh
-clean                🧹 Clean the working folders created during build/demo
-build-virtual        📦 Build Virtual container image from Dockerfile
-build-enclave        📦 Build Enclave container image from Dockerfile
-e2e-test             🧪  Run end to end tests
-unit-test            🧪  Run the Application unit-test
+e2e-test             🧪 Run end to end tests
+unit-test            🧪 Run the Application unit-test
 demo                 🎬 Demo the Data Reconciliation Application
 demo-code-change     🎬 Demo the Data Reconciliation Application Code Change
+clean                🧹 Clean the working folders created during build/demo
 ```
 
 ## Testing
