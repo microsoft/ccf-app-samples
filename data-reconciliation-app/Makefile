@@ -61,7 +61,7 @@ demo: ## 🎬 Demo the Data Reconciliation Application
 	@./test/test.sh --nodeAddress 127.0.0.1:8000 --certificate_dir ./workspace/sandbox_common --interactive
 
 # This target is here for a demo
-# 1. run `make test`
+# 1. run `make test-mccf`
 # 2. make a code change to Line 72 - /workspaces/ccf-app-samples/data-reconciliation-app/src/models/data-schema.ts
 # 3. Run this make target
 demo-code-change: build ## 🎬 Demo the Data Reconciliation Application Code Change
