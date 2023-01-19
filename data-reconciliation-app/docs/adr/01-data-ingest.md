@@ -6,7 +6,7 @@ Approved
 
 ## Context
 
-We need to build an API that ingests data into our system. Once ingested, we need to store this data in the K-V store so we can reconcile and get reports on the data.
+We need to build an API that ingests data into our system. Once ingested, we need to store this data in the K-V store so we can reconcile it and get reports on the ingested data.
 
 Gathered requirements:
 
@@ -34,7 +34,7 @@ Gathered requirements:
   - N/A
 - Headers
   - content-type: application/json
-- Request will be a `ccfapp.Request` object. We will interrogate the `ccfapp.Request` object to extract the user or member and [authenticate them via certificates](#security). We will read the request body as a JSON.
+- Request will be a `ccfapp.Request` object. We will interrogate the `ccfapp.Request` object to extract the user or member and [authenticate them via certificates](#security). We will read the request body as JSON.
 - API Status Codes
   - OK
     - Status: 200
@@ -194,7 +194,7 @@ A: Members will not use the data reconciliation k-v store for audit. Members hav
 
 Q: Is data mutable?
 
-A: Data records are mutable! When new data is submitted by a member, the data could be a mix of records that need to be created or conceptually "updated" or "deleted". However, our K-V store is append-only. We can only communicate with the local store by reading and writing.When a record requires "updating," we will simply re-write it for the K-V Store.
+A: Data records are mutable! When new data is submitted by a member, the data could be a mix of records that need to be created or conceptually "updated" or "deleted". However, our K-V store is append-only. We can only communicate with the local store by reading and writing. When a record requires "updating," we will simply rewrite it for the K-V Store.
 
 When working with an append-only store, there is no concept of [deleting](https://microsoft.github.io/CCF/main/build_apps/kv/kv_how_to.html#removing-a-key) or updating. Members will never want to delete data records. If a member stops submitting data on a record in subsequent data ingests, we will continue to report on that record. We will not delete the record from the K-V store; therefore, we will report on all records ever submitted by the member. Yes, this means the ledger will grow in size.
 
