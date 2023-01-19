@@ -5,9 +5,12 @@ import { DataSchema } from "../models/data-schema";
 import authenticationService from "../services/authentication-service";
 import ingestService from "../services/ingest-service";
 
-export function postHandler(
-  request: ccfapp.Request<any>
-): ccfapp.Response<CCFResponse> {
+/**
+ * HTTP POST Handler for Ingesting Data via JSON
+ * @param {ccfapp.Request<any>} request - JSON to be ingested
+ * @returns {ServiceResult<string>} - data has ingested successfully
+ */
+export function postHandler(request: ccfapp.Request<any>): ccfapp.Response<CCFResponse> {
   // get caller identity
   const getCallerId = authenticationService.getCallerId(request);
   if (getCallerId.failure) return ApiResult.Failed(getCallerId);
