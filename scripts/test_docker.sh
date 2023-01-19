@@ -6,6 +6,7 @@ declare enclave_type=""
 declare app_dir=$PWD                   # application folder for reference
 declare app_name=${app_dir##*/}        # application name (to be used in container commands)
 declare certificate_dir="${app_dir}/workspace/docker_certificates"
+declare interactive=0
 
 function usage {
     echo ""
@@ -13,12 +14,12 @@ function usage {
     echo ""
     echo "usage: ./test_docker.sh --serverIP <IPADDRESS> --port <PORT> [--virtual] [--enclave]"
     echo ""
-    echo "  --serverIP  string      The IP address of the primary CCF node"
-    echo "  --port      string      The port of the primary CCF node"
-    echo "  --virtual   string      Run this in a virtual node"
-    echo "  --enclave   string      Run this in a SGX node"
+    echo "  --serverIP      string      The IP address of the primary CCF node"
+    echo "  --port          string      The port of the primary CCF node"
+    echo "  --virtual       string      Run this in a virtual node"
+    echo "  --enclave       string      Run this in a SGX node"
+    echo "  --interactive   boolean     Optional. Run in Demo mode"
     echo ""
-    exit 0
 }
 
 function failed {
@@ -28,7 +29,7 @@ function failed {
 
 # parse parameters
 
-if [ $# -gt 5 ]; then
+if [ $# -gt 6 ]; then
     usage
     exit 1
 fi
@@ -42,6 +43,7 @@ do
         --port) port="$2"; shift;;
         --virtual) enclave_type="virtual";;
         --enclave) enclave_type="enclave";;
+        --interactive) interactive=1;;
         --help) usage; exit 0;;
         --) shift;;
     esac
@@ -61,6 +63,13 @@ fi
 declare server="https://${serverIP}:${port}"
 
 function finish {
+    if [ $interactive -eq 1 ]; then
+        echo "🤔 Do you want to stop the container? (Y/n)"
+        read -r proceed
+        if [ "$proceed" == "n" ]; then
+            exit 0
+        fi
+    fi
     containerId=$(docker ps -qf ancestor="$app_name:$enclave_type")
     docker stop "$containerId"
     echo "💀 Killed container ${containerId}"
@@ -94,4 +103,8 @@ if [ ! -f "$testScript" ]; then
 fi
 
 "$governanceScript" --nodeAddress "${serverIP}:${port}" --certificate_dir "$certificate_dir"
-"$testScript" --nodeAddress "${serverIP}:${port}" --certificate_dir "$certificate_dir"
+if [ $interactive -eq 1 ]; then
+    "$testScript" --nodeAddress "${serverIP}:${port}" --certificate_dir "$certificate_dir" --interactive
+else
+    "$testScript" --nodeAddress "${serverIP}:${port}" --certificate_dir "$certificate_dir"
+fi

@@ -53,7 +53,13 @@ unit-test: ## 🧪 Run the Application unit-test
 # To build and start a ccf network and automatically deploy your application on it.
 demo: ## 🎬 Demo the Data Reconciliation Application
 	@echo -e "\e[34m$@\e[0m" || true
-	@./test/test.sh --nodeAddress 127.0.0.1:8000 --certificate_dir ./workspace/sandbox_common --interactive
+	@. ../scripts/test_sandbox.sh --nodeAddress 127.0.0.1:8000 --certificate_dir ./workspace/sandbox_common --constitution_dir ./governance/constitution --interactive
+
+# Run `make start-host` in another terminal before running this.
+# To build and start a ccf network and automatically deploy your application on it.
+demo-docker: ## 🎬 Demo the Data Reconciliation Application
+	@echo -e "\e[34m$@\e[0m" || true
+	@. ../scripts/test_docker.sh --virtual --serverIP 172.17.0.3 --port 8080 --interactive
 
 # This target is specifically for a demo in a pre-configured mCCF network running this application. It does not run without it
 # 1. run `make demo`
