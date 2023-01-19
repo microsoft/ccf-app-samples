@@ -11,6 +11,7 @@ export function getSwaggerUI(): ccfapp.Response<string> {
                 <script>
                     function render() {
                         var ui = SwaggerUIBundle({
+                            //url:  '/app/api',
                             url:  '/app/swagger.json',
                             dom_id: '#swagger-ui',
                             presets: [
