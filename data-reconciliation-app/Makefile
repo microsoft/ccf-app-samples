@@ -60,7 +60,7 @@ demo: ## 🎬 Demo the Data Reconciliation Application
 	@echo -e "\e[34m$@\e[0m" || true
 	@./test/test.sh --nodeAddress 127.0.0.1:8000 --certificate_dir ./workspace/sandbox_common --interactive
 
-# This target is here for a demo
+# This target is specifically for a demo in a pre-configured mCCF network running this application. It does not run without it
 # 1. run `make demo`
 # 2. make a code change to Line 72 - /workspaces/ccf-app-samples/data-reconciliation-app/src/models/data-schema.ts
 # 3. Run this make target
