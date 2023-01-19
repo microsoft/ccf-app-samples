@@ -7,9 +7,9 @@ import authenticationService from "../services/authentication-service";
 import ingestService from "../services/ingest-service";
 
 /**
- * Ingest Data via CSV
- * @param request CSV File data to be ingested
- * @returns @type ServiceResult<string>
+ * HTTP POST Handler for Ingesting Data via CSV
+ * @param {ccfapp.Request<any>} request - CSV File Data to be ingested
+ * @returns {ServiceResult<string>} - data has ingested successfully
  */
 export function postHandlerCsv(request: ccfapp.Request<any>): ccfapp.Response<CCFResponse> {
   // get caller identity
