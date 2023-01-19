@@ -6,9 +6,12 @@ import { DataSchema } from "../models/data-schema";
 import authenticationService from "../services/authentication-service";
 import ingestService from "../services/ingest-service";
 
-export function postHandlerCsv(
-  request: ccfapp.Request<any>
-): ccfapp.Response<CCFResponse> {
+/**
+ * HTTP POST Handler for Ingesting Data via CSV
+ * @param {ccfapp.Request<any>} request - CSV File Data to be ingested
+ * @returns {ServiceResult<string>} - data has ingested successfully
+ */
+export function postHandlerCsv(request: ccfapp.Request<any>): ccfapp.Response<CCFResponse> {
   // get caller identity
   const getCallerId = authenticationService.getCallerId(request);
   if (getCallerId.failure) return ApiResult.Failed(getCallerId);

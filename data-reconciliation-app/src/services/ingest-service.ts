@@ -4,17 +4,18 @@ import { ServiceResult } from "../utils/service-result";
 import keyValueRepository, { IRepository } from "../repositories/kv-repository";
 
 export interface IIngestService {
+  /**
+   * Map and Store DataRecords in KV-Store
+   * @param {string} userId - UserID submitting the data
+   * @param {DataRecord[]} dataRecords - Data mapped into DataRecord
+   */
   submitData(userId: string, dataRecords: DataRecord[]): ServiceResult<string>;
 }
 
 export class IngestService implements IIngestService {
   constructor(private readonly keyValueRepo: IRepository<ReconciledRecord>) {}
 
-  // map and store data to kv-store
-  public submitData(
-    userId: string,
-    dataRecords: DataRecord[]
-  ): ServiceResult<string> {
+  public submitData(userId: string, dataRecords: DataRecord[]): ServiceResult<string> {
     if (!dataRecords || dataRecords.length == 0) {
       return ServiceResult.Failed({
         errorMessage: "Error: ingestion data cannot be null",
