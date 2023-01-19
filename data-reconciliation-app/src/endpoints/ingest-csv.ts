@@ -36,9 +36,11 @@ export function postHandlerCsv(
 function getCsvBodyAsJson(request: ccfapp.Request<any>): ServiceResult<any> {
   try {
     // parse CSV, converting to json
-    var result = papa.parse(request.body.text(), {header: true, skipEmptyLines: true});
+    var result = papa.parse(request.body.text(), {
+      header: true,
+      skipEmptyLines: true,
+    });
     return ServiceResult.Succeeded(result.data);
-
   } catch (ex) {
     return ServiceResult.Failed({
       errorMessage: ex.message,
@@ -47,5 +49,3 @@ function getCsvBodyAsJson(request: ccfapp.Request<any>): ServiceResult<any> {
     });
   }
 }
-
-
