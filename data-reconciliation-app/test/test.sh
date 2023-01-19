@@ -120,11 +120,10 @@ memberName="member2"
 check_eq "${memberName} - JSON data ingest succeeded" "200" "$(curl $ingestUrl -X POST $(cert_arg ${memberName}) -H "Content-Type: application/json" --data-binary "@../../test/data-samples/${memberName}_data.json" $only_status_code)"
 addCheckpoint "🎬 Ingestion Stage Complete"
 
-printf "\n -------- Test Reporting Service (GetAll) --------  \n\n"
+printf "\n -------- Test Reporting Service (Full Report) --------  \n\n"
 
 userName="user0"
 check_eq "${userName} - Getting report without ingesting data should fail as 'No Data to Report' " "400" "$(curl $reportUrl -X GET $(cert_arg ${userName}) -H "Content-Type: application/json" $only_status_code)"
-# addCheckpoint "🎬 No Data to Report"
 
 memberName="member0"
 check_eq "${memberName} - Getting all data records should succeed" "200" "$(curl $reportUrl -X GET $(cert_arg ${memberName}) -H "Content-Type: application/json" $only_status_code)"
@@ -169,7 +168,7 @@ printf "\n  -------- Report Change --------  \n\n"
 
 memberName="member0"
 check_eq "${memberName} - JSON data ingest succeeded" "200" "$(curl $ingestUrl -X POST $(cert_arg ${memberName}) -H "Content-Type: application/json" --data-binary "@../../test/data-samples/${memberName}_data_pt2.json" $only_status_code)"
-addCheckpoint "🎬 ${memberName} successfully ingested additional data"
+printf "🎬 ${memberName} successfully ingested additional/updated data.\n"
 
 memberName="member2"
 printf "\n${memberName} - Data status changes for id: $id_newGroupStatus:\n"
