@@ -6,7 +6,7 @@ Decided
 
 ## Context
 
-We need to build an API that ingests member data into our system. Once ingested, we also need to store this data in the K-V store. Members will decide on a data schema which will be used for ingesting, data reconciliation and reporting.
+We need to build an API that ingests member data into our system. Once ingested, we need to store this data in the K-V store. Members will decide on a data schema which will be used for ingesting, data reconciliation and reporting.
 
 There are multiple strategies for data schema definition and usage. In this document, we lay out our decision and some other alternatives considered.
 
@@ -35,13 +35,13 @@ POST /submit-data
 }
 ```
 
-This option requires a member to reset their previously submitted data and resubmit again when they change their schema.
+This option requires a member to reset their previously submitted data and resubmit when they change their schema.
 
-While this option provides the maximum flexibility for members to submit data in any form, it introduces data validation and mapping, report generation challenges in every layer at the API.
+While this option provides the maximum flexibility for members to submit data in any form, it introduces data validation, mapping, and report generation challenges in every layer at the API.
 
 ### Option2: Defining Data Schema via API
 
-In this strategy, the members define their data schema using a dedicated endpoint and API to store their schema definition in the K-V store. When new data is submitted by a member, API gathers the data schema from the K-V store and then runs validate, data reconciliation etc. using that schema. When a member requests a data reconciliation report, the API will generate the report using their registered data schema format.
+In this strategy, the members define their data schema using a dedicated endpoint and API to store their schema definition in the K-V store. When new data is submitted by a member, API gathers the data schema from the K-V store and runs validate, data reconciliation etc. using that schema. When a member requests a data reconciliation report, the API will generate the report using their registered data schema format.
 
 Data schema registry API payload could become:
 
@@ -71,7 +71,7 @@ POST /submit-data
 
 This option requires a member to reset their previously submitted data and resubmit again when they change their schema.
 
-While this option provides great flexibility for members, it introduces lots of data mapping and validation challenges which will not be feasible within the project timeline
+While this option provides great flexibility for members, it introduces lots of data mapping and validation challenges which won't be a feasible within the project timeline
 
 ### Option3: Defining Data Schema via Deployment
 
