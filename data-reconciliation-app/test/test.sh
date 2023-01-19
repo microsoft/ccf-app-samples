@@ -99,6 +99,7 @@ done
 cd "${certificate_dir}"
 
 ingestUrl="$server/app/ingest"
+ingestCsvUrl="$server/app/csv/ingest"
 reportUrl="$server/app/report"
 id="9845001D460PEJE54159"
 #id1="984500E1B2CA1D4EKG67"
@@ -109,7 +110,7 @@ check_eq "member0 - Getting report without ingesting data should fail as 'No Dat
 
 printf "\n  -------- Test Ingestion Service --------  \n\n"
 
-check_eq "Member0 - data ingest succeed" "200" "$(curl $ingestUrl -X POST $(cert_arg member0) -H "Content-Type: application/json" --data-binary "@../../test/data-samples/member0_demo_pt1.json" $only_status_code)"
+check_eq "Member0 - data ingest through CSV should succeed" "200" "$(curl $ingestCsvUrl -X POST $(cert_arg member0) -H "Content-Type: text/csv" --data-binary "@../../test/data-samples/${memberName}_data.csv" $only_status_code)"
 
 check_eq "Member1 - data ingest failed (data length is zero)" "400" "$(curl $ingestUrl -X POST $(cert_arg member1) -H "Content-Type: application/json" --data-binary "[]" $only_status_code)"
 
