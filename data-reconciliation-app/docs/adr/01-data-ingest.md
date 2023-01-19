@@ -15,15 +15,17 @@ Gathered requirements:
   - one unique identifier (string)
   - one attribute associated with the unique identifier (string)
 - There is likely going to be a UI on top of our ingest API...so we will treat our app like a backend system. Therefore, we will accept JSON into our ingest API.
+- As captured in [Ingestion Format ADR](./07-ingestion-format.md), many financial institutions transmit their data in Comma Separated Value (CSV) files. Therefore we will also accept CSV for data ingestion.
+  - The CSV file data headers must follow the same schema specified for the JSON file
 
 ## Decision
 
 ## API
 
-### Endpoint
+### JSON Ingestion Endpoint
 
 - Description
-  - Ingest member or user data into our application and add data to K-V store
+  - Ingest member or user data and add to K-V store via JSON
 - Path
   - /ingest
 - HTTP Method
@@ -33,6 +35,31 @@ Gathered requirements:
 - Headers
   - content-type: application/json
 - Request will be a `ccfapp.Request Object`. We will interrogate the `ccfapp.Request Object` to extract the user or member and [authenticate them via certficates](#security). We will read the request body as a JSON.
+- API Status Codes
+  - OK
+    - Status: 200
+    - Status Text: "Data has been ingested"
+  - UNAUTHORIZED
+    - Status: 401
+    - Status Text: "Unauthorized"
+  - BAD_REQUEST
+    - Status: 400
+    - Status Text: "Validation Error"
+
+### CSV Ingestion Endpoint
+
+- Description
+  - Ingest member or user data and add to K-V store via CSV.
+  - Data is converted to JSON from the application
+- Path
+  - /csv/ingest
+- HTTP Method
+  - POST
+- URL Params
+  - N/A
+- Headers
+  - content-type: text/csv
+- Request will be a `ccfapp.Request Object`. We will interrogate the `ccfapp.Request Object` to extract the user or member and [authenticate them via certficates](#security). We will read the request body as a text and do the convertion within the code.
 - API Status Codes
   - OK
     - Status: 200
@@ -56,18 +83,29 @@ Users will be authenticated via certificates, which is natively supported by the
 
 The ingest model has been documented by [this ADR](./02-data-schema-strategy.md#option3-defining-data-schema-via-deployment). Our ingest data model will look like:
 
-```
+```typescript
 export interface DataSchema {
     key: string;
     value: string | number;
 }
 ```
 
+### Default Data Schema
+
+The defined default data schema is described below. JSON and CSV files must follow it to be accepted in the application.
+
+```typescript
+const schema: DataSchema = {
+  key: { name: "lei", type: "string" },
+  value: { name: "nace", type: "string" },
+};
+```
+
 ### Data Record Model
 
 Upon ingest, `DataSchema` records will be mapped to a `DataRecord` model. `DataRecord`s can be string or numeric.
 
-```
+```typescript
 export type DataAttributeType = string | number;
 export interface DataRecordProps {
   key: string;
@@ -79,7 +117,7 @@ export interface DataRecordProps {
 
 Our repository will be a K-V store. Our K-V store will be defined as:
 
-```
+```typescript
 const kvStore = ccfapp.typedKv(
   "data",
   ccfapp.string,
@@ -89,7 +127,7 @@ const kvStore = ccfapp.typedKv(
 
 A `ReconciledRecord` represents all of users who submittted data on the record and their opinion of the record.
 
-```
+```typescript
 export class ReconciledRecord implements ReconciledRecordProps {
   key: string;
   values: ReconciliationMap = {};
@@ -115,7 +153,7 @@ Depending if the key exists, a `ReconciledRecord` can be `updated` or `created` 
 
 The ingest service will `update` or `create` a `ReconciledRecord` from `DataRecord`s before saving to the K-V store.
 
-```
+```typescript
 submitData(userId: string, dataRecords: DataRecord[])
 ```
 
@@ -170,4 +208,4 @@ By only storing the `ReconciledRecord`, we make "updating" of a key for a partic
 
 Q: Is there a better way to design our system to increase performance on reconciling and reporting?
 
-A: Probably! Our current design requires us to scan and read from the entire K-V store to generate a member's report. This is an expensive operation Adding a ticket to the backlog to investigate improvements to our design.
+A: Probably! Our current design requires us to scan and read from the entire K-V store to generate a member's report. Please see further discussion here: [improve-performance adr](./08-improve-performance.md). We have considered the data-reconciliation app to be write heavy, therefore, we have implemented the current approach which is write-efficient.
