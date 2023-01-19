@@ -15,7 +15,7 @@ Gathered requirements:
   - one unique identifier (string)
   - one attribute associated with the unique identifier (string)
 - There is likely going to be a UI on top of our ingest API...so we will treat our app like a backend system. Therefore, we will accept JSON into our ingest API.
-- As captured in [Ingestion Format ADR](./07-ingestion-format.md), Many financial institutions transmit their data in Comma Seperated Value (CSV) files. Therefore we will also accept CSV for data ingestion, which will then be converted and treated as a JSON object in the application.
+- As captured in [Ingestion Format ADR](./07-ingestion-format.md), many financial institutions transmit their data in Comma Separated Value (CSV) files. Therefore we will also accept CSV for data ingestion.
   - The CSV file data headers must follow the same schema specified for the JSON file
 
 ## Decision
@@ -25,7 +25,7 @@ Gathered requirements:
 ### JSON Ingestion Endpoint
 
 - Description
-  - Ingest member or user data into our application and add data to K-V store via JSON
+  - Ingest member or user data and add to K-V store via JSON
 - Path
   - /ingest
 - HTTP Method
@@ -49,7 +49,7 @@ Gathered requirements:
 ### CSV Ingestion Endpoint
 
 - Description
-  - Ingest member or user data into our application and add data to K-V store via CSV.
+  - Ingest member or user data and add to K-V store via CSV.
   - Data is converted to JSON from the application
 - Path
   - /csv/ingest
