@@ -134,6 +134,7 @@ check_eq "${memberName} - Getting all data records should succeed" "200" "$(curl
 memberName="member2"
 check_eq "${memberName} - Getting all data records should succeed" "200" "$(curl $reportUrl -X GET $(cert_arg ${memberName}) -H "Content-Type: application/json" $only_status_code)"
 
+memberName="member1"
 printf "\n${memberName} Full Report:\n"
 curl $server/app/report -X GET $(cert_arg $memberName) --no-progress-meter | jq '.content[]'
 printf "\n"
@@ -174,8 +175,84 @@ memberName="member2"
 printf "\n${memberName} - Data status changes for id: $id_newGroupStatus:\n"
 curl $reportUrl/$id_newGroupStatus -X GET $(cert_arg ${memberName})  --no-progress-meter | jq '. | {content}'
 
-printf "\n\n🏁 Test Completed...\n"
-exit 0
+addCheckpoint "🎬 Updated Report after New Data Submission"
+
+
 
 # ----------------------------------------------------
-#TODO: add assertions to check content within reports
+# Assertions' Checks 
+# ----------------------------------------------------
+
+assert_report_field() {
+    local memberName="$1"
+    local recordId="$2"
+    local fieldName="$3"
+    local expectedValue="$4"  
+
+    # extract current value by filtering the field of interest from the member report  
+    currentValue=$(curl $reportUrl/$recordId -X GET $(cert_arg ${memberName})  --no-progress-meter | jq ".content.${fieldName}")
+    
+    check_eq "Assert $memberName::$recordId.$fieldName == $expectedValue" "${expectedValue}" "${currentValue}" 
+}
+
+memberName="member2"
+recordId=$id_inConsensus
+printf "\nChecking ALL fields for ${memberName} and id ${recordId} (In Consensus)\n"
+assert_report_field "${memberName}" ${recordId} "group_status"           "\"IN_CONSENSUS\"" 
+assert_report_field "${memberName}" ${recordId} "majority_minority"      "\"Majority\"" 
+assert_report_field "${memberName}" ${recordId} "count_of_unique_values" "1" 
+assert_report_field "${memberName}" ${recordId} "members_in_agreement"   "3" 
+assert_report_field "${memberName}" ${recordId} "lei"                    "\"${id_inConsensus}\"" 
+assert_report_field "${memberName}" ${recordId} "nace"                   "\"C.18.13\"" 
+
+memberName="member2"
+recordId="9845002B6B074505A715"
+printf "\nChecking fields for ${memberName} and id ${recordId} (Not Enough Data with Minority of votes)\n" 
+assert_report_field "${memberName}" ${recordId} "group_status"           "\"NOT_ENOUGH_DATA\"" 
+assert_report_field "${memberName}" ${recordId} "majority_minority"      "\"Minority\"" 
+assert_report_field "${memberName}" ${recordId} "count_of_unique_values" "2" 
+assert_report_field "${memberName}" ${recordId} "members_in_agreement"   "1" 
+
+memberName="member2"
+recordId="984500BA57A56NBD3A24"
+printf "\nChecking fields for ${memberName} and id ${recordId} (Not Enough Data with Majority of votes)\n"
+assert_report_field "${memberName}" ${recordId} "group_status"           "\"NOT_ENOUGH_DATA\"" 
+assert_report_field "${memberName}" ${recordId} "majority_minority"      "\"Majority\"" 
+assert_report_field "${memberName}" ${recordId} "count_of_unique_values" "1" 
+assert_report_field "${memberName}" ${recordId} "members_in_agreement"   "2" 
+
+memberName="member2"
+recordId="984500E1B2CA1D4EKG67"
+printf "\nChecking fields for ${memberName} and id ${recordId} (Lack of Consensus with Majority of votes)\n"
+assert_report_field "${memberName}" ${recordId} "group_status"           "\"LACK_OF_CONSENSUS\"" 
+assert_report_field "${memberName}" ${recordId} "majority_minority"      "\"Majority\"" 
+assert_report_field "${memberName}" ${recordId} "count_of_unique_values" "2" 
+assert_report_field "${memberName}" ${recordId} "members_in_agreement"   "2" 
+
+memberName="member0"
+recordId="984500E1B2CA1D4EKG67"
+printf "\nChecking fields for ${memberName} and id ${recordId} (Lack of Consensus with Minority of votes)\n"
+assert_report_field "${memberName}" ${recordId} "group_status"           "\"LACK_OF_CONSENSUS\"" 
+assert_report_field "${memberName}" ${recordId} "majority_minority"      "\"Minority\"" 
+assert_report_field "${memberName}" ${recordId} "count_of_unique_values" "2" 
+assert_report_field "${memberName}" ${recordId} "members_in_agreement"   "1" 
+
+memberName="member0"
+recordId="984500F5BD5BE5767C51"
+printf "\nChecking fields for ${memberName} and id ${recordId} (In Consensus)\n"
+assert_report_field "${memberName}" ${recordId} "group_status"           "\"IN_CONSENSUS\"" 
+assert_report_field "${memberName}" ${recordId} "count_of_unique_values" "1" 
+assert_report_field "${memberName}" ${recordId} "members_in_agreement"   "3" 
+
+memberName="member1"
+recordId="984500E1B2CA1D4EKG67"
+printf "\nChecking fields for ${memberName} and id ${recordId} (Lack Of Consensus)\n"
+assert_report_field "${memberName}" ${recordId} "group_status" "\"LACK_OF_CONSENSUS\"" 
+
+memberName="member1"
+recordId="984500F5BD5BE5767C51"
+printf "\nChecking fields for ${memberName} and id ${recordId} (In Consensus)\n"
+assert_report_field "${memberName}" ${recordId} "group_status" "\"IN_CONSENSUS\"" 
+
+printf "\n\n🏁 Test Completed...\n"
+exit 0
