@@ -131,7 +131,6 @@ It is also possible to run the tests in _Demo mode_. This can be achieved by run
 
 ```bash
 cd data-reconciliation-app    # Navigate to reconciliation sample folder
-make start-host               # Start a CCF virtual network using sandbox
 make demo                     # Run interactive end to end tests
 ```
 
