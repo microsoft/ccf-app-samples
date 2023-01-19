@@ -16,7 +16,6 @@ function usage {
     echo "  --signing-cert  string      The signing certificate (member0)"
     echo "  --signing-key   string      The signing key (member0)"
     echo ""
-    exit 0
 }
 
 function failed {
