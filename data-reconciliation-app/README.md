@@ -10,7 +10,7 @@ When a new record(s) is submitted through ingestion endpoints, the application w
 
 ## Architecture
 
-The reconciliation application consists of three main parts.
+The reconciliation application consists of three main parts: Data Ingestion, Data Reconciliation and Data Reporting.
 
 - Data ingestion
   - API Endpoint: allow members to submit their data to reconciled.
@@ -25,7 +25,7 @@ The reconciliation application consists of three main parts.
 
 ![architecture diagram](./docs/images/architecture.png)
 
-### Repo Layout
+### Repository Layout
 
 ```text
 📂
@@ -46,19 +46,21 @@ The reconciliation application consists of three main parts.
 │    └── utils          utility classes
 │
 └── test
-     └── e2e-test       Application end to end tests
-     └── unit-test      Application unit tests
+     └── data-samples    Data files for tests|demo
+     └── e2e-test            Application end to end tests
+     └── unit-test            Application unit tests
+     
 
 ```
 
 ## Getting Started
 
-To get started and run the application locally, we will start with setting up the environment.
+To get started and run the application locally, start with setting up the environment.
 
 ```bash
 # setup the environment
 git clone https://github.com/microsoft/ccf-app-samples # Clone the samples repository
-code .                                                 # open samples repository in Visual studio code
+code ccf-app-samples                                                 # open samples repository in Visual studio code
 
 # In the VScode terminal window
 cd data-reconciliation-app                             # Navigate to reconciliation sample folder
@@ -70,17 +72,17 @@ Now the environment is ready, and there are several scenarios that could be exec
 - **Run the application's [e2e-tests](./test/test.sh) in a sandbox environment in the interactive mode**
   - `make demo`
 
-- **Run the application's [e2e-tests](./test/test.sh) in a sandbox environment**
+- **Run the application's [e2e-tests](./test/test.sh) in a sandbox (simulated) environment**
   - `make test`
 
-- **Run the application's [e2e-tests](./test/test.sh) on a Docker container running a virtual environment (sandbox)**
+- **Run the application's [e2e-tests](./test/test.sh) on a Docker Container running a virtual (simulated) environment**
   - `make test-docker-virtual`
 
-- **Run the application [e2e-tests](./test/test.sh) on a managed ccf environment**
-  - First, create a managed CCF instance on your Azure subscription. Please follow [here](https://github.com/microsoft/ccf-app-samples/tree/main/deploy#deploying-the-ccf-samples)
+- **Run the application [e2e-tests](./test/test.sh) on a Managed CCF environment**
+  - First, create a Managed CCF instance on your Azure subscription. Please follow [here](https://github.com/microsoft/ccf-app-samples/tree/main/deploy#deploying-the-ccf-samples)
   - Run the e2e-test, please follow [here](https://github.com/microsoft/ccf-app-samples/tree/main/deploy#deploying-a-ccf-application-to-azure-managed-ccf)
 
-- **Start a CCF network with three active members using the sandbox and deploy the application to it, the application and network are ready to receive requests**
+- **Start a CCF network with 3 active members and 1 user using the sandbox and deploy the application to it, the application and network are ready to receive requests**
   - `make start-host`
 
 - **Run the application's unit tests**
@@ -90,7 +92,7 @@ These are the main scenarios; more commands are available at makefile and are de
 
 ### Make file
 
-A makefile provides a frontend to interacting with the project, this is used both locally and during CI and GitHub Actions. This makefile is self documenting, and has the following targets:
+A Makefile provides a front-end to interact with the project. It is used both locally, during CI, and on GitHub Actions. This Makefile is self-documented, and has the following targets:
 
 ```text
 help                 💬 This help message :)
@@ -119,7 +121,7 @@ There are 3 different types of network that this sample can be tested against; S
 | Docker      | `make test-docker-virtual` and `make test-docker-enclave` | [test_docker](../scripts/test_docker.sh)   |
 | Managed CCF | `make test-mccf`                                          | [test_mccf](../scripts/test_docker.sh)     |
 
-The wrapper scripts are responsible for starting the particular network with the correct constitution and setting up the governance (users/members/application). The wrapper scripts will also close the network after the tests have finished (excluding mCCF).
+The wrapper scripts are responsible for starting the particular network with the correct constitution and setting up governance (users/members/application). The wrapper scripts will also close the network after the tests have finished (excluding mCCF).
 
 ### Demo
 
