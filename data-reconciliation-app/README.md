@@ -64,7 +64,7 @@ cd data-reconciliation-app                             # Navigate to reconciliat
 make build                                             # Run interactive end to end tests
 ```
 
-there several scenarios could be executed on the local environment
+There are several scenarios that could be executed at this stage
 
 - **Run the application's [e2e-tests](./test/test.sh) in a sandbox environment**
 
