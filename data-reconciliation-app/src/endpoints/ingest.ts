@@ -6,8 +6,8 @@ import authenticationService from "../services/authentication-service";
 import ingestService from "../services/ingest-service";
 
 /**
- * HTTP POST Handler for Ingesting Data via JSON
- * @param {ccfapp.Request<any>} request - JSON to be ingested
+ * HTTP POST Handler for ingesting dta via JSON
+ * @param {ccfapp.Request<any>} request - mTLS request  with userId and JSON data for ingestion
  * @returns {ServiceResult<string>} - data has ingested successfully
  */
 export function postHandler(request: ccfapp.Request<any>): ccfapp.Response<CCFResponse> {
