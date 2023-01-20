@@ -1,12 +1,9 @@
 [
-  { "lei": "1", "nace": "test1" },
-  { "lei": "2", "nace": "test2" },
-  { "lei": "3", "nace": "test3" },
-  { "lei": "4", "nace": "test4" },
-  { "lei": "5", "nace": "test5" },
-  { "lei": "6", "nace": "test6" },
-  { "lei": "7", "nace": "test7" },
-  { "lei": "8", "nace": "test8" },
-  { "lei": "9", "nace": "test9" },
-  { "lei": "10", "nace": "test10" }
+  { "lei": "984500E1B2CA1D4EKG67", "nace": "A01.1" },
+  { "lei": "984500UF3DE41EFA7F02", "nace": "B.08.9" },
+  { "lei": "254900Z8QM2AR51H5I26", "nace": "C.10.1" },
+  { "lei": "984500F5BD5BE5767C51", "nace": "C.18.13" },
+  { "lei": "9845005E5AEEB78CE366", "nace": "G.46.19" },
+  { "lei": "9845001D460PEJE54159", "nace": "K.65.12" },
+  { "lei": "984500815D6139D53E23", "nace": "M.69.1" }
 ]

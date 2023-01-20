@@ -21,7 +21,7 @@ build-enclave: build ## 📦 Build Enclave container image from Dockerfile
 # Start hosting the application using `sandbox.sh` 
 start-host: build ## 🏃 Start the CCF network using Sandbox.sh
 	@echo -e "\e[34m$@\e[0m" || true
-	@/opt/ccf_virtual/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count 3 --initial-user-count 0 --constitution-dir ./governance/constitution
+	@/opt/ccf_virtual/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count 3 --initial-user-count 1 --constitution-dir ./governance/constitution
 
 test: build ## 🧪 Test the Data Reconciliation Application in the sandbox
 	@echo -e "\e[34m$@\e[0m" || true
