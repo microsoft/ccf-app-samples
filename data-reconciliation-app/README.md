@@ -15,13 +15,13 @@ The reconciliation application consists of three main parts: Data Ingestion, Dat
 - Data ingestion
   - API Endpoint: allow members to submit their data to reconciled.
     - Accept single or batch of records
+- Data reconciliation
+  - Data is compared across all members, all members' data carry equal weight to reach consensus.
+  - Reconciliation is on each record, not on the entire data set.
 - Data reporting
   - API Endpoint: Members will query for results
     - Query by specific record by `a unique identifier`
     - Query all data
-- Data reconciliation
-  - Data is compared across all members, all members' data carry equal weight to reach consensus.
-  - Reconciliation is on each record, not on the entire data set.
 
 ![architecture diagram](./docs/images/architecture.png)
 
