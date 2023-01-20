@@ -53,38 +53,34 @@ The reconciliation application consists of three main parts.
 
 ## Getting Started
 
-To get started and run the application locally.
+To get started and run the application locally, we will start with setting up the environment.
 
 ```bash
+# setup the environment
 git clone https://github.com/microsoft/ccf-app-samples # Clone the samples repository
 code .                                                 # open samples repository in Visual studio code
 
 # In the VScode terminal window
 cd data-reconciliation-app                             # Navigate to reconciliation sample folder
-make build                                             # Run interactive end to end tests
+make build                                             # Build and create the application deployment bundle
 ```
 
-There are several scenarios that could be executed at this stage
+Now the environment is ready, and there are several scenarios that could be executed at this stage.
 
-- **Run the application's [e2e-tests](./test/test.sh) in a sandbox environment**
-
-  - `make test`
-
-- **Run the application's [e2e-tests](./test/test.sh) in a sandbox environment with interactive mode**
-
+- **Run the application's [e2e-tests](./test/test.sh) in a sandbox environment in the interactive mode**
   - `make demo`
 
-- **Run the application's [e2e-tests](./test/test.sh) on a Docker container running a virtual environment (sandbox)**
+- **Run the application's [e2e-tests](./test/test.sh) in a sandbox environment**
+  - `make test`
 
+- **Run the application's [e2e-tests](./test/test.sh) on a Docker container running a virtual environment (sandbox)**
   - `make test-docker-virtual`
 
 - **Run the application [e2e-tests](./test/test.sh) on a managed ccf environment**
-
   - First, create a managed CCF instance on your Azure subscription. Please follow [here](https://github.com/microsoft/ccf-app-samples/tree/main/deploy#deploying-the-ccf-samples)
   - Run the e2e-test, please follow [here](https://github.com/microsoft/ccf-app-samples/tree/main/deploy#deploying-a-ccf-application-to-azure-managed-ccf)
 
 - **Start a CCF network with three active members using the sandbox and deploy the application to it, the application and network are ready to receive requests**
-
   - `make start-host`
 
 - **Run the application's unit tests**
@@ -117,11 +113,11 @@ clean                🧹 Clean the working folders created during build/demo
 
 There are 3 different types of network that this sample can be tested against; Sandbox, Docker, and Managed CCF. The script [./test.sh](./test/test.sh) is specific to this sample and is called by wrapper scripts that exist in the root [scripts](../scripts/) folder. These wrapper scripts are used for all samples.
 
-|     Network |                                                   Command |                                     Script |
+|   Network   |                   Command                                 |                  Script                    |
 | ----------: | --------------------------------------------------------: | -----------------------------------------: |
-|     Sandbox |                                               `make test` | [test_sandbox](../scripts/test_sandbox.sh) |
-|      Docker | `make test-docker-virtual` and `make test-docker-enclave` |   [test_docker](../scripts/test_docker.sh) |
-| Managed CCF |                                          `make test-mccf` |     [test_mccf](../scripts/test_docker.sh) |
+| Sandbox     | `make test`                                               | [test_sandbox](../scripts/test_sandbox.sh) |
+| Docker      | `make test-docker-virtual` and `make test-docker-enclave` | [test_docker](../scripts/test_docker.sh)   |
+| Managed CCF | `make test-mccf`                                          | [test_mccf](../scripts/test_docker.sh)     |
 
 The wrapper scripts are responsible for starting the particular network with the correct constitution and setting up the governance (users/members/application). The wrapper scripts will also close the network after the tests have finished (excluding mCCF).
 
