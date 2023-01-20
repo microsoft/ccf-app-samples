@@ -11,37 +11,37 @@ Once data is ingested into the app, Members/Users will query for the data to be 
 ## Requirements
 
 - Reconciliation is on each record.
-- Reconciled information will apply only to items a User has submitted data for.
-- Anytime a User requests a Reconciliation Report, Logic will be executed for this User on the current dataset stored in the network
+- Reconciled information will apply only to items for which a user has submitted data.
+- When a user requests for Reconciliation Report, logic on the current dataset stored in the network is executed for this user.
 - Result will not present other Users' information on a specific record, but just a comparison with them.
 
 ## When Reconciliation Happens
 
-This logic will be embedded on the reporting API, and anytime a member asks for their data to be reconciled (ask for a report), the application will do the necessary calculations based on the data this member has entered.
+This logic will be embedded in the reporting API, and anytime a member asks for their data to be reconciled (asks for a report), the application will do the necessary calculations based on the data this member has ingested.
 
-With this approach, Data Ingestion will be detached from any rules related to Reporting/Reconciliation.
+With this approach, Data Ingestion will be decoupled from any rules related to Reporting/Reconciliation.
 
-This will be done by querying the KV Store for the keys a User has submitted data for. Data related to keys that are unknown to this User will not be present in the final report, and not considered for reconciliation. Therefore the reconciled data they get is only related to their submitted information.
+This will be done by querying the KV Store for the keys a user has submitted data for. Data related to keys that are unknown to this user will not be present in the final report and will not be considered for reconciliation. Therefore, the reconciled data they get is only related to their submitted information.
 
 ## Scenarios
 
 ### Querying for a Specific Record
 
-Users may want to reconcile a specific record. This will be done by directly querying the record in the KV Storage, and comparing the value submitted by the User against others'.
+Users may want to reconcile a specific record. This will be accomplished by directly querying the record in the KV Storage and comparing the user's value to others.
 
-Checks will be done if User has submitted this specific record.
+Checks will be done if the user has submitted this specific record.
 
 ### Querying for all Data
 
-Users may want to reconcile all data they submitted. This will be done by scanning the KV Storage, identifying the records this User has submitted and the comparison logic will be the same used for a single record.
+Users may want to reconcile all the data they submitted. This will be accomplished by scanning the KV Storage, identifying the records this User has submitted, and applying the same comparison logic as for a specific record.
 
 ## Rules
 
 **Current User:** The User requesting a reconciled report.
 
-Each record will have all members' opinions for it. So for each record the reconciliation will be done by comparing the opinion of the current User against the other.
+Each record will have all members' opinions on it. So, for each record, the reconciliation will be performed by comparing the current user's opinion to others'.
 
-### KV Storage - Simple Map based on keys
+### KV Storage: Simple Map Based on Keys
 
 ```json
 {
@@ -57,32 +57,30 @@ Each record will have all members' opinions for it. So for each record the recon
 
 ### Voting Threshold
 
-Reconciliation logic is considered only if a specified number of opinions for a record is submitted. The `voting_threshold` determines if the record has received enough opinions to be reconciled. This will be configurable and can be set by members of the network, depending on the size of the network.
+Reconciliation logic is considered only if a specified number of opinions for a record are submitted. The `voting_threshold` determines if the record has received enough opinions to be reconciled. This will be configurable and can be set by members of the network, depending on the size of the network.
 
 ### For each record in the KV Storage
 
-First check to be made is whether the current User has submitted an opinion for this record. If not, this record can and will be skipped straightaway.
+The first thing to look for is whether the current User has submitted an opinion for this record. If not, this record will be skipped right away.
 
-If we have an opinion, then reconciliation can have 3 possible status:
+If we have an opinion, then reconciliation can have three possible states:
 
 - `NOT_ENOUGH_DATA` : If number of opinions does not reach `voting_threshold`.
-- `LACK_OF_CONSENSUS`: If threshhold is met and data is not equal among all opinions.
-- `IN_CONSENSUS`: If threshold is met and data is equal among all opinions.
+- `LACK_OF_CONSENSUS`: If the threshold is met and at least one of the submitted opinions differs from all of the others.
+- `IN_CONSENSUS`: If the threshold is met and all the opinions submitted are the same.
 
-**A single different record is already a reason for the result to be `LACK_OF_CONSENSUS`.**
-
-This status is the one that will be reported as the `group_status` field in the final Report.
+This state will come under the `group_status` field in the final Report.
 
 ### Sample Summary Result Schema and Report Mapping
 
 In addition to `group_status`, additional statistics will be retrieved for the record to be later consolidated in the Report:
 
-- Total number of opinions (this number helps reporting but shall not be public)
+- Total number of opinions (useful for reporting but will not be made public)
 - Number of unique opinions (count of different opinions for the record)
-- Number of members that agree with the current User
+- Number of members that agree with the current user
 - If the member's opinion is in accordance with the majority or minority of votes
 
-Information will be consolidated in a Summary Result object that will be used by the Reporting API.
+Information will be consolidated into a Summary Result object that will be used by the Reporting API.
 The following proposed schema represents a reconciled record. The output Report will then be generated based on this data.
 
 ```json
@@ -90,7 +88,7 @@ The following proposed schema represents a reconciled record. The output Report 
   "key": "<record key>",
   "value": "<value informed by User>",
   "group_status": "<value>",
-  "total_votes_count": "#",                 // total opinions count - initially comented (DEMO CHANGE)
+  "total_votes_count": "#",                 // total opinions count - initially commented (DEMO CHANGE)
   "count_of_unique_values": "#",            // count of unique values
   "members_in_agreement": "#",              // # of members in agreement with the User value
   "majority_minority": "<calculated value>" // relative to the number of active members in the network
@@ -103,7 +101,7 @@ Where:
 record = // current record being reconciled
 userId = // user requesting reconciliation
 totalUsersInNetwork = // number of users in the system
-voting_threshold = // specified value for threshold needed for our calculations
+voting_threshold = // specified threshold value required for our calculations
 
 key = record.key;
 
@@ -113,9 +111,9 @@ value = record.values[userId]
 total_votes_count = record.values.length
 
 // removing duplicates from Users opinions
-count_of_unique_values = (new Set(Object.values(record.values)).length
+count_of_unique_values = (new Set(Object.values(record.values))).length
 
-// Filtering all similar votes to the current User
+// Filtering all votes that are similar to the current user
 members_in_agreement = 
     Object.keys(record.values).filter(
         (key) => key != userId && record.values[key] == user_opinion
@@ -133,11 +131,11 @@ majority_minority = (members_in_agreement / totalUsersInNetwork) > 0.5 ? 'majori
 Report Column         | Object Mapping        | description 
 ----------------------|-----------------------|------------
 KEY                   |key                    | Record Id
-ATTRIBUTE_N           | value                 | Value submitted by User
+ATTRIBUTE_N           |value                  | Value submitted by User
 GROUP_STATUS          |group_status           | Reconciliation result
 UNIQUE_VALUES         |count_of_unique_values | Number of Distinct values submitted for this record
-MEMBERS_IN_AGREEMENT  | members_in_agreement  | Number of members with same data as User
-MINORITY_MAJORITY     | majority_minority     | Comparison between agreement total votes
+MEMBERS_IN_AGREEMENT  |members_in_agreement   | Number of members with same data as User
+MINORITY_MAJORITY     |majority_minority      | Comparison between agreement total votes
 
 ## Pseudo Code
 
