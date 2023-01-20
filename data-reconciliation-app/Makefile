@@ -43,7 +43,8 @@ test-mccf: build ## 🧪 Test the Data Reconciliation Application in a Managed C
 	@. ../scripts/test_mccf.sh --address "${CCF_NAME}.confidential-ledger.azure.com" --signing-cert "${PUBLIC_CERT}" --signing-key "${PRIVATE_CERT}"
 
 e2e-test: ## 🧪 Run end to end tests
-	@echo -e "\e[34m Not Implemented \e[0m" || true
+	@echo -e "\e[34m$@\e[0m" || true
+	@. ../scripts/test_sandbox.sh --nodeAddress 127.0.0.1:8000 --certificate_dir ./workspace/sandbox_common --constitution_dir ./governance/constitution
 	
 unit-test: ## 🧪 Run the Application unit-test
 	@echo -e "\e[34m$@\e[0m" || true
