@@ -118,6 +118,7 @@ check_eq "${memberName} - JSON data ingest succeeded"                    "200" "
 printf " ---\n"
 memberName="member2"
 check_eq "${memberName} - JSON data ingest succeeded" "200" "$(curl $ingestUrl -X POST $(cert_arg ${memberName}) -H "Content-Type: application/json" --data-binary "@../../test/data-samples/${memberName}_data.json" $only_status_code)"
+
 addCheckpoint "🎬 Ingestion Stage Complete"
 
 printf "\n -------- Test Reporting Service (Full Report) --------  \n\n"
@@ -163,6 +164,7 @@ addCheckpoint "🎬 NOT_ENOUGH_DATA"
 
 printf "\n${memberName} - Lack of Consensus GroupStatus Example: id: ${id_lackOfConsensus}\n"
 curl $reportUrl/$id_lackOfConsensus -X GET $(cert_arg ${memberName})  --no-progress-meter | jq '. | {content}'
+
 addCheckpoint "🎬 LACK_OF_CONSENSUS DATA"
 
 printf "\n  -------- Report Change --------  \n\n"
@@ -176,8 +178,6 @@ printf "\n${memberName} - Data status changes for id: $id_newGroupStatus:\n"
 curl $reportUrl/$id_newGroupStatus -X GET $(cert_arg ${memberName})  --no-progress-meter | jq '. | {content}'
 
 addCheckpoint "🎬 Updated Report after New Data Submission"
-
-
 
 # ----------------------------------------------------
 # Assertions' Checks 

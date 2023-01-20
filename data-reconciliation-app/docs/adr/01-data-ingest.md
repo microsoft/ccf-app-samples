@@ -6,7 +6,7 @@ Approved
 
 ## Context
 
-We need to build an API that ingests data into our system. Once ingested, we also need to store this data in the K-V store so we can reconcile and report out on the data.
+We need to build an API that ingests data into our system. Once ingested, we need to store this data in the K-V store so we can reconcile and report out on the data.
 
 Gathered requirements:
 
@@ -20,7 +20,7 @@ Gathered requirements:
 
 ## Decision
 
-## API
+## API 
 
 ### JSON Ingestion Endpoint
 
@@ -34,7 +34,7 @@ Gathered requirements:
   - N/A
 - Headers
   - content-type: application/json
-- Request will be a `ccfapp.Request Object`. We will interrogate the `ccfapp.Request Object` to extract the user or member and [authenticate them via certficates](#security). We will read the request body as a JSON.
+- Request will be a `ccfapp.Request` object. We will interrogate the `ccfapp.Request` object to extract the user or member and [authenticate them via certficates](#security). We will read the request body as a JSON.
 - API Status Codes
   - OK
     - Status: 200
@@ -73,9 +73,7 @@ Gathered requirements:
 
 ### Security
 
-Users will be authenticated via certificates, which is natively supported by the CCF framework.
-
-//TODO Add reference to this future ADR: https://github.com/microsoft/ccf-app-samples/issues/102
+Users will be [authenticated via certificates](./04-Authentication.md), which is natively supported by the CCF framework.
 
 ## Models
 
@@ -103,7 +101,7 @@ const schema: DataSchema = {
 
 ### Data Record Model
 
-Upon ingest, `DataSchema` records will be mapped to a `DataRecord` model. `DataRecord`s can be string or numeric.
+Upon ingest, `DataSchema` records will be mapped to a `DataRecord` model. `DataRecords` can be string or numeric.
 
 ```typescript
 export type DataAttributeType = string | number;
@@ -125,7 +123,7 @@ const kvStore = ccfapp.typedKv(
 );
 ```
 
-A `ReconciledRecord` represents all of users who submittted data on the record and their opinion of the record.
+A `ReconciledRecord` represents all users who submittted data on the record and their opinion of the record.
 
 ```typescript
 export class ReconciledRecord implements ReconciledRecordProps {
@@ -151,7 +149,7 @@ Depending if the key exists, a `ReconciledRecord` can be `updated` or `created` 
 
 ### Ingest Service
 
-The ingest service will `update` or `create` a `ReconciledRecord` from `DataRecord`s before saving to the K-V store.
+The ingest service will `update` or `create` a `ReconciledRecord` from `DataRecords` before saving to the K-V store.
 
 ```typescript
 submitData(userId: string, dataRecords: DataRecord[])
@@ -190,7 +188,7 @@ This design does not store the originally ingested data by each member. Rather, 
 
 Q: There is no way to audit and members/users cannot see the original data they ingested. Is this a concern?
 
-A: Members will not use the data reconciliation k-v store for audit. Members have their data on-prem or managed elsewhere. This app is solely for data reconciliation, not auditing. Realistically, if a member needed to get a snapshot of the data they inputed into the data reconciliation app at a certain time, the ledger is actually tracking the historic transactions on the k-v store. This should be possible/a capability provided by CCF. Auditing is not a capability we need to build or factor into design decisions.
+A: Members will not use the data reconciliation k-v store for audit. Members have their data on-prem or managed elsewhere. This app is solely for data reconciliation, not auditing. Realistically, if a member needed to get a snapshot of the data they ingested into the data reconciliation app at a certain time, the ledger is actually tracking the historic transactions on the k-v store. This should be possible/a capability provided by CCF. Auditing is not a capability we need to build or factor into design decisions.
 
 ### 3. Ingest Design - Data Mutability?
 
@@ -204,7 +202,7 @@ An E2E data flow is captured [here](../images/data_recon_sample.png) with input 
 
 ### 4. K-V Design - Expensive to Reconcile & Report
 
-By only storing the `ReconciledRecord`, we make "updating" of a key for a particular member harder. Addititionally, when we create a report on the reconciled data, members/users will only receive a report on the keys they submitted. By using the `ReconciledRecord`, we will have to check the values for each key to create the report.
+By only storing the `ReconciledRecord`, we made key updation for a particular member harder. Additionally, when we create a report on the reconciled data, members/users will only receive a report on the keys they submitted. By using the `ReconciledRecord`, we will have to check the values for each key to create the report.
 
 Q: Is there a better way to design our system to increase performance on reconciling and reporting?
 
