@@ -5,18 +5,17 @@ import { DataSchema } from "../models/data-schema";
 import authenticationService from "../services/authentication-service";
 import ingestService from "../services/ingest-service";
 
-export function postHandler(
-  request: ccfapp.Request<any>
-): ccfapp.Response<CCFResponse> {
-  // get caller identity
+export function postHandler(request: ccfapp.Request<any>): ccfapp.Response<CCFResponse> {
+
+  // check if caller has a valid identity
+  const isValidIdentity = authenticationService.isAuthenticated(request);
+  if (isValidIdentity.failure || !isValidIdentity.content)
+    return ApiResult.AuthFailure();
+
+  // get caller unique identifier
   const getCallerId = authenticationService.getCallerId(request);
   if (getCallerId.failure) return ApiResult.Failed(getCallerId);
   const callerId = getCallerId.content;
-
-  // check if caller has a valid identity
-  const isValidIdentity = authenticationService.isValidIdentity(callerId);
-  if (isValidIdentity.failure || !isValidIdentity.content)
-    return ApiResult.AuthFailure();
 
   // read data from request body as json
   let getJsonData = getBodyAsJson(request);
