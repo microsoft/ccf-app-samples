@@ -5,7 +5,7 @@
         "js_module": "endpoints/ingest.js",
         "js_function": "postHandler",
         "forwarding_required": "always",
-        "authn_policies": ["member_cert", "user_cert"],
+        "authn_policies": ["member_cert", "user_cert", "jwt"],
         "mode": "readwrite",
         "openapi": {
           "responses": {
@@ -61,7 +61,7 @@
         "js_module": "endpoints/ingest-csv.js",
         "js_function": "postHandlerCsv",
         "forwarding_required": "always",
-        "authn_policies": ["member_cert", "user_cert"],
+        "authn_policies": ["member_cert", "user_cert", "jwt"],
         "mode": "readwrite",
         "openapi": {
           "responses": {
@@ -90,7 +90,7 @@
         "js_module": "endpoints/reporting.js",
         "js_function": "getAllHandler",
         "forwarding_required": "always",
-        "authn_policies": ["member_cert", "user_cert"],
+        "authn_policies": ["member_cert", "user_cert", "jwt"],
         "mode": "readonly",
         "openapi": {
           "responses": {
@@ -138,7 +138,7 @@
         "js_module": "endpoints/reporting.js",
         "js_function": "getByIdHandler",
         "forwarding_required": "always",
-        "authn_policies": ["member_cert", "user_cert"],
+        "authn_policies": ["member_cert", "user_cert", "jwt"],
         "mode": "readonly",
         "openapi": {
           "parameters": [

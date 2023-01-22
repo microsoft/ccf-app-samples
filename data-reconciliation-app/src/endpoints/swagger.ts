@@ -42,6 +42,13 @@ export function getOpenApiDocument(): ccfapp.Response<object> {
 
 const openApiDoc = {
   "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
     "responses": {
       "default": {
         "content": {

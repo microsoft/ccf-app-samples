@@ -12,15 +12,15 @@ import ingestService from "../services/ingest-service";
  * @returns {ServiceResult<string>} - data has been ingested successfully
  */
 export function postHandlerCsv(request: ccfapp.Request<any>): ccfapp.Response<CCFResponse> {
-  // get caller identity
+  // check if caller has a valid identity
+  const isValidIdentity = authenticationService.isAuthenticated(request);
+  if (isValidIdentity.failure || !isValidIdentity.content)
+    return ApiResult.AuthFailure();
+
+  // get caller unique identifier
   const getCallerId = authenticationService.getCallerId(request);
   if (getCallerId.failure) return ApiResult.Failed(getCallerId);
   const callerId = getCallerId.content;
-
-  // check if caller has a valid identity
-  const isValidIdentity = authenticationService.isValidIdentity(callerId);
-  if (isValidIdentity.failure || !isValidIdentity.content)
-    return ApiResult.AuthFailure();
 
   // read CSV data from request body as json
   let getJsonData = getCsvBodyAsJson(request);
