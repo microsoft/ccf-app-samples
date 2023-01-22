@@ -11,7 +11,7 @@ function usage {
     echo ""
     echo "Start a CCF node in docker."
     echo ""
-    echo "usage: ./test_docker.sh --nodeAddress <IPADDRESS:PORT> --certificate_dir <string> --constitution_dir <string>"
+    echo "usage: ./test_docker.sh --nodeAddress <IPADDRESS:PORT> --certificate_dir <string> --constitution_dir <string> [--interactive]]"
     echo ""
     echo "  --nodeAddress       string      The IP and port of the primary CCF node"
     echo "  --certificate_dir   string      The directory where the certificates are"

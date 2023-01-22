@@ -12,7 +12,7 @@ function usage {
     echo ""
     echo "Start a CCF node in docker and run the tests."
     echo ""
-    echo "usage: ./test_docker.sh --serverIP <IPADDRESS> --port <PORT> [--virtual] [--enclave]"
+    echo "usage: ./test_docker.sh --serverIP <IPADDRESS> --port <PORT> [--virtual] [--enclave] [--interactive]"
     echo ""
     echo "  --serverIP      string      The IP address of the primary CCF node"
     echo "  --port          string      The port of the primary CCF node"
@@ -63,14 +63,15 @@ fi
 declare server="https://${serverIP}:${port}"
 
 function finish {
+    containerId=$(docker ps -qf ancestor="$app_name:$enclave_type")
     if [ $interactive -eq 1 ]; then
         echo "🤔 Do you want to stop the container? (Y/n)"
         read -r proceed
         if [ "$proceed" == "n" ]; then
+            echo "👍 Container will continue to run. (Container ID: ${containerId})"
             exit 0
         fi
     fi
-    containerId=$(docker ps -qf ancestor="$app_name:$enclave_type")
     docker stop "$containerId"
     echo "💀 Killed container ${containerId}"
 }
