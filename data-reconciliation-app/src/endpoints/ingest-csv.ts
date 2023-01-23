@@ -8,8 +8,8 @@ import ingestService from "../services/ingest-service";
 
 /**
  * HTTP POST Handler for ingesting data via CSV
- * @param {ccfapp.Request<any>} request mTLS request with userId and CSV file for ingestion
- * @returns {ServiceResult<string>} data has ingested successfully
+ * @param {ccfapp.Request<any>} request - mTLS request with userId and CSV file for ingestion
+ * @returns {ServiceResult<string>} - data has been ingested successfully
  */
 export function postHandlerCsv(request: ccfapp.Request<any>): ccfapp.Response<CCFResponse> {
   // get caller identity
@@ -39,9 +39,11 @@ export function postHandlerCsv(request: ccfapp.Request<any>): ccfapp.Response<CC
 function getCsvBodyAsJson(request: ccfapp.Request<any>): ServiceResult<any> {
   try {
     // parse CSV, converting to json
-    var result = papa.parse(request.body.text(), {header: true, skipEmptyLines: true});
+    var result = papa.parse(request.body.text(), {
+      header: true,
+      skipEmptyLines: true,
+    });
     return ServiceResult.Succeeded(result.data);
-
   } catch (ex) {
     return ServiceResult.Failed({
       errorMessage: ex.message,
@@ -50,5 +52,3 @@ function getCsvBodyAsJson(request: ccfapp.Request<any>): ServiceResult<any> {
     });
   }
 }
-
-
