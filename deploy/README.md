@@ -26,7 +26,7 @@ At its simplest, you need 2 things to create an Azure Managed CCF instance:
 - the certificate for the initial member
 
 !!! Note
-The following commands assume you have created some pem files and they are in the deploy folder.
+The following commands assume you have created some pem files and they are in the deploy folder. Please see [here](https://microsoft.github.io/CCF/main/governance/adding_member.html#generating-member-keys-and-certificates) for instructions on how to generate these files.
 
 ```bash
 cd deploy
