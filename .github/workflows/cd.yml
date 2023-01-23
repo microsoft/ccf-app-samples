@@ -42,6 +42,7 @@ jobs:
       - name: Deploy Banking Sample to mCCF
         uses: devcontainers/ci@v0.2
         with:
+          imageName: ghcr.io/microsoft/ccf-samples-devcontainer
           runCmd: |
             cd banking-app && make test-mccf
           env: |
@@ -52,6 +53,7 @@ jobs:
       - name: Deploy Data Reconciliation Sample to mCCF
         uses: devcontainers/ci@v0.2
         with:
+          imageName: ghcr.io/microsoft/ccf-samples-devcontainer
           runCmd: |
             cd data-reconciliation-app && make test-mccf
           env: |
