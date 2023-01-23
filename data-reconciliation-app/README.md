@@ -1,24 +1,31 @@
 # CCF Data Reconciliation Application
 
-This is the repo for _CCF Data Reconciliation - sample_.
+This is the _CCF Data Reconciliation - sample_ in typescript.
 
 ## Overview
 
 The CCF network will be used to host a reconciliation service where different parties with membership (banks and data providers) will be able to submit their own data to be reconciled against "each other's data" in a confidential manner without exposing the data to other members in the network.
 
-The sample will use the voting process to reconcile members' data; on the data submission, when new record is submitted the app will check if it does not exist in the key-value store, it will be added; otherwise, a vote is added to this record with a member ID, and the vote will be "agree" if data attributes match; otherwise, it will "disagree."
+When a new record(s) is submitted through ingestion endpoints, the application will search the key-value store by the record's key; if this key does not exist, it will be added; otherwise, a vote is added to this record with a member ID and the submitted value.
 
 ## Architecture
 
-This is a work in progress overview of the current architecture and key interactions and integrations.
+The reconciliation application consists of three main parts: Data Ingestion, Data Reconciliation and Data Reporting.
+
+- Data ingestion
+  - API Endpoint: allow members to submit their data to reconciled.
+    - Accept single or batch of records
+- Data reconciliation
+  - Data is compared across all members, all members' data carry equal weight to reach consensus.
+  - Reconciliation is on each record, not on the entire data set.
+- Data reporting
+  - API Endpoint: Members will query for results
+    - Query by specific record by `a unique identifier`
+    - Query all data
 
 ![architecture diagram](./docs/images/architecture.png)
 
-## Getting Started
-
-To get started run `cd data-reconciliation-app && make test` to run the application locally.
-
-### Repo Layout
+### Repository Layout
 
 ```text
 📂
@@ -26,21 +33,66 @@ To get started run `cd data-reconciliation-app && make test` to run the applicat
 │   └── adrs            All Architecture decision records (ADR)
 │
 ├── governance
-│   └── constitution    CCF network constitution files
-│   └── nodes           CCF network nodes configs
-│   └── scripts         All governance scripts
-│   └── vote            Contains proposal voting acceptance and rejection logic
+│    └── constitution    CCF network constitution files
+│    └── nodes           CCF network nodes configs
+│    └── scripts         All governance scripts
+│    └── vote            Contains proposal voting acceptance and rejection logic
 │
 └── src                 Application source code
+│    └── endpoints      Application endpoints
+│    └── models         Domain models
+│    └── repositories   Data repositories
+│    └── services       Domain services
+│    └── utils          utility classes
 │
 └── test
-│    └── e2e-test       Application end to end tests
-│    └── unit-test      Application unit tests
+     └── data-samples    Data files for tests|demo
+     └── e2e-test            Application end to end tests
+     └── unit-test            Application unit tests
+     
+
 ```
 
-### Running Locally
+## Getting Started
 
-A makefile provides a frontend to interacting with the project, this is used both locally and during CI and GitHub Actions. This makefile is self documenting, and has the following targets:
+To get started and run the application locally, start with setting up the environment.
+
+```bash
+# setup the environment
+git clone https://github.com/microsoft/ccf-app-samples # Clone the samples repository
+code ccf-app-samples                                                 # open samples repository in Visual studio code
+
+# In the VScode terminal window
+cd data-reconciliation-app                             # Navigate to reconciliation sample folder
+make build                                             # Build and create the application deployment bundle
+```
+
+Now the environment is ready, and there are several scenarios that could be executed at this stage.
+
+- **Run the application's [e2e-tests](./test/test.sh) in a sandbox environment in the interactive mode**
+  - `make demo`
+
+- **Run the application's [e2e-tests](./test/test.sh) in a sandbox (simulated) environment**
+  - `make test`
+
+- **Run the application's [e2e-tests](./test/test.sh) on a Docker Container running a virtual (simulated) environment**
+  - `make test-docker-virtual`
+
+- **Run the application [e2e-tests](./test/test.sh) on a Managed CCF environment**
+  - First, create a Managed CCF instance on your Azure subscription. Please follow [here](https://github.com/microsoft/ccf-app-samples/tree/main/deploy#deploying-the-ccf-samples)
+  - Run the e2e-test, please follow [here](https://github.com/microsoft/ccf-app-samples/tree/main/deploy#deploying-a-ccf-application-to-azure-managed-ccf)
+
+- **Start a CCF network with 3 active members and 1 user using the sandbox and deploy the application to it, the application and network are ready to receive requests**
+  - `make start-host`
+
+- **Run the application's unit tests**
+  - `make unit-test`
+
+These are the main scenarios; more commands are available at makefile and are described in the following section.
+
+### Make file
+
+A Makefile provides a front-end to interact with the project. It is used both locally, during CI, and on GitHub Actions. This Makefile is self-documented, and has the following targets:
 
 ```text
 help                 💬 This help message :)
@@ -63,18 +115,21 @@ clean                🧹 Clean the working folders created during build/demo
 
 There are 3 different types of network that this sample can be tested against; Sandbox, Docker, and Managed CCF. The script [./test.sh](./test/test.sh) is specific to this sample and is called by wrapper scripts that exist in the root [scripts](../scripts/) folder. These wrapper scripts are used for all samples.
 
-| Network | Command | Script |
-| ------: | -----: | ------: |
-| Sandbox |  `make test` | [test_sandbox](../scripts/test_sandbox.sh) |
-| Docker | `make test-docker-virtual` and `make test-docker-enclave` | [test_docker](../scripts/test_docker.sh) |
-| Managed CCF | `make test-mccf` | [test_mccf](../scripts/test_docker.sh) |
+|   Network   |                   Command                                 |                  Script                    |
+| ----------: | --------------------------------------------------------: | -----------------------------------------: |
+| Sandbox     | `make test`                                               | [test_sandbox](../scripts/test_sandbox.sh) |
+| Docker      | `make test-docker-virtual` and `make test-docker-enclave` | [test_docker](../scripts/test_docker.sh)   |
+| Managed CCF | `make test-mccf`                                          | [test_mccf](../scripts/test_docker.sh)     |
 
-The wrapper scripts are responsible for starting the particular network with the correct constitution and setting up the governance (users/members/application). The wrapper scripts will also close the network after the tests have finished (excluding mCCF).
+The wrapper scripts are responsible for starting the particular network with the correct constitution and setting up governance (users/members/application). The wrapper scripts will also close the network after the tests have finished (excluding mCCF).
 
 ### Demo
 
-It is also possible to run the tests in *Demo mode*. This can be achieved by runing
+It is also possible to run the tests in _Demo mode_. This can be achieved by running
+
 ```bash
-cd data-reconciliation-app && make demo
+cd data-reconciliation-app    # Navigate to reconciliation sample folder
+make demo                     # Run interactive end to end tests
 ```
+
 There is a [guide](./docs/demo-guidance.md) here explaining what the demo shows. This will run the tests but require manual intervention so you can inspect the state of the network.

@@ -21,7 +21,7 @@ build-enclave: build ## 📦 Build Enclave container image from Dockerfile
 # Start hosting the application using `sandbox.sh` 
 start-host: build ## 🏃 Start the CCF network using Sandbox.sh
 	@echo -e "\e[34m$@\e[0m" || true
-	@/opt/ccf_virtual/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count 3 --initial-user-count 0 --constitution-dir ./governance/constitution
+	@/opt/ccf_virtual/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count 3 --initial-user-count 1 --constitution-dir ./governance/constitution
 
 test: build ## 🧪 Test the Data Reconciliation Application in the sandbox
 	@echo -e "\e[34m$@\e[0m" || true
@@ -43,7 +43,8 @@ test-mccf: build ## 🧪 Test the Data Reconciliation Application in a Managed C
 	@. ../scripts/test_mccf.sh --address "${CCF_NAME}.confidential-ledger.azure.com" --signing-cert "${PUBLIC_CERT}" --signing-key "${PRIVATE_CERT}"
 
 e2e-test: ## 🧪 Run end to end tests
-	@echo -e "\e[34m Not Implemented \e[0m" || true
+	@echo -e "\e[34m$@\e[0m" || true
+	@. ../scripts/test_sandbox.sh --nodeAddress 127.0.0.1:8000 --certificate_dir ./workspace/sandbox_common --constitution_dir ./governance/constitution
 	
 unit-test: ## 🧪 Run the Application unit-test
 	@echo -e "\e[34m$@\e[0m" || true

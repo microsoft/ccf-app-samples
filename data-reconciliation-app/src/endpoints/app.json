@@ -78,7 +78,7 @@
             "required": true,
             "content": {
               "text/csv": {
-                "schema": { "type":"object" }
+                "schema": { "type": "object" }
               }
             }
           }

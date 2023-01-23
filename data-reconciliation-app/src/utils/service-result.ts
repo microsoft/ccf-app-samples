@@ -4,6 +4,11 @@ export interface ErrorResponse {
   details?: unknown;
 }
 
+/**
+ * A generic result pattern implementation.
+ * Instead of returning the result directly, which can be an error or data itself,
+ * we wrap them with a meaningful state: Success or Failure
+ */
 export class ServiceResult<T> {
   public readonly success: boolean;
   public readonly failure: boolean;

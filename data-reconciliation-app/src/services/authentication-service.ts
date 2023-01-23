@@ -11,13 +11,37 @@ export interface CCFMember {
 }
 
 export interface IAuthenticationService {
+  /**
+   * Extracts userId from mTLS certificate
+   * @param {ccfapp.Request<any>} request mTLS request with userId
+   * @returns {ServiceResult<string>} userId extracted from mTLS certificate
+   */
   getCallerId(request: ccfapp.Request<any>): ServiceResult<string>;
+
+  /**
+   * Checks if a user exists
+   * @see https://microsoft.github.io/CCF/main/audit/builtin_maps.html#users-info
+   * @param {string} userId userId to check if it exists
+   * @returns {ServiceResult<boolean>}
+   */
   isUser(userId: string): ServiceResult<boolean>;
+
+  /**
+   * Checks if caller is an active member or a user registered in the network
+   * @param {string} identityId userId extracted from mTLS certificate
+   * @returns {ServiceResult<boolean>}
+   */
   isValidIdentity(identityId: string): ServiceResult<boolean>;
+
+  /**
+   * Check if member exists and active in the network
+   * @see https://microsoft.github.io/CCF/main/audit/builtin_maps.html#users-info
+   * @param {string} memberId memberId extracted from mTLS certificate
+   * @returns {ServiceResult<boolean>}
+   */
   isActiveMember(memberId: string): ServiceResult<boolean>;
 }
 
-// Authentication Service
 export class CertBasedAuthenticationService implements IAuthenticationService {
   // get caller id
   // Note that the following way of getting caller ID doesn't work for 'jwt' auth policy and 'no_auth' auth policy.
@@ -40,7 +64,7 @@ export class CertBasedAuthenticationService implements IAuthenticationService {
     }
   }
 
-  // Check if user exists https://microsoft.github.io/CCF/main/audit/builtin_maps.html#users-info
+  
   public isUser(userId: string): ServiceResult<boolean> {
     try {
       if (!userId) {
@@ -66,7 +90,6 @@ export class CertBasedAuthenticationService implements IAuthenticationService {
     }
   }
 
-  // Check if member exists https://microsoft.github.io/CCF/main/audit/builtin_maps.html#users-info
   public isActiveMember(memberId: string): ServiceResult<boolean> {
     try {
       if (!memberId) {
@@ -104,7 +127,7 @@ export class CertBasedAuthenticationService implements IAuthenticationService {
     }
   }
 
-  // Check if caller is an active member or an user registered in the network
+  // 
   public isValidIdentity(identityId: string): ServiceResult<boolean> {
     if (!identityId) {
       return ServiceResult.Failed({
@@ -130,6 +153,8 @@ export class CertBasedAuthenticationService implements IAuthenticationService {
   }
 }
 
-const authenticationService: IAuthenticationService =
-  new CertBasedAuthenticationService();
+/**
+ * Certificate based authentication service implementation
+ */
+const authenticationService: IAuthenticationService = new CertBasedAuthenticationService();
 export default authenticationService;
