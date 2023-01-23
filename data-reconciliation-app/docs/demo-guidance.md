@@ -14,6 +14,8 @@ If you wish to run this in Managed CCF, please see the [Managed CCF Demo Guidanc
 
 Start the demo by running `make demo` or `make demo-docker` in the `data-reconciliation-app` path.
 
+This part of the demo has started the network and deployed the app. The network is running with 3 members, and the app is deployed with the constitution defined [here](../governance/constitution/), which means that all members have equal votes on decisions, and unanimous approval is required to advance proposals. All members have been activated.
+
 ```bash
 ▶️ Starting sandbox...
 💤 Waiting for sandbox . . . (23318)
@@ -21,10 +23,10 @@ Start the demo by running `make demo` or `make demo-docker` in the `data-reconci
 💤 Waiting for the app frontend...
 ```
 
-### Demo notes
-This part of the demo has started the network and deployed the app. The network is running with 3 members, and the app is deployed with the constitution defined [here](../governance/constitution/), which means that all members have equal votes on decisions, and unanimous approval is required to advance proposals. All members have been activated.
-
 ## Part 2. Ingestion
+
+After you press any key, we will start the ingestion service. This service is a simple REST API that accepts JSON/CSV data. You can ingest data for a particular member, and the data will be stored in the network. There are a few negative test cases demonstrated as well as ingesting different file formats. At this point of the demo you will be asked to press any key to continue.
+
 ```bash
   -------- Test Ingestion Service --------  
 
@@ -40,10 +42,10 @@ This part of the demo has started the network and deployed the app. The network 
 🎬 Ingestion Stage Complete
 ```
 
-### Demo notes
-After you press any key, we will start the ingestion service. This service is a simple REST API that accepts JSON/CSV data. You can ingest data for a particular member, and the data will be stored in the network. There are a few negative test cases demonstrated as well as ingesting different file formats. At this point of the demo you will be asked to press any key to continue.
-
 ## Part 3. Reporting Service (Full Report)
+
+The next part of the demo will show the reporting service. This service is a simple REST API that returns a report of the data that has been ingested. Here we demonstrate retrieving a full report of all of the ingested data for that member. At this point of the demo you will be asked to press any key to continue.
+
 ```bash
 -------- Test Reporting Service (Full Report) --------  
 
@@ -111,11 +113,7 @@ member1 Full Report:
 }
 
 🎬 Full Reports Complete
-
-- Press any key to continue...
 ```
-
-The next part of the demo will show the reporting service. This service is a simple REST API that returns a report of the data that has been ingested. Here we demonstrate retrieving a full report of all of the ingested data for that member. At this point of the demo you will be asked to press any key to continue.
 
 ## Part 4. Reporting Service (By Id) - IN CONSENSUS
 
@@ -158,8 +156,6 @@ member2 - Not Enough Data GroupStatus Example: id: 984500BA57A56NBD3A24
   }
 }
 🎬 NOT_ENOUGH_DATA
-
-- Press any key to continue...
 ```
 
 ## Part 6. Reporting Service (By Id) - LACK_OF_CONSENSUS
@@ -179,8 +175,6 @@ member2 - Lack of Consensus GroupStatus Example: id: 9845001D460PEJE54159
   }
 }
 🎬 LACK_OF_CONSENSUS DATA
-
-- Press any key to continue...
 ```
 
 ## Part 7. Ingesting more data
@@ -213,3 +207,6 @@ member2 - Data status changes for id: 9845001D460PEJE54159:
 
 The last part of the demo is running a test suite. This is a simple script that runs a series of tests against the REST API. The tests are designed to show the various states of the data and the reporting service.
 
+## Part 9. Optional Code Change
+
+The main part of the demo is complete. However, if you would like to see how you could handle a code change with CCF, then youcan also follow this optional [demo](./managed-ccf-demo-guidance.md)
