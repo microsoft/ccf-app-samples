@@ -19,13 +19,6 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Login to GH-CR to push the updated devcontainer image
-        uses: docker/login-action@v1
-        with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Build samples in DevContainer
         uses: devcontainers/ci@v0.2
         with:
@@ -34,7 +27,6 @@ jobs:
             git config --global --add safe.directory "$GITHUB_WORKSPACE"
             make lint
             cd banking-app && make test && make test-docker-virtual
-          refFilterForPush: refs/heads/main
           env: |
             GITHUB_WORKSPACE
 
