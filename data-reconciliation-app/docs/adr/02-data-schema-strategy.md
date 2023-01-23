@@ -6,7 +6,7 @@ Decided
 
 ## Context
 
-We need to build an API that ingest members data into our system. Once ingested, we need to store this data in the K-V store. Members will decide on a data schema that will be used for ingesting, data reconciliation, and reporting.
+We need to build an API that ingests members' data into our system. Once ingested, we need to store this data in the K-V store. Members will decide on a data schema used for ingesting, data reconciliation, and reporting.
 
 There are multiple strategies for data schema definition and usage. In this document, we lay out our decision and some other alternatives considered.
 
