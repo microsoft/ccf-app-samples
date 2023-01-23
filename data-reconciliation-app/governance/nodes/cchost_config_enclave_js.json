@@ -8,7 +8,7 @@
     "node_to_node_interface": { "bind_address": "127.0.0.1:8081" },
     "rpc_interfaces": {
       "main_interface": {
-        "bind_address": "127.0.0.1:8080"
+        "bind_address": "0.0.0.0:8080"
       }
     }
   },
