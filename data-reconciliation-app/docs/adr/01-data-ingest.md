@@ -6,12 +6,12 @@ Approved
 
 ## Context
 
-We need to build an API that ingests data into our system. Once ingested, we need to store this data in the K-V store so we can reconcile it and get reports on the ingested data.
+We need to build an API that ingests data into our system. Once ingested, we need to store this data in the K-V store so we can reconcile it and generate reports on the ingested data.
 
 Gathered requirements:
 
 - Members of the network will decide on a data schema ahead of ingest.
-- Members and users of the network can ingest data via the API. Data will be ingested via JSON, which will include:
+- Members and users of the network can ingest data via the API. Data will be ingested via JSON or CSV, which will include:
   - one unique identifier (string)
   - one attribute associated with the unique identifier (string)
 - There is likely going to be a UI on top of our ingest API, so we will treat our app like a backend   system. Therefore, we will accept JSON into our ingest API.
@@ -188,7 +188,7 @@ This design does not store the originally ingested data by each member. Rather, 
 
 Q: There is no way to audit, and members/users cannot see the original data they ingested. Is this a concern?
 
-A: Members will not use the data reconciliation k-v store for audit. Members have their data on-prem or managed elsewhere. This app is solely for data reconciliation, not auditing. Realistically, if a member needed to get a snapshot of the data they ingested into the data reconciliation app at a certain time, the ledger is actually tracking the historic transactions on the K-V store. This should be possible/a capability provided by CCF. Auditing is not a capability we need to build or factor into design decisions.
+A: Members will not use the data reconciliation k-v store for audit. Members have their data on-prem or managed elsewhere. This app is solely for data reconciliation, not auditing. Realistically, if a member needed to get a snapshot of the data they ingested into the data reconciliation app at a certain time, the ledger is actually tracking the historic transactions on the K-V store. This should be a capability provided by CCF. Auditing is not a capability we need to build or factor into design decisions.
 
 ### 3. Ingest Design - Data Mutability?
 
