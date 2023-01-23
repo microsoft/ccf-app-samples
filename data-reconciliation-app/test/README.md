@@ -27,7 +27,7 @@ cd data-reconciliation-app     # Navigate to reconciliation sample folder
 make unit-test                 # Build and run unit-test using jest framework
 ```
 
-**NOTE**: To enable the CCF functionality on testing environment, the application is using built-in feature of CCF, [the Polyfill implementation](https://microsoft.github.io/CCF/main/js/ccf-app/modules/polyfill.html) which is override the CCF modules implementation to support the testing and local environments
+**NOTE**: To enable the CCF functionality on testing environment, the application is using built-in feature of CCF, [the Polyfill implementation](https://microsoft.github.io/CCF/main/js/ccf-app/modules/polyfill.html) which overrides the CCF modules' implementation to support testing and local environments
 
 ## End to end testing
 
@@ -63,7 +63,7 @@ make test                      # Run end-to-end(e2e) tests in a sandbox (virtual
 | Sandbox     | `make test`                | [test_sandbox](../../scripts/test_sandbox.sh) | virtual                   |
 | Docker      | `make test-docker-virtual` | [test_docker](../../scripts/test_docker.sh)   | virtual                   |
 | Docker      | `make test-docker-enclave` | [test_docker](../../scripts/test_docker.sh)   | enclave (TEE)             |
-| Managed CCF | `make test-mccf`           | [test_mccf](../../scripts/test_docker.sh)     | enclave (TEE)             |
+| Managed CCF | `make test-mccf`           | [test_mccf](../../scripts/test_mccf.sh)     | enclave (TEE)             |
 
 
 **To Run the application's e2e-tests using docker on enclave environment**
