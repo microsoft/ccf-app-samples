@@ -50,10 +50,7 @@ export class SummaryRecord implements SummaryRecordProps {
     this.uniqueValuesCount = summaryRecord.uniqueValuesCount;
   }
 
-  public static create(
-    memberId: string,
-    record: ReconciledRecord
-  ): ServiceResult<SummaryRecord> {
+  public static create(memberId: string, record: ReconciledRecord): ServiceResult<SummaryRecord> {
     if (!record.key) {
       return ServiceResult.Failed({
         errorMessage: "Error: key cannot be null or empty",
@@ -97,9 +94,7 @@ export class SummaryRecord implements SummaryRecordProps {
     ).length;
 
     // count of members who submitted a value differ from the current member (caller)
-    const membersInDisagreementCount = memberIds.filter(
-      (key) => record.values[key] != memberValue
-    ).length;
+    const membersInDisagreementCount = memberIds.filter((key) => record.values[key] != memberValue).length;
 
     const summary: SummaryRecordProps = {
       key: record.key,
@@ -120,18 +115,21 @@ export class SummaryRecord implements SummaryRecordProps {
     return ServiceResult.Succeeded(dataRecord);
   }
 
-  // get the status of current value is it in (Majority or Minority) group
-  private static getSubDivisionStatus(
-    membersInAgreementCount: number,
-    membersInDisagreementCount: number
-  ) {
+  
+  /**
+   * Get the status of current value is it in (Majority or Minority) group
+   */
+  private static getSubDivisionStatus(membersInAgreementCount: number, membersInDisagreementCount: number) {
     if (membersInAgreementCount > membersInDisagreementCount) {
       return SummaryStatus.Majority;
     }
     return SummaryStatus.Minority;
   }
 
-  // get group status (NotEnoughVotes,LackOfConsensus, InConsensus)
+  
+  /**
+   * Get group status (NotEnoughVotes,LackOfConsensus, InConsensus)
+   */
   private static getGroupStatus(votesCount: number, uniqueValuesCount: number) {
     if (votesCount < MINIMUM_VOTES_THRESHOLD) {
       return SummaryGroupStatus.NotEnoughData;
