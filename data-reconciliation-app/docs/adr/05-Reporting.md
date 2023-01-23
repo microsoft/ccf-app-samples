@@ -6,7 +6,7 @@ Proposed
 
 ## Context
 
-We need to build an API that reports the members' and users' reconciled datasets back to them.
+We need to build an API that reports the members' and users' reconciled records back to them.
 
 ## Requirements:
 - A report can be requested for a single record or for all records.
@@ -89,7 +89,7 @@ getDataByKey(userId: string, key: string) : SummaryResult   // for a single reco
 
 ### Summary Result Object
 
-The SummaryResult object will be the final output in the report. In the report, the key and value will match the schema defined.
+The [SummaryResult object](https://github.com/microsoft/ccf-app-samples/blob/main/data-reconciliation-app/src/models/summary-record.ts) will be the final output in the report. In the report, the key and value will match the schema defined.
 
 
 
