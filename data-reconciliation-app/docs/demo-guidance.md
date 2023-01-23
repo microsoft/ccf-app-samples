@@ -207,4 +207,4 @@ The last part of the demo is running a test suite. This is a simple script that 
 
 ## Part 9. Optional Code Change
 
-The main part of the demo is complete. However, if you would like to see how you could handle a code change with CCF, then youcan also follow this optional [demo](./managed-ccf-demo-guidance.md)
+The main part of the demo is complete. However, if you would like to see how you could handle a code change with CCF, then you can also follow this optional [demo](./managed-ccf-demo-guidance.md)

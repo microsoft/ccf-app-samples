@@ -65,10 +65,10 @@ declare server="https://${serverIP}:${port}"
 function finish {
     containerId=$(docker ps -qf ancestor="$app_name:$enclave_type")
     if [ $interactive -eq 1 ]; then
-        echo "🤔 Do you want to stop the container? (Y/n)"
+        echo "🤔 Do you want to stop the container (Container ID: ${containerId})? (Y/n)"
         read -r proceed
         if [ "$proceed" == "n" ]; then
-            echo "👍 Container will continue to run. (Container ID: ${containerId})"
+            echo "👍 Container will continue to run. Please stop this manually when you are done."
             exit 0
         fi
     fi

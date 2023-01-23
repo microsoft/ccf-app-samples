@@ -72,6 +72,7 @@ function finish {
         echo "🤔 Do you want to stop the sandbox (${sandbox_pid})? (Y/n)"
         read -r proceed
         if [ "$proceed" == "n" ]; then
+            echo "👍 Sandbox will continue to run. Please stop this manually when you are done. Its process ID is above."
             exit 0
         fi
     fi
