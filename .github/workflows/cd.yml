@@ -39,7 +39,7 @@ jobs:
             #!/bin/bash
             az group create --name ${{ env.ccfName }} --location ${{ env.ResourceGroupLocation }}
 
-      - name: Deploy
+      - name: Deploy Managed CCF Network
         uses: azure/arm-deploy@v1
         with:
           resourceGroupName: ${{ env.ccfName }}
@@ -50,7 +50,8 @@ jobs:
         uses: devcontainers/ci@v0.2
         with:
           imageName: ghcr.io/microsoft/ccf-samples-devcontainer
-          #refFilterForPush: refs/heads/main
+          refFilterForPush: refs/heads/main
+          eventFilterForPush: workflow_dispatch
           runCmd: |
             cd banking-app && make test-mccf
           env: |
