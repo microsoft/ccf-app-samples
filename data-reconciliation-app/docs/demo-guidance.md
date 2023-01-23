@@ -162,7 +162,7 @@ member2 - Not Enough Data GroupStatus Example: id: 984500BA57A56NBD3A24
 - Press any key to continue...
 ```
 
-## Part 6. Reporting Service (By Id) - LACKL_OF_CONSENSUS
+## Part 6. Reporting Service (By Id) - LACK_OF_CONSENSUS
 
 And this example shows the result when the members do not agree on the value for a particular key.
 
