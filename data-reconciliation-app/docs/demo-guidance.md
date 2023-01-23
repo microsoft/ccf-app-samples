@@ -22,7 +22,7 @@ Start the demo by running `make demo` or `make demo-docker` in the `data-reconci
 ```
 
 ### Demo notes
-This part of the demo has started the network and deployed the app. The network is running with 3 members, and the app is deployed with the constitution defined [here](../governance/constitution/), which means that all members have equal votes on decisions, and unanimous approval is required to advance proposals. All members have been activated.
+This part of the demo has started the network and deployed the app. The network is running with 3 members and 1 user, and the app is deployed with the constitution defined [here](../governance/constitution/), which means that all members have equal votes on decisions, and a majority of approval votes is required to advance proposals. All members have been activated.
 
 ## Part 2. Ingestion
 ```bash
