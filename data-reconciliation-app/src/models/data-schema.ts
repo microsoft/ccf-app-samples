@@ -11,11 +11,13 @@ export class DataSchema {
   key: DataFieldSchema;
   value: DataFieldSchema;
 
-  // map ingested data model to data-record model based on the schema
-  static mapDataRecord(
-    dataRecord: object,
-    schema: DataSchema
-  ): ServiceResult<DataRecord> {
+  /**
+   * Map ingested data model to data-record model based on the schema
+   * @param {object} dataRecord 
+   * @param {DataSchema} schema 
+   * @returns 
+   */
+  static mapDataRecord(dataRecord: object, schema: DataSchema): ServiceResult<DataRecord> {
     if (!dataRecord || !schema) {
       return ServiceResult.Failed({
         errorMessage: "Error: data record is null or empty",
@@ -35,7 +37,11 @@ export class DataSchema {
     return DataRecord.create({ key: key, value: value });
   }
 
-  // map ingested data-models to data-record model based on the schema
+  /**
+   * Map ingested data-models to data-record model based on the schema
+   * @param {object[]} dataRecords 
+   * @returns 
+   */
   static mapDataRecords(dataRecords: object[]): ServiceResult<DataRecord[]> {
     if (!dataRecords || dataRecords.length == 0) {
       return ServiceResult.Failed({
@@ -56,11 +62,13 @@ export class DataSchema {
     return ServiceResult.Succeeded(mappedRecords);
   }
 
-  // map summary data model to report model based on the schema
-  static mapSummaryRecord(
-    summaryRecord: SummaryRecord,
-    schema?: DataSchema
-  ): ServiceResult<object> {
+  /**
+   * Map summary data model to report model based on the schema
+   * @param {SummaryRecord} summaryRecord 
+   * @param {DataSchema} schema?
+   * @returns 
+   */
+  static mapSummaryRecord(summaryRecord: SummaryRecord, schema?: DataSchema): ServiceResult<object> {
     if (!schema) {
       schema = DataSchema.getDefaultDataSchema();
     }
@@ -78,10 +86,12 @@ export class DataSchema {
     return ServiceResult.Succeeded(result);
   }
 
-  // map summary data models to report models based on the schema
-  static mapSummaryRecords(
-    summaryRecords: SummaryRecord[]
-  ): ServiceResult<object[]> {
+  /**
+   * Map summary data models to report models based on the schema
+   * @param {SummaryRecord[]} summaryRecords 
+   * @returns {ServiceResult<object[]>}
+   */
+  static mapSummaryRecords(summaryRecords: SummaryRecord[]): ServiceResult<object[]> {
     const schema = DataSchema.getDefaultDataSchema();
     const results: object[] = [];
     if (summaryRecords && summaryRecords.length > 0) {
@@ -95,18 +105,19 @@ export class DataSchema {
     return ServiceResult.Succeeded(results);
   }
 
-  // validate input object schema
-  private static hasValidSchema(
-    dataRecord: object,
-    schema: DataSchema
-  ): boolean {
+  /**
+   * Validate input object schema
+   */
+  private static hasValidSchema(dataRecord: object,schema: DataSchema): boolean {
     return (
       dataRecord.hasOwnProperty(schema.key.name) &&
       dataRecord.hasOwnProperty(schema.value.name)
     );
   }
 
-  // get data schema to map the ingested data model
+  /**
+   * Get data schema to map the ingested data model
+   */
   private static getDefaultDataSchema(): DataSchema {
     const schema: DataSchema = {
       key: { name: "lei", type: "string" },
