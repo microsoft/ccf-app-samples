@@ -185,7 +185,7 @@ member2 - Lack of Consensus GroupStatus Example: id: 9845001D460PEJE54159
 
 ## Part 7. Ingesting more data
 
-To show how we can gain consensus, we can ingest more data and then re-run the report.
+To show how data ingestion can affect all members' reports, we can ingest more data and then re-run the report. We demonstrate this here with `member0` ingesting some new data and `member2` asking for a report for the same key as in the previous step. You can see that grou_status has changed from `LACK_OF_CONSENSUS` to `IN_CONSENSUS`.
 
 ```bash
   -------- Report Change --------  
