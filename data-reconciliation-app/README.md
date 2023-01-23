@@ -115,8 +115,8 @@ clean                🧹 Clean the working folders created during build/demo
 
 The application testing strategy depends on two main types of testing to maintain code quality and coverage:
 
-- Unit testing: to test the application’s business logic (domain models and services), please follow [here](./test/testing.md#unit-testing)
-- End to end testing: to test application’s workflows from beginning to end, please follow [here](./test/testing.md#end-to-end-testing)
+- Unit testing: to test the application’s business logic (domain models and services), please follow [here](./test/README.md#unit-testing)
+- End to end testing: to test application’s workflows from beginning to end, please follow [here](./test/README.md#end-to-end-testing)
 
 ```bash
 cd data-reconciliation-app    # Navigate to reconciliation sample folder
