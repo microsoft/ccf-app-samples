@@ -60,8 +60,8 @@ make test                      # Run end-to-end(e2e) tests in a sandbox (virtual
 
 |   Network   |     Command                |                  Script                       | Supported environment     |
 | :---------  | :------------------------- | :-------------------------------------------  | :------------------------ |
-| Sandbox     | `make test`                | [test_sandbox](../../scripts/test_sandbox.sh) | virtual - enclave (TEE)   |
-| Docker      | `make test-docker-virtual` | [test_docker](../../scripts/test_docker.sh)   | virtual - enclave (TEE)   |
+| Sandbox     | `make test`                | [test_sandbox](../../scripts/test_sandbox.sh) | virtual                   |
+| Docker      | `make test-docker-virtual` | [test_docker](../../scripts/test_docker.sh)   | virtual                   |
 | Docker      | `make test-docker-enclave` | [test_docker](../../scripts/test_docker.sh)   | enclave (TEE)             |
 | Managed CCF | `make test-mccf`           | [test_mccf](../../scripts/test_docker.sh)     | enclave (TEE)             |
 
