@@ -50,8 +50,9 @@ jobs:
         uses: devcontainers/ci@v0.2
         with:
           imageName: ghcr.io/microsoft/ccf-samples-devcontainer
-          eventFilterForPush: workflow_dispatch
-          #refFilterForPush: refs/heads/main
+          cacheFrom: ghcr.io/microsoft/ccf-samples-devcontainer
+          eventFilterForPush: push
+          refFilterForPush: refs/heads/main
           runCmd: |
             cd banking-app && make test-mccf
           env: |
