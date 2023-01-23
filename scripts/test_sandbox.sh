@@ -5,18 +5,19 @@ declare app_dir=$PWD                   # application folder for reference
 declare nodeAddress=""
 declare certificate_dir=""
 declare constitution_dir=""
+declare interactive=0
 
 function usage {
     echo ""
     echo "Start a CCF node in docker."
     echo ""
-    echo "usage: ./test_docker.sh --nodeAddress <IPADDRESS:PORT> --certificate_dir <string> --constitution_dir <string>"
+    echo "usage: ./test_docker.sh --nodeAddress <IPADDRESS:PORT> --certificate_dir <string> --constitution_dir <string> [--interactive]]"
     echo ""
     echo "  --nodeAddress       string      The IP and port of the primary CCF node"
     echo "  --certificate_dir   string      The directory where the certificates are"
     echo "  --constitution_dir  string      The directory where the constitution is"
+    echo "  --interactive       boolean     Optional. Run in Demo mode"
     echo ""
-    exit 0
 }
 
 function failed {
@@ -26,7 +27,7 @@ function failed {
 
 # parse parameters
 
-if [ $# -gt 6 ]; then
+if [ $# -gt 7 ]; then
     usage
     exit 1
 fi
@@ -39,6 +40,7 @@ do
         --nodeAddress) nodeAddress="$2"; shift;;
         --certificate_dir) certificate_dir=$2; shift;;
         --constitution_dir) constitution_dir=$2; shift;;
+        --interactive) interactive=1;;
         --help) usage; exit 0;;
         --) shift;;
     esac
@@ -66,8 +68,16 @@ sandbox_pid=$!
 echo "💤 Waiting for sandbox . . . (${sandbox_pid})"
 
 function finish {
-  kill -9 $sandbox_pid
-  echo "💀 Killed process ${sandbox_pid}"
+    if [ $interactive -eq 1 ]; then
+        echo "🤔 Do you want to stop the sandbox (${sandbox_pid})? (Y/n)"
+        read -r proceed
+        if [ "$proceed" == "n" ]; then
+            echo "👍 Sandbox will continue to run. Please stop this manually when you are done. Its process ID is above."
+            exit 0
+        fi
+    fi
+    kill -9 $sandbox_pid
+    echo "💀 Killed process ${sandbox_pid}"
 }
 trap finish EXIT
 
@@ -76,6 +86,9 @@ if [ ! -f "$testScript" ]; then
     echo "💥📂 Test file $testScript not found."
     exit 1
 else
-  "$testScript" --nodeAddress "${nodeAddress}" \
-    --certificate_dir "$certificate_dir"
+    if [ $interactive -eq 1 ]; then
+        "$testScript" --nodeAddress "${nodeAddress}" --certificate_dir "$certificate_dir" --interactive
+    else
+        "$testScript" --nodeAddress "${nodeAddress}" --certificate_dir "$certificate_dir"
+    fi
 fi
