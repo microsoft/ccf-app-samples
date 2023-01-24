@@ -1,31 +1,39 @@
 import * as ccfapp from "@microsoft/ccf-app";
 
 export function getSwaggerUI(): ccfapp.Response<string> {
+  /*
+  How to configure swagger UI to you application: https://swagger.io/docs/open-source-tools/swagger-ui/usage/installation/
+  */
   return {
     statusCode: 200,
     headers: { "content-type": "text/html" },
-    body: `<html>
-            <head>    
-                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@3.17.0/swagger-ui.css">
-                <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@3.17.0/swagger-ui-bundle.js"></script>
-                <script>
-                    function render() {
-                        var ui = SwaggerUIBundle({
-                            //url:  '/app/api',
-                            url:  '/app/swagger.json',
-                            dom_id: '#swagger-ui',
-                            presets: [
-                                SwaggerUIBundle.presets.apis,
-                                SwaggerUIBundle.SwaggerUIStandalonePreset
-                            ]
-                        });
-                    }
-                </script>
-            </head>
-            <body onload="render()">
-                <div id="swagger-ui"></div>
-            </body>
-          </html>`
+    body: `<!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="description" content="SwaggerUI" />
+        <title>SwaggerUI</title>
+        <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@4.5.0/swagger-ui.css" />
+        <script src="https://unpkg.com/swagger-ui-dist@4.5.0/swagger-ui-bundle.js" crossorigin></script>
+        <script src="https://unpkg.com/swagger-ui-dist@4.5.0/swagger-ui-standalone-preset.js" crossorigin></script>
+      </head>
+      <body>
+      <div id="swagger-ui"></div>
+      <script>
+        window.onload = () => {
+          window.ui = SwaggerUIBundle({
+            //url:  '/app/api', /* will be used when ccf allow more control on openAPI document that can be done through deployment bundle */
+            url:  '/app/swagger.json',
+            dom_id: '#swagger-ui',
+            presets: [SwaggerUIBundle.presets.apis,SwaggerUIStandalonePreset],
+            layout: "StandaloneLayout",
+          });
+        };
+      </script>
+      </body>
+    </html>
+    `
   };
 
 }
@@ -41,12 +49,23 @@ export function getOpenApiDocument(): ccfapp.Response<object> {
 
 
 const openApiDoc = {
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Data Reconciliation Application",
+    "description": "The data reconciliation service is hosted on the CCF network, where users/members can submit their data to be reconciled against each other's data in a confidential manner and generate some data insights as a report",
+    "version": "1.0.0"
+  },
+  "security": [{"Bearer": []}],
+  "servers": [],
   "components": {
     "securitySchemes": {
-      "bearerAuth": {
-        "type": "http",
+      "Bearer": {
+        "type": "apiKey",
+        "description": "JWT Authorization header using the Bearer scheme.",
+        "name": "Authorization",
+        "in": "header",
         "scheme": "bearer",
-        "bearerFormat": "JWT"
+        "bearerFormat": "JWT",
       }
     },
     "responses": {
@@ -62,6 +81,37 @@ const openApiDoc = {
       }
     },
     "schemas": {
+      "ApiResult": {
+        "properties": {
+          "content": {
+            "type": "object"
+          },
+          "error": {
+            "properties": {
+              "errorMessage": {
+                "type": "string"
+              },
+              "errorType": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "failure": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "string"
+          },
+          "statusCode": {
+            "type": "number"
+          },
+          "success": {
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
       "CCFError": {
         "properties": {
           "error": {
@@ -245,37 +295,6 @@ const openApiDoc = {
         "maximum": 18446744073709552000,
         "minimum": 0,
         "type": "integer"
-      },
-      "ApiResult": {
-        "properties": {
-          "content": {
-            "type": "object"
-          },
-          "error": {
-            "properties": {
-              "errorMessage": {
-                "type": "string"
-              },
-              "errorType": {
-                "type": "string"
-              }
-            },
-            "type": "object"
-          },
-          "failure": {
-            "type": "boolean"
-          },
-          "status": {
-            "type": "string"
-          },
-          "statusCode": {
-            "type": "number"
-          },
-          "success": {
-            "type": "boolean"
-          }
-        },
-        "type": "object"
       }
     },
     "x-ccf-forwarding": {
@@ -293,255 +312,12 @@ const openApiDoc = {
       }
     }
   },
-  "info": {
-    "description": "Data Reconciliation Application",
-    "title": "Data Reconciliation Application",
-    "version": "1.0.0"
-  },
-  "openapi": "3.0.0",
   "paths": {
-    "/app/api": {
-      "get": {
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/json"
-                }
-              }
-            },
-            "description": "Default response description"
-          },
-          "default": {
-            "$ref": "#/components/responses/default"
-          }
-        },
-        "x-ccf-forwarding": {
-          "$ref": "#/components/x-ccf-forwarding/sometimes"
-        }
-      }
-    },
-    "/app/api/metrics": {
-      "get": {
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EndpointMetrics"
-                }
-              }
-            },
-            "description": "Default response description"
-          },
-          "default": {
-            "$ref": "#/components/responses/default"
-          }
-        },
-        "x-ccf-forwarding": {
-          "$ref": "#/components/x-ccf-forwarding/sometimes"
-        }
-      }
-    },
-    "/app/code": {
-      "get": {
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GetCode__Out"
-                }
-              }
-            },
-            "description": "Default response description"
-          },
-          "default": {
-            "$ref": "#/components/responses/default"
-          }
-        },
-        "x-ccf-forwarding": {
-          "$ref": "#/components/x-ccf-forwarding/sometimes"
-        }
-      }
-    },
-    "/app/commit": {
-      "get": {
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GetCommit__Out"
-                }
-              }
-            },
-            "description": "Default response description"
-          },
-          "default": {
-            "$ref": "#/components/responses/default"
-          }
-        },
-        "x-ccf-forwarding": {
-          "$ref": "#/components/x-ccf-forwarding/sometimes"
-        }
-      }
-    },
-    "/app/local_tx": {
-      "get": {
-        "parameters": [
-          {
-            "in": "query",
-            "name": "transaction_id",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/TransactionId"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GetTxStatus__Out"
-                }
-              }
-            },
-            "description": "Default response description"
-          },
-          "default": {
-            "$ref": "#/components/responses/default"
-          }
-        },
-        "x-ccf-forwarding": {
-          "$ref": "#/components/x-ccf-forwarding/sometimes"
-        }
-      }
-    },
-    "/app/receipt": {
-      "get": {
-        "parameters": [
-          {
-            "in": "query",
-            "name": "transaction_id",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/TransactionId"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/json"
-                }
-              }
-            },
-            "description": "Default response description"
-          },
-          "default": {
-            "$ref": "#/components/responses/default"
-          }
-        },
-        "x-ccf-forwarding": {
-          "$ref": "#/components/x-ccf-forwarding/sometimes"
-        }
-      }
-    },
-    "/app/snp/host_data": {
-      "get": {
-        "parameters": [
-          {
-            "in": "query",
-            "name": "key",
-            "required": false,
-            "schema": {
-              "$ref": "#/components/schemas/string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GetSnpHostDataMap__Out"
-                }
-              }
-            },
-            "description": "Default response description"
-          },
-          "default": {
-            "$ref": "#/components/responses/default"
-          }
-        },
-        "x-ccf-forwarding": {
-          "$ref": "#/components/x-ccf-forwarding/sometimes"
-        }
-      }
-    },
-    "/app/snp/measurements": {
-      "get": {
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GetCode__Out"
-                }
-              }
-            },
-            "description": "Default response description"
-          },
-          "default": {
-            "$ref": "#/components/responses/default"
-          }
-        },
-        "x-ccf-forwarding": {
-          "$ref": "#/components/x-ccf-forwarding/sometimes"
-        }
-      }
-    },
-    "/app/tx": {
-      "get": {
-        "parameters": [
-          {
-            "in": "query",
-            "name": "transaction_id",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/TransactionId"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GetTxStatus__Out"
-                }
-              }
-            },
-            "description": "Default response description"
-          },
-          "default": {
-            "$ref": "#/components/responses/default"
-          }
-        },
-        "x-ccf-forwarding": {
-          "$ref": "#/components/x-ccf-forwarding/sometimes"
-        }
-      }
-    },
     "/app/ingest": {
       "post": {
         "description": "Users or members submit their data to be reconciled",
         "summary": "Ingest data to be reconciled",
+        "tags": ["Application Endpoints"],
         "requestBody": {
           "content": {
             "application/json": {
@@ -581,8 +357,19 @@ const openApiDoc = {
       "get": {
         "description": "Get the data reconciliation report for all ingested data",
         "summary": "Get the data reconciliation report for all ingested data",
+        "tags": ["Application Endpoints"],
         "responses": {
           "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResult"
+                }
+              }
+            },
+            "description": "Ok"
+          },
+          "400": {
             "content": {
               "application/json": {
                 "schema": {
@@ -599,6 +386,7 @@ const openApiDoc = {
       "get": {
         "description": "Get the data reconciliation report for specified record by supplying record id",
         "summary": "Get the data reconciliation report for specified record",
+        "tags": ["Application Endpoints"],
         "parameters": [
           {
             "in": "path",
@@ -622,7 +410,271 @@ const openApiDoc = {
           }
         }
       }
+    },
+    "/app/api": {
+      "get": {
+        "description": "Get the application OpenAPI schema",
+        "summary": "Get the application OpenAPI schema",
+        "tags": ["Network Endpoints"],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/json"
+                }
+              }
+            },
+            "description": "Default response description"
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        },
+        "x-ccf-forwarding": {
+          "$ref": "#/components/x-ccf-forwarding/sometimes"
+        }
+      }
+    },
+    "/app/api/metrics": {
+      "get": {
+        "description": "Usage metrics for endpoints",
+        "summary": "Get the usage metrics for endpoints",
+        "tags": ["Network Endpoints"],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EndpointMetrics"
+                }
+              }
+            },
+            "description": "Default response description"
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        },
+        "x-ccf-forwarding": {
+          "$ref": "#/components/x-ccf-forwarding/sometimes"
+        }
+      }
+    },
+    "/app/commit": {
+      "get": {
+        "description": "Current commit level",
+        "summary": "Current commit level, Latest transaction ID that has been committed on the service",
+        "tags": ["Network Endpoints"],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetCommit__Out"
+                }
+              }
+            },
+            "description": "Default response description"
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        },
+        "x-ccf-forwarding": {
+          "$ref": "#/components/x-ccf-forwarding/sometimes"
+        }
+      }
+    },
+    "/app/receipt": {
+      "get": {
+        "description": "Receipt for a transaction",
+        "summary": "Get a signed statement from the service over a transaction entry in the ledger",
+        "tags": ["Network Endpoints"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "transaction_id",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/TransactionId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/json"
+                }
+              }
+            },
+            "description": "Default response description"
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        },
+        "x-ccf-forwarding": {
+          "$ref": "#/components/x-ccf-forwarding/sometimes"
+        }
+      }
+    },
+    "/app/code": {
+      "get": {
+        "description": "",
+        "summary": "",
+        "tags": ["Network Endpoints"],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetCode__Out"
+                }
+              }
+            },
+            "description": "Default response description"
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        },
+        "x-ccf-forwarding": {
+          "$ref": "#/components/x-ccf-forwarding/sometimes"
+        }
+      }
+    },
+    "/app/snp/measurements": {
+      "get": {
+        "description": "",
+        "summary": "",
+        "tags": ["Network Endpoints"],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetCode__Out"
+                }
+              }
+            },
+            "description": "Default response description"
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        },
+        "x-ccf-forwarding": {
+          "$ref": "#/components/x-ccf-forwarding/sometimes"
+        }
+      }
+    },
+    "/app/snp/host_data": {
+      "get": {
+        "description": "",
+        "summary": "",
+        "tags": ["Network Endpoints"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "key",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetSnpHostDataMap__Out"
+                }
+              }
+            },
+            "description": "Default response description"
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        },
+        "x-ccf-forwarding": {
+          "$ref": "#/components/x-ccf-forwarding/sometimes"
+        }
+      }
+    },
+    "/app/tx": {
+      "get": {
+        "description": "get current status of a transaction",
+        "summary": "get current status of a transaction, Possible statuses returned are Unknown, Pending, Committed or Invalid.",
+        "tags": ["Network Endpoints"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "transaction_id",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/TransactionId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetTxStatus__Out"
+                }
+              }
+            },
+            "description": "Default response description"
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        },
+        "x-ccf-forwarding": {
+          "$ref": "#/components/x-ccf-forwarding/sometimes"
+        }
+      }
+    },
+    "/app/local_tx": {
+      "get": {
+        "description": "",
+        "summary": "",
+        "tags": ["Network Endpoints"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "transaction_id",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/TransactionId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetTxStatus__Out"
+                }
+              }
+            },
+            "description": "Default response description"
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        },
+        "x-ccf-forwarding": {
+          "$ref": "#/components/x-ccf-forwarding/sometimes"
+        }
+      }
     }
-  },
-  "servers": []
+  }
 };

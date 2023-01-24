@@ -69,3 +69,8 @@ clean: ## 🧹 Clean the working folders created during build/demo
 	@rm -rf .venv_ccf_sandbox
 	@rm -rf workspace
 	@rm -rf dist
+
+# Start hosting the application using `sandbox.sh` and enable JWT authentication
+start-host-jwt: build ## 🏃 Start the CCF network using Sandbox.sh
+	@echo -e "\e[34m$@\e[0m" || true
+	@/opt/ccf_virtual/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count 3 --initial-user-count 1 --constitution-dir ./governance/constitution --jwt-issuer "./governance/proposals/sandbox_set_jwt_issuer.json"

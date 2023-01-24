@@ -33,10 +33,6 @@ interface UserMemberAuthnIdentity extends ccfapp.AuthnIdentityCommon {
 }
 
 interface JwtAuthnIdentity extends ccfapp.JwtAuthnIdentity {
-  /**
-  * User ID.
-  */
-  userId: string;
 }
 
 interface CCFMember {
@@ -47,14 +43,13 @@ interface MSAccessTokenClaims {
   sub: string;
   iss: string;
   aud: string;
-  appid: string; // 1.0 only
-  ver: string; // 1.0 or 2.0
+  appid: string; 
+  ver: string; 
 }
 
 // Replace the below string with your own app id by registering an app in Azure:
 // https://docs.microsoft.com/en-us/azure/active-directory/develop/quickstart-register-app
-const MS_APP_ID = "1773214f-72b8-48f9-ae18-81e30fab04db";
-const MS_APP_ID_URI = "api://1773214f-72b8-48f9-ae18-81e30fab04db";
+const MS_APP_ID_URI = "api://b8dbd573-a015-424b-b111-2d5fa11cee3c";
 
 export interface IAuthenticationService {
   getCallerId(request: ccfapp.Request<any>): ServiceResult<string>;
@@ -78,7 +73,7 @@ export class CertBasedAuthenticationService implements IAuthenticationService {
       let callerId = caller.id;
       if (caller.policy === AuthenticationPolicyEnum.Jwt) {
         const jwtCaller = request.caller as unknown as JwtAuthnIdentity;
-        callerId = jwtCaller.userId;
+        callerId = jwtCaller?.jwt?.payload?.sub;
       }
 
       if (!callerId) {
@@ -165,7 +160,7 @@ export class CertBasedAuthenticationService implements IAuthenticationService {
   // Check if caller a valid access token
   public isValidJwtToken(identity: JwtAuthnIdentity): ServiceResult<boolean> {
 
-    if (!identity || !identity.userId) {
+    if (!identity || !identity.jwt || !identity.jwt.payload || !identity.jwt.payload.sub) {
       return ServiceResult.Failed({
         errorMessage: "Error: invalid caller identity",
         errorType: "AuthenticationError",
@@ -180,12 +175,6 @@ export class CertBasedAuthenticationService implements IAuthenticationService {
       if (msClaims.ver !== "1.0") {
         return ServiceResult.Failed({
           errorMessage: "Error: unsupported access token version, must be 1.0",
-          errorType: "AuthenticationError",
-        });
-      }
-      if (msClaims.appid !== MS_APP_ID) {
-        return ServiceResult.Failed({
-          errorMessage: "Error: jwt validation failed: appid mismatch",
           errorType: "AuthenticationError",
         });
       }
