@@ -6,7 +6,7 @@ FROM mcr.microsoft.com/ccf/app/run-js:2.0.7-sgx
 
 # copy configuration into image
 COPY ./governance/constitution/*.js /app/
-COPY ./config/cchost_config_enclave_js.json /app/
+COPY ./governance/nodes/cchost_config_enclave_js.json /app/
 COPY ./workspace/docker_certificates/member0_cert.pem /app/
 COPY ./workspace/docker_certificates/member0_enc_pubk.pem /app/
 

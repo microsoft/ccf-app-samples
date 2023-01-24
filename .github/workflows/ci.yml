@@ -44,7 +44,7 @@ jobs:
         with:
           cacheFrom: ghcr.io/microsoft/ccf-samples-devcontainer
           runCmd: |
-            cd auditable-logging-app && make test
+            cd auditable-logging-app && make test && make test-docker-virtual
 
   data-reconciliation-app-sample:
     name: Data Reconciliation app sample
