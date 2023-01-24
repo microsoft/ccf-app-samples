@@ -50,7 +50,7 @@ To generate report for a member, we can then follow the steps below:
 
 #### Consequences
 
-- This will slightly degrade the performance of ingest API as each record in the request body will need to be stored
+- This will slightly degrade the performance of the ingest API as each record in the request body will need to be stored
 - Storing ingested keys will require more storage space
 - Keys ingested by each member will keep growing and storing will require sharding in future
 
