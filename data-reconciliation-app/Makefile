@@ -71,6 +71,12 @@ clean: ## 🧹 Clean the working folders created during build/demo
 	@rm -rf dist
 
 # Start hosting the application using `sandbox.sh` and enable JWT authentication
-start-host-jwt: build ## 🏃 Start the CCF network using Sandbox.sh
+start-host-jwt: build create-jwt-configs  ## 🏃 Start the CCF network using Sandbox.sh
 	@echo -e "\e[34m$@\e[0m" || true
-	@/opt/ccf_virtual/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count 3 --initial-user-count 1 --constitution-dir ./governance/constitution --jwt-issuer "./governance/proposals/sandbox_set_jwt_issuer.json"
+	@/opt/ccf_virtual/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count 3 --initial-user-count 1 --constitution-dir ./governance/constitution --jwt-issuer "./workspace/configs/set_jwt_issuer_test_sandbox.json"
+
+# Create the JWT issuer configs files for (Test - Microsoft Azure Identity Provider).
+# This config will be used in sandbox and as proposal for docker and mCCF.
+create-jwt-configs: ## 🏃 Create the JWT issuer configs files
+	@echo -e "\e[34m$@\e[0m" || true
+	@ts-node --esm ./test/utils/jwt-configs-generator.ts

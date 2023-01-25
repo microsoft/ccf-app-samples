@@ -353,6 +353,33 @@ const openApiDoc = {
         }
       }
     },
+    "/app/csv/ingest": {
+      "post": {
+        "description": "Users or members submit their data to be reconciled in csv formate",
+        "summary": "Ingest data to be reconciled",
+        "tags": ["Application Endpoints"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "text/csv": {
+              "schema": { "type": "object" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResult"
+                }
+              }
+            },
+            "description": "Ok"
+          }
+        }
+      }
+    },
     "/app/report": {
       "get": {
         "description": "Get the data reconciliation report for all ingested data",
