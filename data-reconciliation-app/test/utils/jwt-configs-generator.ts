@@ -5,28 +5,32 @@ import forge from "node-forge";
 import { KeyPairSyncResult } from "crypto";
 import axios from 'axios';
 
-export class JwtConfigsGenerator {
-
-  /*
-    Create the JWT issuer configs for (Test - Microsoft Azure Identity Provider).
-    This config will be used in sandbox and as proposal for docker and mCCF.
+/*
+   * Create the JWT issuer configs for (Test - Microsoft Azure Identity Provider).
+   * This config will be used in sandbox and as proposal for docker and mCCF.
   */
-  
+
+export class JwtConfigsGenerator {
+ 
   public static workspaceFolderPath : string = "./workspace/configs";
 
+  /*  
+   * Create a test Identity Provider configs for sandbox and proposal for docker and mCCF.
+   */
   public static async createSandbox_Test_JwtIssuer_Config(): Promise<any> {
 
     let keyId: string = "12345";
     let issuer: string = "https://demo";
     let keys: KeyPairSyncResult<string, string>;
 
-    // Generate a new key pair
+    // Generate a new encryption key pair
     keys = crypto.generateKeyPairSync("rsa", {
       modulusLength: 2048,
       publicKeyEncoding: { type: "spki", format: "pem" },
       privateKeyEncoding: { type: "pkcs8", format: "pem" },
     });
 
+    // Create a self-signed certificate
     const cert = forge.pki.createCertificate();
     const attrs = [{ name: "commonName", value: "Test" }];
     cert.setIssuer(attrs);
@@ -40,6 +44,7 @@ export class JwtConfigsGenerator {
       tokens: {},
     };
 
+    // generate some tokens to be used in the tests.
     let tokens = {};
     for (let i = 1; i <= 5; i++) {
       let userId = crypto.randomUUID();
@@ -56,14 +61,37 @@ export class JwtConfigsGenerator {
     // make sure the workspace folder exists.
     await fs.promises.mkdir(this.workspaceFolderPath, { recursive: true }).catch(console.error);
 
-    // create sandbox config file for test.
+    // create sandbox config file for the test jwt issuer.
     fs.writeFileSync(`${this.workspaceFolderPath}/set_jwt_issuer_test_sandbox.json`, JSON.stringify(jwtIssuer));
+
+    // create a proposal file for the test jwt issuer, this file can be submitted as proposal
+    const jwtIssuerProposal = {
+      "actions": [
+        {
+          "name": "set_jwt_issuer",
+          "args": {
+            "issuer": issuer,
+            "key_filter": "all",
+            "auto_refresh": false
+          }
+        },
+        {
+          "name": "set_jwt_public_signing_keys",
+          "args": {
+            "issuer": issuer,
+            "jwks": jwtIssuer.jwks
+          }
+        }
+      ]
+    };
+    fs.writeFileSync(`${this.workspaceFolderPath}/set_jwt_issuer_test_proposal.json`, JSON.stringify(jwtIssuerProposal));
+
     return jwtIssuer;
   }
 
   /*  
-    Create Microsoft Azure Identity Provider configs for sandbox and as proposal for docker and mCCF.
-  */
+   * Create Microsoft Azure Identity Provider configs for sandbox and as proposal for docker and mCCF.
+   */
   public static async create_MSIdp_JwtIssuer_Configs(): Promise<any> {
 
     // Microsoft IDP configs are provided by:https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration
@@ -75,11 +103,11 @@ export class JwtConfigsGenerator {
     // make sure the workspace folder exists.
     await fs.promises.mkdir(this.workspaceFolderPath, { recursive: true }).catch(console.error);
 
-    // create sandbox config file for Microsoft IDP.
+    // create the sandbox config file for Microsoft IDP.
     const jwtIssuer = { issuer: issuer, jwks: ms_jwks.data };
     fs.writeFileSync(`${this.workspaceFolderPath}/set_jwt_issuer_ms_sandbox.json`, JSON.stringify(jwtIssuer));
 
-    // create a proposal file for Microsoft IDP, this file will be submitted as proposal.
+    // create the proposal file for Microsoft IDP, this file can be submitted as proposal.
     const jwtIssuerProposal = {
       "actions": [
         {
@@ -99,7 +127,7 @@ export class JwtConfigsGenerator {
         }
       ]
     };
-    fs.writeFileSync(`${this.workspaceFolderPath}/set_jwt_issuer_ms_proposal.json`, JSON.stringify(jwtIssuer));
+    fs.writeFileSync(`${this.workspaceFolderPath}/set_jwt_issuer_ms_proposal.json`, JSON.stringify(jwtIssuerProposal));
     return jwtIssuerProposal;
   }
 }
