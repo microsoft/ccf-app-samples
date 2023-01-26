@@ -16,7 +16,10 @@ Alternatively, if your organisation supports it, you can checkout this repositor
 
 [![Open in GitHub Codespaces](https://img.shields.io/static/v1?label=Open+in&message=GitHub+codespace&logo=github&color=2F363D&logoColor=white&labelColor=2C2C32)](https://github.com/codespaces/new?hide_repo_select=true&repo=microsoft%2Fccf-app-samples)
 
-Please see `<app-name>/README.md` to run each sample applications.
+Please choose a sample to learn more.
+- [Auditable Logging App](./auditable-logging-app/README.md)
+- [Banking App](./banking-app/README.md)
+- [Data Reconciliation App](./data-reconciliation-app/README.md)
 
 ## Contributing
 

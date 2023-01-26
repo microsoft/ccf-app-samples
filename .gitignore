@@ -9,5 +9,4 @@ package-lock.json
 *.pfx
 **/dist
 **/coverage
-data-reconciliation-app/demo-app/Reports/
-**/.DS_Store
+data-reconciliation-app/test/reports/

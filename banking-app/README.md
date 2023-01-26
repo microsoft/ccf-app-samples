@@ -10,20 +10,20 @@ A bank system that can be run by multiple banks is required.
 
 This application provides a REST API with the following endpoints:
 
-- PUT /app/account/{user_id}/{account_name}
+- PUT `/app/account/{user_id}/{account_name}`
   - Create account for a bank account holder
   - It can be called by banks ([members](https://microsoft.github.io/CCF/main/overview/glossary.html#term-Members) in CCF terminology)
   - Status code for successful calls: 204
-- POST /app/deposit/{user_id}/{account_name}
+- POST `/app/deposit/{user_id}/{account_name}`
   - Deposit money
   - It can be called by banks ([members](https://microsoft.github.io/CCF/main/overview/glossary.html#term-Members) in CCF terminology)
   - Example request body: `{ "value" : 100 }`
   - Status code for successful calls: 204
-- GET /app/balance/{account_name}
+- GET `/app/balance/{account_name}`
   - Check balance
   - It can be called by bank account holders ([users](https://microsoft.github.io/CCF/main/overview/glossary.html#term-Users) in CCF terminology)
   - Example response: Status code 200 with body `{ "balance" : 100 }`
-- POST /app/transfer/{account_name}
+- POST `/app/transfer/{account_name}`
   - Transfer money from an account to another account
   - It can be called by bank account holders ([users](https://microsoft.github.io/CCF/main/overview/glossary.html#term-Users) in CCF terminology)
   - Example request body: `{ value : 100, user_id_to: 'userA' , account_name_to: 'accountA' }`

@@ -122,19 +122,6 @@ $root_dir/scripts/submit_proposal.sh --network-url  ${server} \
   --signing-cert $certs/member0_cert.pem --signing-key $certs/member0_privk.pem
 
 
-#---------------------
-echo "Adding user1 1/2: create certificate and proposal"
-cert_name="user1"
-create_certificate "${cert_name}" "${certs}"
-$root_dir/scripts/add_user.sh --cert-file $certs/${cert_name}_cert.pem
-
-echo "Adding user1 2/2: submit proposal to network and vote as accepted"
-$root_dir/scripts/submit_proposal.sh --network-url  ${server} \
-  --proposal-file $certs/set_user.json --service-cert $certs/service_cert.pem \
-  --signing-cert $certs/member0_cert.pem --signing-key $certs/member0_privk.pem
-
-
-
 ##############################################
 # Propose and Open Network
 ##############################################

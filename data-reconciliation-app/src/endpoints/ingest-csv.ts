@@ -1,4 +1,5 @@
 import * as ccfapp from "@microsoft/ccf-app";
+import papa from "papaparse/papaparse.min.js";
 import { ServiceResult } from "../utils/service-result";
 import { ApiResult, CCFResponse } from "../utils/api-result";
 import { DataSchema } from "../models/data-schema";
@@ -6,11 +7,11 @@ import authenticationService from "../services/authentication-service";
 import ingestService from "../services/ingest-service";
 
 /**
- * HTTP POST Handler for ingesting dta via JSON
- * @param {ccfapp.Request<any>} request - mTLS request  with userId and JSON data for ingestion
+ * HTTP POST Handler for ingesting data via CSV
+ * @param {ccfapp.Request<any>} request - mTLS request with userId and CSV file for ingestion
  * @returns {ServiceResult<string>} - data has been ingested successfully
  */
-export function postHandler(request: ccfapp.Request<any>): ccfapp.Response<CCFResponse> {
+export function postHandlerCsv(request: ccfapp.Request<any>): ccfapp.Response<CCFResponse> {
   // get caller identity
   const getCallerId = authenticationService.getCallerId(request);
   if (getCallerId.failure) return ApiResult.Failed(getCallerId);
@@ -21,8 +22,8 @@ export function postHandler(request: ccfapp.Request<any>): ccfapp.Response<CCFRe
   if (isValidIdentity.failure || !isValidIdentity.content)
     return ApiResult.AuthFailure();
 
-  // read data from request body as json
-  let getJsonData = getBodyAsJson(request);
+  // read CSV data from request body as json
+  let getJsonData = getCsvBodyAsJson(request);
   if (getJsonData.failure) return ApiResult.Failed(getJsonData);
   const data = getJsonData.content;
 
@@ -35,13 +36,18 @@ export function postHandler(request: ccfapp.Request<any>): ccfapp.Response<CCFRe
   return ApiResult.Succeeded(response);
 }
 
-function getBodyAsJson(request: ccfapp.Request<any>): ServiceResult<any> {
+function getCsvBodyAsJson(request: ccfapp.Request<any>): ServiceResult<any> {
   try {
-    return ServiceResult.Succeeded(request.body.json());
+    // parse CSV, converting to json
+    var result = papa.parse(request.body.text(), {
+      header: true,
+      skipEmptyLines: true,
+    });
+    return ServiceResult.Succeeded(result.data);
   } catch (ex) {
     return ServiceResult.Failed({
       errorMessage: ex.message,
-      errorType: "InvalidJSON",
+      errorType: "InvalidCsvToJSON",
       details: ex,
     });
   }
