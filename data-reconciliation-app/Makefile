@@ -18,10 +18,16 @@ build-enclave: build ## 📦 Build Enclave container image from Dockerfile
 	@echo -e "\e[34m$@\e[0m" || true
 	@../scripts/build_image.sh enclave
 
-# Start hosting the application using `sandbox.sh` 
-start-host: build ## 🏃 Start the CCF network using Sandbox.sh
+# Start hosting the application using `sandbox.sh` and enable custom JWT authentication
+start-host: build create-jwt-configs  ## 🏃 Start the CCF network using Sandbox.sh
 	@echo -e "\e[34m$@\e[0m" || true
-	@/opt/ccf_virtual/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count 3 --initial-user-count 1 --constitution-dir ./governance/constitution
+	@/opt/ccf_virtual/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count 3 --initial-user-count 1 --constitution-dir ./governance/constitution --jwt-issuer "./workspace/configs/set_jwt_issuer_test_sandbox.json"
+
+# Start hosting the application using `sandbox.sh` and enable MS IDP JWT authentication
+start-host-jwt-ms: build create-jwt-configs  ## 🏃 Start the CCF network using Sandbox.sh
+	@echo -e "\e[34m$@\e[0m" || true
+	@/opt/ccf_virtual/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count 3 --initial-user-count 1 --constitution-dir ./governance/constitution --jwt-issuer "./workspace/configs/set_jwt_issuer_ms_sandbox.json"
+
 
 test: build ## 🧪 Test the Data Reconciliation Application in the sandbox
 	@echo -e "\e[34m$@\e[0m" || true
@@ -71,11 +77,6 @@ clean: ## 🧹 Clean the working folders created during build/demo
 	@rm -rf .venv_ccf_sandbox
 	@rm -rf workspace
 	@rm -rf dist
-
-# Start hosting the application using `sandbox.sh` and enable JWT authentication
-start-host-jwt: build create-jwt-configs  ## 🏃 Start the CCF network using Sandbox.sh
-	@echo -e "\e[34m$@\e[0m" || true
-	@/opt/ccf_virtual/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count 3 --initial-user-count 1 --constitution-dir ./governance/constitution --jwt-issuer "./workspace/configs/set_jwt_issuer_test_sandbox.json"
 
 # Create the JWT issuer configs files for (Test - Microsoft Azure Identity Provider).
 # This config will be used in sandbox and as proposal for docker and mCCF.

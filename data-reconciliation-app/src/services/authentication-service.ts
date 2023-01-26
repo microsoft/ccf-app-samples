@@ -2,7 +2,10 @@ import * as ccfapp from "@microsoft/ccf-app";
 import { ccf } from "@microsoft/ccf-app/global";
 import { ServiceResult } from "../utils/service-result";
 
-export enum AuthenticationPolicyEnum {
+/**
+ * CCF authentication policies
+ */
+export enum CCFAuthenticationPolicyEnum {
   User_cert = "user_cert",
   User_signature = "user_signature",
   Member_cert = "member_cert",
@@ -37,6 +40,7 @@ interface UserMemberAuthnIdentity extends ccfapp.AuthnIdentityCommon {
 
 /**
  * CCF member information
+ * https://microsoft.github.io/CCF/main/audit/builtin_maps.html#members-info
  */
 interface CCFMember {
   status: string;
@@ -53,6 +57,9 @@ interface MSAccessToken {
   ver: string;
 }
 
+/**
+ * Authentication Service Interface
+ */
 export interface IAuthenticationService {
   /**
    * Checks if caller is an active member or a registered user or has a valid JWT token
@@ -70,7 +77,7 @@ export interface IAuthenticationService {
   isUser(userId: string): ServiceResult<boolean>;
 
   /**
-   * Checks if a user exists
+   * Checks if a member exists and active
    * @see https://microsoft.github.io/CCF/main/audit/builtin_maps.html#members-info
    * @param {string} memberId memberId to check if it exists and active
    * @returns {ServiceResult<boolean>}
@@ -78,9 +85,9 @@ export interface IAuthenticationService {
   isActiveMember(memberId: string): ServiceResult<boolean>;
 }
 
-/*
-* Authentication Service
-*/
+/**
+ * Authentication Service Implementation
+ */
 export class AuthenticationService implements IAuthenticationService {
 
   /*
@@ -89,37 +96,41 @@ export class AuthenticationService implements IAuthenticationService {
   public isAuthenticated(request: ccfapp.Request<any>): ServiceResult<string> {
     const commonCaller = request.caller as unknown as ccfapp.AuthnIdentityCommon;
 
-    // check if caller has a valid access token
-    if (commonCaller.policy === AuthenticationPolicyEnum.Jwt) {
-      const jwtCaller = request.caller as unknown as ccfapp.JwtAuthnIdentity;
-      const isValid = this.isValidJwtToken(jwtCaller);
-      if (isValid.success && isValid.content) {
-        const identityId = jwtCaller?.jwt?.payload?.sub;
-        return ServiceResult.Succeeded(identityId);
+    switch (commonCaller.policy) {
+      // check if caller has a valid access token
+      case CCFAuthenticationPolicyEnum.Jwt: {
+        const jwtCaller = request.caller as unknown as ccfapp.JwtAuthnIdentity;
+        const isValid = this.isValidJwtToken(jwtCaller);
+        if (isValid.success && isValid.content) {
+          const identityId = jwtCaller?.jwt?.payload?.sub;
+          return ServiceResult.Succeeded(identityId);
+        }
       }
-    }
-    // check if caller is a valid user
-    else if (commonCaller.policy === AuthenticationPolicyEnum.User_cert || commonCaller.policy === AuthenticationPolicyEnum.User_signature) {
-      const userCaller = request.caller as unknown as UserMemberAuthnIdentity;
-      const identityId = userCaller.id;
-      const isValid = this.isUser(identityId);
-      if (isValid.success && isValid.content) {
-        return ServiceResult.Succeeded(identityId);
+      // check if caller is a valid user
+      case CCFAuthenticationPolicyEnum.User_cert:
+      case CCFAuthenticationPolicyEnum.User_signature: {
+        const userCaller = request.caller as unknown as UserMemberAuthnIdentity;
+        const identityId = userCaller.id;
+        const isValid = this.isUser(identityId);
+        if (isValid.success && isValid.content) {
+          return ServiceResult.Succeeded(identityId);
+        }
       }
-    }
-    // check if caller is a valid member
-    else if (commonCaller.policy === AuthenticationPolicyEnum.Member_cert || commonCaller.policy === AuthenticationPolicyEnum.Member_signature) {
-      const memberCaller = request.caller as unknown as UserMemberAuthnIdentity;
-      const identityId = memberCaller.id;
-      const isValid = this.isActiveMember(identityId);
-      if (isValid.success && isValid.content) {
-        return ServiceResult.Succeeded(identityId);
+      // check if caller is a valid member
+      case CCFAuthenticationPolicyEnum.Member_cert:
+      case CCFAuthenticationPolicyEnum.Member_signature: {
+        const memberCaller = request.caller as unknown as UserMemberAuthnIdentity;
+        const identityId = memberCaller.id;
+        const isValid = this.isActiveMember(identityId);
+        if (isValid.success && isValid.content) {
+          return ServiceResult.Succeeded(identityId);
+        }
       }
     }
 
     return ServiceResult.Failed({
       errorMessage: "Error: invalid caller identity",
-      errorType: "AuthenticationError",
+      errorType: "AuthenticationError"
     });
   }
 
@@ -155,7 +166,7 @@ export class AuthenticationService implements IAuthenticationService {
   }
 
   /**
-   * Checks if a user exists
+   * Checks if a member exists and active
    * @see https://microsoft.github.io/CCF/main/audit/builtin_maps.html#members-info
    * @param {string} memberId memberId to check if it exists and active
    * @returns {ServiceResult<boolean>}
@@ -197,7 +208,11 @@ export class AuthenticationService implements IAuthenticationService {
     }
   }
 
-  // Check if caller a valid access token
+  /**
+   * Check if caller's access token is valid
+   * @param {JwtAuthnIdentity} identity JwtAuthnIdentity object
+   * @returns {ServiceResult<boolean>}
+   */
   public isValidJwtToken(identity: ccfapp.JwtAuthnIdentity): ServiceResult<boolean> {
 
     if (!identity || !identity.jwt || !identity.jwt.payload || !identity.jwt.payload.sub) {
@@ -209,10 +224,12 @@ export class AuthenticationService implements IAuthenticationService {
 
     if (identity.jwt.keyIssuer === "https://demo") { // logic to validate the tokens of demo issuer
       // no further validation
-    } 
+    }
     else if (identity.jwt.keyIssuer === "https://login.microsoftonline.com/common/v2.0") { // logic to validate the tokens microsoft idp issuer
       // Microsoft identity platform access tokens
       const msClaims = identity.jwt.payload as MSAccessToken;
+      
+      // check if token has the right version
       if (msClaims.ver !== "1.0") {
         return ServiceResult.Failed({
           errorMessage: "Error: unsupported access token version, must be 1.0",
@@ -224,7 +241,7 @@ export class AuthenticationService implements IAuthenticationService {
       // https://docs.microsoft.com/en-us/azure/active-directory/develop/quickstart-register-app
       const MS_APP_ID = "ee48548a-7d69-4b8e-b2d4-805e8bac7f01";
       const MS_APP_ID_URI = "api://b8dbd573-a015-424b-b111-2d5fa11cee3c";
-      
+
       // check if token is for this app
       if (msClaims.appid !== MS_APP_ID) {
         return ServiceResult.Failed({
@@ -241,7 +258,7 @@ export class AuthenticationService implements IAuthenticationService {
         });
       }
     } else {
-      // Jwt issue if not supported
+      // Jwt issuer if not supported
       return ServiceResult.Failed({
         errorMessage: `Error: jwt validation failed: unknown key issuer: ${identity.jwt.keyIssuer}`,
         errorType: "AuthenticationError",

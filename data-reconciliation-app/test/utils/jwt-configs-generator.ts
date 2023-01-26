@@ -11,13 +11,21 @@ import axios from 'axios';
   */
 
 export class JwtConfigsGenerator {
- 
-  public static workspaceFolderPath : string = "./workspace/configs";
+
+  public static workspaceFolderPath: string = "./workspace/configs";
 
   /*  
    * Create a test Identity Provider configs for sandbox and proposal for docker and mCCF.
    */
   public static async createSandbox_Test_JwtIssuer_Config(): Promise<any> {
+
+    const proposalFilePath = `${this.workspaceFolderPath}/set_jwt_issuer_test_proposal.json`;
+    const sandboxConfigFilePath = `${this.workspaceFolderPath}/set_jwt_issuer_test_sandbox.json`;
+    if (fs.existsSync(sandboxConfigFilePath) && fs.existsSync(proposalFilePath)) 
+      return;
+
+    // make sure the workspace folder exists.
+    await fs.promises.mkdir(this.workspaceFolderPath, { recursive: true }).catch(console.error);
 
     let keyId: string = "12345";
     let issuer: string = "https://demo";
@@ -57,14 +65,11 @@ export class JwtConfigsGenerator {
     }
 
     jwtIssuer.tokens = tokens;
-    
-    // make sure the workspace folder exists.
-    await fs.promises.mkdir(this.workspaceFolderPath, { recursive: true }).catch(console.error);
 
     // create sandbox config file for the test jwt issuer.
-    fs.writeFileSync(`${this.workspaceFolderPath}/set_jwt_issuer_test_sandbox.json`, JSON.stringify(jwtIssuer));
+    fs.writeFileSync(sandboxConfigFilePath, JSON.stringify(jwtIssuer));
 
-    // create a proposal file for the test jwt issuer, this file can be submitted as proposal
+    // create a proposal object for the test jwt issuer, this will be submitted as proposal
     const jwtIssuerProposal = {
       "actions": [
         {
@@ -84,15 +89,25 @@ export class JwtConfigsGenerator {
         }
       ]
     };
-    fs.writeFileSync(`${this.workspaceFolderPath}/set_jwt_issuer_test_proposal.json`, JSON.stringify(jwtIssuerProposal));
+
+    // save the proposal to file if not exists
+    fs.writeFileSync(proposalFilePath, JSON.stringify(jwtIssuerProposal));
 
     return jwtIssuer;
   }
 
-  /*  
+  /**   
    * Create Microsoft Azure Identity Provider configs for sandbox and as proposal for docker and mCCF.
    */
   public static async create_MSIdp_JwtIssuer_Configs(): Promise<any> {
+
+    const proposalFilePath = `${this.workspaceFolderPath}/set_jwt_issuer_ms_proposal.json`;
+    const sandboxConfigFilePath = `${this.workspaceFolderPath}/set_jwt_issuer_ms_sandbox.json`;
+    if (fs.existsSync(sandboxConfigFilePath) && fs.existsSync(proposalFilePath)) 
+      return;
+
+    // make sure the workspace folder exists.
+    await fs.promises.mkdir(this.workspaceFolderPath, { recursive: true }).catch(console.error);
 
     // Microsoft IDP configs are provided by:https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration
     // Microsoft IDP Keys are provided by: https://login.microsoftonline.com/common/discovery/v2.0/keys
@@ -100,14 +115,11 @@ export class JwtConfigsGenerator {
     const ms_openid_config = await axios.get(`${issuer}/.well-known/openid-configuration`, {});
     const ms_jwks = await axios.get(ms_openid_config.data.jwks_uri, {});
 
-    // make sure the workspace folder exists.
-    await fs.promises.mkdir(this.workspaceFolderPath, { recursive: true }).catch(console.error);
-
     // create the sandbox config file for Microsoft IDP.
     const jwtIssuer = { issuer: issuer, jwks: ms_jwks.data };
-    fs.writeFileSync(`${this.workspaceFolderPath}/set_jwt_issuer_ms_sandbox.json`, JSON.stringify(jwtIssuer));
+    fs.writeFileSync(sandboxConfigFilePath, JSON.stringify(jwtIssuer));
 
-    // create the proposal file for Microsoft IDP, this file can be submitted as proposal.
+    // create the proposal object for Microsoft IDP, this will be submitted as proposal.
     const jwtIssuerProposal = {
       "actions": [
         {
@@ -127,7 +139,9 @@ export class JwtConfigsGenerator {
         }
       ]
     };
-    fs.writeFileSync(`${this.workspaceFolderPath}/set_jwt_issuer_ms_proposal.json`, JSON.stringify(jwtIssuerProposal));
+
+    // save the proposal to file if not exists
+    fs.writeFileSync(proposalFilePath, JSON.stringify(jwtIssuerProposal));
     return jwtIssuerProposal;
   }
 }
