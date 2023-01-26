@@ -10,7 +10,6 @@ function usage {
     echo "  --nodeAddress        string      The IP and port of the primary CCF node"
     echo "  --certificate_dir    string      The directory where the certificates are"
     echo ""
-    exit 0
 }
 
 function failed {
@@ -39,10 +38,10 @@ do
 done
 
 # validate parameters
-if [ -z $nodeAddress ]; then
+if [ -z "$nodeAddress" ]; then
     failed "You must supply --nodeAddress"
 fi
-if [ -z $certs ]; then
+if [ -z "$certs" ]; then
     failed "You must supply --certificate_dir"
 fi
 

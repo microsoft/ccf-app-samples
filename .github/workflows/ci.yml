@@ -18,9 +18,11 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
+
       - name: Build samples in DevContainer
         uses: devcontainers/ci@v0.2
         with:
+          cacheFrom: ghcr.io/microsoft/ccf-samples-devcontainer
           runCmd: |
             git config --global --add safe.directory "$GITHUB_WORKSPACE"
             make lint
@@ -40,8 +42,9 @@ jobs:
       - name: Build samples in DevContainer
         uses: devcontainers/ci@v0.2
         with:
+          cacheFrom: ghcr.io/microsoft/ccf-samples-devcontainer
           runCmd: |
-            cd auditable-logging-app && make test
+            cd auditable-logging-app && make test && make test-docker-virtual
 
   data-reconciliation-app-sample:
     name: Data Reconciliation app sample
@@ -55,5 +58,6 @@ jobs:
       - name: Build samples in DevContainer
         uses: devcontainers/ci@v0.2
         with:
+          cacheFrom: ghcr.io/microsoft/ccf-samples-devcontainer
           runCmd: |
             cd data-reconciliation-app && make test && make test-docker-virtual

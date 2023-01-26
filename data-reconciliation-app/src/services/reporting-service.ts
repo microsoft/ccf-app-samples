@@ -4,14 +4,24 @@ import keyValueRepository, { IRepository } from "../repositories/kv-repository";
 import { SummaryRecord } from "../models/summary-record";
 
 export interface IReportingService {
+  /**
+   * Reconciliation summary report by a member
+   * @param {string} memberId 
+   * @returns {ServiceResult<SummaryRecord>}
+   */
   getData(memberId: string): ServiceResult<SummaryRecord[]>;
+
+  /**
+   * Reconciliation summary report by all members
+   * @param {string} memberId 
+   * @returns {ServiceResult<SummaryRecord>}
+   */
   getDataById(memberId: string, key: string): ServiceResult<SummaryRecord>;
 }
 
 export class ReportingService implements IReportingService {
   constructor(private readonly repository: IRepository<ReconciledRecord>) {}
 
-  // get reconciliation summary report for one user's data record
   getDataById(memberId: string, key: string): ServiceResult<SummaryRecord> {
     if (!key || key.length == 0)
       return ServiceResult.Failed({
@@ -27,7 +37,6 @@ export class ReportingService implements IReportingService {
     return SummaryRecord.create(memberId, record.content);
   }
 
-  // get reconciliation summary report for all user's data records
   public getData(memberId: string): ServiceResult<SummaryRecord[]> {
     const result: SummaryRecord[] = [];
 

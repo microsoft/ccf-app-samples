@@ -13,13 +13,11 @@ export function getAllHandler(request: ccfapp.Request<any>): ccfapp.Response<CCF
 
   // check if caller has a valid identity
   const isValidIdentity = authenticationService.isAuthenticated(request);
-  if (isValidIdentity.failure || !isValidIdentity.content)
+  if (isValidIdentity.failure)
     return ApiResult.AuthFailure();
 
-  // get caller unique identifier
-  const getCallerId = authenticationService.getCallerId(request);
-  if (getCallerId.failure) return ApiResult.Failed(getCallerId);
-  const callerId = getCallerId.content;
+  // caller unique identifier
+  const callerId = isValidIdentity.content;
 
   const response = reportingService.getData(callerId);
   if (response.failure) return ApiResult.Failed(response);
@@ -39,13 +37,11 @@ export function getByIdHandler(request: ccfapp.Request<any>): ccfapp.Response<CC
 
   // check if caller has a valid identity
   const isValidIdentity = authenticationService.isAuthenticated(request);
-  if (isValidIdentity.failure || !isValidIdentity.content)
+  if (isValidIdentity.failure)
     return ApiResult.AuthFailure();
 
-  // get caller unique identifier
-  const getCallerId = authenticationService.getCallerId(request);
-  if (getCallerId.failure) return ApiResult.Failed(getCallerId);
-  const callerId = getCallerId.content;
+  // caller unique identifier
+  const callerId = isValidIdentity.content;
 
   // get record key from request parameters
   const key = request.params["id"];

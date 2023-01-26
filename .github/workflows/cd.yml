@@ -25,6 +25,13 @@ jobs:
         with:
           creds: '{"clientId":"${{ secrets.ARM_CLIENT_ID }}","clientSecret":"${{ secrets.ARM_CLIENT_SECRET }}","subscriptionId":"${{ secrets.ARM_SUBSCRIPTION_ID }}","tenantId":"${{ secrets.ARM_TENANT_ID }}"}' # editorconfig-checker-disable-line
 
+      - name: Login to GH-CR to push the updated devcontainer image
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Create Resource Group
         uses: Azure/CLI@v1
         with:
@@ -32,7 +39,7 @@ jobs:
             #!/bin/bash
             az group create --name ${{ env.ccfName }} --location ${{ env.ResourceGroupLocation }}
 
-      - name: Deploy
+      - name: Deploy Managed CCF Network
         uses: azure/arm-deploy@v1
         with:
           resourceGroupName: ${{ env.ccfName }}
@@ -42,6 +49,10 @@ jobs:
       - name: Deploy Banking Sample to mCCF
         uses: devcontainers/ci@v0.2
         with:
+          imageName: ghcr.io/microsoft/ccf-samples-devcontainer
+          cacheFrom: ghcr.io/microsoft/ccf-samples-devcontainer
+          eventFilterForPush: push
+          refFilterForPush: refs/heads/main
           runCmd: |
             cd banking-app && make test-mccf
           env: |
@@ -52,6 +63,7 @@ jobs:
       - name: Deploy Data Reconciliation Sample to mCCF
         uses: devcontainers/ci@v0.2
         with:
+          imageName: ghcr.io/microsoft/ccf-samples-devcontainer
           runCmd: |
             cd data-reconciliation-app && make test-mccf
           env: |

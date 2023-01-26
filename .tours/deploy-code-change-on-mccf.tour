@@ -1,0 +1,38 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "Deploy Code Change on mCCF",
+  "steps": [
+    {
+      "file": "deploy/README.md",
+      "description": "Create a public/private cert for member0 for your new Managed CCF Network. You create these files by being in the deploy folder and running \n\n```bash\n/opt/ccf_virtual/bin/keygenerator.sh --name member0\n```",
+      "line": 29
+    },
+    {
+      "file": "deploy/README.md",
+      "description": "Use this new certificate to create a managed CCF network in an Azure Subscription.",
+      "line": 32
+    },
+    {
+      "file": "deploy/README.md",
+      "description": "Export the name of your new network into a terminal so that we can use this in our test scripts.",
+      "line": 56
+    },
+    {
+      "file": "data-reconciliation-app/Makefile",
+      "description": "Run `make test-mccf` in the same terminal to ingest data and test CCF is working.",
+      "line": 38
+    },
+    {
+      "file": "data-reconciliation-app/src/models/data-schema.ts",
+      "description": "Uncomment this line so we can demonstrate a code change",
+      "line": 80
+    },
+    {
+      "file": "data-reconciliation-app/Makefile",
+      "description": "Run `make demo-code-change` to demonstrate rebuilding the application and proposing a new version to the network",
+      "line": 63
+    }
+  ],
+  "isPrimary": true,
+  "description": "Outlines steps required for testing this on Managed CCF"
+}
