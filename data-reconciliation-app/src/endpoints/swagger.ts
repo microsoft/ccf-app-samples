@@ -317,7 +317,7 @@ const openApiDoc = {
       "post": {
         "description": "Users or members submit their data to be reconciled",
         "summary": "Ingest data to be reconciled",
-        "tags": ["Application Endpoints"],
+        "tags": ["Application API"],
         "requestBody": {
           "content": {
             "application/json": {
@@ -357,7 +357,7 @@ const openApiDoc = {
       "post": {
         "description": "Users or members submit their data to be reconciled in csv formate",
         "summary": "Ingest data to be reconciled",
-        "tags": ["Application Endpoints"],
+        "tags": ["Application API"],
         "requestBody": {
           "required": true,
           "content": {
@@ -384,7 +384,7 @@ const openApiDoc = {
       "get": {
         "description": "Get the data reconciliation report for all ingested data",
         "summary": "Get the data reconciliation report for all ingested data",
-        "tags": ["Application Endpoints"],
+        "tags": ["Application API"],
         "responses": {
           "200": {
             "content": {
@@ -413,7 +413,7 @@ const openApiDoc = {
       "get": {
         "description": "Get the data reconciliation report for specified record by supplying record id",
         "summary": "Get the data reconciliation report for specified record",
-        "tags": ["Application Endpoints"],
+        "tags": ["Application API"],
         "parameters": [
           {
             "in": "path",
@@ -442,7 +442,7 @@ const openApiDoc = {
       "get": {
         "description": "Get the application OpenAPI schema",
         "summary": "Get the application OpenAPI schema",
-        "tags": ["Network Endpoints"],
+        "tags": ["User RPC API"],
         "responses": {
           "200": {
             "content": {
@@ -467,7 +467,7 @@ const openApiDoc = {
       "get": {
         "description": "Usage metrics for endpoints",
         "summary": "Get the usage metrics for endpoints",
-        "tags": ["Network Endpoints"],
+        "tags": ["User RPC API"],
         "responses": {
           "200": {
             "content": {
@@ -492,7 +492,7 @@ const openApiDoc = {
       "get": {
         "description": "Current commit level",
         "summary": "Current commit level, Latest transaction ID that has been committed on the service",
-        "tags": ["Network Endpoints"],
+        "tags": ["User RPC API"],
         "responses": {
           "200": {
             "content": {
@@ -517,7 +517,7 @@ const openApiDoc = {
       "get": {
         "description": "Receipt for a transaction",
         "summary": "Get a signed statement from the service over a transaction entry in the ledger",
-        "tags": ["Network Endpoints"],
+        "tags": ["User RPC API"],
         "parameters": [
           {
             "in": "query",
@@ -552,7 +552,7 @@ const openApiDoc = {
       "get": {
         "description": "",
         "summary": "",
-        "tags": ["Network Endpoints"],
+        "tags": ["User RPC API"],
         "responses": {
           "200": {
             "content": {
@@ -577,7 +577,7 @@ const openApiDoc = {
       "get": {
         "description": "",
         "summary": "",
-        "tags": ["Network Endpoints"],
+        "tags": ["User RPC API"],
         "responses": {
           "200": {
             "content": {
@@ -602,7 +602,7 @@ const openApiDoc = {
       "get": {
         "description": "",
         "summary": "",
-        "tags": ["Network Endpoints"],
+        "tags": ["User RPC API"],
         "parameters": [
           {
             "in": "query",
@@ -637,7 +637,7 @@ const openApiDoc = {
       "get": {
         "description": "get current status of a transaction",
         "summary": "get current status of a transaction, Possible statuses returned are Unknown, Pending, Committed or Invalid.",
-        "tags": ["Network Endpoints"],
+        "tags": ["User RPC API"],
         "parameters": [
           {
             "in": "query",
@@ -672,7 +672,7 @@ const openApiDoc = {
       "get": {
         "description": "",
         "summary": "",
-        "tags": ["Network Endpoints"],
+        "tags": ["User RPC API"],
         "parameters": [
           {
             "in": "query",
