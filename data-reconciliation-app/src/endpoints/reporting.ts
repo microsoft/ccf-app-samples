@@ -10,14 +10,14 @@ import { DataSchema } from "../models/data-schema";
  * @returns {ServiceResult<object[]>} - Reconcilation report
  */
 export function getAllHandler(request: ccfapp.Request<any>): ccfapp.Response<CCFResponse> {
-  const getCallerId = authenticationService.getCallerId(request);
-  if (getCallerId.failure) return ApiResult.Failed(getCallerId);
 
-  const callerId = getCallerId.content;
-
-  const isValidIdentity = authenticationService.isValidIdentity(callerId);
-  if (isValidIdentity.failure || !isValidIdentity.content)
+  // check if caller has a valid identity
+  const isValidIdentity = authenticationService.isAuthenticated(request);
+  if (isValidIdentity.failure)
     return ApiResult.AuthFailure();
+
+  // caller unique identifier
+  const callerId = isValidIdentity.content;
 
   const response = reportingService.getData(callerId);
   if (response.failure) return ApiResult.Failed(response);
@@ -34,17 +34,19 @@ export function getAllHandler(request: ccfapp.Request<any>): ccfapp.Response<CCF
  * @returns {ServiceResult<object[]>} - Reconcilation report
  */
 export function getByIdHandler(request: ccfapp.Request<any>): ccfapp.Response<CCFResponse> {
-  const getCallerId = authenticationService.getCallerId(request);
-  if (getCallerId.failure) return ApiResult.Failed(getCallerId);
 
-  const callerId = getCallerId.content;
-
-  const isValidIdentity = authenticationService.isValidIdentity(callerId);
-  if (isValidIdentity.failure || !isValidIdentity.content)
+  // check if caller has a valid identity
+  const isValidIdentity = authenticationService.isAuthenticated(request);
+  if (isValidIdentity.failure)
     return ApiResult.AuthFailure();
 
+  // caller unique identifier
+  const callerId = isValidIdentity.content;
+
+  // get record key from request parameters
   const key = request.params["id"];
 
+  // get report summary data
   const response = reportingService.getDataById(callerId, key);
   if (response.failure) return ApiResult.Failed(response);
 
