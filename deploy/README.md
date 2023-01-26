@@ -32,8 +32,17 @@ This devcontainer has PowerShell installed with the minimum required to deploy t
 
 ```pwsh
 cd deploy
-./New-ManagedCCF.ps1 -CCFName myCCF4 -resourcegroupName test `
-    -tenantid myTenantId -subscriptionid MySubscriptionId -pemfilename member0_cert.pem -Credential myApplicationId
+./New-ManagedCCF.ps1 -CCFName myCCF4 `
+    -resourcegroupName test `
+    -tenantid myTenantId `
+    -subscriptionid MySubscriptionId `
+    -pemfilename member0_cert.pem `
+    -Credential myApplicationId
+```
+
+Alternatively you could run the following command and enter the correct values.
+```bash
+make deploy-mccf
 ```
 
 ## Deploying an Azure Managed CCF instance using Azure CLI
