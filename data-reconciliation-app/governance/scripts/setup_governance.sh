@@ -161,6 +161,14 @@ $root_dir/scripts/submit_proposal.sh --network-url  ${server} \
   --signing-cert $certs/member0_cert.pem --signing-key $certs/member0_privk.pem
 
 ##############################################
+# Enable Jwt authentication
+##############################################
+echo "Enable Jwt authentication: submit proposal to network and vote as accepted"
+$root_dir/scripts/submit_proposal.sh --network-url  ${server} \
+  --proposal-file $PWD/workspace/configs/set_jwt_issuer_ms_proposal.json --service-cert $certs/service_cert.pem \
+  --signing-cert $certs/member0_cert.pem --signing-key $certs/member0_privk.pem
+
+##############################################
 # Test Network
 ##############################################
 curl "${server}/node/network" --cacert $certs/service_cert.pem | jq

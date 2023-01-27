@@ -23,8 +23,11 @@ export function getSwaggerUI(): ccfapp.Response<string> {
       <script>
         window.onload = () => {
           window.ui = SwaggerUIBundle({
-            //url:  '/app/api', /* will be used when ccf allow more control on openAPI document that can be done through deployment bundle */
-            url:  '/app/swagger.json',
+            urls: [
+              {url: "/app/swagger.json", name: "Application API"}, /* '/app/api' will be used when ccf allow more control on openAPI document to be done through deployment bundle */
+              {url: "/gov/api", name: "Governance API"},
+              {url: "/node/api", name: "Operator API"}
+            ],
             dom_id: '#swagger-ui',
             presets: [SwaggerUIBundle.presets.apis,SwaggerUIStandalonePreset],
             layout: "StandaloneLayout",
@@ -442,7 +445,7 @@ const openApiDoc = {
       "get": {
         "description": "Get the application OpenAPI schema",
         "summary": "Get the application OpenAPI schema",
-        "tags": ["User RPC API"],
+        "tags": ["Metrics API"],
         "responses": {
           "200": {
             "content": {
@@ -467,7 +470,7 @@ const openApiDoc = {
       "get": {
         "description": "Usage metrics for endpoints",
         "summary": "Get the usage metrics for endpoints",
-        "tags": ["User RPC API"],
+        "tags": ["Metrics API"],
         "responses": {
           "200": {
             "content": {
@@ -492,7 +495,7 @@ const openApiDoc = {
       "get": {
         "description": "Current commit level",
         "summary": "Current commit level, Latest transaction ID that has been committed on the service",
-        "tags": ["User RPC API"],
+        "tags": ["Metrics API"],
         "responses": {
           "200": {
             "content": {
@@ -517,7 +520,7 @@ const openApiDoc = {
       "get": {
         "description": "Receipt for a transaction",
         "summary": "Get a signed statement from the service over a transaction entry in the ledger",
-        "tags": ["User RPC API"],
+        "tags": ["Metrics API"],
         "parameters": [
           {
             "in": "query",
@@ -552,7 +555,7 @@ const openApiDoc = {
       "get": {
         "description": "",
         "summary": "",
-        "tags": ["User RPC API"],
+        "tags": ["Metrics API"],
         "responses": {
           "200": {
             "content": {
@@ -577,7 +580,7 @@ const openApiDoc = {
       "get": {
         "description": "",
         "summary": "",
-        "tags": ["User RPC API"],
+        "tags": ["Metrics API"],
         "responses": {
           "200": {
             "content": {
@@ -602,7 +605,7 @@ const openApiDoc = {
       "get": {
         "description": "",
         "summary": "",
-        "tags": ["User RPC API"],
+        "tags": ["Metrics API"],
         "parameters": [
           {
             "in": "query",
@@ -637,7 +640,7 @@ const openApiDoc = {
       "get": {
         "description": "get current status of a transaction",
         "summary": "get current status of a transaction, Possible statuses returned are Unknown, Pending, Committed or Invalid.",
-        "tags": ["User RPC API"],
+        "tags": ["Metrics API"],
         "parameters": [
           {
             "in": "query",
@@ -672,7 +675,7 @@ const openApiDoc = {
       "get": {
         "description": "",
         "summary": "",
-        "tags": ["User RPC API"],
+        "tags": ["Metrics API"],
         "parameters": [
           {
             "in": "query",
