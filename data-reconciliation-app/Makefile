@@ -85,7 +85,7 @@ clean: ## 🧹 Clean the working folders created during build/demo
 # This config will be used in sandbox and as proposal for docker and mCCF.
 create-jwt-configs: ## 🏃 Create the JWT issuer configs files
 	@echo -e "\e[34m$@\e[0m" || true
-	@ts-node --esm ./test/utils/jwt-configs-generator.ts
+	@npm run create-jwt-configs
 
 # Generate a MS-AAD JWT (app-to-app) token for the application testing;
 genenrate-jwt-token: # Generate an Azure AD access tokens for authentication
