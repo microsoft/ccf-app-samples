@@ -13,11 +13,11 @@ build: ## 🔨 Build the Application
 run-env-setup: create-jwt-configs build  ## 🔨 Create the initialization configs and Build the Application
 	@echo -e "\e[34m$@\e[0m" || true
 
-build-virtual: run-env-setup ## 📦 Build Virtual container image from Dockerfile
+build-virtual: build ## 📦 Build Virtual container image from Dockerfile
 	@echo -e "\e[34m$@\e[0m" || true
 	@../scripts/build_image.sh virtual
 
-build-enclave: run-env-setup ## 📦 Build Enclave container image from Dockerfile
+build-enclave: build ## 📦 Build Enclave container image from Dockerfile
 	@echo -e "\e[34m$@\e[0m" || true
 	@../scripts/build_image.sh enclave
 
@@ -36,11 +36,11 @@ test: run-env-setup ## 🧪 Test the Data Reconciliation Application in the sand
 	@echo -e "\e[34m$@\e[0m" || true
 	@. ../scripts/test_sandbox.sh --nodeAddress 127.0.0.1:8000 --certificate_dir ./workspace/sandbox_common --constitution_dir ./governance/constitution
 
-test-docker-virtual: run-env-setup build-virtual ## 🧪 Test the Data Reconciliation Application in a Docker sandbox
+test-docker-virtual: build-virtual ## 🧪 Test the Data Reconciliation Application in a Docker sandbox
 	@echo -e "\e[34m$@\e[0m" || true
 	@. ../scripts/test_docker.sh --virtual --serverIP 172.17.0.3 --port 8080
 
-test-docker-enclave: run-env-setup build-enclave ## 🧪 Test the Data Reconciliation Application in a Docker enclave
+test-docker-enclave: build-enclave ## 🧪 Test the Data Reconciliation Application in a Docker enclave
 	@echo -e "\e[34m$@\e[0m" || true
 	@. ../scripts/test_docker.sh --enclave --serverIP 172.17.0.4 --port 8080
 
