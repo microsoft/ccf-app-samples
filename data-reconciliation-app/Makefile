@@ -13,11 +13,11 @@ build: ## 🔨 Build the Application
 run-env-setup: create-jwt-configs build  ## 🔨 Create the initialization configs and Build the Application
 	@echo -e "\e[34m$@\e[0m" || true
 
-build-virtual: build ## 📦 Build Virtual container image from Dockerfile
+build-virtual: run-env-setup ## 📦 Build Virtual container image from Dockerfile
 	@echo -e "\e[34m$@\e[0m" || true
 	@../scripts/build_image.sh virtual
 
-build-enclave: build ## 📦 Build Enclave container image from Dockerfile
+build-enclave: run-env-setup ## 📦 Build Enclave container image from Dockerfile
 	@echo -e "\e[34m$@\e[0m" || true
 	@../scripts/build_image.sh enclave
 
