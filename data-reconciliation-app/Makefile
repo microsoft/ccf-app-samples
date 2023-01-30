@@ -10,7 +10,8 @@ build: ## 🔨 Build the Application
 	@echo -e "\e[34m$@\e[0m" || true
 	@npm run build
 
-run-env-setup: create-jwt-configs build  ## 🔨 Create the initialization configs and Build the Application
+
+run-env-setup: create-jwt-configs build  ## 🔨 Create the initialization config files if not exists, then Build the Application and generate bundles
 	@echo -e "\e[34m$@\e[0m" || true
 
 build-virtual: run-env-setup ## 📦 Build Virtual container image from Dockerfile
@@ -63,7 +64,7 @@ demo: run-env-setup ## 🎬 Demo the Data Reconciliation Application in the Sand
 	@echo -e "\e[34m$@\e[0m" || true
 	@. ../scripts/test_sandbox.sh --nodeAddress 127.0.0.1:8000 --certificate_dir ./workspace/sandbox_common --constitution_dir ./governance/constitution --interactive
 
-demo-docker: run-env-setup build-virtual ## 🎬 Demo the Data Reconciliation Application in a virtual Docker image
+demo-docker: build-virtual ## 🎬 Demo the Data Reconciliation Application in a virtual Docker image
 	@echo -e "\e[34m$@\e[0m" || true
 	@. ../scripts/test_docker.sh --virtual --serverIP 172.17.0.3 --port 8080 --interactive
 
@@ -87,7 +88,7 @@ create-jwt-configs: ## 🏃 Create the JWT issuer configs files
 	@echo -e "\e[34m$@\e[0m" || true
 	@npm run create-jwt-configs
 
-# Generate a MS-AAD JWT (app-to-app) token for the application testing;
+# Generate a MS-Idp AAD (Azure active directory) JWT (app-to-app) token for the application testing;
 genenrate-jwt-token: # Generate an Azure AD access tokens for authentication
 	@echo "########################################################################"
 	@echo "## Generate a JWT token for the application; two applications must be registered in the Azure AD tenant"
