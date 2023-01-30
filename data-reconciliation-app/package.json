@@ -4,7 +4,7 @@
     "build": "del-cli -f dist/ && rollup --config && cp src/endpoints/app.json dist/ && node build_bundle.js dist/",
     "bundle": "node build_bundle.js dist",
     "unit-test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
-    "create-jwt-config": "ts-node --esm ./test/utils/jwt-configs-generator.ts"
+    "create-jwt-config": "ts-node --esm ./test/utils/jwt-config-generator.ts"
   },
   "type": "module",
   "engines": {
