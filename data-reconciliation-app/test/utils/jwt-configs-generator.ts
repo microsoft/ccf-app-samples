@@ -12,7 +12,7 @@ import axios from 'axios';
 
 export class JwtConfigsGenerator {
 
-  public static workspaceFolderPath: string = "./workspace/configs";
+  public static workspaceFolderPath: string = "./workspace/proposals";
 
   /*  
    * Create a test Identity Provider configs for sandbox and proposal for docker and mCCF.

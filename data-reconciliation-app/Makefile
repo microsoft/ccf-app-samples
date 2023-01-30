@@ -22,12 +22,12 @@ build-enclave: build ## 📦 Build Enclave container image from Dockerfile
 # Start hosting the application using `sandbox.sh` and enable custom JWT authentication
 start-host: build  ## 🏃 Start the CCF network using Sandbox.sh
 	@echo -e "\e[34m$@\e[0m" || true
-	@/opt/ccf_virtual/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count 3 --initial-user-count 1 --constitution-dir ./governance/constitution --jwt-issuer "./workspace/configs/set_jwt_issuer_test_sandbox.json"
+	@/opt/ccf_virtual/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count 3 --initial-user-count 1 --constitution-dir ./governance/constitution --jwt-issuer "./workspace/proposals/set_jwt_issuer_test_sandbox.json"
 
 # Start hosting the application using `sandbox.sh` and enable MS IDP JWT authentication
 start-host-jwt-ms: build ## 🏃 Start the CCF network using Sandbox.sh
 	@echo -e "\e[34m$@\e[0m" || true
-	@/opt/ccf_virtual/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count 3 --initial-user-count 1 --constitution-dir ./governance/constitution --jwt-issuer "./workspace/configs/set_jwt_issuer_ms_sandbox.json"
+	@/opt/ccf_virtual/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count 3 --initial-user-count 1 --constitution-dir ./governance/constitution --jwt-issuer "./workspace/proposals/set_jwt_issuer_ms_sandbox.json"
 
 
 test: build ## 🧪 Test the Data Reconciliation Application in the sandbox
