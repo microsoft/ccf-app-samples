@@ -18,6 +18,8 @@
     },
     "ghcr.io/devcontainers/features/powershell:1": {
       "modules": "Az.Resources"
+    },
+    "ghcr.io/rchaganti/vsc-devcontainer-features/azurebicep:1": {
     }
   }
 }
