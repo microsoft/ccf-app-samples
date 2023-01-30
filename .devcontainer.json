@@ -17,6 +17,7 @@
       "nodeGypDependencies": true
     },
     "ghcr.io/devcontainers/features/powershell:1": {
+      "modules": "Az.Resources"
     }
   }
 }

@@ -28,7 +28,7 @@ demo: ## 🎬 Demo an Application
 
 deploy-mccf: ## 🚀 Deploy Managed CCF
 	@echo -e "\e[34m$@\e[0m" || true
-	pwsh ./deploy/New-ManagedCCF.ps1
+	cd deploy && pwsh ./New-ManagedCCF.ps1
 
 clean: ## 🧹 Clean the working folders created during build/demo
 	@rm -rf .venv_ccf_sandbox
