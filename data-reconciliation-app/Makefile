@@ -10,8 +10,7 @@ build: ## 🔨 Build the Application
 	@echo -e "\e[34m$@\e[0m" || true
 	@npm run build
 
-
-run-env-setup: create-jwt-configs build  ## 🔨 Create the initialization config files if not exists, then Build the Application and generate bundles
+run-env-setup: create-jwt-configs build  ## 🔨 Create the initialization config files if not exists, and Build the Application
 	@echo -e "\e[34m$@\e[0m" || true
 
 build-virtual: run-env-setup ## 📦 Build Virtual container image from Dockerfile
