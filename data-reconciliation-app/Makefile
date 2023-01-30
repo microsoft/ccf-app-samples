@@ -88,7 +88,7 @@ create-jwt-configs: ## 🏃 Create the JWT issuer configs files
 	@npm run create-jwt-configs
 
 # Generate a MS-Idp AAD (Azure active directory) JWT (app-to-app) token for the application testing;
-genenrate-jwt-token: # Generate an Azure AD access tokens for authentication
+generate-jwt-token: # Generate an Azure AD access tokens for authentication
 	@echo "########################################################################"
 	@echo "## Generate a JWT token for the application; two applications must be registered in the Azure AD tenant"
 	@echo "## Follow: https://learn.microsoft.com/en-us/azure/active-directory/develop/quickstart-register-app"

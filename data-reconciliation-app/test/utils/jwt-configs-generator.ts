@@ -17,7 +17,7 @@ export class JwtConfigsGenerator {
   /*  
    * Create a test Identity Provider configs for sandbox and proposal for docker and mCCF.
    */
-  public static async createSandbox_Test_JwtIssuer_Config(): Promise<any> {
+  public static async createSandboxTestJwtIssuerConfig(): Promise<any> {
 
     const proposalFilePath = `${this.workspaceFolderPath}/set_jwt_issuer_test_proposal.json`;
     const sandboxConfigFilePath = `${this.workspaceFolderPath}/set_jwt_issuer_test_sandbox.json`;
@@ -99,7 +99,7 @@ export class JwtConfigsGenerator {
   /**   
    * Create Microsoft Azure Identity Provider configs for sandbox and as proposal for docker and mCCF.
    */
-  public static async create_MSIdp_JwtIssuer_Configs(): Promise<any> {
+  public static async createMSIdpJwtIssuerConfigs(): Promise<any> {
 
     const proposalFilePath = `${this.workspaceFolderPath}/set_jwt_issuer_ms_proposal.json`;
     const sandboxConfigFilePath = `${this.workspaceFolderPath}/set_jwt_issuer_ms_sandbox.json`;
@@ -146,7 +146,7 @@ export class JwtConfigsGenerator {
   }
 }
 
-await JwtConfigsGenerator.createSandbox_Test_JwtIssuer_Config();
-await JwtConfigsGenerator.create_MSIdp_JwtIssuer_Configs();
+await JwtConfigsGenerator.createSandboxTestJwtIssuerConfig();
+await JwtConfigsGenerator.createMSIdpJwtIssuerConfigs();
 
 console.log(`JWT issuer configs are generated successfully!, Path: ${JwtConfigsGenerator.workspaceFolderPath}`);

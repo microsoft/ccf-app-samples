@@ -5,7 +5,7 @@ import { ServiceResult } from "../utils/service-result";
 /**
  * CCF authentication policies
  */
-export enum CCFAuthenticationPolicyEnum {
+export enum CcfAuthenticationPolicyEnum {
   User_cert = "user_cert",
   User_signature = "user_signature",
   Member_cert = "member_cert",
@@ -98,7 +98,7 @@ export class AuthenticationService implements IAuthenticationService {
 
     switch (commonCaller.policy) {
       // check if caller has a valid access token
-      case CCFAuthenticationPolicyEnum.Jwt: {
+      case CcfAuthenticationPolicyEnum.Jwt: {
         const jwtCaller = request.caller as unknown as ccfapp.JwtAuthnIdentity;
         const isValid = this.isValidJwtToken(jwtCaller);
         if (isValid.success && isValid.content) {
@@ -107,8 +107,8 @@ export class AuthenticationService implements IAuthenticationService {
         }
       }
       // check if caller is a valid user
-      case CCFAuthenticationPolicyEnum.User_cert:
-      case CCFAuthenticationPolicyEnum.User_signature: {
+      case CcfAuthenticationPolicyEnum.User_cert:
+      case CcfAuthenticationPolicyEnum.User_signature: {
         const userCaller = request.caller as unknown as UserMemberAuthnIdentity;
         const identityId = userCaller.id;
         const isValid = this.isUser(identityId);
@@ -117,8 +117,8 @@ export class AuthenticationService implements IAuthenticationService {
         }
       }
       // check if caller is a valid member
-      case CCFAuthenticationPolicyEnum.Member_cert:
-      case CCFAuthenticationPolicyEnum.Member_signature: {
+      case CcfAuthenticationPolicyEnum.Member_cert:
+      case CcfAuthenticationPolicyEnum.Member_signature: {
         const memberCaller = request.caller as unknown as UserMemberAuthnIdentity;
         const identityId = memberCaller.id;
         const isValid = this.isActiveMember(identityId);
