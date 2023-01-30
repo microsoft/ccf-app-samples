@@ -222,10 +222,16 @@ export class AuthenticationService implements IAuthenticationService {
       });
     }
 
-    if (identity.jwt.keyIssuer === "https://demo") { // logic to validate the tokens of demo issuer
+    // Need to run another round of enhancement by spliting the implementation
+    // into separate services per identity provider
+    // https://github.com/orgs/microsoft/projects/542/views/1?pane=issue&itemId=19232592
+    if (identity.jwt.keyIssuer === "https://demo") { 
+      // custom logic to validate the tokens of demo issuer
       // no further validation
     }
-    else if (identity.jwt.keyIssuer === "https://login.microsoftonline.com/common/v2.0") { // logic to validate the tokens microsoft idp issuer
+    else if (identity.jwt.keyIssuer === "https://login.microsoftonline.com/common/v2.0") { 
+      // custom logic to validate the tokens of microsoft Idp
+      
       // Microsoft identity platform access tokens
       const msClaims = identity.jwt.payload as MSAccessToken;
       

@@ -9,30 +9,28 @@ help: ## 💬 This help message :)
 build: ## 🔨 Build the Application
 	@echo -e "\e[34m$@\e[0m" || true
 	@npm run build
+	@npm run create-jwt-config # Create the JWT issuer config files for (Test - Microsoft Azure Identity Provider).
 
-run-env-setup: create-jwt-configs build  ## 🔨 Create the initialization config files if not exists, and Build the Application
-	@echo -e "\e[34m$@\e[0m" || true
-
-build-virtual: run-env-setup ## 📦 Build Virtual container image from Dockerfile
+build-virtual: build ## 📦 Build Virtual container image from Dockerfile
 	@echo -e "\e[34m$@\e[0m" || true
 	@../scripts/build_image.sh virtual
 
-build-enclave: run-env-setup ## 📦 Build Enclave container image from Dockerfile
+build-enclave: build ## 📦 Build Enclave container image from Dockerfile
 	@echo -e "\e[34m$@\e[0m" || true
 	@../scripts/build_image.sh enclave
 
 # Start hosting the application using `sandbox.sh` and enable custom JWT authentication
-start-host: run-env-setup  ## 🏃 Start the CCF network using Sandbox.sh
+start-host: build  ## 🏃 Start the CCF network using Sandbox.sh
 	@echo -e "\e[34m$@\e[0m" || true
 	@/opt/ccf_virtual/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count 3 --initial-user-count 1 --constitution-dir ./governance/constitution --jwt-issuer "./workspace/configs/set_jwt_issuer_test_sandbox.json"
 
 # Start hosting the application using `sandbox.sh` and enable MS IDP JWT authentication
-start-host-jwt-ms: run-env-setup ## 🏃 Start the CCF network using Sandbox.sh
+start-host-jwt-ms: build ## 🏃 Start the CCF network using Sandbox.sh
 	@echo -e "\e[34m$@\e[0m" || true
 	@/opt/ccf_virtual/bin/sandbox.sh --js-app-bundle ./dist/ --initial-member-count 3 --initial-user-count 1 --constitution-dir ./governance/constitution --jwt-issuer "./workspace/configs/set_jwt_issuer_ms_sandbox.json"
 
 
-test: run-env-setup ## 🧪 Test the Data Reconciliation Application in the sandbox
+test: build ## 🧪 Test the Data Reconciliation Application in the sandbox
 	@echo -e "\e[34m$@\e[0m" || true
 	@. ../scripts/test_sandbox.sh --nodeAddress 127.0.0.1:8000 --certificate_dir ./workspace/sandbox_common --constitution_dir ./governance/constitution
 
@@ -51,7 +49,7 @@ test-mccf: build ## 🧪 Test the Data Reconciliation Application in a Managed C
 	$(call check_defined, PRIVATE_CERT)
 	@. ../scripts/test_mccf.sh --address "${CCF_NAME}.confidential-ledger.azure.com" --signing-cert "${PUBLIC_CERT}" --signing-key "${PRIVATE_CERT}"
 
-e2e-test: run-env-setup ## 🧪 Run end to end tests
+e2e-test: build ## 🧪 Run end to end tests
 	@echo -e "\e[34m$@\e[0m" || true
 	@. ../scripts/test_sandbox.sh --nodeAddress 127.0.0.1:8000 --certificate_dir ./workspace/sandbox_common --constitution_dir ./governance/constitution
 	
@@ -59,7 +57,7 @@ unit-test: ## 🧪 Run the Application unit-test
 	@echo -e "\e[34m$@\e[0m" || true
 	@npm run unit-test
 	
-demo: run-env-setup ## 🎬 Demo the Data Reconciliation Application in the Sandbox
+demo: build ## 🎬 Demo the Data Reconciliation Application in the Sandbox
 	@echo -e "\e[34m$@\e[0m" || true
 	@. ../scripts/test_sandbox.sh --nodeAddress 127.0.0.1:8000 --certificate_dir ./workspace/sandbox_common --constitution_dir ./governance/constitution --interactive
 
@@ -71,7 +69,7 @@ demo-docker: build-virtual ## 🎬 Demo the Data Reconciliation Application in a
 # 1. run `make demo`
 # 2. make a code change to Line 72 - /workspaces/ccf-app-samples/data-reconciliation-app/src/models/data-schema.ts
 # 3. Run this make target
-demo-code-change: run-env-setup ## 🎬 Demo the Data Reconciliation Application Code Change
+demo-code-change: build ## 🎬 Demo the Data Reconciliation Application Code Change
 	@echo -e "\e[34m$@\e[0m" || true
 	$(call check_defined, CCF_NAME)
 	@./test/code_change_demo.sh --address "${CCF_NAME}.confidential-ledger.azure.com" --interactive
@@ -80,12 +78,6 @@ clean: ## 🧹 Clean the working folders created during build/demo
 	@rm -rf .venv_ccf_sandbox
 	@rm -rf workspace
 	@rm -rf dist
-
-# Create the JWT issuer configs files for (Test - Microsoft Azure Identity Provider).
-# This config will be used in sandbox and as proposal for docker and mCCF.
-create-jwt-configs: ## 🏃 Create the JWT issuer configs files
-	@echo -e "\e[34m$@\e[0m" || true
-	@npm run create-jwt-configs
 
 # Generate a MS-Idp AAD (Azure active directory) JWT (app-to-app) token for the application testing;
 generate-jwt-token: # Generate an Azure AD access tokens for authentication

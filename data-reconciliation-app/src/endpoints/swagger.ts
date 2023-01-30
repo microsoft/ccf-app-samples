@@ -1,9 +1,10 @@
 import * as ccfapp from "@microsoft/ccf-app";
 
+/**
+ * Generate a swagger UI based on the OpenApi documents of (Application - Governance)
+ * How to configure swagger UI: https://swagger.io/docs/open-source-tools/swagger-ui/usage/installation/
+ */
 export function getSwaggerUI(): ccfapp.Response<string> {
-  /*
-  How to configure swagger UI to you application: https://swagger.io/docs/open-source-tools/swagger-ui/usage/installation/
-  */
   return {
     statusCode: 200,
     headers: { "content-type": "text/html" },
@@ -41,7 +42,12 @@ export function getSwaggerUI(): ccfapp.Response<string> {
 
 }
 
-// return an OpenAPI document as the app documentation
+/**
+ * Return an OpenAPI document as the app documentation
+ * this impelementation should be replaced the usage of '/app/api' endpoint
+ * when ccf allow more control on openAPI document to be done through deployment bundle
+ * https://github.com/microsoft/ccf-app-samples/issues/185
+ */ 
 export function getOpenApiDocument(): ccfapp.Response<object> {
   return {
     statusCode: 200,
@@ -50,7 +56,12 @@ export function getOpenApiDocument(): ccfapp.Response<object> {
   };
 }
 
-
+/**
+ * OpenAPI document 
+ * This impelementation should be replaced the usage of '/app/api' endpoint
+ * when ccf allow more control on openAPI document to be done through deployment bundle
+ * https://github.com/microsoft/ccf-app-samples/issues/185
+ */
 const openApiDoc = {
   "openapi": "3.0.0",
   "info": {
