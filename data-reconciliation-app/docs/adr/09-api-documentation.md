@@ -37,11 +37,9 @@ We will go with the second option because:
 
 ## Consequences
 
-- The application will have it is own OpenAPI document, which need to be update along side the app.json
+- The application will have its own OpenAPI document, which needs to be updated along with the `app. json`
 - Developers will request [`$server/app/swagger`] to get swagger-ui for the application, they test
-- The application endpoints can be tested using two typed of authentication
-    - JWT Bearer tokens: using Microsoft Identity Provider (Idp) as token issuer
-    - Mutual TLS authentication:
+- Swagger-ui support two types of authentication to the application endpoints 
+    - **JWT Bearer Tokens:** Using Microsoft Identity Provider (IDP) as Token Issuer
+    - **Mutual TLS authentication(Certificate based):** it can be achieved by importing the members certificates to the browser , please follow [here](https://support.globalsign.com/ssl/ssl-certificates-installation/import-and-export-certificate-microsoft-windows), and you can select the certificate for authentication from the browser.
 
-Developers will request [`$server/app/api`](https://microsoft.github.io/CCF/main/use_apps/rpc_api.html#get--app-api) to get the documentation of endpoints that require authentication with a valid user identity.
-We need to support JWT authentication to allow endpoint testing through Swagger-UI because it does not support mutual TLS authentication (certificate base).
