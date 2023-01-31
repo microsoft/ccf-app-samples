@@ -123,8 +123,8 @@ export class JwtConfigsGenerator {
     // download the CA certificate for the microsoft identity Provider to be stored so that the TLS connection 
     // to the IdP can be validated during key refresh
     // https://learn.microsoft.com/en-us/azure/security/fundamentals/azure-ca-details
-    // DigiCert SHA2 Secure Server CA: https://crt.sh/?d=3422153451
-    const ca_cert = await axios.get("https://crt.sh/?d=3422153451", {});
+    // DigiCert Global Root CA: https://crt.sh/?d=853428
+    const ca_cert = await axios.get("https://crt.sh/?d=853428", {});
 
     let jwtIssuerProposal = {
       "actions": [
@@ -142,13 +142,6 @@ export class JwtConfigsGenerator {
             "key_filter": "all",
             "ca_cert_bundle_name": "jwt_ms",
             "auto_refresh": true
-          }
-        },
-        {
-          "name": "set_jwt_public_signing_keys",
-          "args": {
-            "issuer": issuer,
-            "jwks": ms_jwks.data
           }
         }
       ]
