@@ -77,7 +77,7 @@ function finish {
         fi
     fi
     kill -9 $sandbox_pid
-    echo "💀 Killed sanbox process ${sandbox_pid}"
+    echo "💀 Killed sandbox process ${sandbox_pid}"
 }
 trap finish EXIT
 
