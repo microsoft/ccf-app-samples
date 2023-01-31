@@ -1,5 +1,5 @@
 export const member0DataPart1 = [
-    { lei: '984500E1B2CA1D4EKG67', nace: 'A01.1' },
+    { lei: '984500E1B2CA1D4EKG67', nace: 'A.01.1' },
     { lei: '984500UF3DE41EFA7F02', nace: 'B.08.9' },
     { lei: '254900Z8QM2AR51H5I26', nace: 'C.10.1' },
     { lei: '9845002B6B074505A715', nace: 'C.10.12' },

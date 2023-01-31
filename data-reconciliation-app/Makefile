@@ -42,10 +42,9 @@ test-mccf: build ## 🧪 Test the Data Reconciliation Application in a Managed C
 	$(call check_defined, PRIVATE_CERT)
 	@. ../scripts/test_mccf.sh --address "${CCF_NAME}.confidential-ledger.azure.com" --signing-cert "${PUBLIC_CERT}" --signing-key "${PRIVATE_CERT}"
 
-e2e-test: ## 🧪 Run end to end tests
+e2e-test: build ## 🧪 Test the Data Reconciliation Application in the sandbox using the Typescript flow
 	@echo -e "\e[34m$@\e[0m" || true
-	@cd ./test/e2e-test/ && npm install && npm run start
-	# @. ../scripts/test_sandbox.sh --nodeAddress 127.0.0.1:8000 --certificate_dir ./workspace/sandbox_common --constitution_dir ./governance/constitution
+	@. ../scripts/test_sandbox.sh --nodeAddress 127.0.0.1:8000 --certificate_dir ./workspace/sandbox_common --constitution_dir ./governance/constitution --ts_mode
 	
 unit-test: ## 🧪 Run the Application unit-test
 	@echo -e "\e[34m$@\e[0m" || true

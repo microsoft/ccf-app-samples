@@ -38,4 +38,19 @@ export default class Api {
 
         return result.data.content as Array<ReportItem>;
     }
+
+    public static async reportById(props: DemoProps, member: DemoMemberProps, recordId: string): Promise<ReportItem> {
+        console.log(`📝 ${member.name} Reporting Data for id ${recordId}...`);
+
+        const result = await axios.get(`${props.reportUrl}/${recordId}`, { httpsAgent: member.httpsAgent });
+
+        if (result.status !== 200) {
+            throw new Error(`🛑 [TEST FAILURE]: Unexpected status code: ${result.status}`);
+        }
+
+        console.log(`✅ [PASS] [${result.status} : ${result.statusText}] - ${member.name}\n`);
+        console.table(result.data.content);
+
+        return result.data.content;
+    }
 }
