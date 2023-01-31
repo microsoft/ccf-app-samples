@@ -88,16 +88,16 @@ testScript="$app_dir/test/test.sh"
 if [ ! -f "$testScript" ]; then
     echo "💥📂 Test file $testScript not found."
     exit 1
-else
-    testScript="${testScript} --nodeAddress ${nodeAddress} --certificate_dir ${certificate_dir}"
-    if [ $interactive -eq 1 ]; then
-        testScript="${testScript} --interactive"
-    fi
-    
-    if [ $ts_mode -eq 1 ]; then
-        testScript="${testScript} --ts_mode"
-    fi
-
-    # call testScript command
-    ${testScript}
 fi
+
+# build testScript command
+testScript="${testScript} --nodeAddress ${nodeAddress} --certificate_dir ${certificate_dir}"
+if [ $interactive -eq 1 ]; then
+    testScript="${testScript} --interactive"
+fi    
+if [ $ts_mode -eq 1 ]; then
+    testScript="${testScript} --ts_mode"
+fi
+
+# call testScript command
+${testScript}

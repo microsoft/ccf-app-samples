@@ -45,7 +45,12 @@ test-mccf: build ## 🧪 Test the Data Reconciliation Application in a Managed C
 e2e-test: build ## 🧪 Test the Data Reconciliation Application in the sandbox using the Typescript flow
 	@echo -e "\e[34m$@\e[0m" || true
 	@. ../scripts/test_sandbox.sh --nodeAddress 127.0.0.1:8000 --certificate_dir ./workspace/sandbox_common --constitution_dir ./governance/constitution --ts_mode
-	
+
+e2e-test-docker: build-virtual ## 🧪 Test the Data Reconciliation Application in a Docker sandbox
+	@echo -e "\e[34m$@\e[0m" || true
+	@. ../scripts/test_docker.sh --virtual --serverIP 172.17.0.3 --port 8080 --ts_mode
+
+
 unit-test: ## 🧪 Run the Application unit-test
 	@echo -e "\e[34m$@\e[0m" || true
 	@npm run unit-test
