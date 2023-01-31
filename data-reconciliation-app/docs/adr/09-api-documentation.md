@@ -20,22 +20,28 @@ This document can be imported into [`Swagger`](https://editor.swagger.io/) to ge
 
 Currently, CCF implementation lacks the methodology for deploying the different options supported by OpenAPI as a part of the application bundle `app.json`, like (info, schemes, security definitions, and host).
 
+### Option2: New Swagger UI
 
-### Option2: New backend application
+Create two new endpoints as part of the application API
+ - /app/swagger.json: return an OpenAPI documentation in json formate.
+ - /app/swagger: return the html for swagger-ui which will a UI based on the OpenAPI documentation
 
-Create a new separate backend application that returns an OpenAPI documentation UI (swagger-UI), 
-
-- The application can act as a wrapper on top of the CCF OpenAPI endpoint to retrieve the document, convert it to UI, and return the result, and it can be written in .NET, Node.js, or any other language.
-
-- The application will generate a UI using a separate copy of the openAPI document defined within the application boundary (this document must be maintained alongside the endpoints).
+Note: Currently, CCF `/app/api` OpenAPI documentation endpoint implementation lacks the methodology for deploying the different options supported by OpenAPI specifications as a part of the application bundle `app.json`, like (info, schemes, security definitions, and host), when the issues are solved, the `/app/swagger.json` will be replaced by the built-in ccf endpoint `/app/api`
 
 ## Decision
 
-We will go with the first option because:
-- It has the least development and maintenance effort.
-- It will evolve and be updated automatically because it is leveraging a CCF built-in feature.
+We will go with the second option because:
+- Gives a better developer experience to document, explore and test the application endpoints.
+- Will evolve and be updated automatically because it is part of the application.
+- leverage the built-in features for swagger-ui like authentication using JWT or mutual TLS Certs 
 
 ## Consequences
+
+- The application will have it is own OpenAPI document, which need to be update along side the app.json
+- Developers will request [`$server/app/swagger`] to get swagger-ui for the application, they test
+- The application endpoints can be tested using two typed of authentication
+    - JWT Bearer tokens: using Microsoft Identity Provider (Idp) as token issuer
+    - Mutual TLS authentication:
 
 Developers will request [`$server/app/api`](https://microsoft.github.io/CCF/main/use_apps/rpc_api.html#get--app-api) to get the documentation of endpoints that require authentication with a valid user identity.
 We need to support JWT authentication to allow endpoint testing through Swagger-UI because it does not support mutual TLS authentication (certificate base).
