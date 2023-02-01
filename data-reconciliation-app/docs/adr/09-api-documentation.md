@@ -33,7 +33,7 @@ Note: Currently, CCF `/app/api` OpenAPI documentation endpoint implementation la
 We will go with the second option because:
 - Gives a better developer experience to document, explore and test the application endpoints.
 - Will evolve and be updated automatically because it is part of the application.
-- leverage the built-in features for swagger-ui like authentication using JWT or mutual TLS Certs 
+- Leverage the built-in features for swagger-ui like authentication using JWT or mTLS 
 
 ## Consequences
 
