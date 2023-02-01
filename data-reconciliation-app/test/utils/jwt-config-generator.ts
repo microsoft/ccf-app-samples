@@ -5,17 +5,17 @@ import forge from "node-forge";
 import { KeyPairSyncResult } from "crypto";
 import axios from 'axios';
 
-/*
-   * Create the JWT issuer configs for (Test - Microsoft Azure Identity Provider).
-   * This config will be used in sandbox and as proposal for docker and mCCF.
-  */
-
+/**
+ * Create the JWT issuer configs for (Test - Microsoft Azure Identity Provider).
+ * This config will be used in sandbox and as proposal for docker and mCCF.
+ * Jwt issuer proposal documentation: https://microsoft.github.io/CCF/main/build_apps/auth/jwt.html
+*/
 export class JwtConfigsGenerator {
 
   public static workspaceFolderPath: string = "./workspace/proposals";
 
   /*  
-   * Create a test Identity Provider configs for sandbox and proposal for docker and mCCF.
+   * Create JWT issuer proposals for a test Identity Provider for sandbox, docker and mCCF.
    */
   public static async createSandboxTestJwtIssuerConfig(): Promise<any> {
 
@@ -69,7 +69,8 @@ export class JwtConfigsGenerator {
     // create sandbox config file for the test jwt issuer.
     fs.writeFileSync(sandboxConfigFilePath, JSON.stringify(jwtIssuer));
 
-    // create a proposal object for the test jwt issuer, this will be submitted as proposal
+    // create a jwt issuer proposal for the test Idp
+    // jwt issuer proposal documentation https://microsoft.github.io/CCF/main/build_apps/auth/jwt.html
     const jwtIssuerProposal = {
       "actions": [
         {
@@ -97,7 +98,7 @@ export class JwtConfigsGenerator {
   }
 
   /**   
-   * Create Microsoft Azure Identity Provider configs for sandbox and as proposal for docker and mCCF.
+   * Create JWT issuer proposals for Microsoft Azure Identity Provider for sandbox, docker, and mCCF.
    */
   public static async createMSIdpJwtIssuerConfigs(): Promise<any> {
 
@@ -109,8 +110,8 @@ export class JwtConfigsGenerator {
     // make sure the workspace folder exists.
     await fs.promises.mkdir(this.workspaceFolderPath, { recursive: true }).catch(console.error);
 
-    // Microsoft IDP configs are provided by:https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration
-    // Microsoft IDP Keys are provided by: https://login.microsoftonline.com/common/discovery/v2.0/keys
+    // Microsoft IDP config are provided by:https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration
+    // Microsoft IDP keys are provided by: https://login.microsoftonline.com/common/discovery/v2.0/keys
     let issuer: string = "https://login.microsoftonline.com/common/v2.0";
     const ms_openid_config = await axios.get(`${issuer}/.well-known/openid-configuration`, {});
     const ms_jwks = await axios.get(ms_openid_config.data.jwks_uri, {});
@@ -119,8 +120,9 @@ export class JwtConfigsGenerator {
     const jwtIssuer = { issuer: issuer, jwks: ms_jwks.data };
     fs.writeFileSync(sandboxConfigFilePath, JSON.stringify(jwtIssuer));
 
-    // create the proposal object for Microsoft IDP, this will be submitted as proposal.
-    // download the CA certificate for the microsoft identity Provider to be stored so that the TLS connection 
+    // create a jwt issuer proposal for the Microsoft Idp
+    // Jwt issuer proposal documentation: https://microsoft.github.io/CCF/main/build_apps/auth/jwt.html
+    // Download the CA certificate for the microsoft identity Provider to be stored so that the TLS connection 
     // to the IdP can be validated during key refresh
     // https://learn.microsoft.com/en-us/azure/security/fundamentals/azure-ca-details
     // DigiCert Global Root CA: https://crt.sh/?d=853428
