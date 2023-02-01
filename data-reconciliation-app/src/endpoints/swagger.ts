@@ -44,8 +44,8 @@ export function getSwaggerUI(): ccfapp.Response<string> {
 
 /**
  * Return an OpenAPI document as the app documentation
- * this impelementation should be replaced the usage of '/app/api' endpoint
- * when ccf allow more control on openAPI document to be done through deployment bundle
+ * this implementation should replace the usage of '/app/api' endpoint
+ * when ccf allows more control of the openAPI document through the deployment bundle
  * https://github.com/microsoft/ccf-app-samples/issues/185
  */ 
 export function getOpenApiDocument(): ccfapp.Response<object> {
@@ -59,7 +59,7 @@ export function getOpenApiDocument(): ccfapp.Response<object> {
 /**
  * OpenAPI document 
  * This impelementation should be replaced the usage of '/app/api' endpoint
- * when ccf allow more control on openAPI document to be done through deployment bundle
+ * when ccf allows more control of the openAPI document through the deployment bundle
  * https://github.com/microsoft/ccf-app-samples/issues/185
  */
 const openApiDoc = {
