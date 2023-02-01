@@ -7,7 +7,7 @@ import { DataSchema } from "../models/data-schema";
 /**
  * HTTP GET Handler for generating a reconciliation report with all records
  * @param {ccfapp.Request<any>} request - mTLS request with userId
- * @returns {ServiceResult<object[]>} - Reconcilation report
+ * @returns {ServiceResult<object[]>} - Reconciliation report
  */
 export function getAllHandler(request: ccfapp.Request<any>): ccfapp.Response<CCFResponse> {
   const getCallerId = authenticationService.getCallerId(request);
@@ -31,7 +31,7 @@ export function getAllHandler(request: ccfapp.Request<any>): ccfapp.Response<CCF
 /**
  * HTTP GET Handler for generating a reconciliation report for a recordId
  * @param {ccfapp.Request<any>} request - mTLS request with userId and recordId
- * @returns {ServiceResult<object[]>} - Reconcilation report
+ * @returns {ServiceResult<object[]>} - Reconciliation report
  */
 export function getByIdHandler(request: ccfapp.Request<any>): ccfapp.Response<CCFResponse> {
   const getCallerId = authenticationService.getCallerId(request);
