@@ -8,6 +8,7 @@ const certificateStorePath = process.env.CERTS_FOLDER!;
 
 export interface DemoProps {
     ingestUrl: string;
+    ingestCsvUrl: string;
     reportUrl: string;
     proposalUrl: string;
 }
@@ -23,6 +24,7 @@ class Demo {
     //
     private static readonly demoProps: DemoProps = {
         ingestUrl: `${serverUrl}/app/ingest`,
+        ingestCsvUrl: `${serverUrl}/app/csv/ingest`,
         reportUrl: `${serverUrl}/app/report`,
         proposalUrl: `${serverUrl}/gov/proposals`,
     };
@@ -54,9 +56,10 @@ class Demo {
 
         this.printTestSectionHeader('🔬 [TEST]: Ingestion & Reporting...');
 
-        for (const member of this.members) {
-            await Api.ingest(this.demoProps, member);
-        }
+        // member 0 ingests data through CSV endpoint, members 1 & 2 through JSON
+        await Api.ingest(this.demoProps.ingestCsvUrl, this.members[0]);
+        await Api.ingest(this.demoProps.ingestUrl, this.members[1]);
+        await Api.ingest(this.demoProps.ingestUrl, this.members[2]);
 
         for (const member of this.members) {
             await Api.report(this.demoProps, member);
@@ -64,9 +67,10 @@ class Demo {
 
         this.printTestSectionHeader('🔬 [TEST]: Report Changes...');
 
+        // new Ingestion for member 0 is through JSON
         const member0 = this.members[0];
         member0.data = member0DataPart2;
-        await Api.ingest(this.demoProps, member0);
+        await Api.ingest(this.demoProps.ingestUrl, member0);
 
         const reportItems = await Api.report(this.demoProps, member0);
 

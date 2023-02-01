@@ -12,10 +12,10 @@ export interface ReportItem {
 }
 
 export default class Api {
-    public static async ingest(props: DemoProps, member: DemoMemberProps) {
+    public static async ingest(apiUrl: string, member: DemoMemberProps) {
         console.log(`📝 ${member.name} Ingesting Data...`);
 
-        const result = await axios.post(props.ingestUrl, member.data, { httpsAgent: member.httpsAgent });
+        const result = await axios.post(apiUrl, member.data, { httpsAgent: member.httpsAgent });
 
         if (result.status !== 200) {
             throw new Error(`🛑 [TEST FAILURE]: Unexpected status code: ${result.status}`);
