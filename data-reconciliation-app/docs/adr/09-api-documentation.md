@@ -38,8 +38,8 @@ We will go with the second option because:
 ## Consequences
 
 - The application will have its own OpenAPI document, which needs to be updated along with the `app. json`
-- Developers will request [`$server/app/swagger`] to get swagger-ui for the application, they test
-- Swagger-ui support two types of authentication to the application endpoints 
-    - **JWT Bearer Tokens:** Using Microsoft Identity Provider (IDP) as Token Issuer
-    - **Mutual TLS authentication(Certificate based):** it can be achieved by importing the members certificates to the browser , please follow [here](https://support.globalsign.com/ssl/ssl-certificates-installation/import-and-export-certificate-microsoft-windows), and you can select the certificate for authentication from the browser.
+- Developers will request [`$server/app/swagger`] to get swagger-ui for the application, where the application endpoints can be explored and tested
+- Swagger-ui supports two types of authentication for the application endpoints 
+    - **JWT Bearer Tokens:** Using Microsoft Identity Provider (IDP) as Token Issuer or any other Idp
+    - **Mutual TLS authentication(Certificate based):** it can be achieved by importing the members certificates to the browser , please follow [here](https://support.globalsign.com/ssl/ssl-certificates-installation/import-and-export-certificate-microsoft-windows), and the certificate will be selected by the user for authentication from the browser.
 
