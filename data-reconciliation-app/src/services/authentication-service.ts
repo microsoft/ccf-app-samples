@@ -227,10 +227,12 @@ export class AuthenticationService implements IAuthenticationService {
     // https://github.com/orgs/microsoft/projects/542/views/1?pane=issue&itemId=19232592
     if (identity.jwt.keyIssuer === "https://demo") { 
       // custom logic to validate the tokens of demo issuer
+      // Todo: add token signature validation
       // no further validation
     }
     else if (identity.jwt.keyIssuer === "https://login.microsoftonline.com/common/v2.0") { 
       // custom logic to validate the tokens of microsoft Idp
+      // Todo: add token signature validation
       
       // Microsoft identity platform access tokens
       const msClaims = identity.jwt.payload as MSAccessToken;
