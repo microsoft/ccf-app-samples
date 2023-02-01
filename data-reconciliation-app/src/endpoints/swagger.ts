@@ -58,7 +58,7 @@ export function getOpenApiDocument(): ccfapp.Response<object> {
 
 /**
  * OpenAPI document 
- * This impelementation should be replaced the usage of '/app/api' endpoint
+ * This implementation should replace the usage of '/app/api' endpoint
  * when ccf allows more control of the openAPI document through the deployment bundle
  * https://github.com/microsoft/ccf-app-samples/issues/185
  */
