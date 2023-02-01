@@ -134,7 +134,7 @@ export function getLogItem(
   const parsedQuery = parseRequestQuery(request);
 
   const logId = parseInt(parsedQuery.log_id);
-  if (logId === NaN) {
+  if (Number.isNaN(logId)) {
     return {
       statusCode: 400,
     };
