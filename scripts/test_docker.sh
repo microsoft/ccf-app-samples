@@ -77,7 +77,7 @@ function finish {
 }
 trap finish EXIT
 
-docker run --detach --ip "$serverIP" "$app_name:$enclave_type"
+docker run --rm --detach --ip "$serverIP" "$app_name:$enclave_type"
 containerId=$(docker ps -f ancestor="$app_name:$enclave_type" -q)
 
 echo "💤 Waiting for CCF node to create the certificate..."

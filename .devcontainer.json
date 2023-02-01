@@ -16,6 +16,7 @@
     }
   },
   "postCreateCommand": "scripts/initialise_devContainer.sh",
+  "postStartCommand": "scripts/devContainer_OnStart.sh",
   "features": {
     "ghcr.io/devcontainers/features/docker-from-docker:1": {
       "version": "20.10.8"
