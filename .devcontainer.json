@@ -18,7 +18,7 @@
       "nodeGypDependencies": true
     },
     "ghcr.io/devcontainers/features/powershell:1": {
-      "modules": "Az.Resources"
+      "modules": "Az.Resources, Microsoft.Graph.Application"
     },
     "ghcr.io/rchaganti/vsc-devcontainer-features/azurebicep:1": {
     }
