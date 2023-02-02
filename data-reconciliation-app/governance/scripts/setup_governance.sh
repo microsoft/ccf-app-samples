@@ -104,9 +104,9 @@ create_certificate "${cert_name}" "${certs}"
 $root_dir/scripts/add_member.sh --cert-file $certs/${cert_name}_cert.pem --pubk-file $certs/${cert_name}_enc_pubk.pem
 
 echo "Adding Member1 step 2/2: submit proposal to network and vote as accepted"
-$root_dir/scripts/submit_proposal.sh --network-url  ${server} \
-  --proposal-file $certs/set_member.json --service-cert $certs/service_cert.pem \
-  --signing-cert $certs/member0_cert.pem --signing-key $certs/member0_privk.pem
+$root_dir/scripts/submit_proposal.sh --network-url ${server} \
+ --proposal-file "$certs/set_member.json" \
+ --certificate-dir $certs
 
 #---------------------
 echo "Adding Member2 step 1/2: create certificate and proposal"
@@ -115,9 +115,9 @@ create_certificate "${cert_name}" "${certs}"
 $root_dir/scripts/add_member.sh --cert-file $certs/${cert_name}_cert.pem --pubk-file $certs/${cert_name}_enc_pubk.pem
 
 echo "Adding Member2 step 2/2: submit proposal to network and vote as accepted"
-$root_dir/scripts/submit_proposal.sh --network-url  ${server} \
-  --proposal-file $certs/set_member.json --service-cert $certs/service_cert.pem \
-  --signing-cert $certs/member0_cert.pem --signing-key $certs/member0_privk.pem
+$root_dir/scripts/submit_proposal.sh --network-url ${server} \
+ --proposal-file "$certs/set_member.json" \
+ --certificate-dir $certs
 
 #---------------------
 echo "Adding user0 step 1/2: create certificate and proposal"
@@ -126,9 +126,9 @@ create_certificate "${cert_name}" "${certs}"
 $root_dir/scripts/add_user.sh --cert-file $certs/${cert_name}_cert.pem --pubk-file $certs/${cert_name}_enc_pubk.pem
 
 echo "Adding user0 step 2/2: submit proposal to network and vote as accepted"
-$root_dir/scripts/submit_proposal.sh --network-url  ${server} \
-  --proposal-file $certs/set_user.json --service-cert $certs/service_cert.pem \
-  --signing-cert $certs/member0_cert.pem --signing-key $certs/member0_privk.pem
+$root_dir/scripts/submit_proposal.sh --network-url ${server} \
+ --proposal-file "$certs/set_user.json" \
+ --certificate-dir $certs
 
 ##############################################
 # Propose and Open Network
@@ -156,23 +156,23 @@ echo "Opening Network 1/2: create proposal"
 create_open_network_proposal "${certs}"
 
 echo "Opening Network 2/2: submit proposal to network and vote as accepted"
-$root_dir/scripts/submit_proposal.sh --network-url  ${server} \
-  --proposal-file $certs/network_open_proposal.json --service-cert $certs/service_cert.pem \
-  --signing-cert $certs/member0_cert.pem --signing-key $certs/member0_privk.pem
+$root_dir/scripts/submit_proposal.sh --network-url ${server} \
+ --proposal-file "$certs/network_open_proposal.json" \
+ --certificate-dir $certs
 
 ##############################################
 # Enable Jwt authentication
 ##############################################
 echo "Enable Jwt authentication: submit proposal to network and vote as accepted"
 # Enable Test-Identity Provider jwt tokens
-$root_dir/scripts/submit_proposal.sh --network-url  ${server} \
-  --proposal-file ${app_dir}/workspace/proposals/set_jwt_issuer_test_proposal.json --service-cert $certs/service_cert.pem \
-  --signing-cert $certs/member0_cert.pem --signing-key $certs/member0_privk.pem
+$root_dir/scripts/submit_proposal.sh --network-url ${server} \
+ --proposal-file "${app_dir}/workspace/proposals/set_jwt_issuer_test_proposal.json" \
+ --certificate-dir $certs
 
 # Enable MS-Identity Provider jwt tokens
-$root_dir/scripts/submit_proposal.sh --network-url  ${server} \
-  --proposal-file ${app_dir}/workspace/proposals/set_jwt_issuer_ms_proposal.json --service-cert $certs/service_cert.pem \
-  --signing-cert $certs/member0_cert.pem --signing-key $certs/member0_privk.pem
+$root_dir/scripts/submit_proposal.sh --network-url ${server} \
+ --proposal-file "${app_dir}/workspace/proposals/set_jwt_issuer_ms_proposal.json" \
+ --certificate-dir $certs
 
 ##############################################
 # Test Network
@@ -186,9 +186,9 @@ curl "${server}/node/network" --cacert $certs/service_cert.pem | jq
 # defined in it.
 ##############################################
 echo "Proposing Application 1/1: submit proposal to network and vote as accepted"
-$root_dir/scripts/submit_proposal.sh --network-url  ${server} \
-  --proposal-file ${app_dir}/dist/set_js_app.json $certs/network_open_proposal.json --service-cert $certs/service_cert.pem \
-  --signing-cert $certs/member0_cert.pem --signing-key $certs/member0_privk.pem
+$root_dir/scripts/submit_proposal.sh --network-url ${server} \
+ --proposal-file "${app_dir}/dist/set_js_app.json" \
+ --certificate-dir $certs
 
 
 ##############################################
