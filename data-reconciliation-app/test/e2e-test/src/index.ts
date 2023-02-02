@@ -54,12 +54,14 @@ class Demo {
             this.members.push(member);
         }
 
-        this.printTestSectionHeader('🔬 [TEST]: Ingestion & Reporting...');
+        this.printTestSectionHeader('🔬 [TEST]:Data Ingestion...');
 
         // member 0 ingests data through CSV endpoint, members 1 & 2 through JSON
         await Api.ingest(this.demoProps.ingestCsvUrl, this.members[0]);
         await Api.ingest(this.demoProps.ingestUrl, this.members[1]);
         await Api.ingest(this.demoProps.ingestUrl, this.members[2]);
+
+        this.printTestSectionHeader('🔬 [TEST]:Data Reporting...');
 
         for (const member of this.members) {
             await Api.report(this.demoProps, member);
