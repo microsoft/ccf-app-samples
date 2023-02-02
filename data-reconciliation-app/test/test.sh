@@ -15,7 +15,7 @@ function usage {
     echo "  --nodeAddress        string      The IP and port of the primary CCF node"
     echo "  --certificate_dir    string      The directory where the certificates are"
     echo "  --interactive        boolean     Optional. Run in Demo mode"
-    echo "  --ts_mode            boolean     Optional. Run in Typescript mode"
+    echo "  --typescript         boolean     Optional. Run in Typescript mode"
     echo ""
 }
 
@@ -38,7 +38,7 @@ do
         --nodeAddress) nodeAddress="$2"; shift;;
         --certificate_dir) certificate_dir="$2"; shift;;
         --interactive) interactive=1;;
-        --ts_mode) ts_mode=1;;
+        --typescript) ts_mode=1;;
         --help) usage; exit 0;;
         --) shift;;
     esac
@@ -75,7 +75,7 @@ if [ $ts_mode -eq 1 ]; then
     echo "Running typescript flow..."
     export SERVER=${server}
     export CERTS_FOLDER=${certificate_dir}
-    cd ./test/e2e-test/ && npm install && npm run start
+    cd ./test/e2e-test/ && npm install && npm run start --resolveJsonModule
     exit 0
 fi
 

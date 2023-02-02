@@ -18,7 +18,7 @@ function usage {
     echo "  --certificate_dir   string      The directory where the certificates are"
     echo "  --constitution_dir  string      The directory where the constitution is"
     echo "  --interactive       boolean     Optional. Run in Demo mode"
-    echo "  --ts_mode           boolean     Optional. Run in Typescript mode"
+    echo "  --typescript        boolean     Optional. Run in Typescript mode"
     echo ""
 }
 
@@ -43,7 +43,7 @@ do
         --certificate_dir) certificate_dir=$2; shift;;
         --constitution_dir) constitution_dir=$2; shift;;
         --interactive) interactive=1;;
-        --ts_mode) ts_mode=1;;
+        --typescript) ts_mode=1;;
         --help) usage; exit 0;;
         --) shift;;
     esac
@@ -96,7 +96,7 @@ if [ $interactive -eq 1 ]; then
     testScript="${testScript} --interactive"
 fi    
 if [ $ts_mode -eq 1 ]; then
-    testScript="${testScript} --ts_mode"
+    testScript="${testScript} --typescript"
 fi
 
 # call testScript command
