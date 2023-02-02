@@ -2,7 +2,6 @@
 .Description
 This allows you to create an Identity Provider for providing tokens
 to an application - this is optional.
- 
 #> 
 
 [CmdletBinding()]
@@ -51,16 +50,6 @@ $api_app | Format-List AppId
 # This application needs an Application ID URI so we can uniquely reference it as a Scope
 Update-MgApplication -ApplicationId $api_app.Id -IdentifierUris @("api://$($api_app.AppId)")
 
-# 2. Now add a password and it will be returned to you, only the first time around.
-$passwordCred = @{
-   displayName = 'Created in PowerShell'
-   endDateTime = (Get-Date).AddMonths(6)
-}
-
-# https://learn.microsoft.com/en-us/powershell/module/az.resources/new-azadappcredential?view=azps-9.3.0#examples
-$secret = Add-MgApplicationPassword -applicationId $api_app.Id -PasswordCredential $passwordCred
-$secret | Format-List SecretText, EndDateTime
-
 # 3. Build the manifest for the Client App (Swagger). Notice that this has user_impersonation
 # access back to the API App
 # The Magic Strings are well known Ids
@@ -96,7 +85,18 @@ $client_params = @{
         }
     SignInAudience = "AzureADMyOrg"
 }
-New-MgApplication @client_params
+$client_app = New-MgApplication @client_params
+
+# 2. Now add a password and it will be returned to you, only the first time around.
+$passwordCred = @{
+   displayName = 'Created in PowerShell'
+   endDateTime = (Get-Date).AddMonths(6)
+}
+
+# https://learn.microsoft.com/en-us/powershell/module/az.resources/new-azadappcredential?view=azps-9.3.0#examples
+$secret = Add-MgApplicationPassword -applicationId $client_app.Id -PasswordCredential $passwordCred
+$secret | Format-List SecretText, EndDateTime
+
 
 Disconnect-MgGraph
 
