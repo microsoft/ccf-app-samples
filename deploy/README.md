@@ -16,7 +16,37 @@ az provider register --namespace Microsoft.ConfidentialLedger
 
 If you receive any errors when running the above commands, it may be that your subscription has not been given access to the Private Preview. Please contact the CCF team to request access.
 
-## Deploying an Azure Managed CCF instance
+## Deploying an Azure Managed CCF instance using PowerShell
+
+The files in this directory will help you deploy an Azure Managed CCF instance from the command line. You can also create an instance from the portal. Both ARM and Bicep are supplied here, but this guide shows the Bicep deployment.
+
+At its simplest, you need 3 things to create an Azure Managed CCF instance:
+
+- a Service Principal, follow [here](https://learn.microsoft.com/en-us/powershell/azure/create-azure-service-principal-azureps?view=azps-9.3.0#create-a-service-principal) for further information 
+- a name for your CCF instance
+- the certificate for the initial member
+
+!!! Note
+The following commands assume you have created some pem files and they are in the deploy folder. Please see [here](https://microsoft.github.io/CCF/main/governance/adding_member.html#generating-member-keys-and-certificates) for instructions on how to generate these files.
+
+This devcontainer has PowerShell installed with the minimum required to deploy to Azure.
+
+```pwsh
+cd deploy
+./New-ManagedCCF.ps1 -CCFName myCCF4 `
+    -resourcegroupName test `
+    -tenantid myTenantId `
+    -subscriptionid MySubscriptionId `
+    -pemfilename member0_cert.pem `
+    -Credential myApplicationId
+```
+
+Alternatively you could run the following command and enter the correct values.
+```bash
+make deploy-mccf
+```
+
+## Deploying an Azure Managed CCF instance using Azure CLI
 
 The files in this directory will help you deploy an Azure Managed CCF instance from the command line. You can also create an instance from the portal. Both ARM and Bicep are supplied here, but this guide shows the Bicep deployment.
 

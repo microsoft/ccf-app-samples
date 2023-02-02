@@ -8,6 +8,7 @@
     "timonwong.shellcheck"
   ],
   "postCreateCommand": "scripts/initialise_devContainer.sh",
+  "postStartCommand": "scripts/devContainer_OnStart.sh",
   "features": {
     "ghcr.io/devcontainers/features/docker-from-docker:1": {
       "version": "20.10.8"
@@ -15,6 +16,11 @@
     "ghcr.io/devcontainers/features/node:1": {
       "version": "16.17.0",
       "nodeGypDependencies": true
+    },
+    "ghcr.io/devcontainers/features/powershell:1": {
+      "modules": "Az.Resources"
+    },
+    "ghcr.io/rchaganti/vsc-devcontainer-features/azurebicep:1": {
     }
   }
 }

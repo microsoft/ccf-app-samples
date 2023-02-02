@@ -26,6 +26,10 @@ start-host: build ## 🏃 Start the CCF Sandbox
 demo: ## 🎬 Demo an Application
 	@echo -e "\e[34mPlease change directory to the sample you wish to demo.\e[0m" || true
 
+deploy-mccf: ## 🚀 Deploy Managed CCF
+	@echo -e "\e[34m$@\e[0m" || true
+	cd deploy && pwsh ./New-ManagedCCF.ps1
+
 clean: ## 🧹 Clean the working folders created during build/demo
 	@rm -rf .venv_ccf_sandbox
 	@rm -rf workspace
