@@ -6,7 +6,7 @@ function usage {
     echo ""
     echo "Submit a ccf proposal and automatically vote with acceptance."
     echo ""
-    echo "usage: ./deploy_application.sh --network-url string --certificate-dir <workspace/sandbox_common> string --proposal-file string --member-count number"
+    echo "usage: ./submit_proposal.sh --network-url string --certificate-dir <workspace/sandbox_common> string --proposal-file string --member-count number"
     echo ""
     echo "  --network-url           string      ccf network url (example: https://test.confidential-ledger.azure.com)"
     echo "  --certificate-dir       string      The directory where the certificates are"
