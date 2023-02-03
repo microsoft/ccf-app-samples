@@ -26,10 +26,8 @@ export interface IJwtIdentityProvider {
     isValidJwtToken(identity: ccfapp.JwtAuthnIdentity): ServiceResult<boolean>
 }
 
-type identityId = string;
-
 export interface IValidatorService {
-    validate(request: ccfapp.Request<any>): ServiceResult<identityId>
+    validate(request: ccfapp.Request<any>): ServiceResult<string>
 }
 
 export class JwtValidator implements IValidatorService  {
@@ -40,7 +38,7 @@ export class JwtValidator implements IValidatorService  {
     this.identityProviders.set(JwtIdentityProviderEnum.Test, testIdProvider);
 }
 
-    validate(request: ccfapp.Request<any>): ServiceResult<identityId> {
+    validate(request: ccfapp.Request<any>): ServiceResult<string> {
         const jwtCaller = request.caller as unknown as ccfapp.JwtAuthnIdentity;
         const provider = this.identityProviders.get(<JwtIdentityProviderEnum>jwtCaller.jwt.keyIssuer);
         const isValid  =  provider.isValidJwtToken(jwtCaller);
