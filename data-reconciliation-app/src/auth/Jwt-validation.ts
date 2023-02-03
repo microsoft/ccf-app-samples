@@ -4,30 +4,20 @@ import msIdProvider from "./jwtIssuer/MS-AAD";
 import testIdProvider from "./jwtIssuer/TestIdP";
 
 /**
-   * JWT Token attributes
-*/
-export interface JwtToken {
-    sub: string;
-    iss: string;
-    aud: string;
-    appid: string;
-    ver: string;
-}
-
-/**
  * JWT Identity Providers
 */
 export enum JwtIdentityProviderEnum {
     MS_AAD = "https://login.microsoftonline.com/common/v2.0",
     Test = "https://demo"
 }
+type identityId = string;
 
 export interface IJwtIdentityProvider {
-    isValidJwtToken(identity: ccfapp.JwtAuthnIdentity): ServiceResult<boolean>
+    isValidJwtToken(identity: ccfapp.JwtAuthnIdentity): ServiceResult<identityId>
 }
 
 export interface IValidatorService {
-    validate(request: ccfapp.Request<any>): ServiceResult<string>
+    validate(request: ccfapp.Request<any>): ServiceResult<identityId>
 }
 
 export class JwtValidator implements IValidatorService  {
@@ -38,19 +28,10 @@ export class JwtValidator implements IValidatorService  {
     this.identityProviders.set(JwtIdentityProviderEnum.Test, testIdProvider);
 }
 
-    validate(request: ccfapp.Request<any>): ServiceResult<string> {
+    validate(request: ccfapp.Request<any>): ServiceResult<identityId> {
         const jwtCaller = request.caller as unknown as ccfapp.JwtAuthnIdentity;
         const provider = this.identityProviders.get(<JwtIdentityProviderEnum>jwtCaller.jwt.keyIssuer);
-        const isValid  =  provider.isValidJwtToken(jwtCaller);
-
-        if (isValid.success && isValid.content) {
-            const identityId = jwtCaller?.jwt?.payload?.sub;
-            return ServiceResult.Succeeded(identityId);
-        }
-        return ServiceResult.Failed({
-            errorMessage: `Error: jwt validation failed: unknown key issuer: ${jwtCaller.jwt.keyIssuer}`,
-            errorType: "AuthenticationError",
-          });
+        return provider.isValidJwtToken(jwtCaller);
     }
 }
 

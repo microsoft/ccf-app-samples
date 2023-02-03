@@ -1,17 +1,27 @@
 import * as ccfapp from "@microsoft/ccf-app";
 import { ServiceResult } from "../../utils/service-result";
 import { IJwtIdentityProvider } from "../Jwt-validation";
-import { JwtToken } from "../Jwt-validation";
+
+/**
+   * MS Access Token
+*/
+export interface MSAccessToken {
+  sub: string;
+  iss: string;
+  aud: string;
+  appid: string;
+  ver: string;
+}
 
 export class MsIdProvider implements IJwtIdentityProvider  {
    /**
    * Check if caller's access token is valid
    * @param {JwtAuthnIdentity} identity JwtAuthnIdentity object
-   * @returns {ServiceResult<boolean>}
+   * @returns {ServiceResult<string>}
    */
-  public isValidJwtToken(identity: ccfapp.JwtAuthnIdentity): ServiceResult<boolean> {
+  public isValidJwtToken(identity: ccfapp.JwtAuthnIdentity): ServiceResult<string> {
       
-    const msClaims = identity.jwt.payload as JwtToken;
+    const msClaims = identity.jwt.payload as MSAccessToken;
       
     // check if token has the right version
     if (msClaims.ver !== "1.0") {
@@ -43,7 +53,8 @@ export class MsIdProvider implements IJwtIdentityProvider  {
         errorType: "AuthenticationError",
       });
     }
-    return ServiceResult.Succeeded(true);
+    const identityId = identity?.jwt?.payload?.sub;
+    return ServiceResult.Succeeded(identityId);
   }
 }
 

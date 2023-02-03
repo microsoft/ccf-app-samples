@@ -6,10 +6,11 @@ export class TestIdProvider implements IJwtIdentityProvider  {
    /**
    * Check if caller's access token is valid
    * @param {JwtAuthnIdentity} identity JwtAuthnIdentity object
-   * @returns {ServiceResult<boolean>}
+   * @returns {ServiceResult<string>}
    */
-  public isValidJwtToken(identity: ccfapp.JwtAuthnIdentity): ServiceResult<boolean> {
-    return ServiceResult.Succeeded(true);
+  public isValidJwtToken(identity: ccfapp.JwtAuthnIdentity): ServiceResult<string> {
+    const identityId = identity?.jwt?.payload?.sub;
+    return ServiceResult.Succeeded(identityId);
   }
 }
 
