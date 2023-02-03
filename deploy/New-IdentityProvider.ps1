@@ -71,15 +71,22 @@ $client_params = @{
 $client_app = New-MgApplication @client_params
 $output.Add("ClientApplicationId", $client_app.AppId)
 
-# 2. Now add a password and it will be returned to you, only the first time around.
-$passwordCred = @{
-   displayName = 'Created in PowerShell'
-   endDateTime = (Get-Date).AddMonths(6)
+# 3. Add a Service Principal to the Client (Swagger) Application
+$ServicePrincipal=@{
+  AppId = $client_app.AppId
+  AccountEnabled = true
 }
+$spn = New-MgServicePrincipal -BodyParameter $ServicePrincipal
 
-# https://learn.microsoft.com/en-us/powershell/module/az.resources/new-azadappcredential?view=azps-9.3.0#examples
-$secret = Add-MgApplicationPassword -applicationId $client_app.Id -PasswordCredential $passwordCred
-$output.Add("ClientSecret", $secret.SecretText)
+# 4. Now add a password and it will be returned to you, only the first time around.
+$passwordCred = @{
+    PasswordCredential = @{
+        DisplayName = "Created via PowerShell"
+    }
+}
+# https://learn.microsoft.com/en-us/powershell/module/microsoft.graph.applications/add-mgserviceprincipalpassword?view=graph-powershell-1.0
+$spn_password = Add-MgServicePrincipalPassword -ServicePrincipalId $spn.Id -BodyParameter $passwordCred
+$output.Add("ClientSecret", $spn_password.SecretText)
 
 # Output hastable as key=value pairs in a file
 $output.GetEnumerator() | ForEach-Object {
