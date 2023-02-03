@@ -39,17 +39,17 @@ CCF provides support for managing public token signing keys required for validat
 
 ## Decision
 
-We will go with **Certificate Authentication** implementation for the following reasons:
-
-- Effectively saves time and effort because we already have a sample implementation in the banking app.
-- The least reliant on external components, which will keep our sample simple (no need for an identity provider to issue and validate tokens)
-- No UI implementation is planned for the current phase. (later, if we're going to create a UI, it is better to go with **JWT Authentication**)
+We will implement both options, **Certificate Authentication** and **JWT Authentication**, so the application endpoints caller will be authenticated using one of the following authentication methods:
+- Member Certificate
+- User Certificate
+- JWT (Microsoft Identity Provider as token issuer), which will have the same permissions as if using User Certificate (no governance permissions)
 
 ## Consequences
 
-Implementing an authentication service based on CCF certificate authentication to identify users and members on each request.
+- Implementing an authentication service to authenticate application caller using CCF certificate and JWT authentications methods.
+- The application can be accessed by member, user or valid user JWT token issued by a registered identity provider.  
 
 ## Resource
 
-[CCF Certificate Authentication](https://microsoft.github.io/CCF/main/build_apps/auth/cert.html)
-[CCF JWT Authentication](https://microsoft.github.io/CCF/main/build_apps/auth/jwt.html)
+- [CCF Certificate Authentication](https://microsoft.github.io/CCF/main/build_apps/auth/cert.html)
+- [CCF JWT Authentication](https://microsoft.github.io/CCF/main/build_apps/auth/jwt.html)
