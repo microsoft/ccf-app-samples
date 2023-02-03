@@ -74,3 +74,24 @@ make test                      # Run end-to-end(e2e) tests in a sandbox (virtual
 **To Run the application's e2e-tests on a Managed CCF**
   - First, create a Managed CCF instance on your Azure subscription. Please follow [here](https://github.com/microsoft/ccf-app-samples/tree/main/deploy#deploying-the-ccf-samples)
   - Run the e2e-test, please follow [here](https://github.com/microsoft/ccf-app-samples/tree/main/deploy#deploying-a-ccf-application-to-azure-managed-ccf)
+
+## Test JWT tokens
+
+The application is currently supporting two JWT token issuers (identity providers):
+- **Test Idp:** it's a custom implementation to simulate a testing token issuer to test your application locally.
+  - *Generate test tokens*: `/.workspace/proposals/set_jwt_issuer_test_sandbox.json` contains pre-generated tokens you can use to test the application endpoints using JWT authentication.
+  - Run ` make start-host` and request `/app/swagger` endpoint then `authorize`
+- **Microsoft Azure Active Directory Identity Provider:** it is an integration sample with MS-AAD Idp
+  - *Generate test tokens*: before you can complete this step, two applications must be registered at the Azure AD tenant, follow [here](https://learn.microsoft.com/en-us/azure/active-directory/develop/quickstart-register-app) 
+  
+    - Create the `app-api registered application` that will be used to validate the token (the CCF API application) and expose an API.
+    - Create the `app-api-client registered application` that will be used to generate the token (CCF api consumer) and generate the client secret.
+    - Update Makefile: 
+      - replace the CLIENT_ID and CLIENT_SECRET variables with the values of the `app-api-client application`.
+      - replace the CLIENT_SCOPE with the `app-api application (Application ID URI)`
+      - replace the TENANT_ID with the tenant id of you application
+    - Update src/services/authentication-service.ts: 
+      - Replace `MS_APP_ID_URI` by `app-api application (Application ID URI)`
+      - Replace `MS_APP_ID`: by `app-api-client registered application`
+    - Run `make generate-jwt-token-ms` to generate a new token.
+    - Run ` make start-host-jwt-host` and request `/app/swagger` endpoint then click on `authorize`.

@@ -80,7 +80,7 @@ clean: ## 🧹 Clean the working folders created during build/demo
 	@rm -rf dist
 
 # Generate a MS-Idp AAD (Azure active directory) JWT (app-to-app) token for the application testing;
-generate-jwt-token: # Generate an Azure AD access tokens for authentication
+generate-jwt-token-ms: # Generate an Azure AD access tokens for authentication
 	@echo "########################################################################"
 	@echo "## Generate a JWT token for the application; two applications must be registered in the Azure AD tenant"
 	@echo "## Follow: https://learn.microsoft.com/en-us/azure/active-directory/develop/quickstart-register-app"
@@ -90,6 +90,6 @@ generate-jwt-token: # Generate an Azure AD access tokens for authentication
 	@echo "# 4. Replace scope with the second application (Application ID URI) "
 	@echo "# 5. Replace src/services/authentication-service.ts>"MS_APP_ID_URI" with the second application (Application ID URI) "
 	@echo "########################################################################"
-	@curl -X POST https://login.microsoftonline.com/16b3c013-d300-468d-ac64-7eda0820b6d3/oauth2/v2.0/token \
+	@curl -X POST https://login.microsoftonline.com/${TENANT_ID}/oauth2/v2.0/token \
 	-H "Content-Type: application/x-www-form-urlencoded" \
-	-d "client_id=${Client_Id}&client_secret=${Client_Secret}&scope=api://b8dbd573-a015-424b-b111-2d5fa11cee3c/.default&grant_type=client_credentials"
+	-d "client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&scope=${CLIENT_SCOPE}/.default&grant_type=client_credentials"
