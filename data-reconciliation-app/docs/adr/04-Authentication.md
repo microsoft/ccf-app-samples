@@ -42,7 +42,7 @@ CCF provides support for managing public token signing keys required for validat
 We will implement both options, **Certificate Authentication** and **JWT Authentication**, so the application endpoints caller will be authenticated using one of the following authentication methods:
 - Member Certificate
 - User Certificate
-- JWT (Microsoft Identity Provider as token issuer)
+- JWT (Microsoft Identity Provider as token issuer), which will have the same permissions as if using User Certificate (no governance permissions)
 
 ## Consequences
 
