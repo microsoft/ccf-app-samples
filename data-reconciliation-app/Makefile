@@ -79,17 +79,13 @@ clean: ## 🧹 Clean the working folders created during build/demo
 	@rm -rf workspace
 	@rm -rf dist
 
-# Generate a MS-Idp AAD (Azure active directory) JWT (app-to-app) token for the application testing;
-generate-jwt-token-ms: # Generate an Azure AD access tokens for authentication
-	@echo "########################################################################"
-	@echo "## Generate a JWT token for the application; two applications must be registered in the Azure AD tenant"
-	@echo "## Follow: https://learn.microsoft.com/en-us/azure/active-directory/develop/quickstart-register-app"
-	@echo "# 1. Create the application that is used to generate the token (CCF api consumer) and generate the client certificate and secret"
-	@echo "# 2. Create the application that is used to authenticate the token (the CCF API application) and expose the API"
-	@echo "# 3. Replace client_id and client_secret with the values from the first application that is used to generate the token"
-	@echo "# 4. Replace scope with the second application (Application ID URI) "
-	@echo "# 5. Replace src/services/authentication-service.ts>"MS_APP_ID_URI" with the second application (Application ID URI) "
-	@echo "########################################################################"
-	@curl -X POST https://login.microsoftonline.com/${TENANT_ID}/oauth2/v2.0/token \
-	-H "Content-Type: application/x-www-form-urlencoded" \
-	-d "client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&scope=${CLIENT_SCOPE}/.default&grant_type=client_credentials"
+# The following are here in case you forget to change directory!
+
+generate-access-token: ## 🔐 Generate and access token
+	@cd .. && $(MAKE) generate-access-token
+
+deploy-mccf: ## 🚀 Deploy Managed CCF
+	@cd .. && $(MAKE) deploy-mccf
+
+deploy-ms-idp: ## 🔐 Create an Identity Provider
+	@cd .. && $(MAKE) deploy-ms-idp

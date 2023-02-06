@@ -1,13 +1,20 @@
 {
-  "name": "CCF Sample DevContainer",
+  "name": "CCF Samples",
   "image": "mcr.microsoft.com/ccf/app/dev:3.0.1-virtual",
   "extensions": [
     "ms-vscode.cpptools",
     "vsls-contrib.codetour",
     "esbenp.prettier-vscode",
-    "timonwong.shellcheck"
+    "timonwong.shellcheck",
+    "github.vscode-pull-request-github"
   ],
-  "postCreateCommand": "scripts/initialise_devContainer.sh",
+  "settings": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll": true
+    }
+  },
   "postStartCommand": "scripts/devContainer_OnStart.sh",
   "features": {
     "ghcr.io/devcontainers/features/docker-from-docker:1": {
@@ -18,7 +25,7 @@
       "nodeGypDependencies": true
     },
     "ghcr.io/devcontainers/features/powershell:1": {
-      "modules": "Az.Resources"
+      "modules": "Az.Resources, Microsoft.Graph.Authentication, Microsoft.Graph.Applications"
     },
     "ghcr.io/rchaganti/vsc-devcontainer-features/azurebicep:1": {
     }
