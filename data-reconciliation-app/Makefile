@@ -90,12 +90,12 @@ deploy-mccf: ## 🚀 Deploy Managed CCF
 deploy-ms-idp: ## 🔐 Create an Identity Provider
 	@cd .. && $(MAKE) deploy-ms-idp
 
-publish-app-sandbox: build ## 🧪 Deploy the Data Reconciliation Application to a network
+deploy-app-to-sandbox: build ## 🧪 Deploy the Data Reconciliation Application to a network
 	@echo -e "\e[34m$@\e[0m" || true
 	@. ../scripts/submit_proposal.sh --network-url "https://127.0.0.1:8000" --proposal-file ./dist/set_js_app.json --certificate_dir "./workspace/sandbox_common" --member-count 2
 	@. ../scripts/submit_proposal.sh --network-url "https://127.0.0.1:8000" --proposal-file ./workspace/proposals/set_jwt_issuer_ms_proposal.json --certificate_dir "./workspace/sandbox_common" --member-count 2
 
-publish-app-mccf: build ## 🧪 Deploy the Data Reconciliation Application to a network
+deploy-app-to-mccf: build ## 🧪 Deploy the Data Reconciliation Application to a network
 	@echo -e "\e[34m$@\e[0m" || true
 	@. ../scripts/submit_proposal.sh --network-url "https://reconciliationapp.confidential-ledger.azure.com" --proposal-file ./dist/set_js_app.json --certificate_dir "./workspace/mccf_certificates" --member-count 2
 	@. ../scripts/submit_proposal.sh --network-url "https://reconciliationapp.confidential-ledger.azure.com" --proposal-file ./workspace/proposals/set_jwt_issuer_ms_proposal.json --certificate_dir "./workspace/mccf_certificates" --member-count 2
