@@ -84,14 +84,9 @@ The application is currently supporting two JWT token issuers (identity provider
 - **Microsoft Azure Active Directory Identity Provider:** it is an integration sample with MS-AAD Idp
   - *Generate test tokens*: before you can complete this step, two applications must be registered at the Azure AD tenant, follow [here](https://learn.microsoft.com/en-us/azure/active-directory/develop/quickstart-register-app) 
   
-    - Create the `app-api registered application` that will be used to validate the token (the CCF API application) and expose an API.
-    - Create the `app-api-client registered application` that will be used to generate the token (CCF api consumer) and generate the client secret.
-    - Update Makefile: 
-      - replace the CLIENT_ID and CLIENT_SECRET variables with the values of the `app-api-client application`.
-      - replace the CLIENT_SCOPE with the `app-api application (Application ID URI)`
-      - replace the TENANT_ID with the tenant id of you application
-    - Update src/services/authentication-service.ts: 
-      - Replace `MS_APP_ID_URI` by `app-api application (Application ID URI)`
-      - Replace `MS_APP_ID`: by `app-api-client registered application`
-    - Run `make generate-jwt-token-ms` to generate a new token.
+    - To create the required registered applications run `make deploy-ms-idp`.
+    - Update src/services/authentication-service.ts with environment values in `aad.env file` created by the previous step: 
+      - Replace `MS_APP_ID_URI` by `ApiIdentifierUri`
+      - Replace `MS_APP_ID`: by `ClientApplicationId`
+    - Run `make generate-access-token` to generate a new token.
     - Run ` make start-host-jwt-host` and request `/app/swagger` endpoint then click on `authorize`.
