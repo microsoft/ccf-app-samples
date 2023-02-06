@@ -77,8 +77,8 @@ make test                      # Run end-to-end(e2e) tests in a sandbox (virtual
 
 ## Test JWT tokens
 
-The application is currently supporting two JWT token issuers (identity providers):
-- **Test Idp:** it's a custom implementation to simulate a testing token issuer to test your application locally.
+The application currently supports two JWT token issuers (identity providers):
+- **Test Idp:** custom implementation to simulate a token issuer to test your application locally.
   - *Generate test tokens*: `/.workspace/proposals/set_jwt_issuer_test_sandbox.json` contains pre-generated tokens you can use to test the application endpoints using JWT authentication.
   - Run ` make start-host` and request `/app/swagger` endpoint then `authorize`
 - **Microsoft Azure Active Directory Identity Provider:** it is an integration sample with MS-AAD Idp
