@@ -26,7 +26,7 @@ $ScopeUserRead="e1fe6dd8-ba31-4d61-89e7-88639da4683d"
 $Output = @{}
 $Output.Add("TenantId", $TenantId)
 # Clean our .env file
-Remove-Item ../.env -Force -ErrorAction SilentlyContinue
+Remove-Item ../aad.env -Force -ErrorAction SilentlyContinue
 
 # 2. Connect with the correct scopes that you need to perform the management
 # operations. These are not the scopes you are granting to the applications.
@@ -92,7 +92,7 @@ $Output.Add("ClientSecret", $SPNPassword.SecretText)
 
 # 7. Output hastable as key=value pairs in a file
 $Output.GetEnumerator() | ForEach-Object {
-    Add-Content ../.env "$($_.Key)=$($_.Value)"
+    Add-Content ../aad.env "$($_.Key)=$($_.Value)"
 }
 
 # 8. Destroy any cookies/connections

@@ -20,10 +20,10 @@ set -euo pipefail
 
 
 # if a .env exists then source it
-if [ -f .env ]; then
-  source .env
+if [ -f aad.env ]; then
+  source aad.env
 else
-    echo "No .env file found. Run make deploy-ms-idp."
+    echo "No aad.env file found. Run make deploy-ms-idp."
     exit 1
 fi
 

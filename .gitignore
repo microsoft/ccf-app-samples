@@ -10,4 +10,4 @@ package-lock.json
 **/dist
 **/coverage
 data-reconciliation-app/test/reports/
-.env
+aad.env
