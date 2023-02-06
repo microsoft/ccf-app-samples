@@ -72,7 +72,3 @@ for ((i = 1 ; i < $member_count ; i++)); do
   signing_key="$certificate_dir/member${i}_privk.pem"
   /opt/ccf_virtual/bin/scurl.sh "$network_url/gov/proposals/$proposal0_id/ballots" --cacert $service_cert --signing-key $signing_key --signing-cert $signing_cert --data-binary @${app_dir}/governance/vote/vote_accept.json -H "content-type: application/json" | jq
 done
-
-
-
-
