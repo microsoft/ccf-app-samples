@@ -45,9 +45,7 @@ class Demo {
          */
         process.chdir('../../');
 
-        this.printTestSectionHeader('🏁 Starting e2e Tests... ');
-
-        this.printTestSectionHeader(`🤖 Starting Host on server ${serverUrl}...`);
+        this.printTestSectionHeader('🏁 Starting e2e Tests on server ${serverUrl}... ');
 
         for (const memberId of this.memberIds) {
             const member = this.createMember(memberId);
@@ -185,12 +183,12 @@ class Demo {
             cert: fs.readFileSync(`${certificateStorePath}/member${memberId}_cert.pem`),
             key: fs.readFileSync(`${certificateStorePath}/member${memberId}_privk.pem`),
             ca: fs.readFileSync(`${certificateStorePath}/service_cert.pem`),
-        })
+        });
     }
 
     private static printTestSectionHeader(title: string) {
-        console.log('\n\n');
-        console.log(`${title}\n`);
+        console.log('\n===============================');
+        console.log(`${title}`);
         console.log('===============================\n');
     }
 }
