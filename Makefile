@@ -30,6 +30,14 @@ deploy-mccf: ## 🚀 Deploy Managed CCF
 	@echo -e "\e[34m$@\e[0m" || true
 	cd deploy && pwsh ./New-ManagedCCF.ps1
 
+deploy-ms-idp: ## 🔐 Create an Identity Provider
+	@echo -e "\e[34m$@\e[0m" || true
+	cd deploy && pwsh ./New-IdentityProvider.ps1
+
+generate-access-token: ## 🔐 Generate and access token
+	@echo -e "\e[34m$@\e[0m" || true
+	./scripts/generate_access_token.sh
+
 clean: ## 🧹 Clean the working folders created during build/demo
 	@rm -rf .venv_ccf_sandbox
 	@rm -rf workspace
