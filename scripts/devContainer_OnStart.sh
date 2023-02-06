@@ -5,3 +5,4 @@ set -euo pipefail
 npm install --prefix=banking-app
 npm install --prefix=auditable-logging-app
 npm install --prefix=data-reconciliation-app
+npm install --prefix=data-reconciliation-app/test/e2e-test
