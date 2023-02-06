@@ -19,80 +19,81 @@ param(
 
 # The Magic Strings are well known Ids
 $MSGraphAppId="00000003-0000-0000-c000-000000000000"
-# $Scope_OpenID="37f7f235-527c-4136-accd-4a02d197296e"
-# $Scope_OfflineAccess="7427e0e9-2fba-42fe-b0c0-848c9e6a8182"
-$Scope_UserRead="e1fe6dd8-ba31-4d61-89e7-88639da4683d"
+$ScopeUserRead="e1fe6dd8-ba31-4d61-89e7-88639da4683d"
 
-# Hold all of our keys in a hashtable
-$output = @{}
-$output.Add("TenantId", $TenantId)
+# 1. Build a hashtable for all the things we want to output
+# into an .env for other scripts to use.
+$Output = @{}
+$Output.Add("TenantId", $TenantId)
 # Clean our .env file
 Remove-Item ../.env -Force -ErrorAction SilentlyContinue
 
-# Connect with the correct scopes that you need to perform the management operations.
-# These are not the scopes you are granting to the applications.
+# 2. Connect with the correct scopes that you need to perform the management
+# operations. These are not the scopes you are granting to the applications.
 $RequiredScopes = @("Directory.AccessAsUser.All", "Directory.ReadWrite.All", "Application.ReadWrite.All")
 Connect-MgGraph -TenantId $TenantId -Scopes $RequiredScopes
 
-# 1. Create the application that secures the API.
+# 3. Create the application that secures the API.
 # https://learn.microsoft.com/en-us/powershell/module/microsoft.graph.applications/new-mgapplication?view=graph-powershell-1.0
-#$userImpersonationScopeId=New-Guid
-$api_app_manifest = @{
+$APIAppManifest = @{
     DisplayName = $AADApiAppName
     SignInAudience = "AzureADMyOrg"
     RequiredResourceAccess = @{
         ResourceAppId = $MSGraphAppId
         ResourceAccess = @(
             @{
-                Id = $Scope_UserRead
+                Id = $ScopeUserRead
                 Type = "Scope"
             })
         }
 }
-$api_app = New-MgApplication @api_app_manifest
-$output.Add("ApiApplicationId", $api_app.AppId)
-$output.Add("ApiIdentifierUri", "api://$($api_app.AppId)")
+$APIApp = New-MgApplication @APIAppManifest
+$Output.Add("ApiApplicationId", $APIApp.AppId)
+$Output.Add("ApiIdentifierUri", "api://$($APIApp.AppId)")
 
-# This application needs an Application ID URI so we can uniquely reference its Scopes
-Update-MgApplication -ApplicationId $api_app.Id -IdentifierUris @($output["ApiIdentifierUri"])
+# This application needs an Application ID URI so we can uniquely reference its Scopes.
+# The portal does this for us and uses the Id of the App that we have just created.
+# This could be api://MyUniqueDomain if we wanted.
+Update-MgApplication -ApplicationId $APIApp.Id -IdentifierUris @($Output["ApiIdentifierUri"])
 
-# 2. Build the manifest for the Client App (Swagger).
-$client_params = @{
+# 4. Build the manifest for the Client App (Swagger).
+$ClientAppManifest = @{
     DisplayName = $AADClientAppName
     RequiredResourceAccess = @{
         ResourceAppId = $MSGraphAppId
         ResourceAccess = @(
             @{
-                Id = $Scope_UserRead
+                Id = $ScopeUserRead
                 Type = "Scope"
             })
         }
     SignInAudience = "AzureADMyOrg"
 }
-$client_app = New-MgApplication @client_params
-$output.Add("ClientApplicationId", $client_app.AppId)
+$ClientApp = New-MgApplication @ClientAppManifest
+$Output.Add("ClientApplicationId", $ClientApp.AppId)
 
-# 3. Add a Service Principal to the Client (Swagger) Application
-$ServicePrincipal=@{
-  AppId = $client_app.AppId
+# 5. Add a Service Principal to the Client (Swagger) Application which
+# will allow us to login in as it
+$ServicePrincipalManifest=@{
+  AppId = $ClientApp.AppId
   AccountEnabled = true
 }
-$spn = New-MgServicePrincipal -BodyParameter $ServicePrincipal
+$ServicePrincipal = New-MgServicePrincipal -BodyParameter $ServicePrincipalManifest
 
-# 4. Now add a password and it will be returned to you, only the first time around.
-$passwordCred = @{
+# 6. Now add a password and it will be returned to you, only the first time around.
+$PasswordCredentials = @{
     PasswordCredential = @{
         DisplayName = "Created via PowerShell"
     }
 }
 # https://learn.microsoft.com/en-us/powershell/module/microsoft.graph.applications/add-mgserviceprincipalpassword?view=graph-powershell-1.0
-$spn_password = Add-MgServicePrincipalPassword -ServicePrincipalId $spn.Id -BodyParameter $passwordCred
-$output.Add("ClientSecret", $spn_password.SecretText)
+$SPNPassword = Add-MgServicePrincipalPassword -ServicePrincipalId $ServicePrincipal.Id -BodyParameter $PasswordCredentials
+$Output.Add("ClientSecret", $SPNPassword.SecretText)
 
-# Output hastable as key=value pairs in a file
-$output.GetEnumerator() | ForEach-Object {
+# 7. Output hastable as key=value pairs in a file
+$Output.GetEnumerator() | ForEach-Object {
     Add-Content ../.env "$($_.Key)=$($_.Value)"
 }
 
-# Destroy any cookies/connections
+# 8. Destroy any cookies/connections
 Disconnect-MgGraph
