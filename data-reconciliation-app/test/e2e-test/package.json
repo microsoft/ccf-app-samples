@@ -1,0 +1,32 @@
+{
+    "name": "demo-app",
+    "version": "1.0.0",
+    "description": "a starter project for testing reconciliation app",
+    "main": "index.js",
+    "scripts": {
+        "start": "ts-node ./src/index.ts"
+    },
+    "devDependencies": {
+        "@types/jasmine": "^4.3.0",
+        "@types/jest": "^29.2.3",
+        "@types/mocha": "^10.0.0",
+        "@types/node": "^18.11.9",
+        "@typescript-eslint/eslint-plugin": "^5.48.1",
+        "@typescript-eslint/parser": "^5.48.1",
+        "axios": "^1.2.2",
+        "eslint": "^8.28.0",
+        "eslint-config-prettier": "^8.5.0",
+        "eslint-config-standard-with-typescript": "^4.0.0",
+        "eslint-plugin-import": "^2.27.4",
+        "eslint-plugin-n": "^15.5.1",
+        "eslint-plugin-prettier": "^4.2.1",
+        "eslint-plugin-promise": "^6.1.1",
+        "eslint-plugin-unused-imports": "^2.0.0",
+        "prettier": "^2.8.0",
+        "rimraf": "^3.0.2",
+        "ts-jest": "^28.0.7",
+        "ts-node": "^10.9.1",
+        "typescript": "^4.9.3"
+    },
+    "private": true
+}

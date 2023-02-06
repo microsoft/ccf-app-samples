@@ -4,6 +4,7 @@ set -euo pipefail
 declare nodeAddress=""
 declare certificate_dir=""
 declare interactive=0
+declare ts_mode=0
 
 function usage {
     echo ""
@@ -14,6 +15,7 @@ function usage {
     echo "  --nodeAddress        string      The IP and port of the primary CCF node"
     echo "  --certificate_dir    string      The directory where the certificates are"
     echo "  --interactive        boolean     Optional. Run in Demo mode"
+    echo "  --typescript         boolean     Optional. Run in Typescript mode"
     echo ""
 }
 
@@ -23,7 +25,7 @@ function failed {
 }
 
 # parse parameters
-if [ $# -gt 5 ]; then
+if [ $# -gt 6 ]; then
     usage
     exit 1
 fi
@@ -36,6 +38,7 @@ do
         --nodeAddress) nodeAddress="$2"; shift;;
         --certificate_dir) certificate_dir="$2"; shift;;
         --interactive) interactive=1;;
+        --typescript) ts_mode=1;;
         --help) usage; exit 0;;
         --) shift;;
     esac
@@ -52,8 +55,34 @@ fi
 
 server="https://${nodeAddress}"
 
-echo "📂 Working directory (for certificates): ${certificate_dir}"
+echo "📂 Directory for certificates: ${certificate_dir}"
 
+
+only_status_code="-s -o /dev/null -w %{http_code}"
+
+echo "💤 Waiting for the app frontend..."
+# Using the same way as https://github.com/microsoft/CCF/blob/1f26340dea89c06cf615cbd4ec1b32665840ef4e/tests/start_network.py#L94
+# There is a side effect here in the case of the sandbox as it creates the 'workspace/sandbox_common' everytime
+# it starts up. The following condition not only checks that this pem file has been created, it also checks it
+# is valid. Don't be caught out by the folder existing from a previous run.
+while [ "200" != "$(curl "$server/app/commit" --cacert "${certificate_dir}/service_cert.pem" $only_status_code)" ]
+do
+    sleep 1
+done
+
+# If Typescript mode is selected, testing flow goes through TS application located in ./test/e2e-test
+if [ $ts_mode -eq 1 ]; then
+    echo "Running typescript flow..."
+    export SERVER=${server}
+    export CERTS_FOLDER=${certificate_dir}
+    cd ./test/e2e-test/ && npm install && npm run start --resolveJsonModule
+    exit 0
+fi
+
+
+#####################################
+# Normal flow (no Typescript mode)
+#####################################
 check_eq() {
     local test_name="$1"
     local expected="$2"
@@ -68,7 +97,7 @@ check_eq() {
 
 cert_arg() {
     caller="$1"
-    echo "--cacert service_cert.pem --cert ${caller}_cert.pem --key ${caller}_privk.pem"
+    echo "--cacert ${certificate_dir}/service_cert.pem --cert ${certificate_dir}/${caller}_cert.pem --key ${certificate_dir}/${caller}_privk.pem"
 }
 
 function addCheckpoint {
@@ -79,22 +108,6 @@ function addCheckpoint {
     fi
 }
 
-only_status_code="-s -o /dev/null -w %{http_code}"
-
-echo "💤 Waiting for the app frontend..."
-# Using the same way as https://github.com/microsoft/CCF/blob/1f26340dea89c06cf615cbd4ec1b32665840ef4e/tests/start_network.py#L94
-# There is a side effect here in the case of the sandbox as it creates the 'workspace/sandbox_common' everytime
-# it starts up. The following condition not only checks that this pem file has been created, it also checks it
-# is valid. Don't be caught out by the folder existing from a previous run.
-while [ "200" != "$(curl "$server/app/commit" --cacert "${certificate_dir}/service_cert.pem" $only_status_code)" ]
-do
-    sleep 1
-done
-
-# Only when this directory has been created (or refreshed), should we change to it
-# otherwise you can get permission issues.
-cd "${certificate_dir}"
-
 ingestUrl="$server/app/ingest"
 ingestCsvUrl="$server/app/csv/ingest"
 reportUrl="$server/app/report"
@@ -102,19 +115,19 @@ reportUrl="$server/app/report"
 printf "\n  -------- Test Ingestion Service --------  \n\n"
 
 memberName="member0"
-check_eq "${memberName} - CSV data ingest failed (wrong file)"   "400" "$(curl $ingestCsvUrl -X POST $(cert_arg ${memberName}) -H "Content-Type: text/csv" --data-binary "@../../test/data-samples/${memberName}_data_pt2.json" $only_status_code)"
-check_eq "${memberName} - CSV data ingest failed (wrong schema)" "400" "$(curl $ingestCsvUrl -X POST $(cert_arg ${memberName}) -H "Content-Type: text/csv" --data-binary "@../../test/data-samples/${memberName}_wrong_schema.csv" $only_status_code)"
-check_eq "${memberName} - CSV data ingest succeeded"             "200" "$(curl $ingestCsvUrl -X POST $(cert_arg ${memberName}) -H "Content-Type: text/csv" --data-binary "@../../test/data-samples/${memberName}_data.csv" $only_status_code)"
+check_eq "${memberName} - CSV data ingest failed (wrong file)"   "400" "$(curl $ingestCsvUrl -X POST $(cert_arg ${memberName}) -H "Content-Type: text/csv" --data-binary "@./test/data-samples/${memberName}_data_pt2.json" $only_status_code)"
+check_eq "${memberName} - CSV data ingest failed (wrong schema)" "400" "$(curl $ingestCsvUrl -X POST $(cert_arg ${memberName}) -H "Content-Type: text/csv" --data-binary "@./test/data-samples/${memberName}_wrong_schema.csv" $only_status_code)"
+check_eq "${memberName} - CSV data ingest succeeded"             "200" "$(curl $ingestCsvUrl -X POST $(cert_arg ${memberName}) -H "Content-Type: text/csv" --data-binary "@./test/data-samples/${memberName}_data.csv" $only_status_code)"
 
 printf " ---\n"
 memberName="member1"
 check_eq "${memberName} - JSON data ingest failed (data length is zero)" "400" "$(curl $ingestUrl -X POST $(cert_arg ${memberName}) -H "Content-Type: application/json" --data-binary "[]" $only_status_code)"
 check_eq "${memberName} - JSON data ingest failed (data is null)"        "400" "$(curl $ingestUrl -X POST $(cert_arg ${memberName}) -H "Content-Type: application/json" --data-binary "" $only_status_code)"
-check_eq "${memberName} - JSON data ingest succeeded"                    "200" "$(curl $ingestUrl -X POST $(cert_arg ${memberName}) -H "Content-Type: application/json" --data-binary "@../../test/data-samples/${memberName}_data.json" $only_status_code)"
+check_eq "${memberName} - JSON data ingest succeeded"                    "200" "$(curl $ingestUrl -X POST $(cert_arg ${memberName}) -H "Content-Type: application/json" --data-binary "@./test/data-samples/${memberName}_data.json" $only_status_code)"
 
 printf " ---\n"
 memberName="member2"
-check_eq "${memberName} - JSON data ingest succeeded" "200" "$(curl $ingestUrl -X POST $(cert_arg ${memberName}) -H "Content-Type: application/json" --data-binary "@../../test/data-samples/${memberName}_data.json" $only_status_code)"
+check_eq "${memberName} - JSON data ingest succeeded" "200" "$(curl $ingestUrl -X POST $(cert_arg ${memberName}) -H "Content-Type: application/json" --data-binary "@./test/data-samples/${memberName}_data.json" $only_status_code)"
 
 addCheckpoint "🎬 Ingestion Stage Complete"
 
@@ -167,7 +180,7 @@ addCheckpoint "🎬 LACK_OF_CONSENSUS DATA"
 printf "\n  -------- Report Change --------  \n\n"
 
 memberName="member0"
-check_eq "${memberName} - JSON data ingest succeeded" "200" "$(curl $ingestUrl -X POST $(cert_arg ${memberName}) -H "Content-Type: application/json" --data-binary "@../../test/data-samples/${memberName}_data_pt2.json" $only_status_code)"
+check_eq "${memberName} - JSON data ingest succeeded" "200" "$(curl $ingestUrl -X POST $(cert_arg ${memberName}) -H "Content-Type: application/json" --data-binary "@./test/data-samples/${memberName}_data_pt2.json" $only_status_code)"
 printf "🎬 ${memberName} successfully ingested additional/updated data.\n"
 
 memberName="member2"
@@ -221,6 +234,8 @@ assert_report_field "${memberName}" ${recordId} "members_in_agreement"   "2"
 memberName="member2"
 recordId="984500E1B2CA1D4EKG67"
 printf "\nChecking fields for ${memberName} and id ${recordId} (Lack of Consensus with Majority of votes)\n"
+assert_report_field "${memberName}" ${recordId} "lei"                    "\"${recordId}\"" 
+assert_report_field "${memberName}" ${recordId} "nace"                   "\"A01.1\"" 
 assert_report_field "${memberName}" ${recordId} "group_status"           "\"LACK_OF_CONSENSUS\"" 
 assert_report_field "${memberName}" ${recordId} "majority_minority"      "\"Majority\"" 
 assert_report_field "${memberName}" ${recordId} "count_of_unique_values" "2" 
@@ -229,6 +244,8 @@ assert_report_field "${memberName}" ${recordId} "members_in_agreement"   "2"
 memberName="member0"
 recordId="984500E1B2CA1D4EKG67"
 printf "\nChecking fields for ${memberName} and id ${recordId} (Lack of Consensus with Minority of votes)\n"
+assert_report_field "${memberName}" ${recordId} "lei"                    "\"${recordId}\"" 
+assert_report_field "${memberName}" ${recordId} "nace"                   "\"A.01.1\"" 
 assert_report_field "${memberName}" ${recordId} "group_status"           "\"LACK_OF_CONSENSUS\"" 
 assert_report_field "${memberName}" ${recordId} "majority_minority"      "\"Minority\"" 
 assert_report_field "${memberName}" ${recordId} "count_of_unique_values" "2" 
@@ -244,6 +261,8 @@ assert_report_field "${memberName}" ${recordId} "members_in_agreement"   "3"
 memberName="member1"
 recordId="984500E1B2CA1D4EKG67"
 printf "\nChecking fields for ${memberName} and id ${recordId} (Lack Of Consensus)\n"
+assert_report_field "${memberName}" ${recordId} "lei"                    "\"${recordId}\"" 
+assert_report_field "${memberName}" ${recordId} "nace"                   "\"A01.1\"" 
 assert_report_field "${memberName}" ${recordId} "group_status" "\"LACK_OF_CONSENSUS\"" 
 
 memberName="member1"
