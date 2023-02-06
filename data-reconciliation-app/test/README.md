@@ -89,4 +89,4 @@ The application is currently supporting two JWT token issuers (identity provider
       - Replace `MS_APP_ID_URI` by `ApiIdentifierUri`
       - Replace `MS_APP_ID`: by `ClientApplicationId`
     - Run `make generate-access-token` to generate a new token.
-    - Run ` make start-host-jwt-host` and request `/app/swagger` endpoint then click on `authorize`.
+    - Run `make start-host-jwt-host` and request `/app/swagger` endpoint then click on `authorize`.
