@@ -78,3 +78,14 @@ clean: ## 🧹 Clean the working folders created during build/demo
 	@rm -rf .venv_ccf_sandbox
 	@rm -rf workspace
 	@rm -rf dist
+
+# The following are here in case you forget to change directory!
+
+generate-access-token: ## 🔐 Generate and access token
+	@cd .. && $(MAKE) generate-access-token
+
+deploy-mccf: ## 🚀 Deploy Managed CCF
+	@cd .. && $(MAKE) deploy-mccf
+
+deploy-ms-idp: ## 🔐 Create an Identity Provider
+	@cd .. && $(MAKE) deploy-ms-idp
