@@ -74,3 +74,19 @@ make test                      # Run end-to-end(e2e) tests in a sandbox (virtual
 **To Run the application's e2e-tests on a Managed CCF**
   - First, create a Managed CCF instance on your Azure subscription. Please follow [here](https://github.com/microsoft/ccf-app-samples/tree/main/deploy#deploying-the-ccf-samples)
   - Run the e2e-test, please follow [here](https://github.com/microsoft/ccf-app-samples/tree/main/deploy#deploying-a-ccf-application-to-azure-managed-ccf)
+
+## Test JWT tokens
+
+The application currently supports two JWT token issuers (identity providers):
+- **Test Idp:** custom implementation to simulate a token issuer to test your application locally.
+  - *Generate test tokens*: `/.workspace/proposals/set_jwt_issuer_test_sandbox.json` contains pre-generated tokens you can use to test the application endpoints using JWT authentication.
+  - Run ` make start-host` and request `/app/swagger` endpoint then `authorize`
+- **Microsoft Azure Active Directory Identity Provider:** integration sample with MS-AAD Idp
+  - *Generate test tokens*: before you can complete this step, two applications must be registered at the Azure AD tenant, follow [here](https://learn.microsoft.com/en-us/azure/active-directory/develop/quickstart-register-app) 
+  
+    - To create the required registered applications run `make deploy-ms-idp`.
+    - Update `src/services/authentication-service.ts` with environment values in `aad.env` file created by the previous step: 
+      - Replace `MS_APP_ID_URI` by `ApiIdentifierUri`
+      - Replace `MS_APP_ID`: by `ClientApplicationId`
+    - Run `make generate-access-token` to generate a new token.
+    - Run `make start-host-jwt-host` and request `/app/swagger` endpoint then click on `authorize`.
