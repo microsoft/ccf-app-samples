@@ -84,17 +84,23 @@ clean: ## 🧹 Clean the working folders created during build/demo
 	@rm -rf workspace
 	@rm -rf dist
 
-# Generate a MS-Idp AAD (Azure active directory) JWT (app-to-app) token for the application testing;
-generate-jwt-token: # Generate an Azure AD access tokens for authentication
-	@echo "########################################################################"
-	@echo "## Generate a JWT token for the application; two applications must be registered in the Azure AD tenant"
-	@echo "## Follow: https://learn.microsoft.com/en-us/azure/active-directory/develop/quickstart-register-app"
-	@echo "# 1. Create the application that is used to generate the token (CCF api consumer) and generate the client certificate and secret"
-	@echo "# 2. Create the application that is used to authenticate the token (the CCF API application) and expose the API"
-	@echo "# 3. Replace client_id and client_secret with the values from the first application that is used to generate the token"
-	@echo "# 4. Replace scope with the second application (Application ID URI) "
-	@echo "# 5. Replace src/services/authentication-service.ts>"MS_APP_ID_URI" with the second application (Application ID URI) "
-	@echo "########################################################################"
-	@curl -X POST https://login.microsoftonline.com/16b3c013-d300-468d-ac64-7eda0820b6d3/oauth2/v2.0/token \
-	-H "Content-Type: application/x-www-form-urlencoded" \
-	-d "client_id=${Client_Id}&client_secret=${Client_Secret}&scope=api://b8dbd573-a015-424b-b111-2d5fa11cee3c/.default&grant_type=client_credentials"
+# The following are here in case you forget to change directory!
+
+generate-access-token: ## 🔐 Generate and access token
+	@cd .. && $(MAKE) generate-access-token
+
+deploy-mccf: ## 🚀 Deploy Managed CCF
+	@cd .. && $(MAKE) deploy-mccf
+
+deploy-ms-idp: ## 🔐 Create an Identity Provider
+	@cd .. && $(MAKE) deploy-ms-idp
+
+deploy-app-to-sandbox: build ## 🧪 Deploy the Data Reconciliation Application to a network
+	@echo -e "\e[34m$@\e[0m" || true
+	@. ../scripts/submit_proposal.sh --network-url "https://127.0.0.1:8000" --proposal-file ./dist/set_js_app.json --certificate_dir "./workspace/sandbox_common" --member-count 2
+	@. ../scripts/submit_proposal.sh --network-url "https://127.0.0.1:8000" --proposal-file ./workspace/proposals/set_jwt_issuer_ms_proposal.json --certificate_dir "./workspace/sandbox_common" --member-count 2
+
+deploy-app-to-mccf: build ## 🧪 Deploy the Data Reconciliation Application to a network
+	@echo -e "\e[34m$@\e[0m" || true
+	@. ../scripts/submit_proposal.sh --network-url "https://reconciliationapp.confidential-ledger.azure.com" --proposal-file ./dist/set_js_app.json --certificate_dir "./workspace/mccf_certificates" --member-count 2
+	@. ../scripts/submit_proposal.sh --network-url "https://reconciliationapp.confidential-ledger.azure.com" --proposal-file ./workspace/proposals/set_jwt_issuer_ms_proposal.json --certificate_dir "./workspace/mccf_certificates" --member-count 2
