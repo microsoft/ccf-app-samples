@@ -1,10 +1,10 @@
 import * as ccfapp from "@microsoft/ccf-app";
-import { ServiceResult } from "../../utils/service-result";
-import { IJwtIdentityProvider } from "../Jwt-validation";
+import { ServiceResult } from "../../../utils/service-result";
+import { IJwtIdentityProvider } from "./jwt-validation";
 
 /**
-   * MS Access Token
-*/
+ * MS Access Token
+ */
 export interface MSAccessToken {
   sub: string;
   iss: string;
@@ -13,16 +13,17 @@ export interface MSAccessToken {
   ver: string;
 }
 
-export class MsIdProvider implements IJwtIdentityProvider  {
-   /**
+export class MsJwtProvider implements IJwtIdentityProvider {
+  /**
    * Check if caller's access token is valid
    * @param {JwtAuthnIdentity} identity JwtAuthnIdentity object
    * @returns {ServiceResult<string>}
    */
-  public isValidJwtToken(identity: ccfapp.JwtAuthnIdentity): ServiceResult<string> {
-      
+  public isValidJwtToken(
+    identity: ccfapp.JwtAuthnIdentity
+  ): ServiceResult<string> {
     const msClaims = identity.jwt.payload as MSAccessToken;
-      
+
     // check if token has the right version
     if (msClaims.ver !== "1.0") {
       return ServiceResult.Failed({
@@ -34,7 +35,7 @@ export class MsIdProvider implements IJwtIdentityProvider  {
     // Replace the below string with your own app id by registering an app in Azure:
     // https://docs.microsoft.com/en-us/azure/active-directory/develop/quickstart-register-app
     // MS_APP_ID and MS_APP_ID_URI added here for clarity
-    // In production, both the MS_APP_ID and MS_APP_ID_URI should be read from the configuration store 
+    // In production, both the MS_APP_ID and MS_APP_ID_URI should be read from the configuration store
     const MS_APP_ID = "ee48548a-7d69-4b8e-b2d4-805e8bac7f01";
     const MS_APP_ID_URI = "api://b8dbd573-a015-424b-b111-2d5fa11cee3c";
 
@@ -49,7 +50,8 @@ export class MsIdProvider implements IJwtIdentityProvider  {
     // check if token audience is for this app
     if (msClaims.aud !== MS_APP_ID_URI) {
       return ServiceResult.Failed({
-        errorMessage: "Error: jwt validation failed: aud mismatch (incorrect scope requested?)",
+        errorMessage:
+          "Error: jwt validation failed: aud mismatch (incorrect scope requested?)",
         errorType: "AuthenticationError",
       });
     }
@@ -61,5 +63,5 @@ export class MsIdProvider implements IJwtIdentityProvider  {
 /**
  * Export jwt validator
  */
-const msIdProvider: IJwtIdentityProvider = new MsIdProvider()
-export default msIdProvider;
+const msJwtProvider: IJwtIdentityProvider = new MsJwtProvider();
+export default msJwtProvider;
