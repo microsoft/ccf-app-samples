@@ -1,7 +1,7 @@
 import Api, { ReportItem } from './api';
 import https from 'https';
 import fs from 'fs';
-import { member0DataPart1, member0DataPart2, member1Data, member2Data } from './data';
+import { csvDataWrongSchema, member0DataPart1, member0DataPart2, member1Data, member2Data } from './data';
 
 const serverUrl = process.env.SERVER!;
 const certificateStorePath = process.env.CERTS_FOLDER!;
@@ -45,47 +45,82 @@ class Demo {
          */
         process.chdir('../../');
 
-        this.printTestSectionHeader('🏁 Starting e2e Tests on server ${serverUrl}... ');
+        this.printTestSectionHeader('🏁 Starting e2e Tests on server ${serverUrl}');
 
         for (const memberId of this.memberIds) {
             const member = this.createMember(memberId);
             this.members.push(member);
         }
 
-        this.printTestSectionHeader('🔬 [TEST]:Data Ingestion...');
+        this.printTestSectionHeader('🔬 [TEST]: Data Ingestion Service');
+
+        console.log(`📝 Ingestion Service Validations...`);
+        const dummyMember = this.createMember(this.memberIds[0]);
+        dummyMember.data = csvDataWrongSchema;
+        await Api.checkPostResponseResult(this.demoProps.ingestCsvUrl, dummyMember, 400, 'CSV data ingest failed (wrong schema)');
+        dummyMember.data = member0DataPart2;
+        await Api.checkPostResponseResult(this.demoProps.ingestCsvUrl, dummyMember, 400, 'CSV data ingest failed (wrong file)');
+        dummyMember.data = [];
+        await Api.checkPostResponseResult(this.demoProps.ingestUrl, dummyMember, 400, 'JSON data ingest failed (data length is zero)');
+        dummyMember.data = null;
+        await Api.checkPostResponseResult(this.demoProps.ingestUrl, dummyMember, 400, 'JSON data ingest failed (data is null)');
+        console.log('---');
 
         // member 0 ingests data through CSV endpoint, members 1 & 2 through JSON
+        console.log(`📝 Members Ingesting Data...`);
         await Api.ingest(this.demoProps.ingestCsvUrl, this.members[0]);
         await Api.ingest(this.demoProps.ingestUrl, this.members[1]);
         await Api.ingest(this.demoProps.ingestUrl, this.members[2]);
 
-        this.printTestSectionHeader('🔬 [TEST]:Data Reporting...');
+        this.printTestSectionHeader('🔬 [TEST]: Data Reporting Service (Full Report)');
 
         for (const member of this.members) {
             await Api.report(this.demoProps, member);
         }
 
-        this.printTestSectionHeader('🔬 [TEST]: Report Changes...');
+        this.printTestSectionHeader('🔬 [TEST]:Data Reporting Service (GetById)');
+
+        console.log(`📝 Reporting Service Validations...`);
+        await Api.checkGetResponseResult(`${this.demoProps.ingestUrl}/10`, dummyMember, 404, 'Getting report by key_not_exist should fail');
+        console.log('---');
+
+        let member = this.members[2];
+        const id_inConsensus = '984500F5BD5BE5767C51';
+        const id_notEnoughData = '984500BA57A56NBD3A24';
+        const id_lackOfConsensus = '9845001D460PEJE54159';
+        // group status for this key changes from LackOfConsensus to InConsensus during the demo 
+        const id_newGroupStatus = id_lackOfConsensus;
+
+        console.log(`\n📝 ${member.name} - IN CONSENSUS Example: id: ${id_inConsensus}`);
+        let reportItem = await Api.reportById(this.demoProps, member, id_inConsensus);
+        this.assertReportField(member.name, reportItem, 'group_status', 'IN_CONSENSUS');
+
+        console.log(`\n📝 ${member.name} - NOT ENOUGH DATA Example: id: ${id_notEnoughData}`);
+        reportItem = await Api.reportById(this.demoProps, member, id_notEnoughData);
+        this.assertReportField(member.name, reportItem, 'group_status', 'NOT_ENOUGH_DATA');
+
+        console.log(`\n📝 ${member.name} - LACK OF CONSENSUS Example: id: ${id_lackOfConsensus}`);
+        reportItem = await Api.reportById(this.demoProps, member, id_lackOfConsensus);
+        this.assertReportField(member.name, reportItem, 'group_status', 'LACK_OF_CONSENSUS');
+
+        this.printTestSectionHeader('🔬 [TEST]: Report Changes');
 
         // new Ingestion for member 0 is through JSON
-        const member0 = this.members[0];
-        member0.data = member0DataPart2;
-        await Api.ingest(this.demoProps.ingestUrl, member0);
+        member = this.members[0];
+        member.data = member0DataPart2;
+        console.log(`📝 ${member.name} Ingesting new Data...`);
+        await Api.ingest(this.demoProps.ingestUrl, member);
 
-        const reportItems = await Api.report(this.demoProps, member0);
-
-        if (reportItems.length !== 12) {
-            throw new Error(`🛑 [TEST FAILURE]: Unexpected number of items in the report: ${reportItems.length}`);
-        } else {
-            console.log(`✅ [PASS] - ${reportItems.length} items in the report`);
-        }
+        member = this.members[2];
+        console.log(`📝 ${member.name} Data Status changes for id: ${id_newGroupStatus}...`);
+        reportItem = await Api.reportById(this.demoProps, member, id_newGroupStatus);
+        this.assertReportField(member.name, reportItem, 'group_status', 'IN_CONSENSUS');
 
         this.printTestSectionHeader('Test Suite - Assertion checks on report fields...');
 
-        let member = this.members[2];
         let recordId = '984500F5BD5BE5767C51';
         console.log(`\nChecking ALL fields for ${member.name} and id ${recordId} (In Consensus)\n`);
-        let reportItem = await Api.reportById(this.demoProps, member, recordId);
+        reportItem = await Api.reportById(this.demoProps, member, recordId);
         this.assertReportField(member.name, reportItem, 'group_status', 'IN_CONSENSUS');
         this.assertReportField(member.name, reportItem, 'majority_minority', 'Majority');
         this.assertReportField(member.name, reportItem, 'count_of_unique_values', 1);
@@ -187,9 +222,9 @@ class Demo {
     }
 
     private static printTestSectionHeader(title: string) {
-        console.log('\n===============================');
+        console.log('\n===============================================');
         console.log(`${title}`);
-        console.log('===============================\n');
+        console.log('===============================================');
     }
 }
 
