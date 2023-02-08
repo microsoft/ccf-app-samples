@@ -11,7 +11,7 @@ function usage {
     echo ""
     echo "Open a network in mCCF and then run the tests."
     echo ""
-    echo "usage: ./test_mccf.sh --address <ADDRESS> --signing-cert <CERT> --signing-key <CERT>"
+    echo "usage: ./test_mccf.sh --address <ADDRESS> --signing-cert <CERT> --signing-key <CERT> [--interactive]"
     echo ""
     echo "  --address       string      The address of the primary CCF node"
     echo "  --signing-cert  string      The signing certificate (member0)"
