@@ -2,7 +2,7 @@
 
 ## Context
 
-We allow developer documentation, exploration, and testing for the application endpoints with OpenAPI documentation using [Swagger UI.](https://github.com/swagger-api/swagger-ui). In this document, we will visit different options on how to provide this endpoint securely.
+We allow developer documentation, exploration, and testing of the application endpoints with OpenAPI using [Swagger UI](https://github.com/swagger-api/swagger-ui). In this document, we will visit different options on how to provide [Swagger UI](https://github.com/swagger-api/swagger-ui) endpoint securely.
 
 As explained in [Third Party JavaScript Management Cheat Sheet by owasp.org](https://cheatsheetseries.owasp.org/cheatsheets/Third_Party_Javascript_Management_Cheat_Sheet.html), the invocation of third-party JS code in a web application requires consideration for 3 risks in particular:
 
@@ -24,7 +24,7 @@ Following strategies can be implemented to mitigate the above risks.
 
 ### 1. External Script Hash
 
-[Content Security Policy (CSP)](https://www.w3.org/TR/CSP3/#external-hash) offers using a `hash` to allow the execution of specific scripts on a page in a way that ensures that the content matches their expectations.
+[Content Security Policy (CSP)](https://www.w3.org/TR/CSP3/#external-hash) offers using a `hash` to allow the execution of specific scripts on a page that ensures the content matches their expectations.
 
 First step is to use the `Content-Security-Policy` HTTP response header field. It is the preferred mechanism for delivering a policy from a server to a client. 
 
@@ -57,23 +57,26 @@ While the following script elements would not execute because they contain valid
 <script integrity="sha256-abc123 sha384-xyz789 sha512-321cba" ...></script>
 ```
 
-To implement this option, we have to calculate the `hash` of all these external file content and include in the headers:
+To implement this option, we have to calculate the `hash` of all external file content and include in the headers:
 
 ```bash
 echo -n 'doSomething();' | openssl sha256 -binary | openssl base64
 ```
 
-The `hash` will be then attached to the all script tags respectively.
+The `hash` will be then attached to the script tags respectively.
 
 ```html
 <script integrity="sha256-abc123" ...></script>
 ```
+----
 
 ### 2. Import npm package and serve from TS
 
-[Swagger UI](https://www.npmjs.com/package/swagger-ui) documentation strongly suggest that we use `swagger-ui` instead of `swagger-ui-dist` if you're building a single-page application, since swagger-ui-dist is significantly larger. They suggest using `swagger-ui` when the tooling makes it possible, as `swagger-ui-dist` will result in more code going across the wire.
+> **⚠️ This option requires further investigation on server side rendering of this package. As we are building an API and not a SPA, due to Swagger UI doesn't support server side rendering functionality, we will disregard this option.**
 
-Using [Swagger UI](https://www.npmjs.com/package/swagger-ui), we can implement this package in our endpoint:
+[Swagger UI](https://www.npmjs.com/package/swagger-ui) documentation strongly suggest that we use `swagger-ui` instead of `swagger-ui-dist` since swagger-ui-dist is significantly larger. They suggest using `swagger-ui` when the tooling makes it possible, as `swagger-ui-dist` will result in more code going across the wire.
+
+Using [Swagger UI](https://www.npmjs.com/package/swagger-ui), we can implement this package in our endpoint if we were to build a SPA.
 
 ```typescript
 import * as ccfapp from "@microsoft/ccf-app";
@@ -100,12 +103,9 @@ export function getSwaggerUI(): ccfapp.Response<string> {
 };
 ```
 
-
-
-
 ### 3. Download external script and serve from the local repo
 
-This option is implemeented by simply downloading the following script and css files and save to this repo and include them by a relative path.
+This option is implemeented by simply downloading the following script and css files and commit to this repo. These files will be imported to the HTML by a relative path.
 
 Scripts to download:
 
@@ -121,7 +121,7 @@ CSS to download:
 https://unpkg.com/swagger-ui-dist@4.5.0/swagger-ui.css
 ```
 
-The HTML created to serve the swagger ui will be updated to:
+The HTML created to serve the swagger ui will be updated to relative paths:
 
 ```html
 <head>
@@ -133,13 +133,19 @@ The HTML created to serve the swagger ui will be updated to:
 </head>
 ```
 
-
 ## Decision
 
+| Options  | Implementation Complexity | Maintanence | Security Concerns |
+| -------  | ------------------------- | ----------- | ----------------- |
+| Option 1 | Moderate                  | Moderate    | Covered           |
+| Option 2 | Hard                      | Hard        | Covered           |
+| Option 3 | Easy                      | Easy        | Covered           |
 
+**Decision**: TBC
 
 ## Consequences
 
+TBC depending on decision
 
 ## References
 
