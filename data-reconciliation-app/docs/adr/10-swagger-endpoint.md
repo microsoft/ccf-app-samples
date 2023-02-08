@@ -8,7 +8,7 @@ As explained in [Third Party JavaScript Management Cheat Sheet by owasp.org](htt
 
 **1. The loss of control over changes to the client application**
 
-This risk arises from the fact that there is usually no guaranty that the code hosted at the third-party will remain the same as seen from the developers and testers: new features may be pushed in the third-party code at any time, thus potentially breaking the interface or data-flows and exposing the availability of your application to its users/customers.
+This risk arises from the fact that there is usually no guarantee that the code hosted at the third-party will remain the same as seen from the developers and testers: new features may be pushed in the third-party code at any time, thus potentially breaking the interface or data-flows and exposing the availability of your application to its users/customers.
 
 **2. The execution of arbitrary code on client systems**
 
