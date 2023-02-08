@@ -28,7 +28,8 @@ demo: ## 🎬 Demo an Application
 
 deploy-mccf: ## 🚀 Deploy Managed CCF
 	@echo -e "\e[34m$@\e[0m" || true
-	cd deploy && pwsh ./New-ManagedCCF.ps1
+	@cd deploy && /opt/ccf_virtual/bin/keygenerator.sh --name member0
+	@cd deploy && pwsh ./New-ManagedCCF.ps1 -PEMFilename member0_cert.pem
 
 deploy-ms-idp: ## 🔐 Create an Identity Provider
 	@echo -e "\e[34m$@\e[0m" || true
