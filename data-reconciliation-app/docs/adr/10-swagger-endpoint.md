@@ -141,11 +141,13 @@ The HTML created to serve the swagger ui will be updated to relative paths:
 | Option 2 | Hard                      | Hard        | Covered           |
 | Option 3 | Easy                      | Easy        | Covered           |
 
-**Decision**: TBC
+**Decision**: 
+
+Option 1 is the most lightweight and flexible option (integrity with the flexibility to serve from anywhere), but assumes client-side support.
 
 ## Consequences
 
-TBC depending on decision
+- `/swagger` endpoints need to implement `Content-Security-Policy`
 
 ## References
 
