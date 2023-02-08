@@ -105,7 +105,7 @@ export function getSwaggerUI(): ccfapp.Response<string> {
 
 ### 3. Download external script and serve from the local repo
 
-This option is implemeented by simply downloading the following script and css files and commit to this repo. These files will be imported to the HTML by a relative path.
+This option is implemented by simply downloading the following script and css files and commit to this repo. These files will be imported to the HTML by a relative path.
 
 Scripts to download:
 
