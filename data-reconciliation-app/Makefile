@@ -70,6 +70,13 @@ demo-docker: build-virtual ## 🎬 Demo the Data Reconciliation Application in a
 	@echo -e "\e[34m$@\e[0m" || true
 	@. ../scripts/test_docker.sh --virtual --serverIP 172.17.0.3 --port 8080 --interactive
 
+demo-mccf: build ## 🎬 Demo the Data Reconciliation Application in a Managed CCF environment
+	@echo -e "\e[34m$@\e[0m" || true
+	$(call check_defined, CCF_NAME)
+	$(call check_defined, PUBLIC_CERT)
+	$(call check_defined, PRIVATE_CERT)
+	@. ../scripts/test_mccf.sh --address "${CCF_NAME}.confidential-ledger.azure.com" --signing-cert "${PUBLIC_CERT}" --signing-key "${PRIVATE_CERT}" --interactive
+
 # This target is specifically for a demo in a pre-configured mCCF network running this application. It does not run without it
 # 1. run `make demo`
 # 2. make a code change to Line 72 - /workspaces/ccf-app-samples/data-reconciliation-app/src/models/data-schema.ts
