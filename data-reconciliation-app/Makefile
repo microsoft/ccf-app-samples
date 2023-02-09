@@ -84,28 +84,12 @@ demo-code-change: build ## 🎬 Demo the Data Reconciliation Application Code Ch
 	$(call check_defined, CCF_NAME)
 	@./test/code_change_demo.sh --address "${CCF_NAME}.confidential-ledger.azure.com" --interactive
 
-clean: ## 🧹 Clean the working folders created during build/demo
-	@rm -rf .venv_ccf_sandbox
-	@rm -rf workspace
-	@rm -rf dist
-
-# The following are here in case you forget to change directory!
-
-generate-access-token: ## 🔐 Generate and access token
-	@cd .. && $(MAKE) generate-access-token
-
-deploy-mccf: ## 🚀 Deploy Managed CCF
-	@cd .. && $(MAKE) deploy-mccf
-
-deploy-ms-idp: ## 🔐 Create an Identity Provider
-	@cd .. && $(MAKE) deploy-ms-idp
-
-deploy-app-to-sandbox: build ## 🧪 Deploy the Data Reconciliation Application to a network
+deploy-app-to-sandbox: build ## 🚀 Deploy the Data Reconciliation Application to the sandbox
 	@echo -e "\e[34m$@\e[0m" || true
 	@. ../scripts/submit_proposal.sh --network-url "https://127.0.0.1:8000" --proposal-file ./dist/set_js_app.json --certificate_dir "./workspace/sandbox_common" --member-count 2
 	@. ../scripts/submit_proposal.sh --network-url "https://127.0.0.1:8000" --proposal-file ./workspace/proposals/set_jwt_issuer_ms_proposal.json --certificate_dir "./workspace/sandbox_common" --member-count 2
 
-deploy-app-to-mccf: build ## 🧪 Deploy the Data Reconciliation Application to a network
+deploy-app-to-mccf: build ## 🚀 Deploy the Data Reconciliation Application to Managed CCF
 	@echo -e "\e[34m$@\e[0m" || true
 	@. ../scripts/submit_proposal.sh --network-url "https://${CCF_NAME}.confidential-ledger.azure.com" --proposal-file ./dist/set_js_app.json --certificate_dir "./workspace/mccf_certificates" --member-count 2
 	@. ../scripts/submit_proposal.sh --network-url "https://${CCF_NAME}.confidential-ledger.azure.com" --proposal-file ./workspace/proposals/set_jwt_issuer_ms_proposal.json --certificate_dir "./workspace/mccf_certificates" --member-count 2
