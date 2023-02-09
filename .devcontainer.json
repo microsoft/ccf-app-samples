@@ -1,24 +1,28 @@
 {
   "name": "CCF Samples",
   "image": "mcr.microsoft.com/ccf/app/dev:3.0.1-virtual",
-  "extensions": [
-    "ms-vscode.cpptools",
-    "vsls-contrib.codetour",
-    "esbenp.prettier-vscode",
-    "timonwong.shellcheck",
-    "github.vscode-pull-request-github"
-  ],
-  "settings": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true,
-    "editor.codeActionsOnSave": {
-      "source.fixAll": true
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vscode.cpptools",
+        "vsls-contrib.codetour",
+        "esbenp.prettier-vscode",
+        "timonwong.shellcheck",
+        "github.vscode-pull-request-github"
+      ],
+      "settings": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+          "source.fixAll": true
+        }
+      }
     }
   },
   "postStartCommand": "scripts/devContainer_OnStart.sh",
   "features": {
-    "ghcr.io/devcontainers/features/docker-from-docker:1": {
-      "version": "20.10.8"
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
+      "version": "20.10.21"
     },
     "ghcr.io/devcontainers/features/node:1": {
       "version": "16.17.0",

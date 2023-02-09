@@ -5,16 +5,18 @@ declare app_dir=$PWD                   # application folder for reference
 declare certificate_dir="${app_dir}/workspace/mccf_certificates"
 declare signing_cert=""
 declare signing_key=""
+declare interactive=0
 
 function usage {
     echo ""
     echo "Open a network in mCCF and then run the tests."
     echo ""
-    echo "usage: ./test_mccf.sh --address <ADDRESS> --signing-cert <CERT> --signing-key <CERT>"
+    echo "usage: ./test_mccf.sh --address <ADDRESS> --signing-cert <CERT> --signing-key <CERT> [--interactive]"
     echo ""
     echo "  --address       string      The address of the primary CCF node"
     echo "  --signing-cert  string      The signing certificate (member0)"
     echo "  --signing-key   string      The signing key (member0)"
+    echo "  --interactive   boolean     Optional. Run in Demo mode"
     echo ""
 }
 
@@ -25,7 +27,7 @@ function failed {
 
 # parse parameters
 
-if [ $# -gt 6 ]; then
+if [ $# -gt 7 ]; then
     usage
     exit 1
 fi
@@ -36,6 +38,7 @@ do
         --address) address="$2"; shift 2;;
         --signing-cert) signing_cert="$2"; shift 2;;
         --signing-key) signing_key="$2"; shift 2;;
+        --interactive) interactive=1; shift;;
         --help) usage; exit 0;;
         *) usage; exit 1;;
     esac
@@ -70,4 +73,18 @@ echo -e "${certAsString}" > "${certificate_dir}/service_cert.pem"
 echo -e "${signing_cert}" > "${certificate_dir}/member0_cert.pem"
 echo -e "${signing_key}" > "${certificate_dir}/member0_privk.pem"
 "$app_dir/governance/scripts/setup_governance.sh" --nodeAddress "${address}" --certificate_dir "$certificate_dir"
-"$app_dir/test/test.sh" --nodeAddress "${address}" --certificate_dir "$certificate_dir"
+
+testScript="$app_dir/test/test.sh"
+if [ ! -f "$testScript" ]; then
+    echo "💥📂 Test file $testScript not found."
+    exit 1
+fi
+
+# build testScript command
+testScript="${testScript} --nodeAddress ${address} --certificate_dir $certificate_dir"
+if [ $interactive -eq 1 ]; then
+    testScript="${testScript} --interactive"
+fi
+
+# call testScript command
+${testScript}
