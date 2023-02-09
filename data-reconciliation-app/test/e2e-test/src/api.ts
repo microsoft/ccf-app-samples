@@ -10,6 +10,34 @@ export interface ReportItem {
     nace: string;
 }
 
+export interface ValidationProps {
+    url: string;
+    method: 'GET' | 'POST';
+    member: DemoMemberProps;
+    expectedStatus: number;
+    testMessage: string;
+}
+
+export class Validator {
+    public static async validateRequest(props: ValidationProps) {
+        const result = await axios({
+            method: props.method,
+            url: props.url,
+            data: props.member.data,
+            httpsAgent: props.member.httpsAgent,
+            validateStatus: function (status) {
+                return status < 500; // Resolve only if the status code is less than 500
+            },
+        });
+
+        if (result.status !== props.expectedStatus) {
+            throw new Error(`🛑 [TEST FAILURE]: ${props.member.name} - ${props.testMessage}: ${props.expectedStatus} expected, but got ${result.status}.`);
+        }
+
+        console.log(`✅ [PASS] ${props.member.name} - ${props.testMessage}`);
+    }
+}
+
 export default class Api {
     public static async ingest(apiUrl: string, member: DemoMemberProps) {
         const result = await axios.post(apiUrl, member.data, { httpsAgent: member.httpsAgent });
@@ -49,35 +77,5 @@ export default class Api {
         console.table(result.data.content);
 
         return result.data.content;
-    }
-
-    public static async checkPostResponseResult(apiUrl: string, member: DemoMemberProps, expectedStatus: number, testMessage: string) {
-        const result = await axios.post(apiUrl, member.data, {
-            httpsAgent: member.httpsAgent,
-            validateStatus: function (status) {
-                return status < 500; // Resolve only if the status code is less than 500
-            },
-        });
-
-        if (result.status !== expectedStatus) {
-            throw new Error(`🛑 [TEST FAILURE]: ${member.name} - ${testMessage}: ${expectedStatus} expected, but got ${result.status}`);
-        }
-
-        console.log(`✅ [PASS] ${member.name} - ${testMessage}`);
-    }
-
-    public static async checkGetResponseResult(apiUrl: string, member: DemoMemberProps, expectedStatus: number, testMessage: string) {
-        const result = await axios.get(apiUrl, {
-            httpsAgent: member.httpsAgent,
-            validateStatus: function (status) {
-                return status < 500; // Resolve only if the status code is less than 500
-            },
-        });
-
-        if (result.status !== expectedStatus) {
-            throw new Error(`🛑 [TEST FAILURE]: ${member.name} - ${testMessage}: ${expectedStatus} expected, but got ${result.status}`);
-        }
-
-        console.log(`✅ [PASS] ${member.name} - ${testMessage}`);
     }
 }
