@@ -97,7 +97,6 @@ $ClientAppManifest = @{
     Web = @{
         ImplicitGrantSettings = @{
             EnableAccessTokenIssuance= $true
-            EnableIdTokenIssuance = $true
         }
     }
 }
