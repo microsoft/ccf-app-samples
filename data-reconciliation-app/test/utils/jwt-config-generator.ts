@@ -4,6 +4,8 @@ import * as crypto from "crypto";
 import forge from "node-forge";
 import { KeyPairSyncResult } from "crypto";
 import axios from "axios";
+import http from "http";
+import https from "https";
 
 /**
  * Create the JWT issuer configs for (Test - Microsoft Azure Identity Provider).
@@ -19,13 +21,11 @@ export class JwtConfigsGenerator {
   public static async createSandboxTestJwtIssuerConfig(): Promise<any> {
     const proposalFilePath = `${this.workspaceFolderPath}/set_jwt_issuer_test_proposal.json`;
     const sandboxConfigFilePath = `${this.workspaceFolderPath}/set_jwt_issuer_test_sandbox.json`;
-    if (fs.existsSync(sandboxConfigFilePath) && fs.existsSync(proposalFilePath))
+    if (fs.existsSync(sandboxConfigFilePath) && fs.existsSync(proposalFilePath)) 
       return;
 
     // make sure the workspace folder exists.
-    await fs.promises
-      .mkdir(this.workspaceFolderPath, { recursive: true })
-      .catch(console.error);
+    await fs.promises.mkdir(this.workspaceFolderPath, { recursive: true }).catch(console.error);
 
     let keyId: string = "12345";
     let issuer: string = "https://demo";
@@ -43,13 +43,8 @@ export class JwtConfigsGenerator {
     const attrs = [{ name: "commonName", value: "Test" }];
     cert.setIssuer(attrs);
     cert.publicKey = forge.pki.publicKeyFromPem(keys.publicKey);
-    cert.sign(
-      forge.pki.privateKeyFromPem(keys.privateKey),
-      forge.md.sha256.create()
-    );
-    const certDer = forge.asn1
-      .toDer(forge.pki.certificateToAsn1(cert))
-      .getBytes();
+    cert.sign(forge.pki.privateKeyFromPem(keys.privateKey), forge.md.sha256.create());
+    const certDer = forge.asn1.toDer(forge.pki.certificateToAsn1(cert)).getBytes();
     const certDerB64 = forge.util.encode64(certDer);
     const jwtIssuer = {
       issuer: issuer,
@@ -106,25 +101,23 @@ export class JwtConfigsGenerator {
    * Create JWT issuer proposals for Microsoft Azure Identity Provider for sandbox, docker, and mCCF.
    */
   public static async createMSIdpJwtIssuerConfigs(): Promise<any> {
-    axios.defaults.timeout === 60000;
+    const httpAgent = new http.Agent({ keepAlive: true });
+    const httpsAgent = new https.Agent({ keepAlive: true });
+    const axiosInstance = axios.create();
+
     const proposalFilePath = `${this.workspaceFolderPath}/set_jwt_issuer_ms_proposal.json`;
     const sandboxConfigFilePath = `${this.workspaceFolderPath}/set_jwt_issuer_ms_sandbox.json`;
-    if (fs.existsSync(sandboxConfigFilePath) && fs.existsSync(proposalFilePath))
+    if (fs.existsSync(sandboxConfigFilePath) && fs.existsSync(proposalFilePath)) 
       return;
 
     // make sure the workspace folder exists.
-    await fs.promises
-      .mkdir(this.workspaceFolderPath, { recursive: true })
-      .catch(console.error);
+    await fs.promises.mkdir(this.workspaceFolderPath, { recursive: true }).catch(console.error);
 
     // Microsoft IDP config are provided by:https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration
     // Microsoft IDP keys are provided by: https://login.microsoftonline.com/common/discovery/v2.0/keys
     let issuer: string = "https://login.microsoftonline.com/common/v2.0";
-    const ms_openid_config = await axios.get(
-      `${issuer}/.well-known/openid-configuration`,
-      {}
-    );
-    const ms_jwks = await axios.get(ms_openid_config.data.jwks_uri, {});
+    const ms_openid_config = await axiosInstance.get(`${issuer}/.well-known/openid-configuration`, {});
+    const ms_jwks = await axiosInstance.get(ms_openid_config.data.jwks_uri, {});
 
     // create the sandbox config file for Microsoft IDP.
     const jwtIssuer = { issuer: issuer, jwks: ms_jwks.data };
@@ -137,7 +130,7 @@ export class JwtConfigsGenerator {
     // https://learn.microsoft.com/en-us/azure/security/fundamentals/azure-ca-details
     // DigiCert Global Root CA: https://crt.sh/?d=853428
 
-    const ca_cert = await axios.get("https://crt.sh/?d=853428", {});
+    const ca_cert = await axiosInstance.get("https://crt.sh/?d=853428", { httpAgent: httpAgent, httpsAgent: httpsAgent });
 
     let jwtIssuerProposal = {
       actions: [
@@ -169,6 +162,4 @@ export class JwtConfigsGenerator {
 await JwtConfigsGenerator.createSandboxTestJwtIssuerConfig();
 await JwtConfigsGenerator.createMSIdpJwtIssuerConfigs();
 
-console.log(
-  `JWT issuer configs are generated successfully!, Path: ${JwtConfigsGenerator.workspaceFolderPath}`
-);
+console.log(`JWT issuer configs are generated successfully!, Path: ${JwtConfigsGenerator.workspaceFolderPath}`);
