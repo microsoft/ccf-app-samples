@@ -4,7 +4,7 @@ SHELL := /bin/bash
 .DEFAULT_GOAL := help
 
 help: ## 💬 This help message :)
-	@grep -E '[a-zA-Z_-]+:.*?## .*$$' $(firstword $(MAKEFILE_LIST)) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
+	@grep -E '[a-zA-Z_-]+:.*?## .*$$' $(firstword $(MAKEFILE_LIST)) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-23s\033[0m %s\n", $$1, $$2}'
 
 lint: ## 🔍 Lint the code base (but don't fix)
 	@echo -e "\e[34m$@\e[0m" || true
@@ -28,7 +28,8 @@ demo: ## 🎬 Demo an Application
 
 deploy-mccf: ## 🚀 Deploy Managed CCF
 	@echo -e "\e[34m$@\e[0m" || true
-	cd deploy && pwsh ./New-ManagedCCF.ps1
+	@cd deploy && /opt/ccf_virtual/bin/keygenerator.sh --name member0
+	@cd deploy && pwsh ./New-ManagedCCF.ps1 -PEMFilename member0_cert.pem
 
 deploy-ms-idp: ## 🔐 Create an Identity Provider
 	@echo -e "\e[34m$@\e[0m" || true
