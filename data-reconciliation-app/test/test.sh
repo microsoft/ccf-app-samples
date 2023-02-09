@@ -70,6 +70,9 @@ do
     sleep 1
 done
 
+echo "-----"
+whoami
+echo "-----"
 ls -lrt ${certificate_dir}
 
 
