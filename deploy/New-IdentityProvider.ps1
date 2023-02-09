@@ -20,6 +20,7 @@ param(
 # The Magic Strings are well known Ids
 $MSGraphAppId="00000003-0000-0000-c000-000000000000"
 $ScopeUserRead="e1fe6dd8-ba31-4d61-89e7-88639da4683d"
+$userImpersonationScopeId=New-Guid
 
 # 1. Build a hashtable for all the things we want to output
 # into an .env for other scripts to use.
@@ -51,10 +52,32 @@ $APIApp = New-MgApplication @APIAppManifest
 $Output.Add("ApiApplicationId", $APIApp.AppId)
 $Output.Add("ApiIdentifierUri", "api://$($APIApp.AppId)")
 
+# Add a Service Principal to the API Application 
+$APIServicePrincipalManifest=@{
+  AppId = $APIApp.AppId
+  AccountEnabled = true
+}
+$APIServicePrincipal = New-MgServicePrincipal -BodyParameter $APIServicePrincipalManifest
+
+$oauth2PermissionScopes = @{
+    oauth2PermissionScopes =@(
+    @{
+            Id=$userImpersonationScopeId
+            IsEnabled = true
+            Type = "User"
+            AdminConsentDescription = "Access this API on behalf of a signed in user"
+            AdminConsentDisplayName = "User Impersonation (admin)"
+            UserConsentDescription = "Access this API on behalf of a signed in user"
+            UserConsentDisplayName = "User Impersonation"
+            Value = "user_impersonation"
+    }
+  )
+}
+
 # This application needs an Application ID URI so we can uniquely reference its Scopes.
 # The portal does this for us and uses the Id of the App that we have just created.
 # This could be api://MyUniqueDomain if we wanted.
-Update-MgApplication -ApplicationId $APIApp.Id -IdentifierUris @($Output["ApiIdentifierUri"])
+Update-MgApplication -ApplicationId $APIApp.Id -IdentifierUris @($Output["ApiIdentifierUri"]) -Api $oauth2PermissionScopes
 
 # 4. Build the manifest for the Client App (Swagger).
 $ClientAppManifest = @{
@@ -68,6 +91,15 @@ $ClientAppManifest = @{
             })
         }
     SignInAudience = "AzureADMyOrg"
+    Spa = @{
+        RedirectUris = "https://127.0.0.1:8000/app/oauth2-redirect.html"
+    }
+    Web = @{
+        ImplicitGrantSettings = @{
+            EnableAccessTokenIssuance= $true
+            EnableIdTokenIssuance = $true
+        }
+    }
 }
 $ClientApp = New-MgApplication @ClientAppManifest
 $Output.Add("ClientApplicationId", $ClientApp.AppId)

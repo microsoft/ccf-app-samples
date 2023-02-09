@@ -1,4 +1,5 @@
 import * as ccfapp from "@microsoft/ccf-app";
+import { ApiIdentifierUri, ClientApplicationId } from "../../../utils/config";
 import { ServiceResult } from "../../../utils/service-result";
 import { IJwtIdentityProvider } from "./jwt-validation";
 
@@ -32,12 +33,9 @@ export class MsJwtProvider implements IJwtIdentityProvider {
       });
     }
 
-    // Replace the below string with your own app id by registering an app in Azure:
-    // https://docs.microsoft.com/en-us/azure/active-directory/develop/quickstart-register-app
-    // MS_APP_ID and MS_APP_ID_URI added here for clarity
-    // In production, both the MS_APP_ID and MS_APP_ID_URI should be read from the configuration store
-    const MS_APP_ID = "ee48548a-7d69-4b8e-b2d4-805e8bac7f01";
-    const MS_APP_ID_URI = "api://b8dbd573-a015-424b-b111-2d5fa11cee3c";
+    // Please check the src/utils/config.ts configuration file 
+    const MS_APP_ID = ClientApplicationId;
+    const MS_APP_ID_URI = ApiIdentifierUri;
 
     // check if token is for this app
     if (msClaims.appid !== MS_APP_ID) {
