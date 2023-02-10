@@ -9,6 +9,7 @@ help: ## 💬 This help message :)
 build: ## 🔨 Build the Application
 	@echo -e "\e[34m$@\e[0m" || true
 	@npm run build
+	@npm run create-jwt-config # Create the JWT issuer config files for (Test - Microsoft Azure Identity Provider).
 
 build-virtual: build ## 📦 Build Virtual container image from Dockerfile
 	@echo -e "\e[34m$@\e[0m" || true

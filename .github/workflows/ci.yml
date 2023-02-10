@@ -9,42 +9,42 @@ on:
   workflow_dispatch:
 
 jobs:
-  # banking-app-sample:
-  #   name: Banking app sample
-  #   runs-on: ubuntu-20.04
-  #   steps:
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v3
-  #       with:
-  #         fetch-depth: 0
-  #         persist-credentials: false
+  banking-app-sample:
+    name: Banking app sample
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          persist-credentials: false
 
-  #     - name: Build samples in DevContainer
-  #       uses: devcontainers/ci@v0.2
-  #       with:
-  #         cacheFrom: ghcr.io/microsoft/ccf-samples-devcontainer
-  #         runCmd: |
-  #           git config --global --add safe.directory "$GITHUB_WORKSPACE"
-  #           make lint
-  #           cd banking-app && make test && make test-docker-virtual
-  #         env: |
-  #           GITHUB_WORKSPACE
+      - name: Build samples in DevContainer
+        uses: devcontainers/ci@v0.2
+        with:
+          cacheFrom: ghcr.io/microsoft/ccf-samples-devcontainer
+          runCmd: |
+            git config --global --add safe.directory "$GITHUB_WORKSPACE"
+            make lint
+            cd banking-app && make test && make test-docker-virtual
+          env: |
+            GITHUB_WORKSPACE
 
-  # auditable-logging-app-sample:
-  #   name: Auditable logging app sample
-  #   runs-on: ubuntu-20.04
-  #   steps:
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v3
-  #       with:
-  #         fetch-depth: 0
-  #         persist-credentials: false
-  #     - name: Build samples in DevContainer
-  #       uses: devcontainers/ci@v0.2
-  #       with:
-  #         cacheFrom: ghcr.io/microsoft/ccf-samples-devcontainer
-  #         runCmd: |
-  #           cd auditable-logging-app && make test && make test-docker-virtual
+  auditable-logging-app-sample:
+    name: Auditable logging app sample
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Build samples in DevContainer
+        uses: devcontainers/ci@v0.2
+        with:
+          cacheFrom: ghcr.io/microsoft/ccf-samples-devcontainer
+          runCmd: |
+            cd auditable-logging-app && make test && make test-docker-virtual
 
   data-reconciliation-app-sample:
     name: Data Reconciliation app sample
@@ -60,4 +60,4 @@ jobs:
         with:
           cacheFrom: ghcr.io/microsoft/ccf-samples-devcontainer
           runCmd: |
-            cd data-reconciliation-app && make e2e-test
+            cd data-reconciliation-app && make test && make test-docker-virtual && make e2e-test && make e2e-test-docker
