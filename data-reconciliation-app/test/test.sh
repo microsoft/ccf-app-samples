@@ -70,11 +70,21 @@ do
     sleep 1
 done
 
+echo "-----"
+whoami
+echo "-----"
+ls -lrt ${certificate_dir}
+
+
 # If Typescript mode is selected, testing flow goes through TS application located in ./test/e2e-test
 if [ $ts_mode -eq 1 ]; then
     echo "Running typescript flow..."
     export SERVER=${server}
     export CERTS_FOLDER="$PWD/${certificate_dir}"
+    echo "-----"
+    echo "folder: ${CERTS_FOLDER}"
+    echo "-----"
+    ls -lrt $CERTS_FOLDER
     cd ./test/e2e-test/ && npm install && npm run start
     exit 0
 fi

@@ -213,9 +213,14 @@ class Demo {
     }
 
     private static createHttpsAgent(memberId: string): https.Agent {
+        console.log(`--- certs folder: ${certificateStorePath}`);
+        console.log(`--- current dir: ${__dirname}`);
+        console.log(`--- concat1: ${__dirname}${certificateStorePath}`);
+        console.log(`--- concat2: ${__dirname}/${certificateStorePath}`);
         return new https.Agent({
             cert: fs.readFileSync(`${certificateStorePath}/member${memberId}_cert.pem`),
             key: fs.readFileSync(`${certificateStorePath}/member${memberId}_privk.pem`),
+            // key: fs.readFileSync(`${certificateStorePath}/service_cert.pem`),
             ca: fs.readFileSync(`${certificateStorePath}/service_cert.pem`),
         });
     }
