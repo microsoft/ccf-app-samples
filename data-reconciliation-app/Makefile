@@ -90,6 +90,7 @@ deploy-app-to-sandbox: build ## 🚀 Deploy the Data Reconciliation Application 
 
 deploy-app-to-mccf: build ## 🚀 Deploy the Data Reconciliation Application to Managed CCF
 	@echo -e "\e[34m$@\e[0m" || true
+	$(call check_defined, CCF_NAME)
 	@. ../scripts/submit_proposal.sh --network-url "https://${CCF_NAME}.confidential-ledger.azure.com" --proposal-file ./dist/set_js_app.json --certificate_dir "./workspace/mccf_certificates" --member-count 2
 	@. ../scripts/submit_proposal.sh --network-url "https://${CCF_NAME}.confidential-ledger.azure.com" --proposal-file ./workspace/proposals/set_jwt_issuer_ms_proposal.json --certificate_dir "./workspace/mccf_certificates" --member-count 2
 
