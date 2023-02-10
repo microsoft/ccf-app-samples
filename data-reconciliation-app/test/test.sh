@@ -79,6 +79,8 @@ ls -lrt ${certificate_dir}
 # If Typescript mode is selected, testing flow goes through TS application located in ./test/e2e-test
 if [ $ts_mode -eq 1 ]; then
     echo "Running typescript flow..."
+    sudo chmod +r ${certificate_dir}/*.pem
+
     export SERVER=${server}
     export CERTS_FOLDER="$PWD/${certificate_dir}"
     echo "-----"
