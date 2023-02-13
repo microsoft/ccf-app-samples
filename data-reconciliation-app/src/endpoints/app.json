@@ -201,12 +201,34 @@
               "description": "Ok",
               "content": {
                 "text/html": {
-                  "schema": { "type": "string"}
+                  "schema": { "type": "string" }
                 }
               }
             }
           }
-          
+        }
+      }
+    },
+    "/oauth2-redirect.html": {
+      "get": {
+        "summary": "Swagger UI: OAuth2 redirect endpoint",
+        "description": "Swagger UI: OAuth2 redirect endpoint",
+        "js_module": "endpoints/swagger.js",
+        "js_function": "getSwaggerOauthRedirectHandler",
+        "forwarding_required": "always",
+        "authn_policies": ["no_auth"],
+        "mode": "readonly",
+        "openapi": {
+          "responses": {
+            "200": {
+              "description": "Ok",
+              "content": {
+                "text/html": {
+                  "schema": { "type": "string" }
+                }
+              }
+            }
+          }
         }
       }
     },

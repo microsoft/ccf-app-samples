@@ -1,14 +1,14 @@
 import * as ccfapp from "@microsoft/ccf-app";
+import { ApiResult } from "../utils/api-result";
+import { MS_AAD_CONFIG } from "../utils/config";
 
 /**
  * Generate a swagger UI based on the OpenApi documents of (Application - Governance)
  * How to configure swagger UI: https://swagger.io/docs/open-source-tools/swagger-ui/usage/installation/
  */
 export function getSwaggerUI(): ccfapp.Response<string> {
-  return {
-    statusCode: 200,
-    headers: { "content-type": "text/html" },
-    body: `<!DOCTYPE html>
+
+  const body = `<!DOCTYPE html>
     <html lang="en">
       <head>
         <meta charset="utf-8" />
@@ -32,14 +32,112 @@ export function getSwaggerUI(): ccfapp.Response<string> {
             dom_id: '#swagger-ui',
             presets: [SwaggerUIBundle.presets.apis,SwaggerUIStandalonePreset],
             layout: "StandaloneLayout",
+            requestInterceptor: function (request) {
+                // Add the OAuth2 access token as an authorization header, which is the accepted format of CCF
+                let token = window.swaggerUIRedirectOauth2?.auth?.token?.access_token;
+                if(token){
+                  request.headers.Authorization = "Bearer " + token;
+                }
+                return request;
+              }
+            });
+
+          window.ui.initOAuth({
+            clientId: "${MS_AAD_CONFIG.ClientApplicationId}",
+            usePkceWithAuthorizationCodeGrant: true
           });
         };
       </script>
       </body>
     </html>
-    `
-  };
+    `;
+  return ApiResult.Html(body);
+}
 
+/**
+ * Swagger UI: OAuth2 Redirect endpoint
+ * The authentication response will be redirected to this endpoint (access-token) by the identity provider
+ * reference: https://github.com/swagger-api/swagger-ui/blob/master/dist/oauth2-redirect.html
+ * This endpoint will be configured in the application registration within the identity provider
+ */
+export function getSwaggerOauthRedirectHandler(): ccfapp.Response<string> {
+
+  const body = `<!doctype html>
+  <html lang="en-US">
+  <head>
+      <title>Swagger UI: OAuth2 Redirect</title>
+  </head>
+  <body>
+  <script>
+      'use strict';
+      function run () {
+          // get the swagger UI Oauth2 object from openner window 
+          var oauth2 = window.opener.swaggerUIRedirectOauth2;
+          var sentState = oauth2.state;
+          var redirectUrl = oauth2.redirectUrl;
+          var isValid, qp, arr;
+  
+          // check if the code or token part of the url hash.
+          if (/code|token|error/.test(window.location.hash)) {
+              qp = window.location.hash.substring(1).replace('?', '&');
+          } else {
+              qp = location.search.substring(1);
+          }
+  
+          arr = qp.split("&");
+          arr.forEach(function (v,i,_arr) { _arr[i] = '"' + v.replace('=', '":"') + '"';});
+          qp = qp ? JSON.parse('{' + arr.join() + '}',function (key, value) { return key === "" ? value : decodeURIComponent(value); }
+          ) : {};
+  
+          isValid = qp.state === sentState;
+  
+          if ((
+            oauth2.auth.schema.get("flow") === "accessCode" ||
+            oauth2.auth.schema.get("flow") === "authorizationCode" ||
+            oauth2.auth.schema.get("flow") === "authorization_code"
+          ) && !oauth2.auth.code) {
+              if (!isValid) {
+                  oauth2.errCb({
+                      authId: oauth2.auth.name,
+                      source: "auth",
+                      level: "warning",
+                      message: "Authorization may be unsafe, passed state was changed in server. The passed state wasn't returned from auth server."
+                  });
+              }
+  
+              if (qp.code) {
+                  delete oauth2.state;
+                  oauth2.auth.code = qp.code;
+                  oauth2.callback({auth: oauth2.auth, redirectUrl: redirectUrl});
+              } else {
+                  let oauthErrorMsg;
+                  if (qp.error) {
+                      oauthErrorMsg = "["+qp.error+"]: " +
+                          (qp.error_description ? qp.error_description+ ". " : "no accessCode received from the server. ") +
+                          (qp.error_uri ? "More info: "+qp.error_uri : "");
+                  }
+  
+                  oauth2.errCb({
+                      authId: oauth2.auth.name,
+                      source: "auth",
+                      level: "error",
+                      message: oauthErrorMsg || "[Authorization failed]: no accessCode received from the server."
+                  });
+              }
+          } else {
+              // send the response back to the opener window to complete the authentication flow.
+              oauth2.callback({auth: oauth2.auth, token: qp, isValid: isValid, redirectUrl: redirectUrl});
+          }
+          window.close();
+      }
+  
+      run();
+
+  </script>
+  </body>
+  </html>
+  `
+  return ApiResult.Html(body);
 }
 
 /**
@@ -47,13 +145,10 @@ export function getSwaggerUI(): ccfapp.Response<string> {
  * this implementation should replace the usage of '/app/api' endpoint
  * when ccf allows more control of the openAPI document through the deployment bundle
  * https://github.com/microsoft/ccf-app-samples/issues/185
- */ 
+ */
 export function getOpenApiDocument(): ccfapp.Response<object> {
-  return {
-    statusCode: 200,
-    headers: { "content-type": "application/json" },
-    body: openApiDoc
-  };
+
+  return ApiResult.Json(openApiDoc);
 }
 
 /**
@@ -69,7 +164,7 @@ const openApiDoc = {
     "description": "The data reconciliation service is hosted on the CCF network, where users/members can submit their data to be reconciled against each other's data in a confidential manner and generate some data insights as a report",
     "version": "1.0.0"
   },
-  "security": [{"Bearer": []}],
+  "security": [{ "Bearer": [] }],
   "servers": [],
   "components": {
     "securitySchemes": {
@@ -80,6 +175,17 @@ const openApiDoc = {
         "in": "header",
         "scheme": "bearer",
         "bearerFormat": "JWT",
+      },
+      "oauth2": {
+        "type": "oauth2",
+        "name": "Authorization using AAD identity provider Oauth2 flow",
+        "flows": {
+          "authorizationCode": {
+            "scopes": MS_AAD_CONFIG.ApiScopes,
+            "authorizationUrl": `https://login.microsoftonline.com/${MS_AAD_CONFIG.TenantId}/oauth2/v2.0/authorize`,
+            "tokenUrl": `https://login.microsoftonline.com/${MS_AAD_CONFIG.TenantId}/oauth2/token`
+          }
+        }
       }
     },
     "responses": {
