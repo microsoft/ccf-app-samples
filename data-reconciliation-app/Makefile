@@ -9,7 +9,6 @@ help: ## 💬 This help message :)
 build: ## 🔨 Build the Application
 	@echo -e "\e[34m$@\e[0m" || true
 	@npm run build
-	@npm run create-jwt-config # Create the JWT issuer config files for (Test - Microsoft Azure Identity Provider).
 
 build-virtual: build ## 📦 Build Virtual container image from Dockerfile
 	@echo -e "\e[34m$@\e[0m" || true
@@ -91,8 +90,9 @@ deploy-app-to-sandbox: build ## 🚀 Deploy the Data Reconciliation Application 
 
 deploy-app-to-mccf: build ## 🚀 Deploy the Data Reconciliation Application to Managed CCF
 	@echo -e "\e[34m$@\e[0m" || true
-	@. ../scripts/submit_proposal.sh --network-url "https://reconciliationapp.confidential-ledger.azure.com" --proposal-file ./dist/set_js_app.json --certificate_dir "./workspace/mccf_certificates" --member-count 2
-	@. ../scripts/submit_proposal.sh --network-url "https://reconciliationapp.confidential-ledger.azure.com" --proposal-file ./workspace/proposals/set_jwt_issuer_ms_proposal.json --certificate_dir "./workspace/mccf_certificates" --member-count 2
+	$(call check_defined, CCF_NAME)
+	@. ../scripts/submit_proposal.sh --network-url "https://${CCF_NAME}.confidential-ledger.azure.com" --proposal-file ./dist/set_js_app.json --certificate_dir "./workspace/mccf_certificates" --member-count 2
+	@. ../scripts/submit_proposal.sh --network-url "https://${CCF_NAME}.confidential-ledger.azure.com" --proposal-file ./workspace/proposals/set_jwt_issuer_ms_proposal.json --certificate_dir "./workspace/mccf_certificates" --member-count 2
 
 # The following are here in case you forget to change directory!
 deploy-mccf: ## 🚀 Deploy Managed CCF
