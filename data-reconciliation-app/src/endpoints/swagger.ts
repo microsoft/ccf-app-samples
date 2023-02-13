@@ -43,7 +43,7 @@ export function getSwaggerUI(): ccfapp.Response<string> {
             });
 
           window.ui.initOAuth({
-            clientId: "${ClientApplicationId}"
+            clientId: "${ClientApplicationId}",
             usePkceWithAuthorizationCodeGrant: true
           });
         };
