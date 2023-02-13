@@ -75,7 +75,8 @@ if [ $ts_mode -eq 1 ]; then
     echo "Running typescript flow..."
     export SERVER=${server}
     export CERTS_FOLDER=${certificate_dir}
-    cd ./test/e2e-test/ && npm install && npm run start --resolveJsonModule
+    npm run e2e-test
+    # cd ./test/e2e-test/ && npm install && npm run start --resolveJsonModule
     exit 0
 fi
 
