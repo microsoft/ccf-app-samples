@@ -1,5 +1,5 @@
 import * as ccfapp from "@microsoft/ccf-app";
-import { ApiIdentifierUri, ClientApplicationId } from "../../../utils/config";
+import { MS_AAD_CONFIG } from "../../../utils/config";
 import { ServiceResult } from "../../../utils/service-result";
 import { IJwtIdentityProvider } from "./jwt-validation";
 
@@ -33,12 +33,8 @@ export class MsJwtProvider implements IJwtIdentityProvider {
       });
     }
 
-    // Please check the src/utils/config.ts configuration file 
-    const MS_APP_ID = ClientApplicationId;
-    const MS_APP_ID_URI = ApiIdentifierUri;
-
     // check if token is for this app
-    if (msClaims.appid !== MS_APP_ID) {
+    if (msClaims.appid !== MS_AAD_CONFIG.ClientApplicationId) {
       return ServiceResult.Failed({
         errorMessage: "Error: jwt validation failed: appid mismatch",
         errorType: "AuthenticationError",
@@ -46,7 +42,7 @@ export class MsJwtProvider implements IJwtIdentityProvider {
     }
 
     // check if token audience is for this app
-    if (msClaims.aud !== MS_APP_ID_URI) {
+    if (msClaims.aud !== MS_AAD_CONFIG.ApiIdentifierUri) {
       return ServiceResult.Failed({
         errorMessage:
           "Error: jwt validation failed: aud mismatch (incorrect scope requested?)",
