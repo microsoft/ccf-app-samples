@@ -16,7 +16,6 @@ export const MS_AAD_CONFIG = {
      */
     ClientApplicationId: "ee48548a-7d69-4b8e-b2d4-805e8bac7f01",
 
-
     /**
      * API Application registration Id
      */
