@@ -73,6 +73,7 @@ echo "Running TypeScript flow..."
 # adding read permission to .pem files so node application can have access
 sudo chmod +r ${certificate_dir}/*.pem
 
+# Calling npm command with the necessary variables
 export SERVER=${server}
 export CERTS_FOLDER=${certificate_dir}
 export INTERACTIVE_MODE=${interactive}

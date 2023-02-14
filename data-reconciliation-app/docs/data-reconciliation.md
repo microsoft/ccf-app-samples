@@ -2,7 +2,7 @@
 
 ## _Reconciliation Overview_
 
-Generally speaking, data reconciliation is used describe a verification phase where the target data is compared against original source data to address a range of issues:
+Generally speaking, data reconciliation is used to describe a verification phase where the target data is compared against the source data to address a range of issues:
 
 - Missing records
 - Missing values
@@ -11,30 +11,30 @@ Generally speaking, data reconciliation is used describe a verification phase wh
 - Badly formatted values
 - Broken relationships across tables or systems
 
-However, in many scenarios, there may not exist a single source of truth to compare your target data against. Rather, institutions can come together in a network to consolidate, compare and identify issues with their own data. One of the benefits of a CCF network is that these institutions can do so confidently, without actually sharing their data with one another.
+However, in many scenarios, there may not exist a single source of truth to compare against your target data. Rather, institutions can come together in a network to consolidate, compare and identify issues with their own data. One of the benefits of a CCF network is that these institutions can do so confidently, without actually sharing their data.
 
 Some potential use cases may involve:
 
-- In finance, a number of financial institutions coming together to predict the price of a derivative.
-- In finance, a number of financial institutions coming together to reconcile reference data or ticker symbols.
-- In healthcare, a number of hospitals coming together to reconcile hospital records for patients.
+- In finance, financial institutions can come together to predict the price of a derivative.
+- In finance, financial institutions can come together to reconcile reference data or ticker symbols.
+- In healthcare, hospitals can come together to reconcile hospital records for patients.
 
 ![reconciliation diagram](./images/data-reconciliation.png)
 
 ## Proposed solution
 
-The CCF network will be used to host a reconciliation service where different parties with membership (banks and data providers) will be able to submit their own data to be reconciled against "each other's data" in a confidential manner without exposing the data to other members in the network.
+The CCF network will be used to host a reconciliation service where different parties with membership (banks and data providers) will be able to submit their data to be reconciled against "each other's data" in a confidential manner without exposing the data to other members in the network.
 
-The solution will use the voting process to reconcile members' data; on the data submission, when new record is submitted the app will check if it does not exist in the key-value store, it will be added; otherwise, a vote is added to this record with a member ID, and the vote will be "agree" if data attributes match; otherwise, it will "disagree."
+The solution will use the voting process to reconcile members' data. When a new record is submitted the app will check if it does not exist in the key-value store, and it will be added; otherwise, a vote is added to this record with a member ID, and the vote will be "agree" if data attributes match; otherwise, it will be "disagree."
 
-This solution is generic to handle scenarios of data collaboration amongst different parties, and share reconciled results out on that data.
+This solution is generic to handle scenarios of data collaboration amongst different parties and share reconciled results out on that data.
 
 ## Assumptions
 
 - The application will accept data that conforms to the `agreed schema`
-- The schema must has a unique identifier and attributes associated with this identifier
-- The Data is compared across all members, no one source of truth
-- In order for our app to provide a report on the data, ~80% of members need to have submitted their data
+- The schema must have a unique identifier and attributes associated with this identifier
+- The Data is compared across all members. There is no source of truth
+- For our app to provide a report on the data, ~80% of members need to have submitted their data
 - If a record is determined to be out of consensus with other members in the network, you cannot share the value that other members had for that record (each member can only have access to their own reconciled records)
 
 ## Application
@@ -43,9 +43,9 @@ The reconciliation application will consist of three main services.
 
 - Data ingestion
   - Accept single or batch of records
-  - Accept data as CSV file format
+  - Accept data in CSV or JSON file format
 - Data reconciliation
-  - The voting concept will be used to reconcile data (all members submit their records as opinion)
+  - The voting concept will be used to reconcile data (all members submit their records as opinions)
   - Data is compared across all members, all members' data carry equal weight to reach consensus.
   - Reconciliation is on each record, not on the entire data set.
 - Data reporting
@@ -55,9 +55,9 @@ The reconciliation application will consist of three main services.
 
 ## Data flow
 
-- Members will submit their own data records in accordance (`with the agreed schema`)
-- Data will be processed and stored in key-value store, with members voting on each record
-- For each member, a list of a reconciled records can be requested
+- Members will submit their data records in accordance (`with the agreed schema`)
+- Data will be processed and stored in a key-value store, with members voting on each record
+- For each member, a list of reconciled records can be requested
 - The data mapping and reference will depend on `a unique identifier`
 
 ![reconciliation-sample diagram](./images/reconciliation-sample.png)
@@ -67,7 +67,7 @@ The reconciliation application will consist of three main services.
 Sample code in Typescript to demonstrate how to generate a voting-based data reconciliation report
 
 ```typescript
-// generate a voting based data reconciliation report
+// generate voting based data reconciliation report
 // memberId: the member who is requesting the report
 public getVotingSummaries(memberId: string) {
 
