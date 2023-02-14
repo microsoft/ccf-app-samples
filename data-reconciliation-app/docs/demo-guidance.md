@@ -28,18 +28,26 @@ This part of the demo has started the network and deployed the app. The network 
 After you press any key, we will start the ingestion service. This service is a simple REST API that accepts JSON/CSV data. You can ingest data for a particular member, and the data will be stored in the network. There are a few negative test cases demonstrated as well as ingesting different file formats. At this point of the demo you will be asked to press any key to continue.
 
 ```bash
-  -------- Test Ingestion Service --------  
+===============================================
+🏁 Starting e2e Tests on server <server ip address>
+===============================================
 
-✅ [Pass]: member0 - CSV data ingest failed (wrong file)
-✅ [Pass]: member0 - CSV data ingest failed (wrong schema)
-✅ [Pass]: member0 - CSV data ingest succeeded
- ---
-✅ [Pass]: member1 - JSON data ingest failed (data length is zero)
-✅ [Pass]: member1 - JSON data ingest failed (data is null)
-✅ [Pass]: member1 - JSON data ingest succeeded
- ---
-✅ [Pass]: member2 - JSON data ingest succeeded
+===============================================
+🔬 [TEST]: Data Ingestion Service
+===============================================
+📝 Ingestion Service Validations...
+✅ [PASS] Member 0 - CSV data ingest failed (wrong schema)
+✅ [PASS] Member 0 - CSV data ingest failed (wrong file)
+✅ [PASS] Member 0 - JSON data ingest failed (data length is zero)
+✅ [PASS] Member 0 - JSON data ingest failed (data is null)
+---
+📝 Members Ingesting Data...
+✅ [PASS] [200 : OK] - Member 0 data has ingested successfully
+✅ [PASS] [200 : OK] - Member 1 data has ingested successfully
+✅ [PASS] [200 : OK] - Member 2 data has ingested successfully
+
 🎬 Ingestion Stage Complete
+ - Press return key to continue... 
 ```
 
 ## Part 3. Reporting Service (Full Report)
@@ -47,72 +55,57 @@ After you press any key, we will start the ingestion service. This service is a 
 The next part of the demo will show the reporting service. This service is a simple REST API that returns a report of the data that has been ingested. Here we demonstrate retrieving a full report of all of the ingested data for that member. At this point of the demo you will be asked to press any key to continue.
 
 ```bash
--------- Test Reporting Service (Full Report) --------  
-
-✅ [Pass]: user0 - Getting report without ingesting data should fail as 'No Data to Report' 
-✅ [Pass]: member0 - Getting all data records should succeed
-✅ [Pass]: member1 - Getting all data records should succeed
-✅ [Pass]: member2 - Getting all data records should succeed
-
-member1 Full Report:
-{
-  "group_status": "LACK_OF_CONSENSUS",
-  "majority_minority": "Majority",
-  "count_of_unique_values": 2,
-  "members_in_agreement": 2,
-  "lei": "984500E1B2CA1D4EKG67",
-  "nace": "A01.1"
-}
-{
-  "group_status": "LACK_OF_CONSENSUS",
-  "majority_minority": "Majority",
-  "count_of_unique_values": 2,
-  "members_in_agreement": 2,
-  "lei": "9845001D460PEJE54159",
-  "nace": "K.65.12"
-}
-{
-  "group_status": "IN_CONSENSUS",
-  "majority_minority": "Majority",
-  "count_of_unique_values": 1,
-  "members_in_agreement": 3,
-  "lei": "254900Z8QM2AR51H5I26",
-  "nace": "C.10.1"
-}
-{
-  "group_status": "IN_CONSENSUS",
-  "majority_minority": "Majority",
-  "count_of_unique_values": 1,
-  "members_in_agreement": 3,
-  "lei": "984500F5BD5BE5767C51",
-  "nace": "C.18.13"
-}
-{
-  "group_status": "LACK_OF_CONSENSUS",
-  "majority_minority": "Majority",
-  "count_of_unique_values": 2,
-  "members_in_agreement": 2,
-  "lei": "9845005E5AEEB78CE366",
-  "nace": "G.46.19"
-}
-{
-  "group_status": "IN_CONSENSUS",
-  "majority_minority": "Majority",
-  "count_of_unique_values": 1,
-  "members_in_agreement": 3,
-  "lei": "984500815D6139D53E23",
-  "nace": "M.69.1"
-}
-{
-  "group_status": "LACK_OF_CONSENSUS",
-  "majority_minority": "Majority",
-  "count_of_unique_values": 2,
-  "members_in_agreement": 2,
-  "lei": "984500UF3DE41EFA7F02",
-  "nace": "B.08.9"
-}
+===============================================
+🔬 [TEST]: Data Reporting Service (Full Report)
+===============================================
+📝 Member 0 Full Report:
+✅ [PASS] [200 : OK] - Member 0
+┌─────────┬─────────────────────┬───────────────────┬────────────────────────┬──────────────────────┬────────────────────────┬───────────┐
+│ (index) │    group_status     │ majority_minority │ count_of_unique_values │ members_in_agreement │          lei           │   nace    │
+├─────────┼─────────────────────┼───────────────────┼────────────────────────┼──────────────────────┼────────────────────────┼───────────┤
+│    0    │  'NOT_ENOUGH_DATA'  │    'Minority'     │           2            │          1           │ '9845002B6B074505A715' │ 'C.10.12' │
+│    1    │  'NOT_ENOUGH_DATA'  │    'Majority'     │           1            │          2           │ '984500BA57A56NBD3A24' │ 'G.46.77' │
+│    2    │ 'LACK_OF_CONSENSUS' │    'Minority'     │           2            │          1           │ '984500E1B2CA1D4EKG67' │ 'A.01.1'  │
+│    3    │ 'LACK_OF_CONSENSUS' │    'Minority'     │           2            │          1           │ '9845001D460PEJE54159' │ 'K.64.12' │
+│    4    │   'IN_CONSENSUS'    │    'Majority'     │           1            │          3           │ '254900Z8QM2AR51H5I26' │ 'C.10.1'  │
+│    5    │   'IN_CONSENSUS'    │    'Majority'     │           1            │          3           │ '984500F5BD5BE5767C51' │ 'C.18.13' │
+│    6    │ 'LACK_OF_CONSENSUS' │    'Minority'     │           2            │          1           │ '9845005E5AEEB78CE366' │ 'G.46.20' │
+│    7    │  'NOT_ENOUGH_DATA'  │    'Majority'     │           1            │          2           │ '9845009C73F4BD8X7827' │ 'R.90.01' │
+│    8    │   'IN_CONSENSUS'    │    'Majority'     │           1            │          3           │ '984500815D6139D53E23' │ 'M.69.1'  │
+│    9    │ 'LACK_OF_CONSENSUS' │    'Majority'     │           2            │          2           │ '984500UF3DE41EFA7F02' │ 'B.08.9'  │
+└─────────┴─────────────────────┴───────────────────┴────────────────────────┴──────────────────────┴────────────────────────┴───────────┘
+📝 Member 1 Full Report:
+✅ [PASS] [200 : OK] - Member 1
+┌─────────┬─────────────────────┬───────────────────┬────────────────────────┬──────────────────────┬────────────────────────┬───────────┐
+│ (index) │    group_status     │ majority_minority │ count_of_unique_values │ members_in_agreement │          lei           │   nace    │
+├─────────┼─────────────────────┼───────────────────┼────────────────────────┼──────────────────────┼────────────────────────┼───────────┤
+│    0    │ 'LACK_OF_CONSENSUS' │    'Majority'     │           2            │          2           │ '984500E1B2CA1D4EKG67' │  'A01.1'  │
+│    1    │ 'LACK_OF_CONSENSUS' │    'Majority'     │           2            │          2           │ '9845001D460PEJE54159' │ 'K.65.12' │
+│    2    │   'IN_CONSENSUS'    │    'Majority'     │           1            │          3           │ '254900Z8QM2AR51H5I26' │ 'C.10.1'  │
+│    3    │   'IN_CONSENSUS'    │    'Majority'     │           1            │          3           │ '984500F5BD5BE5767C51' │ 'C.18.13' │
+│    4    │ 'LACK_OF_CONSENSUS' │    'Majority'     │           2            │          2           │ '9845005E5AEEB78CE366' │ 'G.46.19' │
+│    5    │   'IN_CONSENSUS'    │    'Majority'     │           1            │          3           │ '984500815D6139D53E23' │ 'M.69.1'  │
+│    6    │ 'LACK_OF_CONSENSUS' │    'Majority'     │           2            │          2           │ '984500UF3DE41EFA7F02' │ 'B.08.9'  │
+└─────────┴─────────────────────┴───────────────────┴────────────────────────┴──────────────────────┴────────────────────────┴───────────┘
+📝 Member 2 Full Report:
+✅ [PASS] [200 : OK] - Member 2
+┌─────────┬─────────────────────┬───────────────────┬────────────────────────┬──────────────────────┬────────────────────────┬───────────┐
+│ (index) │    group_status     │ majority_minority │ count_of_unique_values │ members_in_agreement │          lei           │   nace    │
+├─────────┼─────────────────────┼───────────────────┼────────────────────────┼──────────────────────┼────────────────────────┼───────────┤
+│    0    │  'NOT_ENOUGH_DATA'  │    'Minority'     │           2            │          1           │ '9845002B6B074505A715' │ 'C.10.13' │
+│    1    │  'NOT_ENOUGH_DATA'  │    'Majority'     │           1            │          2           │ '984500BA57A56NBD3A24' │ 'G.46.77' │
+│    2    │ 'LACK_OF_CONSENSUS' │    'Majority'     │           2            │          2           │ '984500E1B2CA1D4EKG67' │  'A01.1'  │
+│    3    │ 'LACK_OF_CONSENSUS' │    'Majority'     │           2            │          2           │ '9845001D460PEJE54159' │ 'K.65.12' │
+│    4    │   'IN_CONSENSUS'    │    'Majority'     │           1            │          3           │ '254900Z8QM2AR51H5I26' │ 'C.10.1'  │
+│    5    │   'IN_CONSENSUS'    │    'Majority'     │           1            │          3           │ '984500F5BD5BE5767C51' │ 'C.18.13' │
+│    6    │ 'LACK_OF_CONSENSUS' │    'Majority'     │           2            │          2           │ '9845005E5AEEB78CE366' │ 'G.46.19' │
+│    7    │  'NOT_ENOUGH_DATA'  │    'Majority'     │           1            │          2           │ '9845009C73F4BD8X7827' │ 'R.90.01' │
+│    8    │   'IN_CONSENSUS'    │    'Majority'     │           1            │          3           │ '984500815D6139D53E23' │ 'M.69.1'  │
+│    9    │ 'LACK_OF_CONSENSUS' │    'Minority'     │           2            │          1           │ '984500UF3DE41EFA7F02' │ 'B.08.10' │
+└─────────┴─────────────────────┴───────────────────┴────────────────────────┴──────────────────────┴────────────────────────┴───────────┘
 
 🎬 Full Reports Complete
+ - Press return key to continue... 
 ```
 
 ## Part 4. Reporting Service (By Id) - IN CONSENSUS
@@ -120,22 +113,28 @@ member1 Full Report:
 This next section of the demo is retrieving reports by a specific id. This is a simple REST API that returns a report of the data that has been ingested. Here we demonstrate retrieving an IN_CONSENSUS record , that all members agree on the value of that particular key. At this point of the demo you will be asked to press any key to continue.
 
 ```bash
--------- Test Reporting Service (GetById) --------  
+===============================================
+🔬 [TEST]:Data Reporting Service (GetById)
+===============================================
+📝 Reporting Service Validations...
+✅ [PASS] Member 0 - Getting report by key_not_exist should fail
+---
 
-✅ [Pass]: member2 - Getting report by key_not_exist should fail
-✅ [Pass]: member2 - Getting report by key should succeed
+📝 --- IN CONSENSUS Example ---
+📝 Member 2 Reporting Data for id 984500F5BD5BE5767C51...
+✅ [PASS] [200 : OK] - Member 2
+┌────────────────────────┬────────────────────────┐
+│        (index)         │         Values         │
+├────────────────────────┼────────────────────────┤
+│      group_status      │     'IN_CONSENSUS'     │
+│   majority_minority    │       'Majority'       │
+│ count_of_unique_values │           1            │
+│  members_in_agreement  │           3            │
+│          lei           │ '984500F5BD5BE5767C51' │
+│          nace          │       'C.18.13'        │
+└────────────────────────┴────────────────────────┘
+✅ [PASS] - Assert Member 2::984500F5BD5BE5767C51.group_status == IN_CONSENSUS
 
-member2 - In Consensus GroupStatus Example: id: 984500F5BD5BE5767C51
-{
-  "content": {
-    "group_status": "IN_CONSENSUS",
-    "majority_minority": "Majority",
-    "count_of_unique_values": 1,
-    "members_in_agreement": 3,
-    "lei": "984500F5BD5BE5767C51",
-    "nace": "C.18.13"
-  }
-}
 🎬 IN_CONSENSUS DATA
 ```
 
@@ -144,17 +143,21 @@ member2 - In Consensus GroupStatus Example: id: 984500F5BD5BE5767C51
 This example demonstrates the result if not all members have submitted data for a particular key. At this point of the demo you will be asked to press any key to continue.
 
 ```bash
-member2 - Not Enough Data GroupStatus Example: id: 984500BA57A56NBD3A24
-{
-  "content": {
-    "group_status": "NOT_ENOUGH_DATA",
-    "majority_minority": "Majority",
-    "count_of_unique_values": 1,
-    "members_in_agreement": 2,
-    "lei": "984500BA57A56NBD3A24",
-    "nace": "G.46.77"
-  }
-}
+📝 --- NOT ENOUGH DATA Example ---
+📝 Member 2 Reporting Data for id 984500BA57A56NBD3A24...
+✅ [PASS] [200 : OK] - Member 2
+┌────────────────────────┬────────────────────────┐
+│        (index)         │         Values         │
+├────────────────────────┼────────────────────────┤
+│      group_status      │   'NOT_ENOUGH_DATA'    │
+│   majority_minority    │       'Majority'       │
+│ count_of_unique_values │           1            │
+│  members_in_agreement  │           2            │
+│          lei           │ '984500BA57A56NBD3A24' │
+│          nace          │       'G.46.77'        │
+└────────────────────────┴────────────────────────┘
+✅ [PASS] - Assert Member 2::984500BA57A56NBD3A24.group_status == NOT_ENOUGH_DATA
+
 🎬 NOT_ENOUGH_DATA
 ```
 
@@ -163,17 +166,21 @@ member2 - Not Enough Data GroupStatus Example: id: 984500BA57A56NBD3A24
 And this example shows the result when the members do not agree on the value for a particular key.
 
 ```bash
-member2 - Lack of Consensus GroupStatus Example: id: 9845001D460PEJE54159
-{
-  "content": {
-    "group_status": "LACK_OF_CONSENSUS",
-    "majority_minority": "Majority",
-    "count_of_unique_values": 2,
-    "members_in_agreement": 2,
-    "lei": "9845001D460PEJE54159",
-    "nace": "K.65.12"
-  }
-}
+ --- LACK OF CONSENSUS Example ---
+📝 Member 2 Reporting Data for id 9845001D460PEJE54159...
+✅ [PASS] [200 : OK] - Member 2
+┌────────────────────────┬────────────────────────┐
+│        (index)         │         Values         │
+├────────────────────────┼────────────────────────┤
+│      group_status      │  'LACK_OF_CONSENSUS'   │
+│   majority_minority    │       'Majority'       │
+│ count_of_unique_values │           2            │
+│  members_in_agreement  │           2            │
+│          lei           │ '9845001D460PEJE54159' │
+│          nace          │       'K.65.12'        │
+└────────────────────────┴────────────────────────┘
+✅ [PASS] - Assert Member 2::9845001D460PEJE54159.group_status == LACK_OF_CONSENSUS
+
 🎬 LACK_OF_CONSENSUS DATA
 ```
 
@@ -182,22 +189,26 @@ member2 - Lack of Consensus GroupStatus Example: id: 9845001D460PEJE54159
 To show how data ingestion can affect all members' reports, we can ingest more data and then re-run the report. We demonstrate this here with `member0` ingesting some new data and `member2` asking for a report for the same key as in the previous step. You can see that *group_status* has changed from `LACK_OF_CONSENSUS` to `IN_CONSENSUS`.
 
 ```bash
-  -------- Report Change --------  
+===============================================
+🔬 [TEST]: Report Changes
+===============================================
+📝 Member 0 Ingesting new Data...
+✅ [PASS] [200 : OK] - Member 0 data has ingested successfully
+📝 Member 2 Data Status changes for id: 9845001D460PEJE54159...
+📝 Member 2 Reporting Data for id 9845001D460PEJE54159...
+✅ [PASS] [200 : OK] - Member 2
+┌────────────────────────┬────────────────────────┐
+│        (index)         │         Values         │
+├────────────────────────┼────────────────────────┤
+│      group_status      │     'IN_CONSENSUS'     │
+│   majority_minority    │       'Majority'       │
+│ count_of_unique_values │           1            │
+│  members_in_agreement  │           3            │
+│          lei           │ '9845001D460PEJE54159' │
+│          nace          │       'K.65.12'        │
+└────────────────────────┴────────────────────────┘
+✅ [PASS] - Assert Member 2::9845001D460PEJE54159.group_status == IN_CONSENSUS
 
-✅ [Pass]: member0 - JSON data ingest succeeded
-🎬 member0 successfully ingested additional/updated data.
-
-member2 - Data status changes for id: 9845001D460PEJE54159:
-{
-  "content": {
-    "group_status": "IN_CONSENSUS",
-    "majority_minority": "Majority",
-    "count_of_unique_values": 1,
-    "members_in_agreement": 3,
-    "lei": "9845001D460PEJE54159",
-    "nace": "K.65.12"
-  }
-}
 🎬 Updated Report after New Data Submission
 ```
 

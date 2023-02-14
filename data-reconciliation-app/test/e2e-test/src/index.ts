@@ -47,7 +47,7 @@ class Demo {
          */
         process.chdir('../../');
 
-        this.printTestSectionHeader('🏁 Starting e2e Tests on server ${serverUrl}');
+        this.printTestSectionHeader(`🏁 Starting e2e Tests on server ${serverUrl}`);
 
         for (const memberId of this.memberIds) {
             const member = this.createMember(memberId);
@@ -242,7 +242,6 @@ class Demo {
 
     private static async addCheckpoint(msg: string) {
         if (interactiveMode == '1') {
-            console.log('\n\n');
             await inquirer.prompt([
                 {
                   name: msg,                  

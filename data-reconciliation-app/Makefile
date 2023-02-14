@@ -30,7 +30,7 @@ start-host-jwt-ms: build ## 🏃 Start the CCF network using Sandbox.sh using AA
 
 test: build ## 🧪 Test the Data Reconciliation Application in the sandbox
 	@echo -e "\e[34m$@\e[0m" || true
-	@. ../scripts/test_sandbox.sh --nodeAddress 127.0.0.1:8000 --certificate_dir ./workspace/sandbox_common --constitution_dir ./governance/constitution
+	@. ../scripts/test_sandbox.sh --nodeAddress 127.0.0.1:8000 --certificate_dir ${PWD}/workspace/sandbox_common --constitution_dir ./governance/constitution
 
 test-docker-virtual: build-virtual ## 🧪 Test the Data Reconciliation Application in a Docker sandbox
 	@echo -e "\e[34m$@\e[0m" || true
@@ -47,25 +47,13 @@ test-mccf: build ## 🧪 Test the Data Reconciliation Application in a Managed C
 	$(call check_defined, PRIVATE_CERT)
 	@. ../scripts/test_mccf.sh --address "${CCF_NAME}.confidential-ledger.azure.com" --signing-cert "${PUBLIC_CERT}" --signing-key "${PRIVATE_CERT}"
 
-e2e-test: build ## 🧪 Test the Data Reconciliation Application in the sandbox (Typescript)
-	@echo -e "\e[34m$@\e[0m" || true
-	@. ../scripts/test_sandbox.sh --nodeAddress 127.0.0.1:8000 --certificate_dir ${PWD}/workspace/sandbox_common --constitution_dir ./governance/constitution --typescript
-
-e2e-demo: build ## 🧪 Test the Data Reconciliation Application in the sandbox (Typescript)
-	@echo -e "\e[34m$@\e[0m" || true
-	@. ../scripts/test_sandbox.sh --nodeAddress 127.0.0.1:8000 --certificate_dir ${PWD}/workspace/sandbox_common --constitution_dir ./governance/constitution --typescript --interactive
-
-e2e-test-docker: build-virtual ## 🧪 Test the Data Reconciliation Application in a Docker sandbox (TypeScript)
-	@echo -e "\e[34m$@\e[0m" || true
-	@. ../scripts/test_docker.sh --virtual --serverIP 172.17.0.3 --port 8080 --typescript
-
 unit-test: ## 🧪 Unit Test the Application
 	@echo -e "\e[34m$@\e[0m" || true
 	@npm run unit-test
 	
 demo: build ## 🎬 Demo the Data Reconciliation Application in the Sandbox
 	@echo -e "\e[34m$@\e[0m" || true
-	@. ../scripts/test_sandbox.sh --nodeAddress 127.0.0.1:8000 --certificate_dir ./workspace/sandbox_common --constitution_dir ./governance/constitution --interactive
+	@. ../scripts/test_sandbox.sh --nodeAddress 127.0.0.1:8000 --certificate_dir ${PWD}/workspace/sandbox_common --constitution_dir ./governance/constitution --interactive
 
 demo-docker: build-virtual ## 🎬 Demo the Data Reconciliation Application in a virtual Docker image
 	@echo -e "\e[34m$@\e[0m" || true
