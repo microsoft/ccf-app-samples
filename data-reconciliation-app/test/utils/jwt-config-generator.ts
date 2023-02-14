@@ -4,8 +4,7 @@ import * as crypto from "crypto";
 import forge from "node-forge";
 import { KeyPairSyncResult } from "crypto";
 import axios from "axios";
-import http from "http";
-import https from "https";
+import { setTimeout } from 'timers/promises';
 
 /**
  * Create the JWT issuer configs for (Test - Microsoft Azure Identity Provider).
@@ -21,7 +20,7 @@ export class JwtConfigsGenerator {
   public static async createSandboxTestJwtIssuerConfig(): Promise<any> {
     const proposalFilePath = `${this.workspaceFolderPath}/set_jwt_issuer_test_proposal.json`;
     const sandboxConfigFilePath = `${this.workspaceFolderPath}/set_jwt_issuer_test_sandbox.json`;
-    if (fs.existsSync(sandboxConfigFilePath) && fs.existsSync(proposalFilePath)) 
+    if (fs.existsSync(sandboxConfigFilePath) && fs.existsSync(proposalFilePath))
       return;
 
     // make sure the workspace folder exists.
@@ -101,13 +100,11 @@ export class JwtConfigsGenerator {
    * Create JWT issuer proposals for Microsoft Azure Identity Provider for sandbox, docker, and mCCF.
    */
   public static async createMSIdpJwtIssuerConfigs(): Promise<any> {
-    const httpAgent = new http.Agent({ keepAlive: true });
-    const httpsAgent = new https.Agent({ keepAlive: true });
     const axiosInstance = axios.create();
 
     const proposalFilePath = `${this.workspaceFolderPath}/set_jwt_issuer_ms_proposal.json`;
     const sandboxConfigFilePath = `${this.workspaceFolderPath}/set_jwt_issuer_ms_sandbox.json`;
-    if (fs.existsSync(sandboxConfigFilePath) && fs.existsSync(proposalFilePath)) 
+    if (fs.existsSync(sandboxConfigFilePath) && fs.existsSync(proposalFilePath))
       return;
 
     // make sure the workspace folder exists.
@@ -123,14 +120,8 @@ export class JwtConfigsGenerator {
     const jwtIssuer = { issuer: issuer, jwks: ms_jwks.data };
     fs.writeFileSync(sandboxConfigFilePath, JSON.stringify(jwtIssuer));
 
-    // create a jwt issuer proposal for the Microsoft Idp
-    // Jwt issuer proposal documentation: https://microsoft.github.io/CCF/main/build_apps/auth/jwt.html
     // Download the CA certificate for the microsoft identity Provider to be stored so that the TLS connection
-    // to the IdP can be validated during key refresh
-    // https://learn.microsoft.com/en-us/azure/security/fundamentals/azure-ca-details
-    // DigiCert Global Root CA: https://crt.sh/?d=853428
-
-    const ca_cert = await axiosInstance.get("https://crt.sh/?d=853428", { httpAgent: httpAgent, httpsAgent: httpsAgent });
+    const ca_cert = await JwtConfigsGenerator.downloadDigiCertGlobalRootCA();
 
     let jwtIssuerProposal = {
       actions: [
@@ -138,7 +129,7 @@ export class JwtConfigsGenerator {
           name: "set_ca_cert_bundle",
           args: {
             name: "jwt_ms",
-            cert_bundle: ca_cert.data,
+            cert_bundle: ca_cert,
           },
         },
         {
@@ -156,6 +147,29 @@ export class JwtConfigsGenerator {
     // save the proposal to file if not exists
     fs.writeFileSync(proposalFilePath, JSON.stringify(jwtIssuerProposal));
     return jwtIssuerProposal;
+  }
+
+  /**
+   * Download the CA certificate for the microsoft identity Provider to be stored so that the TLS connection
+   * to the IdP can be validated during key refresh
+   * @param retryCount count of retries
+   * @returns 
+   */
+  public static async downloadDigiCertGlobalRootCA(retryCount: number = 0): Promise<any> {
+
+    // https://learn.microsoft.com/en-us/azure/security/fundamentals/azure-ca-details
+    // DigiCert Global Root CA: https://crt.sh/?d=853428
+    try {
+      const ca_cert = await axios.get("https://crt.sh/?d=853428", {});
+      return ca_cert.data;
+    }
+    catch (ex) {
+      if (retryCount < 10) {
+        await setTimeout(3000);
+        return await JwtConfigsGenerator.downloadDigiCertGlobalRootCA(++retryCount);
+      }
+      throw ex;
+    }
   }
 }
 
