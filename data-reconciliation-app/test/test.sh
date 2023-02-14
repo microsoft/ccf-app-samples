@@ -79,7 +79,7 @@ if [ $ts_mode -eq 1 ]; then
     
     export SERVER=${server}
     export CERTS_FOLDER=${certificate_dir}
-    cd ./test/e2e-test/ && npm install && npm run start
+    npm run e2e-test
     exit 0
 fi
 

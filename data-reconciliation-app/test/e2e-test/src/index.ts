@@ -1,7 +1,7 @@
-import Api, { ReportItem, Validator } from './api';
+import Api, { ReportItem, Validator } from './api.js';
+import { member0DataPart1, csvDataWrongSchema, member0DataPart2, member1Data, member2Data } from './data.js';
 import https from 'https';
 import fs from 'fs';
-import { csvDataWrongSchema, member0DataPart1, member0DataPart2, member1Data, member2Data } from './data';
 
 const serverUrl = process.env.SERVER!;
 const certificateStorePath = process.env.CERTS_FOLDER!;
