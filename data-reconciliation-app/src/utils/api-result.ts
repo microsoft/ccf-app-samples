@@ -15,6 +15,7 @@ export enum StatusCode {
 export interface CCFResponse {
   statusCode: number;
   body: any;
+  headers?: { [key: string]: string; }
 }
 
 /**
@@ -61,6 +62,34 @@ export class ApiResult {
         },
         StatusCode.UNAUTHORIZED
       ),
+    };
+    return response;
+  }
+
+  /**
+   * Successful HTTP API operation
+   * @param result Result of the service operation
+   * @returns Html response
+   */
+  public static Html(result: string, statusCode: StatusCode = StatusCode.OK): CCFResponse {
+    const response: CCFResponse = {
+      statusCode: StatusCode.OK,
+      headers: { "content-type": "text/html" },
+      body: result,
+    };
+    return response;
+  }
+
+  /**
+   * Successful HTTP API operation
+   * @param result Result of the service operation
+   * @returns Json response
+   */
+  public static Json(result: any, statusCode: StatusCode = StatusCode.OK): CCFResponse {
+    const response: CCFResponse = {
+      statusCode: statusCode,
+      headers: { "content-type": "application/json" },
+      body: result,
     };
     return response;
   }

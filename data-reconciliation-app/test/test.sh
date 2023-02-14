@@ -73,9 +73,13 @@ done
 # If Typescript mode is selected, testing flow goes through TS application located in ./test/e2e-test
 if [ $ts_mode -eq 1 ]; then
     echo "Running typescript flow..."
+    
+    # adding read permission to .pem files so node application can have access
+    sudo chmod +r ${certificate_dir}/*.pem
+    
     export SERVER=${server}
     export CERTS_FOLDER=${certificate_dir}
-    cd ./test/e2e-test/ && npm install && npm run start --resolveJsonModule
+    npm run e2e-test
     exit 0
 fi
 

@@ -1,7 +1,7 @@
-import Api, { ReportItem } from './api';
+import Api, { ReportItem, Validator } from './api.js';
+import { member0DataPart1, csvDataWrongSchema, member0DataPart2, member1Data, member2Data } from './data.js';
 import https from 'https';
 import fs from 'fs';
-import { csvDataWrongSchema, member0DataPart1, member0DataPart2, member1Data, member2Data } from './data';
 
 const serverUrl = process.env.SERVER!;
 const certificateStorePath = process.env.CERTS_FOLDER!;
@@ -57,13 +57,13 @@ class Demo {
         console.log(`📝 Ingestion Service Validations...`);
         const dummyMember = this.createMember(this.memberIds[0]);
         dummyMember.data = csvDataWrongSchema;
-        await Api.checkPostResponseResult(this.demoProps.ingestCsvUrl, dummyMember, 400, 'CSV data ingest failed (wrong schema)');
+        await Validator.validateRequest({ url: this.demoProps.ingestCsvUrl, method: 'POST', member: dummyMember, expectedStatus: 400, testMessage: 'CSV data ingest failed (wrong schema)' });
         dummyMember.data = member0DataPart2;
-        await Api.checkPostResponseResult(this.demoProps.ingestCsvUrl, dummyMember, 400, 'CSV data ingest failed (wrong file)');
+        await Validator.validateRequest({ url: this.demoProps.ingestCsvUrl, method: 'POST', member: dummyMember, expectedStatus: 400, testMessage: 'CSV data ingest failed (wrong file)' });
         dummyMember.data = [];
-        await Api.checkPostResponseResult(this.demoProps.ingestUrl, dummyMember, 400, 'JSON data ingest failed (data length is zero)');
+        await Validator.validateRequest({ url: this.demoProps.ingestUrl, method: 'POST', member: dummyMember, expectedStatus: 400, testMessage: 'JSON data ingest failed (data length is zero)' });
         dummyMember.data = null;
-        await Api.checkPostResponseResult(this.demoProps.ingestUrl, dummyMember, 400, 'JSON data ingest failed (data is null)');
+        await Validator.validateRequest({ url: this.demoProps.ingestUrl, method: 'POST', member: dummyMember, expectedStatus: 400, testMessage: 'JSON data ingest failed (data is null)' });
         console.log('---');
 
         // member 0 ingests data through CSV endpoint, members 1 & 2 through JSON
@@ -81,7 +81,7 @@ class Demo {
         this.printTestSectionHeader('🔬 [TEST]:Data Reporting Service (GetById)');
 
         console.log(`📝 Reporting Service Validations...`);
-        await Api.checkGetResponseResult(`${this.demoProps.ingestUrl}/10`, dummyMember, 404, 'Getting report by key_not_exist should fail');
+        await Validator.validateRequest({ url: `${this.demoProps.reportUrl}/10`, method: 'GET', member: dummyMember, expectedStatus: 400, testMessage: 'Getting report by key_not_exist should fail' });
         console.log('---');
 
         let member = this.members[2];
@@ -91,15 +91,15 @@ class Demo {
         // group status for this key changes from LackOfConsensus to InConsensus during the demo 
         const id_newGroupStatus = id_lackOfConsensus;
 
-        console.log(`\n📝 ${member.name} - IN CONSENSUS Example: id: ${id_inConsensus}`);
+        console.log(`\n📝 --- IN CONSENSUS Example ---`);
         let reportItem = await Api.reportById(this.demoProps, member, id_inConsensus);
         this.assertReportField(member.name, reportItem, 'group_status', 'IN_CONSENSUS');
 
-        console.log(`\n📝 ${member.name} - NOT ENOUGH DATA Example: id: ${id_notEnoughData}`);
+        console.log(`\n📝 --- NOT ENOUGH DATA Example ---`);
         reportItem = await Api.reportById(this.demoProps, member, id_notEnoughData);
         this.assertReportField(member.name, reportItem, 'group_status', 'NOT_ENOUGH_DATA');
 
-        console.log(`\n📝 ${member.name} - LACK OF CONSENSUS Example: id: ${id_lackOfConsensus}`);
+        console.log(`\n📝 --- LACK OF CONSENSUS Example ---`);
         reportItem = await Api.reportById(this.demoProps, member, id_lackOfConsensus);
         this.assertReportField(member.name, reportItem, 'group_status', 'LACK_OF_CONSENSUS');
 
@@ -193,7 +193,6 @@ class Demo {
 
         this.printTestSectionHeader('🎉 All Tests Passed...');
     }
-
 
     private static assertReportField(memberName: string, reportItem: ReportItem, fieldName: string, expectedValue: string | number) {
         const currentValue = reportItem[fieldName];
