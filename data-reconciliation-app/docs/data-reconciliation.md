@@ -15,9 +15,9 @@ However, in many scenarios, there may not exist a single source of truth to comp
 
 Some potential use cases may involve:
 
-- In finance, many financial institutions can come together to predict the price of a derivative.
-- In finance, many financial institutions can come together to reconcile reference data or ticker symbols.
-- In healthcare, many hospitals can come together to reconcile hospital records for patients.
+- In finance, financial institutions can come together to predict the price of a derivative.
+- In finance, financial institutions can come together to reconcile reference data or ticker symbols.
+- In healthcare, hospitals can come together to reconcile hospital records for patients.
 
 ![reconciliation diagram](./images/data-reconciliation.png)
 
@@ -25,7 +25,7 @@ Some potential use cases may involve:
 
 The CCF network will be used to host a reconciliation service where different parties with membership (banks and data providers) will be able to submit their data to be reconciled against "each other's data" in a confidential manner without exposing the data to other members in the network.
 
-The solution will use the voting process to reconcile members' data. When a new record is submitted the app will check if it does not exist in the key-value store, it will be added; otherwise, a vote is added to this record with a member ID, and the vote will be "agree" if data attributes match; otherwise, it will be "disagree."
+The solution will use the voting process to reconcile members' data. When a new record is submitted the app will check if it does not exist in the key-value store, and it will be added; otherwise, a vote is added to this record with a member ID, and the vote will be "agree" if data attributes match; otherwise, it will be "disagree."
 
 This solution is generic to handle scenarios of data collaboration amongst different parties and share reconciled results out on that data.
 
@@ -33,7 +33,7 @@ This solution is generic to handle scenarios of data collaboration amongst diffe
 
 - The application will accept data that conforms to the `agreed schema`
 - The schema must have a unique identifier and attributes associated with this identifier
-- The Data is compared across all members, no one source of truth
+- The Data is compared across all members. There is no source of truth
 - For our app to provide a report on the data, ~80% of members need to have submitted their data
 - If a record is determined to be out of consensus with other members in the network, you cannot share the value that other members had for that record (each member can only have access to their own reconciled records)
 
@@ -43,7 +43,7 @@ The reconciliation application will consist of three main services.
 
 - Data ingestion
   - Accept single or batch of records
-  - Accept data in CSV file format
+  - Accept data in CSV or JSON file format
 - Data reconciliation
   - The voting concept will be used to reconcile data (all members submit their records as opinions)
   - Data is compared across all members, all members' data carry equal weight to reach consensus.
