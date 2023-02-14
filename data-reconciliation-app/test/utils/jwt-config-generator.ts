@@ -121,7 +121,7 @@ export class JwtConfigsGenerator {
     fs.writeFileSync(sandboxConfigFilePath, JSON.stringify(jwtIssuer));
 
     // Download the CA certificate for the microsoft identity Provider to be stored so that the TLS connection
-    const ca_cert = await JwtConfigsGenerator.downloadDigiCertGlobalRootCA();
+    const ca_cert = await axios({ url: "https://crt.sh?d=853428", method: 'GET', responseType: 'blob' });
 
     let jwtIssuerProposal = {
       actions: [
@@ -149,32 +149,6 @@ export class JwtConfigsGenerator {
     return jwtIssuerProposal;
   }
 
-  /**
-   * Download the CA certificate for the microsoft identity Provider to be stored so that the TLS connection
-   * to the IdP can be validated during key refresh
-   * @param retryCount count of retries
-   * @returns 
-   */
-  public static async downloadDigiCertGlobalRootCA(retryCount: number = 0): Promise<any> {
-
-    // https://learn.microsoft.com/en-us/azure/security/fundamentals/azure-ca-details
-    // DigiCert Global Root CA: https://crt.sh/?d=853428
-    try {
-      const ca_cert = await axios({
-        url: "https://crt.sh?d=853428",
-        method: 'GET',
-        responseType: 'blob',
-      });
-      return ca_cert.data;
-    }
-    catch (ex) {
-      if (retryCount < 10) {
-        await setTimeout(3000);
-        return await JwtConfigsGenerator.downloadDigiCertGlobalRootCA(++retryCount);
-      }
-      throw ex;
-    }
-  }
 }
 
 await JwtConfigsGenerator.createSandboxTestJwtIssuerConfig();
