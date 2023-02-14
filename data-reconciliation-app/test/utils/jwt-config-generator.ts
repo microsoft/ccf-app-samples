@@ -160,7 +160,11 @@ export class JwtConfigsGenerator {
     // https://learn.microsoft.com/en-us/azure/security/fundamentals/azure-ca-details
     // DigiCert Global Root CA: https://crt.sh/?d=853428
     try {
-      const ca_cert = await axios.get("https://crt.sh/?d=853428", {});
+      const ca_cert = await axios({
+        url: "https://crt.sh?d=853428",
+        method: 'GET',
+        responseType: 'blob',
+      });
       return ca_cert.data;
     }
     catch (ex) {
