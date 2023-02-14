@@ -2,9 +2,11 @@ import Api, { ReportItem, Validator } from './api.js';
 import { member0DataPart1, csvDataWrongSchema, member0DataPart2, member1Data, member2Data } from './data.js';
 import https from 'https';
 import fs from 'fs';
+import inquirer from 'inquirer';
 
 const serverUrl = process.env.SERVER!;
 const certificateStorePath = process.env.CERTS_FOLDER!;
+const interactiveMode = process.env.INTERACTIVE_MODE!;
 
 export interface DemoProps {
     ingestUrl: string;
@@ -72,11 +74,15 @@ class Demo {
         await Api.ingest(this.demoProps.ingestUrl, this.members[1]);
         await Api.ingest(this.demoProps.ingestUrl, this.members[2]);
 
+        await this.addCheckpoint('Ingestion Stage Complete')
+
         this.printTestSectionHeader('🔬 [TEST]: Data Reporting Service (Full Report)');
 
         for (const member of this.members) {
             await Api.report(this.demoProps, member);
         }
+
+        await this.addCheckpoint('Full Reports Complete')
 
         this.printTestSectionHeader('🔬 [TEST]:Data Reporting Service (GetById)');
 
@@ -95,13 +101,19 @@ class Demo {
         let reportItem = await Api.reportById(this.demoProps, member, id_inConsensus);
         this.assertReportField(member.name, reportItem, 'group_status', 'IN_CONSENSUS');
 
+        await this.addCheckpoint('IN_CONSENSUS DATA')
+
         console.log(`\n📝 --- NOT ENOUGH DATA Example ---`);
         reportItem = await Api.reportById(this.demoProps, member, id_notEnoughData);
         this.assertReportField(member.name, reportItem, 'group_status', 'NOT_ENOUGH_DATA');
 
+        await this.addCheckpoint('NOT_ENOUGH_DATA')
+
         console.log(`\n📝 --- LACK OF CONSENSUS Example ---`);
         reportItem = await Api.reportById(this.demoProps, member, id_lackOfConsensus);
         this.assertReportField(member.name, reportItem, 'group_status', 'LACK_OF_CONSENSUS');
+
+        await this.addCheckpoint('LACK_OF_CONSENSUS DATA')
 
         this.printTestSectionHeader('🔬 [TEST]: Report Changes');
 
@@ -115,6 +127,8 @@ class Demo {
         console.log(`📝 ${member.name} Data Status changes for id: ${id_newGroupStatus}...`);
         reportItem = await Api.reportById(this.demoProps, member, id_newGroupStatus);
         this.assertReportField(member.name, reportItem, 'group_status', 'IN_CONSENSUS');
+
+        await this.addCheckpoint('Updated Report after New Data Submission')
 
         this.printTestSectionHeader('Test Suite - Assertion checks on report fields...');
 
@@ -224,6 +238,18 @@ class Demo {
         console.log('\n===============================================');
         console.log(`${title}`);
         console.log('===============================================');
+    }
+
+    private static async addCheckpoint(msg: string) {
+        if (interactiveMode == '1') {
+            console.log('\n\n');
+            await inquirer.prompt([
+                {
+                  name: msg,                  
+                  message: `🎬 ${msg}\n - Press return key to continue...`
+                }
+            ]);
+        }
     }
 }
 

@@ -51,6 +51,10 @@ e2e-test: build ## 🧪 Test the Data Reconciliation Application in the sandbox 
 	@echo -e "\e[34m$@\e[0m" || true
 	@. ../scripts/test_sandbox.sh --nodeAddress 127.0.0.1:8000 --certificate_dir ${PWD}/workspace/sandbox_common --constitution_dir ./governance/constitution --typescript
 
+e2e-demo: build ## 🧪 Test the Data Reconciliation Application in the sandbox (Typescript)
+	@echo -e "\e[34m$@\e[0m" || true
+	@. ../scripts/test_sandbox.sh --nodeAddress 127.0.0.1:8000 --certificate_dir ${PWD}/workspace/sandbox_common --constitution_dir ./governance/constitution --typescript --interactive
+
 e2e-test-docker: build-virtual ## 🧪 Test the Data Reconciliation Application in a Docker sandbox (TypeScript)
 	@echo -e "\e[34m$@\e[0m" || true
 	@. ../scripts/test_docker.sh --virtual --serverIP 172.17.0.3 --port 8080 --typescript
