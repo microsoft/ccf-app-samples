@@ -79,6 +79,7 @@ if [ $ts_mode -eq 1 ]; then
     
     export SERVER=${server}
     export CERTS_FOLDER=${certificate_dir}
+    export INTERACTIVE_MODE=${interactive}
     npm run e2e-test
     exit 0
 fi
