@@ -4,8 +4,6 @@ import * as crypto from "crypto";
 import forge from "node-forge";
 import { KeyPairSyncResult } from "crypto";
 import axios from "axios";
-import { setTimeout } from 'timers/promises';
-
 /**
  * Create the JWT issuer configs for (Test - Microsoft Azure Identity Provider).
  * This config will be used in sandbox and as proposal for docker and mCCF.
@@ -129,7 +127,7 @@ export class JwtConfigsGenerator {
           name: "set_ca_cert_bundle",
           args: {
             name: "jwt_ms",
-            cert_bundle: ca_cert,
+            cert_bundle: ca_cert.data,
           },
         },
         {
