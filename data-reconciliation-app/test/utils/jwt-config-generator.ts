@@ -151,6 +151,7 @@ export class JwtConfigsGenerator {
     fs.writeFileSync(proposalFilePath, JSON.stringify(jwtIssuerProposal));
     return jwtIssuerProposal;
   }
+
 }
 
 await JwtConfigsGenerator.createSandboxTestJwtIssuerConfig();
