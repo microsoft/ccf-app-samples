@@ -4,6 +4,7 @@ import * as crypto from "crypto";
 import forge from "node-forge";
 import { KeyPairSyncResult } from "crypto";
 import axios from "axios";
+import { setTimeout } from 'timers/promises';
 /**
  * Create the JWT issuer configs for (Test - Microsoft Azure Identity Provider).
  * This config will be used in sandbox and as proposal for docker and mCCF.
@@ -120,11 +121,9 @@ export class JwtConfigsGenerator {
 
     // create a jwt issuer proposal for the Microsoft Idp
     // Jwt issuer proposal documentation: https://microsoft.github.io/CCF/main/build_apps/auth/jwt.html
-    // Download the CA certificate for the microsoft identity Provider to be stored so that the TLS connection
-    // to the IdP can be validated during key refresh
-    // https://learn.microsoft.com/en-us/azure/security/fundamentals/azure-ca-details
-    // DigiCert Global Root CA: https://crt.sh/?d=853428
-    const ca_cert = await axios({ url: "https://crt.sh?d=853428", method: 'GET', responseType: 'blob' });
+
+    // Download the CA certificate for the microsoft identity Provider
+    const ca_cert = await JwtConfigsGenerator.getDigiCertGlobalRootCA();
 
     let jwtIssuerProposal = {
       actions: [
@@ -132,7 +131,7 @@ export class JwtConfigsGenerator {
           name: "set_ca_cert_bundle",
           args: {
             name: "jwt_ms",
-            cert_bundle: ca_cert.data,
+            cert_bundle: ca_cert,
           },
         },
         {
@@ -150,6 +149,28 @@ export class JwtConfigsGenerator {
     // save the proposal to file if not exists
     fs.writeFileSync(proposalFilePath, JSON.stringify(jwtIssuerProposal));
     return jwtIssuerProposal;
+  }
+
+  /**
+   * Download the CA certificate for the microsoft identity Provider to be stored so that 
+   * the TLS connection IdP can be validated during key refresh
+   * https://learn.microsoft.com/en-us/azure/security/fundamentals/azure-ca-details
+   * DigiCert Global Root CA: https://crt.sh/?d=853428
+   * @param retryCount 
+   * @returns 
+   */
+  public static async getDigiCertGlobalRootCA(retryCount: number = 1): Promise<string> {
+    try {
+      const ca_cert = await axios({ url: "https://crt.sh?d=853428", method: 'GET', responseType: 'blob' });
+      return ca_cert.data;
+    } catch (ex) {
+      if (retryCount < 10) {
+        await setTimeout(1000);
+        retryCount++
+        return await JwtConfigsGenerator.getDigiCertGlobalRootCA();
+      }
+      throw ex;
+    }
   }
 
 }
