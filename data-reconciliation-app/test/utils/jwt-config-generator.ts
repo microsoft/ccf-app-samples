@@ -161,12 +161,12 @@ export class JwtConfigsGenerator {
    */
   public static async getDigiCertGlobalRootCA(retryCount: number = 1): Promise<string> {
     try {
-      const ca_cert = await axios({ url: "https://crt.sh/?d=853428", method: 'GET', timeout: 3000 });
+      const ca_cert = await axios({ url: "https://crt.sh/?d=853428", method: 'GET', timeout: 5000 });
       return ca_cert.data;
     } catch (ex) {
       console.log(retryCount)
       if (retryCount < 10) {
-        await setTimeout(5000);
+        await setTimeout(10000);
         retryCount++
         return await JwtConfigsGenerator.getDigiCertGlobalRootCA(retryCount);
       }
