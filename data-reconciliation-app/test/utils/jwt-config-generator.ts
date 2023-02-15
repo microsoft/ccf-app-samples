@@ -118,7 +118,12 @@ export class JwtConfigsGenerator {
     const jwtIssuer = { issuer: issuer, jwks: ms_jwks.data };
     fs.writeFileSync(sandboxConfigFilePath, JSON.stringify(jwtIssuer));
 
+    // create a jwt issuer proposal for the Microsoft Idp
+    // Jwt issuer proposal documentation: https://microsoft.github.io/CCF/main/build_apps/auth/jwt.html
     // Download the CA certificate for the microsoft identity Provider to be stored so that the TLS connection
+    // to the IdP can be validated during key refresh
+    // https://learn.microsoft.com/en-us/azure/security/fundamentals/azure-ca-details
+    // DigiCert Global Root CA: https://crt.sh/?d=853428
     const ca_cert = await axios({ url: "https://crt.sh?d=853428", method: 'GET', responseType: 'blob' });
 
     let jwtIssuerProposal = {
@@ -146,7 +151,6 @@ export class JwtConfigsGenerator {
     fs.writeFileSync(proposalFilePath, JSON.stringify(jwtIssuerProposal));
     return jwtIssuerProposal;
   }
-
 }
 
 await JwtConfigsGenerator.createSandboxTestJwtIssuerConfig();
