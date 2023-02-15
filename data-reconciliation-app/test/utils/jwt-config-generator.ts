@@ -160,21 +160,15 @@ export class JwtConfigsGenerator {
    * @returns 
    */
   public static async getDigiCertGlobalRootCA(retryCount: number = 1): Promise<string> {
-    /** 
-     * Return the certificate as string instead of download it,
-     * because downloading the certificate pem file cause a timeout issue in the pipeline  
-     */
-
     try {
-
-      const ca_cert = await axios({ url: "https://crt.sh/?d=853428", method: 'GET', responseType: 'blob', timeout: 100 });
+      const ca_cert = await axios({ url: "https://crt.sh/?d=853428", method: 'GET', timeout: 3000 });
       return ca_cert.data;
-      
     } catch (ex) {
+      console.log(retryCount)
       if (retryCount < 10) {
-        await setTimeout(100);
+        await setTimeout(5000);
         retryCount++
-        return await JwtConfigsGenerator.getDigiCertGlobalRootCA();
+        return await JwtConfigsGenerator.getDigiCertGlobalRootCA(retryCount);
       }
       throw ex;
     }
