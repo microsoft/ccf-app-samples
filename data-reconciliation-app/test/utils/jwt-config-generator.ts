@@ -122,7 +122,7 @@ export class JwtConfigsGenerator {
     // create a jwt issuer proposal for the Microsoft Idp
     // Jwt issuer proposal documentation: https://microsoft.github.io/CCF/main/build_apps/auth/jwt.html
 
-    // Download the CA certificate for the microsoft identity Provider
+    // get the CA certificate for the microsoft identity Provider
     const ca_cert = await JwtConfigsGenerator.getDigiCertGlobalRootCA();
 
     let jwtIssuerProposal = {
@@ -153,7 +153,7 @@ export class JwtConfigsGenerator {
 
   /**
    * Get the CA certificate for the microsoft identity Provider
-   * to be used on the TLS connection with the IdP during key refresh
+   * to be used on the TLS connection from CCF to the IdP during signing key refresh
    * https://learn.microsoft.com/en-us/azure/security/fundamentals/azure-ca-details
    * DigiCert Global Root CA: https://crt.sh/?d=853428
    * @param retryCount 
@@ -164,9 +164,8 @@ export class JwtConfigsGenerator {
       const ca_cert = await axios({ url: "https://crt.sh/?d=853428", method: 'GET', timeout: 5000 });
       return ca_cert.data;
     } catch (ex) {
-      console.log(retryCount)
-      if (retryCount < 5) {
-        await setTimeout(60000);
+      if (retryCount < 10) {
+        await setTimeout(60000); // wait for 1 minute before next request
         retryCount++
         return await JwtConfigsGenerator.getDigiCertGlobalRootCA(retryCount);
       }
