@@ -6,7 +6,6 @@ declare nodeAddress=""
 declare certificate_dir=""
 declare constitution_dir=""
 declare interactive=0
-declare ts_mode=0
 
 function usage {
     echo ""
@@ -18,7 +17,6 @@ function usage {
     echo "  --certificate_dir   string      The directory where the certificates are"
     echo "  --constitution_dir  string      The directory where the constitution is"
     echo "  --interactive       boolean     Optional. Run in Demo mode"
-    echo "  --typescript        boolean     Optional. Run in Typescript mode"
     echo ""
 }
 
@@ -29,7 +27,7 @@ function failed {
 
 # parse parameters
 
-if [ $# -gt 8 ]; then
+if [ $# -gt 7 ]; then
     usage
     exit 1
 fi
@@ -43,7 +41,6 @@ do
         --certificate_dir) certificate_dir=$2; shift;;
         --constitution_dir) constitution_dir=$2; shift;;
         --interactive) interactive=1;;
-        --typescript) ts_mode=1;;
         --help) usage; exit 0;;
         --) shift;;
     esac
@@ -95,9 +92,6 @@ testScript="${testScript} --nodeAddress ${nodeAddress} --certificate_dir ${certi
 if [ $interactive -eq 1 ]; then
     testScript="${testScript} --interactive"
 fi    
-if [ $ts_mode -eq 1 ]; then
-    testScript="${testScript} --typescript"
-fi
 
 # call testScript command
 ${testScript}
