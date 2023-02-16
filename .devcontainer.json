@@ -20,7 +20,6 @@
     }
   },
   "postStartCommand": "scripts/devContainer_OnStart.sh",
-  "initializeCommand": "scripts/devContainer_OnInitialize.sh",
   "features": {
     "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
       "version": "20.10.21"
@@ -32,7 +31,6 @@
     "ghcr.io/devcontainers/features/powershell:1": {
       "modules": "Az.Resources, Microsoft.Graph.Authentication, Microsoft.Graph.Applications"
     },
-    "ghcr.io/rchaganti/vsc-devcontainer-features/azurebicep:1": {
-    }
+    "ghcr.io/rchaganti/vsc-devcontainer-features/azurebicep:1": {}
   }
 }
