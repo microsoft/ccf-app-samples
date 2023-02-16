@@ -165,7 +165,7 @@ export class JwtConfigsGenerator {
       return ca_cert.data;
     } catch (ex) {
       if (retryCount < 10) {
-        await setTimeout(60000); // wait for 1 minute before next request
+        await setTimeout(120000); // wait for 2 minute before next request
         retryCount++
         return await JwtConfigsGenerator.getDigiCertGlobalRootCA(retryCount);
       }
