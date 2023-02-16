@@ -19,12 +19,11 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Banking app sample
+      - name: Build samples in DevContainer
         uses: devcontainers/ci@v0.2
         with:
-          imageName: ghcr.io/microsoft/ccf-samples-devcontainer
           cacheFrom: ghcr.io/microsoft/ccf-samples-devcontainer
-          push: always
+          push: never
           runCmd: |
             git config --global --add safe.directory "$GITHUB_WORKSPACE"
             make lint
@@ -32,7 +31,16 @@ jobs:
           env: |
             GITHUB_WORKSPACE
 
-      - name: Auditable logging app sample
+  auditable-logging-app-sample:
+    name: Auditable logging app sample
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Build samples in DevContainer
         uses: devcontainers/ci@v0.2
         with:
           cacheFrom: ghcr.io/microsoft/ccf-samples-devcontainer
@@ -40,12 +48,19 @@ jobs:
           runCmd: |
             cd auditable-logging-app && make test && make test-docker-virtual
 
-      - name: Data Reconciliation app sample
+  data-reconciliation-app-sample:
+    name: Data Reconciliation app sample
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Build samples in DevContainer
         uses: devcontainers/ci@v0.2
         with:
           cacheFrom: ghcr.io/microsoft/ccf-samples-devcontainer
           push: never
           runCmd: |
             cd data-reconciliation-app && make unit-test && make test && make test-docker-virtual && make e2e-test && make e2e-test-docker
-
-  
