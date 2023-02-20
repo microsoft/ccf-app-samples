@@ -7,7 +7,6 @@ declare app_dir=$PWD                   # application folder for reference
 declare app_name=${app_dir##*/}        # application name (to be used in container commands)
 declare certificate_dir="${app_dir}/workspace/docker_certificates"
 declare interactive=0
-declare ts_mode=0
 
 function usage {
     echo ""
@@ -20,7 +19,6 @@ function usage {
     echo "  --virtual       string      Run this in a virtual node"
     echo "  --enclave       string      Run this in a SGX node"
     echo "  --interactive   boolean     Optional. Run in Demo mode"
-    echo "  --typescript    boolean     Optional. Run in Typescript mode"
     echo ""
 }
 
@@ -31,7 +29,7 @@ function failed {
 
 # parse parameters
 
-if [ $# -gt 7 ]; then
+if [ $# -gt 6 ]; then
     usage
     exit 1
 fi
@@ -46,7 +44,6 @@ do
         --virtual) enclave_type="virtual";;
         --enclave) enclave_type="enclave";;
         --interactive) interactive=1;;
-        --typescript) ts_mode=1;;
         --help) usage; exit 0;;
         --) shift;;
     esac
@@ -113,9 +110,6 @@ fi
 testScript="${testScript} --nodeAddress ${serverIP}:${port} --certificate_dir ${certificate_dir}"
 if [ $interactive -eq 1 ]; then
     testScript="${testScript} --interactive"
-fi    
-if [ $ts_mode -eq 1 ]; then
-    testScript="${testScript} --typescript"
 fi
 
 # call testScript command

@@ -33,7 +33,7 @@ make unit-test                 # Build and run unit-test using jest framework
 
 End to end testing (E2E testing) is a testing method that involves testing an application’s workflow from beginning to end. This method aims to replicate real user scenarios to validate the system for integration and data integrity.
 
-The application uses bash scripts and curl to perform end-to-end testing for the application endpoints.
+The application uses bash scripts to start up the network environment a typescript application to perform end-to-end testing for the Data Reconciliation endpoints.
 
 There are 3 different types of network this sample can be tested against:
 - Sandbox (virtual)
@@ -41,7 +41,7 @@ There are 3 different types of network this sample can be tested against:
 - Azure Managed CCF (enclave)
 
 
-The test script [./test.sh](./test.sh) contains the application test scenarios and result validation for each endpoint. All requests are made using curl and assertion logic in a bash script to validate the results and generate a testing report.
+The test script [./test.sh](./test.sh) contains the call to the TypeScript application located in [e2e-test folder](./e2e-test/src). This code runs the test scenarios and result validation for each endpoint. Additionally, there are assertions at the end of the test to compare report results with expected values. All requests are made simulating MTLS members' signatures via certificates and private keys.
 
 
 **Note:** _The test script of each sample is called by wrapper scripts that exist in the root [scripts](../../scripts/) folder. 
