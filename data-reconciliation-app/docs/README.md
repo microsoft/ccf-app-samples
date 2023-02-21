@@ -1,8 +1,8 @@
 ## Docs Folder 
 
-### Architecture Design Record (ADR)
+### Architecture Decision Record (ADR)
 
-[Architecture Design Records](./docs/adr) are records for architecturally significant decisions: those that affect the structure, non-functional characteristics, dependencies, interfaces, and techniques leveraged to build the data reconciliation app. Many of the ADRs evaluate future considerations if more customer requirements are defined. 
+[Architecture Decision Records](./docs/adr) are records for architecturally significant decisions: those that affect the structure, non-functional characteristics, dependencies, interfaces, and techniques leveraged to build the data reconciliation app. Many of the ADRs evaluate future considerations if more customer requirements are defined. 
 
 
 ### Demo
