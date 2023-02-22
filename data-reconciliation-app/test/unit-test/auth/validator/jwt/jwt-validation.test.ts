@@ -1,6 +1,5 @@
 // Use the CCF polyfill to mock-up all key-value map functionality for unit-test
 import * as ccfapp from "@microsoft/ccf-app";
-import exp from "constants";
 import jwtValidator from "../../../../../src/auth/validator/jwt/jwt-validation";
 import { MSAccessToken } from "../../../../../src/auth/validator/jwt/ms-aad-jwt-provider";
 import { MS_AAD_CONFIG } from "../../../../../src/utils/config";
@@ -14,9 +13,6 @@ describe("Jwt-Validator", () => {
   const header = { key1: "value1" };
   const param = { param1: "value1" };
   const test_body: ccfapp.Body = null;
-
-  beforeEach(() => {});
-  afterEach(() => {});
 
   test("Should return the identityId", () => {
     // Arrange

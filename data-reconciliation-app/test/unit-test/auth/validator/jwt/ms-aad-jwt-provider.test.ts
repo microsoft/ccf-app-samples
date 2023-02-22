@@ -10,11 +10,6 @@ describe("MS-AAD-Jwt-Provider", () => {
   const appid = MS_AAD_CONFIG.ClientApplicationId;
   const ver = "1.0";
 
-  const invalid_ver: MSAccessToken = { sub: sub, iss: iss, aud: aud, appid: appid, ver: "2.0" };
-
-  beforeEach(() => {});
-  afterEach(() => {});
-
   test("Should return the identityId", () => {
     // Arrange
     const msJwttoken: MSAccessToken = { sub: sub, iss: iss, aud: aud, appid: appid, ver: ver };

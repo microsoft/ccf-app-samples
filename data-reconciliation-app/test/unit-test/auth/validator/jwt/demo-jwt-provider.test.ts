@@ -9,9 +9,6 @@ describe("Demo-Jwt-Provider", () => {
   const jwt = { header: "test", keyIssuer: iss, payload: { sub: sub } };
   const identity: ccfapp.JwtAuthnIdentity = { policy: "jwt", jwt: jwt };
 
-  beforeEach(() => {});
-  afterEach(() => {});
-
   test("Should return the identityId", () => {
     // Arrange
     // Act
