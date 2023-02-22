@@ -4,11 +4,11 @@ import msJwtProvider, { MSAccessToken } from "../../../../../src/auth/validator/
 import { MS_AAD_CONFIG } from "../../../../../src/utils/config";
 
 describe("MS-AAD-Jwt-Provider", () => {
-  let sub: string = "ms-aad-test";
-  let iss = "https://login.microsoftonline.com/common/v2.0";
-  let aud = MS_AAD_CONFIG.ApiIdentifierUri;
-  let appid = MS_AAD_CONFIG.ClientApplicationId;
-  let ver = "1.0";
+  const sub: string = "ms-aad-test";
+  const iss = "https://login.microsoftonline.com/common/v2.0";
+  const aud = MS_AAD_CONFIG.ApiIdentifierUri;
+  const appid = MS_AAD_CONFIG.ClientApplicationId;
+  const ver = "1.0";
 
   const invalid_ver: MSAccessToken = { sub: sub, iss: iss, aud: aud, appid: appid, ver: "2.0" };
 

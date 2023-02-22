@@ -3,8 +3,8 @@ import * as ccfapp from "@microsoft/ccf-app";
 import demoJwtProvider from "../../../../../src/auth/validator/jwt/demo-jwt-provider";
 
 describe("Demo-Jwt-Provider", () => {
-  let sub: string = "test";
-  let iss = "https://demo";
+  const sub: string = "test";
+  const iss = "https://demo";
 
   const jwt = { header: "test", keyIssuer: iss, payload: { sub: sub } };
   const identity: ccfapp.JwtAuthnIdentity = { policy: "jwt", jwt: jwt };

@@ -6,14 +6,14 @@ import { MSAccessToken } from "../../../../../src/auth/validator/jwt/ms-aad-jwt-
 import { MS_AAD_CONFIG } from "../../../../../src/utils/config";
 
 describe("Jwt-Validator", () => {
-  let iss = "https://login.microsoftonline.com/common/v2.0";
-  let aud = MS_AAD_CONFIG.ApiIdentifierUri;
-  let appid = MS_AAD_CONFIG.ClientApplicationId;
-  let ver = "1.0";
+  const iss = "https://login.microsoftonline.com/common/v2.0";
+  const aud = MS_AAD_CONFIG.ApiIdentifierUri;
+  const appid = MS_AAD_CONFIG.ClientApplicationId;
+  const ver = "1.0";
 
-  let header = { key1: "value1" };
-  let param = { param1: "value1" };
-  let test_body: ccfapp.Body = null;
+  const header = { key1: "value1" };
+  const param = { param1: "value1" };
+  const test_body: ccfapp.Body = null;
 
   beforeEach(() => {});
   afterEach(() => {});
