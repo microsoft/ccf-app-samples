@@ -1,0 +1,19 @@
+{
+  "private": true,
+  "name": "ccf-express-dbg",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines": {
+    "node": ">=14"
+  },
+  "type": "module",
+  "dependencies": {
+    "@microsoft/ccf-app": "^3.0.12",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
+    "pem": "^1.14.8",
+    "yargs": "^17.7.2"
+  }
+}
