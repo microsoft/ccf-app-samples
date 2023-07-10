@@ -1,6 +1,6 @@
 {
   "name": "CCF Samples",
-  "image": "mcr.microsoft.com/ccf/app/dev:3.0.1-virtual",
+  "image": "mcr.microsoft.com/ccf/app/dev:3.0.12-virtual",
   "customizations": {
     "vscode": {
       "extensions": [
@@ -22,10 +22,10 @@
   "postStartCommand": "scripts/devContainer_OnStart.sh",
   "features": {
     "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
-      "version": "20.10.21"
+      "version": "latest"
     },
     "ghcr.io/devcontainers/features/node:1": {
-      "version": "16.17.0",
+      "version": "lts",
       "nodeGypDependencies": true
     },
     "ghcr.io/devcontainers/features/powershell:1": {
