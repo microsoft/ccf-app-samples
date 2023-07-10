@@ -18,7 +18,7 @@ for (let moduleDef of bundle.modules) {
 }
 
 export async function resolve(specifier, context, nextResolve) {
-  const targetRoot = `${process.cwd()}/dist/`;
+  const targetRoot = path.join(process.cwd(), `dist`);
   let originalSpecifier = specifier;
 
   if (context.parentURL) {
