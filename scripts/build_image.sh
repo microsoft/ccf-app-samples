@@ -29,4 +29,4 @@ $ccf_prefix/keygenerator.sh --name member0 --gen-enc-key
 cd $app_path
 
 echo "-- Running docker build command"
-docker build -t $app_name:${setup_type} -f $app_path/docker/ccf_app_js.${setup_type} .
+DOCKER_BUILDKIT=1 docker build -t $app_name:${setup_type} -f $app_path/docker/ccf_app_js.${setup_type} .
