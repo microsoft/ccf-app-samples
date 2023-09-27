@@ -4,7 +4,7 @@ This is the _CCF Decentralized AuthZ app - sample_ in typescript.
 
 ## Overview
 
-The CCF network will be used to host a decentralized authorization service where different parties with membership (insurance providers, physicians and hospitals) will be able to manage the users and their roles for a shared healthcare services portal. A portal user could belong to one or more organizations (a hospital, an insurance provider or a physicians practice) and have a specific role in each organization. A user's organization and role is collectively called a Claim. 
+The CCF network will be used to host a decentralized authorization service where different parties with membership (for example insurance providers, physicians and hospitals) will be able to manage the users and their roles. A user could belong to one or more organizations (for example, a hospital, an insurance provider or a physicians practice) and have a specific role in each organization. A user's organization and role is collectively called a Claim. 
 
 ## Architecture
 
@@ -21,15 +21,9 @@ The reconciliation application consists of two parts: User Management and Author
 📂
 └── src                 Application source code
 │    └── endpoints      Application endpoints
-│    └── models         Domain models
 │    └── repositories   Data repositories
 │    └── services       Domain services
 │    └── utils          utility classes
-│
-└── test
-     └── data-samples    Data files for tests|demo
-     └── e2e-test            Application end to end tests
-     └── unit-test            Application unit tests
 
 ```
 
@@ -44,7 +38,7 @@ code ccf-app-samples                                   # open samples repository
 
 # In the VScode terminal window
 cd decentralized-authz-app                             # Navigate to app folder
-make build                                             # Build and create the application deployment bundle
+npm run build                                          # Build and create the application deployment bundle
 ```
 
 ## Local Deployment
