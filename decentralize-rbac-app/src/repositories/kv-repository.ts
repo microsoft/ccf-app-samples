@@ -3,9 +3,16 @@ import * as ccfapp from "@microsoft/ccf-app";
 import { ServiceResult } from "../utils/service-result";
 
 /**
- * Generic Key-Value implementation wrapping CFF TypedKvMap storage engine
+ * Generic Key-Value implementation wrapping CCF TypedKvMap storage engine
  */
 export interface IRepository<T> {
+  /**
+ * Store {T} in CFF TypedKvMap storage by key
+ * @param {string} key 
+ * @param {T} value 
+ */
+  set(key: string, value: T): ServiceResult<T>;
+
   /**
    * Retrive {T} in CFF TypedKvMap storage by key
    * @param {string} key 
@@ -54,15 +61,28 @@ export interface IRepository<T> {
 }
 
 export class KeyValueRepository<T> implements IRepository<T> {
-  private kvStore: ccfapp.TypedKvMap<ArrayBuffer, T>;
+  private kvStore: ccfapp.TypedKvMap<string, T>;
 
-  public constructor(kvStore: ccfapp.TypedKvMap<ArrayBuffer, T>) {
+  public constructor(kvStore: ccfapp.TypedKvMap<string, T>) {
     this.kvStore = kvStore;
   }
   
+  public set(key: string, value: T): ServiceResult<T> {
+    try {
+      this.kvStore.set(key, value);
+      return ServiceResult.Succeeded(value);
+    } catch (ex) {
+      return ServiceResult.Failed({
+        errorMessage: "Error: unable to set value to the kvstore",
+        errorType: "KeyValueStoreError",
+        details: ex,
+      });
+    }
+  }
+
   public get(key: string): ServiceResult<T> {
     try {
-      const value: any = this.kvStore.get(ccf.strToBuf(key));
+      const value: any = this.kvStore.get(key);
      
       if (value === undefined) {
         return ServiceResult.Failed({
@@ -71,7 +91,7 @@ export class KeyValueRepository<T> implements IRepository<T> {
         });
       }
 
-      const data = ccf.bufToJsonCompatible(value) as T;
+      const data = value as T;
 
       return ServiceResult.Succeeded(data);
     } catch (ex) {
@@ -85,7 +105,7 @@ export class KeyValueRepository<T> implements IRepository<T> {
 
   public has(key: string): ServiceResult<boolean> {
     try {
-      return ServiceResult.Succeeded(this.kvStore.has(ccf.strToBuf(key)));
+      return ServiceResult.Succeeded(this.kvStore.has(key));
     } catch (ex) {
       return ServiceResult.Failed({
         errorMessage: "Error: unable to check if key exists in the kvstore",
@@ -99,7 +119,7 @@ export class KeyValueRepository<T> implements IRepository<T> {
     try {
       const keys: string[] = [];
       this.kvStore.forEach((val, key) => {
-        keys.push(ccfapp.bufToStr(key));
+        keys.push(key);
       });
       return ServiceResult.Succeeded(keys);
     } catch (ex) {
@@ -141,7 +161,7 @@ export class KeyValueRepository<T> implements IRepository<T> {
 
   public delete(key: string): ServiceResult<void> {
     try {
-      return ServiceResult.Succeeded(this.kvStore.delete(ccf.strToBuf(key)));
+      return ServiceResult.Succeeded(this.kvStore.delete(key));
     } catch (ex) {
       return ServiceResult.Failed({
         errorMessage: "Error: unable to remove a key",
@@ -155,7 +175,7 @@ export class KeyValueRepository<T> implements IRepository<T> {
   public forEach(callback: (key: string, value: T) => void): ServiceResult<string> {
     try {
       this.kvStore.forEach((val, key) => {
-        callback(ccf.bufToStr(key), val);
+        callback(key, val);
       });
 
       return ServiceResult.Succeeded("");
@@ -181,6 +201,9 @@ export class KeyValueRepository<T> implements IRepository<T> {
   }
 }
 
-const kvStore = ccfapp.typedKv("public:ccf.gov.users.info",ccfapp.arrayBuffer,ccfapp.arrayBuffer);
-const keyValueRepository: IRepository<any> = new KeyValueRepository<any>(kvStore);
-export default keyValueRepository;
+const kvRoleActionStore = ccfapp.typedKv("public:rbac.roles",ccfapp.string,ccfapp.string);
+export const keyValueRoleActionRepository: IRepository<any> = new KeyValueRepository<any>(kvRoleActionStore);
+
+const kvUserRoleStore = ccfapp.typedKv("public:rbac.users",ccfapp.string,ccfapp.string);
+export const keyValueUserRoleRepository: IRepository<any> = new KeyValueRepository<any>(kvUserRoleStore);
+

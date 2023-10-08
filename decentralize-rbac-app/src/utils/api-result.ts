@@ -28,11 +28,25 @@ export class ApiResult {
    * @param result Result of the service operation
    * @returns 
    */
-  public static Succeeded<T>(result: ServiceResult<T>): CCFResponse {
+  public static ActionAllowed<T>(result: ServiceResult<T>): CCFResponse {
     const response: CCFResponse = {
-      statusCode: result.statusCode,
-      body: result,
+      statusCode: 200,
+      body: {
+        allowed: true,
+      },
     };
+
+    return response;
+  }
+
+  public static ActionDisallowed<T>(result: ServiceResult<T>): CCFResponse {
+    const response: CCFResponse = {
+      statusCode: 200,
+      body: {
+        allowed: false,
+      },
+    };
+
     return response;
   }
 

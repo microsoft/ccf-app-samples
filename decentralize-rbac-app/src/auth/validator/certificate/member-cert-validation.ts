@@ -35,20 +35,19 @@ export class MemberCertValidator implements IValidatorService {
   public isActiveMember(memberId: string): ServiceResult<boolean> {
     const membersCerts = ccfapp.typedKv(
       "public:ccf.gov.members.certs",
-      ccfapp.arrayBuffer,
+      ccfapp.string,
       ccfapp.arrayBuffer
     );
 
-    const isMember = membersCerts.has(ccf.strToBuf(memberId));
+    const isMember = membersCerts.has(memberId);
 
     const membersInfo = ccfapp.typedKv(
       "public:ccf.gov.members.info",
-      ccfapp.arrayBuffer,
-      ccfapp.arrayBuffer
+      ccfapp.string,
+      ccfapp.json<CCFMember>()
     );
 
-    const memberInfoBuf = membersInfo.get(ccf.strToBuf(memberId));
-    const memberInfo = ccf.bufToJsonCompatible(memberInfoBuf) as CCFMember;
+    const memberInfo = membersInfo.get(memberId);
     const isActiveMember = memberInfo && memberInfo.status === "Active";
 
     return ServiceResult.Succeeded(isActiveMember && isMember);

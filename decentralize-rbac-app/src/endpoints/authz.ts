@@ -2,6 +2,8 @@ import * as ccfapp from "@microsoft/ccf-app";
 import { ApiResult, CCFResponse } from "../utils/api-result";
 import authenticationService from "../services/authentication-service";
 import authzService from "../services/authz-service";
+import { ServiceResult } from "../utils/service-result";
+import { Service } from "protobufjs";
 
 /**
  * HTTP GET Handler for checking if a user exists
@@ -15,8 +17,23 @@ export function authorize(request: ccfapp.Request<any>): ccfapp.Response<CCFResp
     return ApiResult.AuthFailure();
 
   const userId = request.params.user_id;
+  const action = request.params.action;
+
+  if (!userId || !action){
+    return ApiResult.Failed(ServiceResult.Failed({
+      errorMessage: "UserId and action are required",
+      errorType: "InvalidData"
+    }, 400));
+  }
   
   // check if the user exist
-  const response = authzService.authorize(userId);
-  return ApiResult.Succeeded(response);
+  const response = authzService.authorize(userId, action);
+  if (response.success)
+  {
+    return ApiResult.ActionAllowed(response);
+  } 
+  else 
+  {
+    return ApiResult.ActionDisallowed(response);
+  }
 }

@@ -4,7 +4,7 @@ This is the _CCF Decentralized AuthZ app - sample_ in typescript.
 
 ## Overview
 
-The CCF network will be used to host a decentralized authorization service where different parties with membership (for example insurance providers, physicians and hospitals) will be able to manage the users and their roles. A user could belong to one or more organizations (for example, a hospital, an insurance provider or a physicians practice) and have a specific role in each organization. A user's organization and role is collectively called a Claim. 
+The CCF network will be used to host a decentralized authorization service where different parties with membership (for example insurance providers, physician's practice and hospitals) will be able to manage the users and their roles. A user could belong to one or more organizations (for example, a hospital, an insurance provider or a physicians practice) and have a specific role in each organization. A user's organization and role is collectively called a Claim. 
 
 ## Architecture
 
