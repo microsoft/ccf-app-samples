@@ -40,7 +40,7 @@ export class AuthZService implements IAuthZService {
       });
     }
 
-    console.log(`Allowed action for role ${role} is ${allowedAction}`)
+    console.log(`Allowed action for role ${role} is ${allowedAction.content}`)
 
     if (allowedAction.content.toLowerCase() != action.toLowerCase()){
       return ServiceResult.Failed({
