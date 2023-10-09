@@ -17,7 +17,7 @@ export function authorize(request: ccfapp.Request<any>): ccfapp.Response<CCFResp
     return ApiResult.AuthFailure();
 
   const userId = request.params.user_id;
-  const action = request.params.action;
+  const action = request.params.actionName;
 
   if (!userId || !action){
     return ApiResult.Failed(ServiceResult.Failed({

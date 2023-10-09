@@ -1,6 +1,6 @@
 {
 	"endpoints": {
-	  "/{user_id}/{action}": {
+	  "/{user_id}/action/{actionName}": {
 		"get": {
 		  "js_module": "endpoints/authz.js",
 		  "js_function": "authorize",
