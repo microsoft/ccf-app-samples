@@ -4,22 +4,26 @@ This is the _CCF Decentralized AuthZ app - sample_ in typescript.
 
 ## Overview
 
-The CCF network will be used to host a decentralized authorization service where different parties with membership (for example insurance providers, physician's practice and hospitals) will be able to manage the users and their roles. A user could belong to one or more organizations (for example, a hospital, an insurance provider or a physicians practice) and have a specific role in each organization. A user's organization and role is collectively called a Claim. 
+The CCF network will be used to host a decentralized RBAC application where a consortium of members from different organizations would manage the roles, allowed action for a role and users. A user would have a specific role that would determine the allowed action. 
+
+A service could use the decentralized RBAC application to determine if an action is allowed for a logged-in user. 
 
 ## Architecture
 
-The reconciliation application consists of two parts: User Management and Authorization.
+The application consists of two parts: Role and User Management, Authorization.
 
-- User Management
-  - API Endpoint: allow members to add a user or remove a user.
+- Role and User Management
+  - API Endpoint: allow members to add a role and action allowed for a role.
+  - API Endpoint: allow members to add a user and their role.
 - Authorization
-  - Check if a user exist and get the claims.
+  - Check if a user exist and an action is allowed.
 
 ### Repository Layout
 
 ```text
 📂
 └── src                 Application source code
+|    └── auth           Member and User cert Authentication 
 │    └── endpoints      Application endpoints
 │    └── repositories   Data repositories
 │    └── services       Domain services
