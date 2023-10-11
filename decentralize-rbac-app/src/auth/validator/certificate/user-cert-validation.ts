@@ -49,10 +49,10 @@ export class UserCertValidator implements IValidatorService {
   public isUser(userId: string): ServiceResult<boolean> {
     const usersCerts = ccfapp.typedKv(
       "public:ccf.gov.users.certs",
-      ccfapp.arrayBuffer,
+      ccfapp.string,
       ccfapp.arrayBuffer
     );
-    const result = usersCerts.has(ccf.strToBuf(userId));
+    const result = usersCerts.has(userId);
     return ServiceResult.Succeeded(result);
   }
 }

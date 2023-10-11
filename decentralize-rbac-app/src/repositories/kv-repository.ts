@@ -72,10 +72,10 @@ export class KeyValueRepository<T> implements IRepository<T> {
       this.kvStore.set(key, value);
       return ServiceResult.Succeeded(value);
     } catch (ex) {
+      console.log(`Exception in kvstore.set: ${ex}`);
       return ServiceResult.Failed({
         errorMessage: "Error: unable to set value to the kvstore",
         errorType: "KeyValueStoreError",
-        details: ex,
       });
     }
   }
@@ -95,10 +95,10 @@ export class KeyValueRepository<T> implements IRepository<T> {
 
       return ServiceResult.Succeeded(data);
     } catch (ex) {
+      console.log(`Exception in kvstore.get: ${ex}`);
       return ServiceResult.Failed({
         errorMessage: "Error: unable to read value from the kvstore",
         errorType: "KeyValueStoreError",
-        details: ex,
       });
     }
   }
@@ -107,10 +107,10 @@ export class KeyValueRepository<T> implements IRepository<T> {
     try {
       return ServiceResult.Succeeded(this.kvStore.has(key));
     } catch (ex) {
+      console.log(`Exception in kvstore.has: ${ex}`);
       return ServiceResult.Failed({
         errorMessage: "Error: unable to check if key exists in the kvstore",
         errorType: "KeyValueStoreError",
-        details: ex,
       });
     }
   }
@@ -123,10 +123,10 @@ export class KeyValueRepository<T> implements IRepository<T> {
       });
       return ServiceResult.Succeeded(keys);
     } catch (ex) {
+      console.log(`Exception in kvstore.keys: ${ex}`);
       return ServiceResult.Failed({
         errorMessage: "Error: unable to get kvstore all keys",
         errorType: "KeyValueStoreError",
-        details: ex,
       });
     }
   }
@@ -139,10 +139,10 @@ export class KeyValueRepository<T> implements IRepository<T> {
       });
       return ServiceResult.Succeeded(values);
     } catch (ex) {
+      console.log(`Exception in kvstore.values: ${ex}`);
       return ServiceResult.Failed({
         errorMessage: "Error: unable to get kvstore all values",
         errorType: "KeyValueStoreError",
-        details: ex,
       });
     }
   }
@@ -151,10 +151,10 @@ export class KeyValueRepository<T> implements IRepository<T> {
     try {
       return ServiceResult.Succeeded(this.kvStore.clear());
     } catch (ex) {
+      console.log(`Exception in kvstore.clear: ${ex}`);
       return ServiceResult.Failed({
         errorMessage: "Error: unable to clear kvstore values",
         errorType: "KeyValueStoreError",
-        details: ex,
       });
     }
   }
@@ -163,10 +163,10 @@ export class KeyValueRepository<T> implements IRepository<T> {
     try {
       return ServiceResult.Succeeded(this.kvStore.delete(key));
     } catch (ex) {
+      console.log(`Exception in kvstore.delete: ${ex}`);
       return ServiceResult.Failed({
         errorMessage: "Error: unable to remove a key",
         errorType: "KeyValueStoreError",
-        details: ex,
       });
     }
   }
@@ -180,10 +180,10 @@ export class KeyValueRepository<T> implements IRepository<T> {
 
       return ServiceResult.Succeeded("");
     } catch (ex) {
+      console.log(`Exception in kvstore.foreach: ${ex}`);
       return ServiceResult.Failed({
-        errorMessage: "Error: unable to iterate the kvstore pairs",
-        errorType: "KeyValueStoreError",
-        details: ex,
+        errorMessage: "Error: user callback function failed ",
+        errorType: "UnexpectedError"
       });
     }
   }
@@ -192,10 +192,10 @@ export class KeyValueRepository<T> implements IRepository<T> {
     try {
       return ServiceResult.Succeeded(this.kvStore.size);
     } catch (ex) {
+      console.log(`Exception in kvstore.size: ${ex}`);
       return ServiceResult.Failed({
         errorMessage: "Error: unable to get the kvstore size",
         errorType: "KeyValueStoreError",
-        details: ex,
       });
     }
   }

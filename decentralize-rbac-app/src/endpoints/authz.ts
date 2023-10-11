@@ -21,7 +21,7 @@ export function authorize(request: ccfapp.Request<any>): ccfapp.Response<CCFResp
 
   if (!userId || !action){
     return ApiResult.Failed(ServiceResult.Failed({
-      errorMessage: "UserId and action are required",
+      errorMessage: "userId and action are required",
       errorType: "InvalidData"
     }, 400));
   }
