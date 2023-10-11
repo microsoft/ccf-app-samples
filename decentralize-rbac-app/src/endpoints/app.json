@@ -1,0 +1,118 @@
+{
+	"endpoints": {
+	  "/{user_id}/action/{actionName}": {
+		"get": {
+		  "js_module": "endpoints/authz.js",
+		  "js_function": "authorize",
+		  "forwarding_required": "never",
+		  "authn_policies": [
+			"user_cert"
+		  ],
+		  "mode": "readonly",
+		  "openapi": {
+			"responses": {
+			  "200": {
+				"description": "Ok",
+				"content": {
+				  "application/json": {
+					"schema": {
+					  "type": "object",
+					  "properties": {
+						"allowed": {
+						  "type": "boolean"
+						}
+					  }
+					}
+				  }
+				}
+			  }
+			}
+		  }
+		}
+	  },
+	  "/{role}/roles/{action}": {
+		"put": {
+		  "js_module": "endpoints/roles.js",
+		  "js_function": "add_role",
+		  "forwarding_required": "always",
+		  "authn_policies": [
+			"member_cert"
+		  ],
+		  "mode": "readwrite",
+		  "openapi": {
+			"responses": {
+			  "200": {
+				"description": "Ok"
+			  },
+			  "400": {
+				"description": "Failed",
+				"content": {
+				  "application/json": {
+					"schema": {
+					  "type": "object",
+					  "properties": {
+						"content": { "type": "object" },
+						"error": {
+						  "type": "object",
+						  "properties": {
+							"errorMessage": { "type": "string" },
+							"errorType": { "type": "string" }
+						  }
+						},
+						"success": { "type": "boolean" },
+						"failure": { "type": "boolean" },
+						"statusCode": { "type": "number" },
+						"status": { "type": "string" }
+					  }
+					}
+				  }
+				}
+			  }
+			}
+		  }
+		}
+	  },
+	  "/{user_id}/users/{role}": {
+		"put": {
+		  "js_module": "endpoints/users.js",
+		  "js_function": "add_user",
+		  "forwarding_required": "always",
+		  "authn_policies": [
+			"member_cert"
+		  ],
+		  "mode": "readwrite",
+		  "openapi": {
+			"responses": {
+			  "200": {
+				"description": "Ok"
+			  },
+			  "400": {
+				"description": "Failed",
+				"content": {
+				  "application/json": {
+					"schema": {
+					  "type": "object",
+					  "properties": {
+						"content": { "type": "object" },
+						"error": {
+						  "type": "object",
+						  "properties": {
+							"errorMessage": { "type": "string" },
+							"errorType": { "type": "string" }
+						  }
+						},
+						"success": { "type": "boolean" },
+						"failure": { "type": "boolean" },
+						"statusCode": { "type": "number" },
+						"status": { "type": "string" }
+					  }
+					}
+				  }
+				}
+			  }
+			}
+		  }
+		}
+	  }
+	}
+  }
