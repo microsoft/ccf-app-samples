@@ -1,22 +1,26 @@
-# Decentralized AuthZ application
+# Decentralized RBAC Application
 
-This is the _CCF Decentralized AuthZ app - sample_ in typescript.
+This is the _CCF Decentralized RBAC app - sample_ in typescript.
 
 ## Overview
 
-The CCF network will be used to host a decentralized RBAC application where a consortium of members from different organizations would manage the roles, allowed action for a role and users. A user would have a specific role that would determine the allowed action. 
+The CCF network will be used to host a decentralized RBAC application where a consortium of members from different organizations would manage the roles, their allowed actions and users. A user is assigned a role which determines the allowed action. 
 
-A service could use the decentralized RBAC application to determine if an action is allowed for a logged-in user. 
+An external service could use the application to perform authorization(AuthZ) decisions for the logged-in user.
 
 ## Architecture
 
-The application consists of two parts: Role and User Management, Authorization.
+The application consists of three parts: 
+
+(i) Role management,
+(ii) User management, and,
+(iii) Authorization
 
 - Role and User Management
-  - API Endpoint: allow members to add a role and action allowed for a role.
-  - API Endpoint: allow members to add a user and their role.
+  - API Endpoint: allow members to add a role and allowed action.
+  - API Endpoint: allow members to add a user and the role.
 - Authorization
-  - Check if a user exist and an action is allowed.
+  - Check if a user exists and if an action is allowed.
 
 ### Repository Layout
 

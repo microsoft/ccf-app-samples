@@ -20,6 +20,7 @@ Please choose a sample to learn more.
 - [Auditable Logging App](./auditable-logging-app/README.md)
 - [Banking App](./banking-app/README.md)
 - [Data Reconciliation App](./data-reconciliation-app/README.md)
+- [Decentralized RBAC App](./decentralize-rbac-app/README.md)
 
 ## Contributing
 
