@@ -20,7 +20,7 @@ The application consists of three parts:
   - API Endpoint: allow members to add a role and allowed action.
   - API Endpoint: allow members to add a user and the role.
 - Authorization
-  - Check if a user exist and if an action is allowed.
+  - Check if a user exists and if an action is allowed.
 
 ### Repository Layout
 
