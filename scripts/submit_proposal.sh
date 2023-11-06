@@ -54,21 +54,27 @@ elif [[ -z $proposal_file ]]; then
     failed "Missing parameter --proposal-file"
 fi
 
-
 app_dir=$PWD  # application folder for reference
 service_cert="$certificate_dir/service_cert.pem"
 signing_cert="$certificate_dir/member0_cert.pem"
 signing_key="$certificate_dir/member0_privk.pem"
 
-proposal0_out=$(/opt/ccf_virtual/bin/scurl.sh "$network_url/gov/proposals" --cacert $service_cert --signing-key $signing_key --signing-cert $signing_cert --data-binary @$proposal_file -H "content-type: application/json")
+if [ ! -f "env/bin/activate" ]
+    then
+        python3.8 -m venv env
+fi
+source env/bin/activate
+pip install -q ccf==$(cat /opt/ccf_virtual/share/VERSION)
+
+proposal0_out=$(ccf_cose_sign1 --ccf-gov-msg-type proposal --ccf-gov-msg-created_at `date -uIs` --signing-key $signing_key --signing-cert $signing_cert --content $proposal_file | curl -s "$network_url/gov/proposals" --cacert $service_cert --data-binary @- -H "content-type: application/cose")
 proposal0_id=$( jq -r  '.proposal_id' <<< "${proposal0_out}" )
 echo $proposal0_id
 
 # proposal submitter vote for proposal
-/opt/ccf_virtual/bin/scurl.sh "$network_url/gov/proposals/$proposal0_id/ballots" --cacert $service_cert --signing-key $signing_key --signing-cert $signing_cert --data-binary @${app_dir}/governance/vote/vote_accept.json -H "content-type: application/json" | jq
+ccf_cose_sign1 --ccf-gov-msg-type ballot --ccf-gov-msg-proposal_id $proposal0_id --ccf-gov-msg-created_at `date -uIs` --signing-key $signing_key --signing-cert $signing_cert --content ${app_dir}/governance/vote/vote_accept.json | curl -s "$network_url/gov/proposals/$proposal0_id/ballots" --cacert $service_cert --data-binary @- -H "content-type: application/cose" | jq
 
 for ((i = 1 ; i < $member_count ; i++)); do
   signing_cert="$certificate_dir/member${i}_cert.pem"
   signing_key="$certificate_dir/member${i}_privk.pem"
-  /opt/ccf_virtual/bin/scurl.sh "$network_url/gov/proposals/$proposal0_id/ballots" --cacert $service_cert --signing-key $signing_key --signing-cert $signing_cert --data-binary @${app_dir}/governance/vote/vote_accept.json -H "content-type: application/json" | jq
+  ccf_cose_sign1 --ccf-gov-msg-type ballot --ccf-gov-msg-proposal_id $proposal0_id --ccf-gov-msg-created_at `date -uIs` --signing-key $signing_key --signing-cert $signing_cert --content ${app_dir}/governance/vote/vote_accept.json | curl -s "$network_url/gov/proposals/$proposal0_id/ballots" --cacert $service_cert --data-binary @- -H "content-type: application/cose" | jq
 done

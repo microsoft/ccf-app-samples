@@ -170,7 +170,7 @@ export function getLogItem(
     // Note: Instead of ccf.digest, an equivalent of std::hash should be used.
     const makeHandle = (begin: number, last: number): number => {
       const cacheKey = `${begin}-${last}`;
-      const digest = ccf.digest("SHA-256", ccf.strToBuf(cacheKey));
+      const digest = ccf.crypto.digest("SHA-256", ccf.strToBuf(cacheKey));
       const handle = new DataView(digest).getUint32(0);
       return handle;
     };
