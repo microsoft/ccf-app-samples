@@ -218,7 +218,7 @@ export function transfer(
 
   const claim = `${userId} sent ${value} to ${userIdTo}`;
   currentClaimTable.set(keyForClaimTable, { userId, claim });
-  const claimDigest = ccf.digest("SHA-256", ccf.strToBuf(claim));
+  const claimDigest = ccf.crypto.digest("SHA-256", ccf.strToBuf(claim));
   ccf.rpc.setClaimsDigest(claimDigest);
 
   console.log("Transfer Completed");
@@ -283,7 +283,7 @@ export function getTransactionReceipt(
   // Note: Instead of ccf.digest, an equivalent of std::hash should be used.
   const makeHandle = (begin: number, end: number, id: string): number => {
     const cacheKey = `${begin}-${end}-${id}`;
-    const digest = ccf.digest("SHA-256", ccf.strToBuf(cacheKey));
+    const digest = ccf.crypto.digest("SHA-256", ccf.strToBuf(cacheKey));
     const handle = new DataView(digest).getUint32(0);
     return handle;
   };
