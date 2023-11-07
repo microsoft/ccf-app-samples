@@ -9,12 +9,12 @@ import { DataSchema } from "../models/data-schema";
  * @param {ccfapp.Request<any>} request - mTLS request with userId
  * @returns {ServiceResult<object[]>} - Reconciliation report
  */
-export function getAllHandler(request: ccfapp.Request<any>): ccfapp.Response<CCFResponse> {
-
+export function getAllHandler(
+  request: ccfapp.Request<any>,
+): ccfapp.Response<CCFResponse> {
   // check if caller has a valid identity
   const isValidIdentity = authenticationService.isAuthenticated(request);
-  if (isValidIdentity.failure)
-    return ApiResult.AuthFailure();
+  if (isValidIdentity.failure) return ApiResult.AuthFailure();
 
   // caller unique identifier
   const callerId = isValidIdentity.content;
@@ -33,12 +33,12 @@ export function getAllHandler(request: ccfapp.Request<any>): ccfapp.Response<CCF
  * @param {ccfapp.Request<any>} request - mTLS request with userId and recordId
  * @returns {ServiceResult<object[]>} - Reconciliation report
  */
-export function getByIdHandler(request: ccfapp.Request<any>): ccfapp.Response<CCFResponse> {
-
+export function getByIdHandler(
+  request: ccfapp.Request<any>,
+): ccfapp.Response<CCFResponse> {
   // check if caller has a valid identity
   const isValidIdentity = authenticationService.isAuthenticated(request);
-  if (isValidIdentity.failure)
-    return ApiResult.AuthFailure();
+  if (isValidIdentity.failure) return ApiResult.AuthFailure();
 
   // caller unique identifier
   const callerId = isValidIdentity.content;

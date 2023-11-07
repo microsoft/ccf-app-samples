@@ -6,9 +6,10 @@ Approved
 
 ## Context
 
-We need to store the data from the Ingestion API in our K-V store (Map). We need to provide a mechanism for data to be updated after initial ingestion. 
+We need to store the data from the Ingestion API in our K-V store (Map). We need to provide a mechanism for data to be updated after initial ingestion.
 
 ### Mutability?
+
 1. Members can ingest data or query for a report on data at any time. There is no concept of a session. For example, consider members 1,2,3 submit data on Monday. If member 1 submits more data on Tuesday, reports for all members (Tuesday onwards) will be generated based on members 2 & 3's Monday data and member 1's Tuesday data.
 
 2. Data records are mutable! When new data is submitted, the content can be a mix of records that conceptually need to be created or "updated". Our K-V store is append-only. We can only read and write to the local store. When working with an append-only store, there is no concept of deleting or updating. https://microsoft.github.io/CCF/main/build_apps/kv/kv_how_to.html#removing-a-key

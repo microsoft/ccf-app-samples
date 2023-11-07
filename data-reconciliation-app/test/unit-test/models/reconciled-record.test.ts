@@ -39,7 +39,7 @@ describe("Reconciled Record Model", () => {
     const updateReconRecord = ReconciledRecord.update(
       createReconRecord,
       updateDataRecord,
-      userId
+      userId,
     ).content;
 
     // Assert

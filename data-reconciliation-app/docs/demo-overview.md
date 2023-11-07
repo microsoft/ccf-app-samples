@@ -10,7 +10,6 @@ CCF is based on web technologies; clients interact with CCF JavaScript applicati
 
 ![CCF Network](https://microsoft.github.io/CCF/main/_images/about-ccf.png)
 
-
 ## CCF Network Attributes
 
 - **Nodes** [Run on TEE > secure] [multi-nodes > highly-available and performant]
@@ -34,24 +33,25 @@ In secure multi-party computing, encrypted data goes into the enclave. The encla
 
 ![Applications](https://learn.microsoft.com/en-us/azure/confidential-computing/media/use-cases-scenarios/use-cases.png)
 
-
 ## Data Reconciliation Application
 
-**Use Case:** Multiple parties (organisations - Banks - companies) need to process their confidential data **without exposing the input data to other parties**. This type of secure computation enables scenarios such as anti-money laundering, fraud-detection, and secure analysis of healthcare data. 
+**Use Case:** Multiple parties (organisations - Banks - companies) need to process their confidential data **without exposing the input data to other parties**. This type of secure computation enables scenarios such as anti-money laundering, fraud-detection, and secure analysis of healthcare data.
 
-**Proposed Solution:** A **data reconciliation service** will be hosted on a CCF network where members can submit their data to be reconciled against "each other's data" in a confidential manner, to performs analysis and generate some data-insights. 
+**Proposed Solution:** A **data reconciliation service** will be hosted on a CCF network where members can submit their data to be reconciled against "each other's data" in a confidential manner, to performs analysis and generate some data-insights.
 
 In secure multi-party computing, encrypted data goes into the enclave. The enclave decrypts the data using a key, performs analysis, gets a result, and sends back an encrypted result that a party can decrypt with the designated key.
 
-**Data Schema:** Data schema will be agreed by members 
+**Data Schema:** Data schema will be agreed by members
+
 - Unique key: uniquely identifying each record.
-- Value: to be reconciled with other members' data. 
+- Value: to be reconciled with other members' data.
 
 ![Input Data](./images/data.png)
 
 ![Output Report](./images/report.png)
 
-## Functional  Requirements
+## Functional Requirements
+
 - Members can submit their data as a single record or a batch
 - Members can update their data
 - Each member can request a reconciliation report for all records or specific record (by UniqueId)
@@ -71,7 +71,7 @@ The reconciliation application will consist of three main parts.
   - API Endpoint: Members will query for results
     - Query by specific record by `a unique identifier`
     - Query all data
- 
+
 When a new record(s) is submitted through ingestion endpoints, the application will search the key-value store by the record's key; if this key does not exist, it will be added; otherwise, a vote is added to this record with a member ID and the submitted value.
 
 ![Detailed Steps](./images/data_recon_sample.png)

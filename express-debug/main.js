@@ -119,7 +119,7 @@ appRouter.use(
       return true;
     },
   }),
-  ccfMiddleware
+  ccfMiddleware,
 );
 
 for (let [path, pathObject] of Object.entries(metadata.endpoints)) {
@@ -179,12 +179,12 @@ pem.createCertificate({ days: 1, selfSigned: true }, function (err, keys) {
         requestCert: true,
         rejectUnauthorized: false,
       },
-      expressApp
+      expressApp,
     )
     .listen(port);
   console.log(
     `CCF express app listening on ${server.address().address}:${
       server.address().port
-    }!`
+    }!`,
   );
 });

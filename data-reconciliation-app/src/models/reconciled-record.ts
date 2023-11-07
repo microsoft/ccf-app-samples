@@ -18,7 +18,7 @@ export class ReconciledRecord implements ReconciledRecordProps {
 
   public static create(
     record: DataRecord,
-    userId: string
+    userId: string,
   ): ServiceResult<ReconciledRecord> {
     const newRecord: ReconciledRecord = new ReconciledRecord();
 
@@ -32,7 +32,7 @@ export class ReconciledRecord implements ReconciledRecordProps {
   public static update(
     record: ReconciledRecord,
     newRecordValue: DataRecord,
-    userId: string
+    userId: string,
   ): ServiceResult<ReconciledRecord> {
     record.key = newRecordValue.key;
     record.values[userId] = newRecordValue.value;

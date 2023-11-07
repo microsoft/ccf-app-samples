@@ -15,18 +15,17 @@ export enum StatusCode {
 export interface CCFResponse {
   statusCode: number;
   body: any;
-  headers?: { [key: string]: string; }
+  headers?: { [key: string]: string };
 }
 
 /**
  * Utility class for wrapping the response with CFF network conventions
  */
 export class ApiResult {
-
   /**
    * Successful HTTP API operation
    * @param result Result of the service operation
-   * @returns 
+   * @returns
    */
   public static Succeeded<T>(result: ServiceResult<T>): CCFResponse {
     const response: CCFResponse = {
@@ -39,7 +38,7 @@ export class ApiResult {
   /**
    * Failed HTTP API operation
    * @param result Result of the service operation
-   * @returns 
+   * @returns
    */
   public static Failed<T>(result: ServiceResult<T>): CCFResponse {
     const response: CCFResponse = {
@@ -60,7 +59,7 @@ export class ApiResult {
           errorMessage: "Unauthorized",
           errorType: "Unauthorized",
         },
-        StatusCode.UNAUTHORIZED
+        StatusCode.UNAUTHORIZED,
       ),
     };
     return response;
@@ -71,7 +70,10 @@ export class ApiResult {
    * @param result Result of the service operation
    * @returns Html response
    */
-  public static Html(result: string, statusCode: StatusCode = StatusCode.OK): CCFResponse {
+  public static Html(
+    result: string,
+    statusCode: StatusCode = StatusCode.OK,
+  ): CCFResponse {
     const response: CCFResponse = {
       statusCode: StatusCode.OK,
       headers: { "content-type": "text/html" },
@@ -85,7 +87,10 @@ export class ApiResult {
    * @param result Result of the service operation
    * @returns Json response
    */
-  public static Json(result: any, statusCode: StatusCode = StatusCode.OK): CCFResponse {
+  public static Json(
+    result: any,
+    statusCode: StatusCode = StatusCode.OK,
+  ): CCFResponse {
     const response: CCFResponse = {
       statusCode: statusCode,
       headers: { "content-type": "application/json" },

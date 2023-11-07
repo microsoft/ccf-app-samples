@@ -100,7 +100,7 @@ public getVotingSummaries(memberId: string) {
 // recordId: the record identifier for the data to be reconciled
 function getStringVotingSummary(
   memberId: string,
-  recordId: string
+  recordId: string,
 ): StringVoteSummary {
   // record = { attributes: {name: "XYZ", type: "string"}, votes: {"Member 1": A ,"Member 2": A ,"Member 3": A ,"Member 4": D  }}
   const record = this.kvStore.get(recordId);
@@ -123,11 +123,11 @@ function getStringVotingSummary(
       count: keys.length,
       // Count the number of members who agreed with the record vote value.
       acceptedCount: keys.filter(
-        (key) => key != memberId && votes[key] == memberVote
+        (key) => key != memberId && votes[key] == memberVote,
       ).length,
       // Count the number of members who disagreed with the record vote value.
       rejectedCount: keys.filter(
-        (key) => key != memberId && votes[key] != memberVote
+        (key) => key != memberId && votes[key] != memberVote,
       ).length,
     },
   };
@@ -146,7 +146,7 @@ function getStringVotingSummary(
 // recordId: the record identifier for the data to be reconciled
 function getNumericVotingSummary(
   memberId: string,
-  recordId: string
+  recordId: string,
 ): NumericVoteSummary {
   // record = { attributes: {name: "XYZ", type: "number"}, votes: {"Member 1": 10 ,"Member 2": 20 ,"Member 3": 30 ,"Member 4": 40  }}
   const record = this.kvStore.get(recordId);

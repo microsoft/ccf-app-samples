@@ -61,7 +61,7 @@ const app_reg = {
 };
 
 console.log(
-  `Writing bundle containing ${modules.length} modules to ${bundlePath}`
+  `Writing bundle containing ${modules.length} modules to ${bundlePath}`,
 );
 writeFileSync(bundlePath, JSON.stringify(bundle));
 writeFileSync(appRegPath, JSON.stringify(app_reg));

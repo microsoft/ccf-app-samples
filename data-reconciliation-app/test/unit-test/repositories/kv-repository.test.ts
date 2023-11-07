@@ -19,7 +19,7 @@ describe("Key value pair Repository", () => {
 
   let testReconRecord: ReconciledRecord = ReconciledRecord.create(
     testRecord,
-    userId
+    userId,
   ).content!;
 
   beforeEach(() => {});
@@ -56,7 +56,7 @@ describe("Key value pair Repository", () => {
     }).content!;
     let newTestReconRecord: ReconciledRecord = ReconciledRecord.create(
       newRecord,
-      userId
+      userId,
     ).content!;
 
     keyValueRepo?.set(testKey, newTestReconRecord);
@@ -68,7 +68,7 @@ describe("Key value pair Repository", () => {
     expect(result.content).not.toBeNull();
     expect(result.content.key).toBe(newTestReconRecord.key);
     expect(result.content.values[userId]).toBe(
-      newTestReconRecord.values[userId]
+      newTestReconRecord.values[userId],
     );
   });
 

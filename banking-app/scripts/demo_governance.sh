@@ -39,51 +39,78 @@ cp ../../vote/* ./
 # Add users
 
 # Proposal for user0
-proposal0_out=$(${ccf_prefix}/scurl.sh ${server}/gov/proposals \
-  --cacert service_cert.pem \
+proposal0_out=$(ccf_cose_sign1 --ccf-gov-msg-type proposal \
+  --ccf-gov-msg-created_at `date -uIs` \
   --signing-key member0_privk.pem \
   --signing-cert member0_cert.pem \
-  --data-binary @set_user0.json \
-  -H "content-type: application/json")
+  --content set_user0.json | \
+  curl -s "${server}/gov/proposals" \
+  --cacert service_cert.pem \
+  --data-binary @- \
+  -H "content-type: application/cose")
 proposal0_id=$( jq -r  '.proposal_id' <<< "${proposal0_out}" )
 echo $proposal0_id
 
 # Vote by member 1
-$ccf_prefix/scurl.sh ${server}/gov/proposals/$proposal0_id/ballots \
-  --cacert service_cert.pem \
+ccf_cose_sign1 --ccf-gov-msg-type ballot \
+  --ccf-gov-msg-proposal_id $proposal0_id \
+  --ccf-gov-msg-created_at `date -uIs` \
   --signing-key member1_privk.pem \
   --signing-cert member1_cert.pem \
-  --data-binary @vote_accept.json \
-  -H "content-type: application/json" | jq
+  --content vote_accept.json | \
+  curl -s "${server}/gov/proposals/$proposal0_id/ballots" \
+  --cacert service_cert.pem \
+  --data-binary @- \
+  -H "content-type: application/cose" | jq
 
 # Vote by member 2
-$ccf_prefix/scurl.sh ${server}/gov/proposals/$proposal0_id/ballots \
-  --cacert service_cert.pem \
+ccf_cose_sign1 --ccf-gov-msg-type ballot \
+  --ccf-gov-msg-proposal_id $proposal0_id \
+  --ccf-gov-msg-created_at `date -uIs` \
   --signing-key member2_privk.pem \
   --signing-cert member2_cert.pem \
-  --data-binary @vote_accept.json \
-  -H "content-type: application/json" | jq
+  --content vote_accept.json | \
+  curl -s "${server}/gov/proposals/$proposal0_id/ballots" \
+  --cacert service_cert.pem \
+  --data-binary @- \
+  -H "content-type: application/cose" | jq
 
 # Proposal for user1
-proposal1_out=$(${ccf_prefix}/scurl.sh ${server}/gov/proposals --cacert service_cert.pem --signing-key member0_privk.pem --signing-cert member0_cert.pem --data-binary @set_user1.json -H "content-type: application/json")
+proposal1_out=$(ccf_cose_sign1 --ccf-gov-msg-type proposal \
+  --ccf-gov-msg-created_at `date -uIs` \
+  --signing-key member0_privk.pem \
+  --signing-cert member0_cert.pem \
+  --content set_user1.json | \
+  curl -s "${server}/gov/proposals" \
+  --cacert service_cert.pem \
+  --data-binary @- \
+  -H "content-type: application/cose")
 proposal1_id=$( jq -r  '.proposal_id' <<< "${proposal1_out}" )
-echo $proposal0_id
+echo $proposal1_id
 
 # Vote by member 1
-$ccf_prefix/scurl.sh ${server}/gov/proposals/$proposal1_id/ballots \
-  --cacert service_cert.pem \
+ccf_cose_sign1 --ccf-gov-msg-type ballot \
+  --ccf-gov-msg-proposal_id $proposal1_id \
+  --ccf-gov-msg-created_at `date -uIs` \
   --signing-key member1_privk.pem \
   --signing-cert member1_cert.pem \
-  --data-binary @vote_accept.json \
-  -H "content-type: application/json" | jq
+  --content vote_accept.json | \
+  curl -s "${server}/gov/proposals/$proposal1_id/ballots" \
+  --cacert service_cert.pem \
+  --data-binary @- \
+  -H "content-type: application/cose" | jq
 
 # Vote by member 2
-$ccf_prefix/scurl.sh ${server}/gov/proposals/$proposal1_id/ballots \
-  --cacert service_cert.pem \
+ccf_cose_sign1 --ccf-gov-msg-type ballot \
+  --ccf-gov-msg-proposal_id $proposal1_id \
+  --ccf-gov-msg-created_at `date -uIs` \
   --signing-key member2_privk.pem \
   --signing-cert member2_cert.pem \
-  --data-binary @vote_accept.json \
-  -H "content-type: application/json" | jq
+  --content vote_accept.json | \
+  curl -s "${server}/gov/proposals/$proposal1_id/ballots" \
+  --cacert service_cert.pem \
+  --data-binary @- \
+  -H "content-type: application/cose" | jq
 
 # "Display network ccf version"
 curl "${server}/node/version" --cacert service_cert.pem

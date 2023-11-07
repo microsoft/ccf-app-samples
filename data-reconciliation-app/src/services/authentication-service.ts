@@ -42,30 +42,32 @@ export class AuthenticationService implements IAuthenticationService {
     this.validators.set(CcfAuthenticationPolicyEnum.Jwt, jwtValidator);
     this.validators.set(
       CcfAuthenticationPolicyEnum.User_cert,
-      userCertValidator
+      userCertValidator,
     );
     this.validators.set(
       CcfAuthenticationPolicyEnum.User_signature,
-      userCertValidator
+      userCertValidator,
     );
     this.validators.set(
       CcfAuthenticationPolicyEnum.Member_cert,
-      memberCertValidator
+      memberCertValidator,
     );
     this.validators.set(
       CcfAuthenticationPolicyEnum.Member_signature,
-      memberCertValidator
+      memberCertValidator,
     );
   }
 
   /*
    * Check if caller is a valid identity (user or member or access token)
    */
-  public isAuthenticated(request: ccfapp.Request<any>): ServiceResult<identityId> {
+  public isAuthenticated(
+    request: ccfapp.Request<any>,
+  ): ServiceResult<identityId> {
     try {
       const caller = request.caller as unknown as ccfapp.AuthnIdentityCommon;
       const validator = this.validators.get(
-        <CcfAuthenticationPolicyEnum>caller.policy
+        <CcfAuthenticationPolicyEnum>caller.policy,
       );
       return validator.validate(request);
     } catch (ex) {

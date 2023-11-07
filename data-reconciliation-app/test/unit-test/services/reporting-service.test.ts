@@ -69,7 +69,7 @@ describe("Data Reporting Service", () => {
     // Act
     const result = reportingService.getDataById(
       memberId1,
-      comparisonRecord.key
+      comparisonRecord.key,
     );
 
     // Assert
@@ -102,7 +102,7 @@ describe("Data Reporting Service", () => {
     // Assert
     expect(result.failure).toBe(true);
     expect(result.error.errorMessage).toBe(
-      "Error: key cannot be null or empty"
+      "Error: key cannot be null or empty",
     );
     expect(result.content).toBeNull();
   });

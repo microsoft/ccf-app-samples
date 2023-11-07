@@ -28,7 +28,7 @@ export async function resolve(specifier, context, nextResolve) {
     }
     canonicalSpecifier = path.resolve(
       path.dirname(canonicalSpecifier),
-      specifier
+      specifier,
     );
     canonicalSpecifier = path.relative(targetRoot, canonicalSpecifier);
     specifier = canonicalSpecifier;

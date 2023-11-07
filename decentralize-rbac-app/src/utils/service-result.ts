@@ -21,7 +21,7 @@ export class ServiceResult<T> {
     content: T | null,
     error: ErrorResponse | null,
     success: boolean,
-    statusCode: number
+    statusCode: number,
   ) {
     this.content = content;
     this.error = error;
@@ -37,7 +37,7 @@ export class ServiceResult<T> {
 
   public static Failed<T>(
     error: ErrorResponse,
-    statusCode: number = 400
+    statusCode: number = 400,
   ): ServiceResult<T> {
     return new ServiceResult<T>(null, error, false, statusCode);
   }

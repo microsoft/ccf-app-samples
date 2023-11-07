@@ -88,54 +88,57 @@ The following proposed schema represents a reconciled record. The output Report 
   "lei": "<record key>",
   "nace": "<value informed by User>",
   "group_status": "<value>",
-  "total_votes_count": "#",                 // total opinions count - initially commented (DEMO CHANGE)
-  "count_of_unique_values": "#",            // count of unique values
-  "members_in_agreement": "#",              // # of members in agreement with the User value
+  "total_votes_count": "#", // total opinions count - initially commented (DEMO CHANGE)
+  "count_of_unique_values": "#", // count of unique values
+  "members_in_agreement": "#", // # of members in agreement with the User value
   "majority_minority": "<calculated value>" // relative to the number of active members in the network
-} 
+}
 ```
 
 Where:
 
 ```typescript
 record = // current record being reconciled
-userId = // user requesting reconciliation
-totalUsersInNetwork = // number of users in the system
-voting_threshold = // specified threshold value required for our calculations
+  userId = // user requesting reconciliation
+  totalUsersInNetwork = // number of users in the system
+  voting_threshold = // specified threshold value required for our calculations
+  key =
+    record.key;
 
-key = record.key;
-
-value = record.values[userId]
+value = record.values[userId];
 
 // Number of opinions
-total_votes_count = record.values.length
+total_votes_count = record.values.length;
 
 // removing duplicates from Users' submitted values
-count_of_unique_values = (new Set(Object.values(record.values))).length
+count_of_unique_values = new Set(Object.values(record.values)).length;
 
 // Filtering all votes that are similar to the current user
-members_in_agreement = 
-    Object.keys(record.values).filter(
-        (key) => key != userId && record.values[key] == user_opinion
-    ).length
+members_in_agreement = Object.keys(record.values).filter(
+  (key) => key != userId && record.values[key] == user_opinion,
+).length;
 
 // Defining reconciliation status
-group_status = (total_votes_count/totalUsersInNetwork) < voting_threshold 
-                ? 'NOT_ENOUGH_DATA'
-                : (unique_opinions.size() != 1) ? 'LACK_OF_CONSENSUS' : 'IN_CONSENSUS'
+group_status =
+  total_votes_count / totalUsersInNetwork < voting_threshold
+    ? "NOT_ENOUGH_DATA"
+    : unique_opinions.size() != 1
+    ? "LACK_OF_CONSENSUS"
+    : "IN_CONSENSUS";
 
 // Majority/minority classification according to network
-majority_minority = (members_in_agreement / totalUsersInNetwork) > 0.5 ? 'majority' : 'minority'
-
+majority_minority =
+  members_in_agreement / totalUsersInNetwork > 0.5 ? "majority" : "minority";
 ```
-Report Column         | Object Mapping        | description 
-----------------------|-----------------------|------------
-KEY                   |key                    | Record Id
-ATTRIBUTE_N           |value                  | Value submitted by User
-GROUP_STATUS          |group_status           | Reconciliation result
-UNIQUE_VALUES         |count_of_unique_values | Number of Distinct values submitted for this record
-MEMBERS_IN_AGREEMENT  |members_in_agreement   | Number of members with same data as User
-MINORITY_MAJORITY     |majority_minority      | Comparison between agreement total votes
+
+| Report Column        | Object Mapping         | description                                         |
+| -------------------- | ---------------------- | --------------------------------------------------- |
+| KEY                  | key                    | Record Id                                           |
+| ATTRIBUTE_N          | value                  | Value submitted by User                             |
+| GROUP_STATUS         | group_status           | Reconciliation result                               |
+| UNIQUE_VALUES        | count_of_unique_values | Number of Distinct values submitted for this record |
+| MEMBERS_IN_AGREEMENT | members_in_agreement   | Number of members with same data as User            |
+| MINORITY_MAJORITY    | majority_minority      | Comparison between agreement total votes            |
 
 ## Pseudo Code
 

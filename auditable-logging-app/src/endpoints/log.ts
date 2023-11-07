@@ -27,7 +27,7 @@ function isUser(userId: string): boolean {
   const usersCerts = ccfapp.typedKv(
     "public:ccf.gov.users.certs",
     ccfapp.arrayBuffer,
-    ccfapp.arrayBuffer
+    ccfapp.arrayBuffer,
   );
   return usersCerts.has(ccf.strToBuf(userId));
 }
@@ -38,7 +38,7 @@ function isMember(memberId: string): boolean {
   const membersCerts = ccfapp.typedKv(
     "public:ccf.gov.members.certs",
     ccfapp.arrayBuffer,
-    ccfapp.arrayBuffer
+    ccfapp.arrayBuffer,
   );
   return membersCerts.has(ccf.strToBuf(memberId));
 }
@@ -71,7 +71,7 @@ const permissionTableName = "log_access_permissions";
 const userIdToPermission = ccfapp.typedKv(
   permissionTableName,
   ccfapp.string /** User ID */,
-  ccfapp.json<PermissionItem>()
+  ccfapp.json<PermissionItem>(),
 );
 
 /**
@@ -82,7 +82,7 @@ const userIdToPermission = ccfapp.typedKv(
 function checkUserAccess(
   userId: string,
   logId: number,
-  seqNo?: number
+  seqNo?: number,
 ): boolean {
   // Access is not allowed if perssion is not set explicitly.
   if (!userIdToPermission.has(userId)) {
@@ -129,7 +129,7 @@ interface LogEntry extends LogItem {
 const logMap = ccfapp.typedKv("log", ccfapp.uint32, ccfapp.json<LogItem>());
 
 export function getLogItem(
-  request: ccfapp.Request
+  request: ccfapp.Request,
 ): ccfapp.Response<LogItem | string> {
   const parsedQuery = parseRequestQuery(request);
 
@@ -170,7 +170,7 @@ export function getLogItem(
     // Note: Instead of ccf.digest, an equivalent of std::hash should be used.
     const makeHandle = (begin: number, last: number): number => {
       const cacheKey = `${begin}-${last}`;
-      const digest = ccf.digest("SHA-256", ccf.strToBuf(cacheKey));
+      const digest = ccf.crypto.digest("SHA-256", ccf.strToBuf(cacheKey));
       const handle = new DataView(digest).getUint32(0);
       return handle;
     };
@@ -182,7 +182,7 @@ export function getLogItem(
       handle,
       rangeBegin,
       rangeLast,
-      expirySeconds
+      expirySeconds,
     );
     if (states === null) {
       return {
@@ -197,7 +197,7 @@ export function getLogItem(
     const logMapHistorical = ccfapp.typedKv(
       firstKv["log"],
       ccfapp.uint32,
-      ccfapp.json<LogItem>()
+      ccfapp.json<LogItem>(),
     );
     return {
       body: logMapHistorical.get(logId),
@@ -238,7 +238,7 @@ function validatePermission(permission: any): boolean {
       !permissionPropertyKeys.has(key) ||
       !Object.prototype.hasOwnProperty.call(
         valueTypeToProperty,
-        typeof value
+        typeof value,
       ) ||
       !valueTypeToProperty[typeof value].has(key)
     ) {

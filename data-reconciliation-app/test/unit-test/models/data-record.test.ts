@@ -36,7 +36,7 @@ describe("Data Record Model", () => {
     expect(createDataRecord.error).not.toBeNull();
     expect(createDataRecord.error?.errorType).toBe("InvalidRecordKey");
     expect(createDataRecord.error?.errorMessage).toBe(
-      "Error: key cannot be null or empty"
+      "Error: key cannot be null or empty",
     );
   });
 
@@ -55,7 +55,7 @@ describe("Data Record Model", () => {
     expect(createDataRecord.error).not.toBeNull();
     expect(createDataRecord.error?.errorType).toBe("InvalidRecordValue");
     expect(createDataRecord.error?.errorMessage).toBe(
-      "Error: value cannot be null or empty"
+      "Error: value cannot be null or empty",
     );
   });
 });

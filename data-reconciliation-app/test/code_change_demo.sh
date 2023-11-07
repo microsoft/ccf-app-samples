@@ -56,6 +56,14 @@ if [ -z "$address" ]; then
 fi
 server="https://${address}"
 
+# Set up Python package
+if [ ! -f "env/bin/activate" ]
+    then
+        python3.8 -m venv env
+fi
+source env/bin/activate
+pip install -q ccf==$(cat /opt/ccf_virtual/share/VERSION)
+
 reportUrl="$server/app/report"
 proposalUrl="$server/gov/proposals"
 id="9845001D460PEJE54159"
@@ -67,9 +75,9 @@ curl "${server}/node/network/nodes" --cacert service_cert.pem --no-progress-mete
 addCheckpoint "🎬 Managed CCF is Kubernetes!"
 
 echo "💤Submitting new application to the network"
-proposal0_out=$(/opt/ccf_virtual/bin/scurl.sh "$proposalUrl" --cacert service_cert.pem --signing-key member0_privk.pem --signing-cert member0_cert.pem --data-binary @../../dist/set_js_app.json -H "content-type: application/json" --no-progress-meter)
+proposal0_out=$(ccf_cose_sign1 --ccf-gov-msg-type proposal --ccf-gov-msg-created_at `date -uIs` --signing-key member0_privk.pem --signing-cert member0_cert.pem --content $../../dist/set_js_app.json | curl -s "$network_url/gov/proposals" --cacert service_cert.pem --data-binary @- -H "content-type: application/cose")
 proposal0_id=$( jq -r  '.proposal_id' <<< "${proposal0_out}" )
-/opt/ccf_virtual/bin/scurl.sh "$proposalUrl/$proposal0_id/ballots" --cacert service_cert.pem --signing-key member0_privk.pem --signing-cert member0_cert.pem --data-binary @../../governance/vote/vote_accept.json -H "content-type: application/json" --no-progress-meter | jq
+ccf_cose_sign1 --ccf-gov-msg-type ballot --ccf-gov-msg-proposal_id $proposal0_id --ccf-gov-msg-created_at `date -uIs` --signing-key member0_privk.pem --signing-cert member0_cert.pem --content ../../governance/vote/vote_accept.json | curl -s "$proposalUrl/$proposal0_id/ballots" --cacert service_cert.pem --data-binary @- -H "content-type: application/cose" | jq
 addCheckpoint "🎬 Member 0 Submitted a proposal and voted in favour of the proposal. Majority vote needed for acceptance"
 
 printf "💤Get reconciliation report for member 1\n"
@@ -78,7 +86,7 @@ curl $reportUrl/$id -X GET $(cert_arg member1) --no-progress-meter | jq '. | {co
 addCheckpoint "🎬 Existing reconciliation summary for member 1"
 
 printf "\n💤Member 2 will accept the new application\n"
-/opt/ccf_virtual/bin/scurl.sh "$proposalUrl/$proposal0_id/ballots" --cacert service_cert.pem --signing-key member2_privk.pem --signing-cert member2_cert.pem --data-binary @../../governance/vote/vote_accept.json -H "content-type: application/json" --no-progress-meter | jq
+ccf_cose_sign1 --ccf-gov-msg-type ballot --ccf-gov-msg-proposal_id $proposal0_id --ccf-gov-msg-created_at `date -uIs` --signing-key member2_privk.pem --signing-cert member2_cert.pem --content ../../governance/vote/vote_accept.json | curl -s "$proposalUrl/$proposal0_id/ballots" --cacert service_cert.pem --data-binary @- -H "content-type: application/cose" | jq
 addCheckpoint "🎬 Member2 casting a vote in favour of the proposal."
 
 printf "\n💤Get reconciliation report for member 1 again\n"

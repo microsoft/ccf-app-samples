@@ -26,7 +26,7 @@ Following strategies can be implemented to mitigate the above risks.
 
 [Content Security Policy (CSP)](https://www.w3.org/TR/CSP3/#external-hash) offers using a `hash` to allow the execution of specific scripts on a page that ensures the content matches their expectations.
 
-First step is to use the `Content-Security-Policy` HTTP response header field. It is the preferred mechanism for delivering a policy from a server to a client. 
+First step is to use the `Content-Security-Policy` HTTP response header field. It is the preferred mechanism for delivering a policy from a server to a client.
 
 ```
 Content-Security-Policy = 1 #serialized-policy
@@ -68,7 +68,8 @@ The `hash` will be then attached to the script tags respectively.
 ```html
 <script integrity="sha256-abc123" ...></script>
 ```
-----
+
+---
 
 ### 2. Import npm package and serve from TS
 
@@ -80,27 +81,29 @@ Using [Swagger UI](https://www.npmjs.com/package/swagger-ui), we can implement t
 
 ```typescript
 import * as ccfapp from "@microsoft/ccf-app";
-import { SwaggerUIBundle } from 'swagger-ui-dist';
+import { SwaggerUIBundle } from "swagger-ui-dist";
 
 /**
  * Generate a swagger UI based on the OpenApi documents of (Application - Governance)
  * How to configure swagger UI: https://swagger.io/docs/open-source-tools/swagger-ui/usage/installation/
  */
 export function getSwaggerUI(): ccfapp.Response<string> {
-
   const ui = SwaggerUIBundle({
-      urls: [
-        {url: "/app/swagger.json", name: "Application API"}, /* '/app/api' will be used when ccf allow more control on openAPI document to be done through deployment bundle */
-        {url: "/gov/api", name: "Governance API"},
-        {url: "/node/api", name: "Operator API"}
-      ],
-      dom_id: '#swagger-ui',
-      presets: [SwaggerUIBundle.presets.apis],
-      layout: "StandaloneLayout",
-    });
+    urls: [
+      {
+        url: "/app/swagger.json",
+        name: "Application API",
+      } /* '/app/api' will be used when ccf allow more control on openAPI document to be done through deployment bundle */,
+      { url: "/gov/api", name: "Governance API" },
+      { url: "/node/api", name: "Operator API" },
+    ],
+    dom_id: "#swagger-ui",
+    presets: [SwaggerUIBundle.presets.apis],
+    layout: "StandaloneLayout",
+  });
 
-    return ui;
-};
+  return ui;
+}
 ```
 
 ### 3. Download external script and serve from the local repo
@@ -125,23 +128,26 @@ The HTML created to serve the swagger ui will be updated to relative paths:
 
 ```html
 <head>
-    .....
-    <link rel="stylesheet" href="public/css/swagger-ui-dist@4.5.0/swagger-ui.css" />
-    <script src="public/scripts/swagger-ui-dist@4.5.0/swagger-ui-bundle.js"></script>
-    <script src="public/scripts/swagger-ui-dist@4.5.0/swagger-ui-standalone-preset.js"></script>
-    ....
+  .....
+  <link
+    rel="stylesheet"
+    href="public/css/swagger-ui-dist@4.5.0/swagger-ui.css"
+  />
+  <script src="public/scripts/swagger-ui-dist@4.5.0/swagger-ui-bundle.js"></script>
+  <script src="public/scripts/swagger-ui-dist@4.5.0/swagger-ui-standalone-preset.js"></script>
+  ....
 </head>
 ```
 
 ## Decision
 
 | Options  | Implementation Complexity | Maintanence | Security Concerns |
-| -------  | ------------------------- | ----------- | ----------------- |
+| -------- | ------------------------- | ----------- | ----------------- |
 | Option 1 | Moderate                  | Moderate    | Covered           |
 | Option 2 | Hard                      | Hard        | Covered           |
 | Option 3 | Easy                      | Easy        | Covered           |
 
-**Decision**: 
+**Decision**:
 
 Option 1 is the most lightweight and flexible option (integrity with the flexibility to serve from anywhere), but assumes client-side support.
 
@@ -153,4 +159,3 @@ Option 1 is the most lightweight and flexible option (integrity with the flexibi
 
 - https://www.w3.org/TR/CSP3/#external-hash
 - https://www.npmjs.com/package/swagger-ui
-

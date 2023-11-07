@@ -16,10 +16,34 @@ describe("Jwt-Validator", () => {
 
   test("Should return the identityId", () => {
     // Arrange
-    const ms_jwt_token: MSAccessToken = { sub: "test-ms-aad", iss: iss, aud: aud, appid: appid, ver: ver };
-    const ms_aad_jwt = { header: "test", keyIssuer: iss, payload: ms_jwt_token };
-    const ms_aad_identity: ccfapp.JwtAuthnIdentity = { policy: "jwt", jwt: ms_aad_jwt };
-    const ms_aad_request: ccfapp.Request<any> = { headers: header, params: param, path: "path", url: "url", route: "", query: "", hostname: "hostname", method: "post", body: test_body, caller: ms_aad_identity };
+    const ms_jwt_token: MSAccessToken = {
+      sub: "test-ms-aad",
+      iss: iss,
+      aud: aud,
+      appid: appid,
+      ver: ver,
+    };
+    const ms_aad_jwt = {
+      header: "test",
+      keyIssuer: iss,
+      payload: ms_jwt_token,
+    };
+    const ms_aad_identity: ccfapp.JwtAuthnIdentity = {
+      policy: "jwt",
+      jwt: ms_aad_jwt,
+    };
+    const ms_aad_request: ccfapp.Request<any> = {
+      headers: header,
+      params: param,
+      path: "path",
+      url: "url",
+      route: "",
+      query: "",
+      hostname: "hostname",
+      method: "post",
+      body: test_body,
+      caller: ms_aad_identity,
+    };
 
     // Act
     const result = jwtValidator.validate(ms_aad_request);
@@ -32,9 +56,27 @@ describe("Jwt-Validator", () => {
 
   test("Should return the identityId", () => {
     // Arrange
-    const demo_jwt = { header: "test", keyIssuer: "https://demo", payload: { sub: "test" } };
-    const demo_identity: ccfapp.JwtAuthnIdentity = { policy: "jwt", jwt: demo_jwt };
-    const demo_request: ccfapp.Request<any> = { headers: header, params: param, path: "path", url: "url", route: "", query: "", hostname: "hostname", method: "post", body: test_body, caller: demo_identity };
+    const demo_jwt = {
+      header: "test",
+      keyIssuer: "https://demo",
+      payload: { sub: "test" },
+    };
+    const demo_identity: ccfapp.JwtAuthnIdentity = {
+      policy: "jwt",
+      jwt: demo_jwt,
+    };
+    const demo_request: ccfapp.Request<any> = {
+      headers: header,
+      params: param,
+      path: "path",
+      url: "url",
+      route: "",
+      query: "",
+      hostname: "hostname",
+      method: "post",
+      body: test_body,
+      caller: demo_identity,
+    };
 
     // Act
     const result = jwtValidator.validate(demo_request);

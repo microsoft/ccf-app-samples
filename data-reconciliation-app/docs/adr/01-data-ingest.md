@@ -14,13 +14,13 @@ Gathered requirements:
 - Members and users of the network can ingest data via the API. Data will be ingested via JSON or CSV, which will include:
   - one unique identifier (string)
   - one attribute associated with the unique identifier (string)
-- There is likely going to be a UI on top of our ingest API, so we will treat our app like a backend   system. Therefore, we will accept JSON into our ingest API.
+- There is likely going to be a UI on top of our ingest API, so we will treat our app like a backend system. Therefore, we will accept JSON into our ingest API.
 - As captured in [Ingestion Format ADR](./07-ingestion-format.md), many financial institutions transmit their data in comma-separated value (CSV) files. Therefore we will also accept CSV for data ingestion.
 - The CSV file data headers must follow the same schema specified for the JSON file.
 
 ## Decision
 
-## API 
+## API
 
 ### JSON Ingestion Endpoint
 
@@ -83,8 +83,8 @@ The ingest model has been documented by [this ADR](./02-data-schema-strategy.md#
 
 ```typescript
 export interface DataSchema {
-    key: string;
-    value: string | number;
+  key: string;
+  value: string | number;
 }
 ```
 
@@ -119,7 +119,7 @@ Our repository will be a K-V store. Our K-V store will be defined as:
 const kvStore = ccfapp.typedKv(
   "data",
   ccfapp.string,
-  ccfapp.json<ReconciledRecord>()
+  ccfapp.json<ReconciledRecord>(),
 );
 ```
 

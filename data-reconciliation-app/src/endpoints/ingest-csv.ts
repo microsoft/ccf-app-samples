@@ -11,11 +11,12 @@ import ingestService from "../services/ingest-service";
  * @param {ccfapp.Request<any>} request - mTLS request with userId and CSV file for ingestion
  * @returns {ServiceResult<string>} - data has been ingested successfully
  */
-export function postHandlerCsv(request: ccfapp.Request<any>): ccfapp.Response<CCFResponse> {
+export function postHandlerCsv(
+  request: ccfapp.Request<any>,
+): ccfapp.Response<CCFResponse> {
   // check if caller has a valid identity
   const isValidIdentity = authenticationService.isAuthenticated(request);
-  if (isValidIdentity.failure)
-    return ApiResult.AuthFailure();
+  if (isValidIdentity.failure) return ApiResult.AuthFailure();
 
   // caller unique identifier
   const callerId = isValidIdentity.content;

@@ -148,7 +148,7 @@ describe("Summary Record Model", () => {
     // Assert
     expect(createSummaryRecord.failure).toBe(true);
     expect(createSummaryRecord.error.errorMessage).toBe(
-      "Error: The key does not exist"
+      "Error: The key does not exist",
     );
   });
 
@@ -163,7 +163,7 @@ describe("Summary Record Model", () => {
     // Assert
     expect(createSummaryRecord.failure).toBe(true);
     expect(createSummaryRecord.error.errorMessage).toBe(
-      "Error: key cannot be null or empty"
+      "Error: key cannot be null or empty",
     );
   });
 
@@ -177,7 +177,7 @@ describe("Summary Record Model", () => {
     // Assert
     expect(createSummaryRecord.failure).toBe(true);
     expect(createSummaryRecord.error.errorMessage).toBe(
-      "Error: values can not be null or empty"
+      "Error: values can not be null or empty",
     );
   });
 });

@@ -1,8 +1,8 @@
 # Build
-FROM mcr.microsoft.com/ccf/app/dev:3.0.1-virtual as builder
+FROM mcr.microsoft.com/ccf/app/dev:4.0.12-virtual as builder
 
 # Run
-FROM mcr.microsoft.com/ccf/app/run-js:3.0.1-virtual
+FROM mcr.microsoft.com/ccf/app/run-js:4.0.12-virtual
 
 # Note: libjs_generic.virtual is not included in run-js container
 COPY --from=builder /opt/ccf_virtual/lib/libjs_generic.virtual.so /usr/lib/ccf

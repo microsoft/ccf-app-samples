@@ -36,7 +36,7 @@ export class MemberCertValidator implements IValidatorService {
     const membersCerts = ccfapp.typedKv(
       "public:ccf.gov.members.certs",
       ccfapp.arrayBuffer,
-      ccfapp.arrayBuffer
+      ccfapp.arrayBuffer,
     );
 
     const isMember = membersCerts.has(ccf.strToBuf(memberId));
@@ -44,7 +44,7 @@ export class MemberCertValidator implements IValidatorService {
     const membersInfo = ccfapp.typedKv(
       "public:ccf.gov.members.info",
       ccfapp.arrayBuffer,
-      ccfapp.arrayBuffer
+      ccfapp.arrayBuffer,
     );
 
     const memberInfoBuf = membersInfo.get(ccf.strToBuf(memberId));

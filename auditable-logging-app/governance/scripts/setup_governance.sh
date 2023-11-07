@@ -45,6 +45,13 @@ if [ -z "$certs" ]; then
     failed "You must supply --certificate_dir"
 fi
 
+# Set up Python package
+if [ ! -f "env/bin/activate" ]
+    then
+        python3.8 -m venv env
+fi
+source env/bin/activate
+pip install -q ccf==$(cat /opt/ccf_virtual/share/VERSION)
 
 ##############################################
 # Generic variables
@@ -74,12 +81,15 @@ cat $certs/activation.json
 
 ccf_prefix=/opt/ccf_virtual/bin
 
-$ccf_prefix/scurl.sh "${server}/gov/ack" \
-    --cacert $certs/service_cert.pem \
-    --signing-key $certs/member0_privk.pem \
-    --signing-cert $certs/member0_cert.pem \
-    --header "Content-Type: application/json" \
-    --data-binary @$certs/activation.json
+ccf_cose_sign1 --ccf-gov-msg-type ack \
+               --ccf-gov-msg-created_at `date -uIs` \
+               --signing-key $certs/member0_privk.pem \
+               --signing-cert $certs/member0_cert.pem \
+               --content $certs/activation.json | \
+               curl -s "${server}/gov/ack" \
+               --cacert $certs/service_cert.pem \
+               --header "Content-Type: application/cose" \
+               --data-binary @-
 
 echo "Getting list of members..."
 curl ${server}/gov/members --cacert $certs/service_cert.pem | jq
