@@ -60,4 +60,4 @@ jobs:
         with:
           cacheFrom: ghcr.io/microsoft/ccf-samples-devcontainer
           runCmd: |
-            cd data-reconciliation-app && make unit-test && make test
+            cd data-reconciliation-app && make unit-test && make test && test-docker-virtual

@@ -10,9 +10,12 @@
     },
     "rpc_interfaces": {
       "main_interface": {
-        "bind_address": "127.0.0.1:8080"
+        "bind_address": "172.17.0.2:8080"
       }
     }
+  },
+  "node_certificate": {
+    "subject_alt_names": ["iPAddress:127.0.0.1"]
   },
   "command": {
     "type": "Start",
