@@ -45,6 +45,13 @@ if [ -z "$certs" ]; then
     failed "You must supply --certificate_dir"
 fi
 
+# Set up Python package
+if [ ! -f "env/bin/activate" ]
+    then
+        python3.8 -m venv env
+fi
+source env/bin/activate
+pip install -q ccf==$(cat /opt/ccf_virtual/share/VERSION)
 
 ##############################################
 # Generic variables
@@ -73,12 +80,17 @@ curl "${server}/gov/ack/update_state_digest" \
 echo "Show digest"
 cat $certs/activation.json
 
-$ccf_prefix/scurl.sh "${server}/gov/ack" \
-    --cacert $certs/service_cert.pem \
-    --signing-key $certs/member0_privk.pem \
-    --signing-cert $certs/member0_cert.pem \
-    --header "Content-Type: application/json" \
-    --data-binary @$certs/activation.json
+ccf_prefix=/opt/ccf_virtual/bin
+
+ccf_cose_sign1 --ccf-gov-msg-type ack \
+               --ccf-gov-msg-created_at `date -uIs` \
+               --signing-key $certs/member0_privk.pem \
+               --signing-cert $certs/member0_cert.pem \
+               --content $certs/activation.json | \
+               curl -s "${server}/gov/ack" \
+               --cacert $certs/service_cert.pem \
+               --header "Content-Type: application/cose" \
+               --data-binary @-
 
 echo "Getting list of members..."
 curl ${server}/gov/members --cacert $certs/service_cert.pem | jq
@@ -201,9 +213,16 @@ echo "Activating Member1 step 1/2: member being added update state digest with h
 curl "${server}/gov/ack/update_state_digest" -X POST --cacert $certs/service_cert.pem --key $certs/${memberName}_privk.pem \
   --cert $certs/${memberName}_cert.pem --silent | jq > $certs/activation.json
 
-echo "Activating Member1 step 2/2: member being added acknoledges himself, becoming active"
-$ccf_prefix/scurl.sh "${server}/gov/ack" --cacert $certs/service_cert.pem --signing-key $certs/${memberName}_privk.pem --signing-cert $certs/${memberName}_cert.pem \
-    --header "Content-Type: application/json" --data-binary @$certs/activation.json
+echo "Activating Member1 step 2/2: member being added acknowledges himself, becoming active"
+ccf_cose_sign1 --ccf-gov-msg-type ack \
+               --ccf-gov-msg-created_at `date -uIs` \
+               --signing-key $certs/${memberName}_privk.pem \
+               --signing-cert $certs/${memberName}_cert.pem \
+               --content $certs/activation.json | \
+               curl -s "${server}/gov/ack" \
+               --cacert $certs/service_cert.pem \
+               --header "Content-Type: application/cose" \
+               --data-binary @-
 
 #---------------------
 memberName="member2"
@@ -211,7 +230,14 @@ echo "Activating Member2 step 1/2: member being added update state digest with h
 curl "${server}/gov/ack/update_state_digest" -X POST --cacert $certs/service_cert.pem --key $certs/${memberName}_privk.pem \
   --cert $certs/${memberName}_cert.pem --silent | jq > $certs/activation.json
 
-echo "Activating Member1 step 2/2: member being added acknoledges himself, becoming active"
-$ccf_prefix/scurl.sh "${server}/gov/ack" --cacert $certs/service_cert.pem --signing-key $certs/${memberName}_privk.pem --signing-cert $certs/${memberName}_cert.pem \
-    --header "Content-Type: application/json" --data-binary @$certs/activation.json
+echo "Activating Member1 step 2/2: member being added acknowledges himself, becoming active"
+ccf_cose_sign1 --ccf-gov-msg-type ack \
+               --ccf-gov-msg-created_at `date -uIs` \
+               --signing-key $certs/${memberName}_privk.pem \
+               --signing-cert $certs/${memberName}_cert.pem \
+               --content $certs/activation.json | \
+               curl -s "${server}/gov/ack" \
+               --cacert $certs/service_cert.pem \
+               --header "Content-Type: application/cose" \
+               --data-binary @-
 

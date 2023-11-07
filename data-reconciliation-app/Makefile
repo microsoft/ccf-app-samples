@@ -34,11 +34,11 @@ test: build ## 🧪 Test the Data Reconciliation Application in the sandbox
 
 test-docker-virtual: build-virtual ## 🧪 Test the Data Reconciliation Application in a Docker sandbox
 	@echo -e "\e[34m$@\e[0m" || true
-	@. ../scripts/test_docker.sh --virtual --serverIP 172.17.0.3 --port 8080
+	@. ../scripts/test_docker.sh --virtual --serverIP 172.17.0.2 --port 8080
 
 test-docker-enclave: build-enclave ## 🧪 Test the Data Reconciliation Application in a Docker enclave
 	@echo -e "\e[34m$@\e[0m" || true
-	@. ../scripts/test_docker.sh --enclave --serverIP 172.17.0.4 --port 8080
+	@. ../scripts/test_docker.sh --enclave --serverIP 172.17.0.2 --port 8080
 
 test-mccf: build ## 🧪 Test the Data Reconciliation Application in a Managed CCF environment
 	@echo -e "\e[34m$@\e[0m" || true
@@ -57,7 +57,7 @@ demo: build ## 🎬 Demo the Data Reconciliation Application in the Sandbox
 
 demo-docker: build-virtual ## 🎬 Demo the Data Reconciliation Application in a virtual Docker image
 	@echo -e "\e[34m$@\e[0m" || true
-	@. ../scripts/test_docker.sh --virtual --serverIP 172.17.0.3 --port 8080 --interactive
+	@. ../scripts/test_docker.sh --virtual --serverIP 172.17.0.2 --port 8080 --interactive
 
 demo-mccf: build ## 🎬 Demo the Data Reconciliation Application in a Managed CCF environment
 	@echo -e "\e[34m$@\e[0m" || true

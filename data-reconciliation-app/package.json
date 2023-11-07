@@ -9,10 +9,10 @@
   },
   "type": "module",
   "engines": {
-    "node": ">=14"
+    "node": ">=16"
   },
   "dependencies": {
-    "@microsoft/ccf-app": "^3.0.0-dev6",
+    "@microsoft/ccf-app": "^4.0.12",
     "axios": "^1.2.4",
     "crypto-js": "^3.1.9-1",
     "inquirer": "9.1.4",
