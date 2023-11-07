@@ -1,12 +1,15 @@
 # CCF Express
 
 ## Summary
+
 This folder contains a small tool to host a CCF JS app using ExpressJS. This uses the polyfills distributed with the `ccf-app` npm package to implement the `ccf` global, and exposes HTTP routes based on the metadata from an `app.json` file.
 
 The intention is that this can be used to debug CCF application handlers written in JavaScript or TypeScript. This does not start a multi-node network, or any enclaved code. Instead it starts a single local web server, attempting to provide the same `/app` HTTP API defined by `app.json`.
 
-### *WARNINGS*
+### _WARNINGS_
+
 This is a minimal PoC, and does not provide a perfectly matching server implementation. Notable discrepancies from a CCF node at the time of writing:
+
 - No implementation of governance endpoints. This purely serves `/app` endpoints, and any attempts at governance will return 404s. Any app state which is bootstrapped by governance may need additional genesis calls.
 - Does no authentication. It attempts to construct a valid `caller` object based on fields from the incoming request, but does not validate that this represents an identity that is known and trusted in the KV.
 - KV does not offer opacity or snapshot isolation. Any writes to the KV are immediately visible to other concurrently executing handlers, and writes are _not_ rolled back for failing operations.

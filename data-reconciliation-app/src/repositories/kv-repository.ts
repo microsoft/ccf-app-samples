@@ -8,22 +8,22 @@ import { ServiceResult } from "../utils/service-result";
 export interface IRepository<T> {
   /**
    * Store {T} in CFF TypedKvMap storage by key
-   * @param {string} key 
-   * @param {T} value 
+   * @param {string} key
+   * @param {T} value
    */
   set(key: string, value: T): ServiceResult<T>;
 
   /**
    * Retrive {T} in CFF TypedKvMap storage by key
-   * @param {string} key 
-   * @param {T} value 
+   * @param {string} key
+   * @param {T} value
    */
   get(key: string): ServiceResult<T>;
 
   /**
    * Check if {T} exists in CFF TypedKvMap storage by key
-   * @param {string} key 
-   * @param {T} value 
+   * @param {string} key
+   * @param {T} value
    */
   has(key: string): ServiceResult<boolean>;
 
@@ -45,14 +45,14 @@ export interface IRepository<T> {
 
   /**
    * Iterate through CFF TypedKvMap storage by key
-   * @param callback 
+   * @param callback
    */
   forEach(callback: (key: string, value: T) => void): ServiceResult<string>;
 
   /**
    * Clears CFF TypedKvMap storage
    */
-  clear(): ServiceResult<void>
+  clear(): ServiceResult<void>;
 }
 
 export class KeyValueRepository<T> implements IRepository<T> {
@@ -61,7 +61,7 @@ export class KeyValueRepository<T> implements IRepository<T> {
   public constructor(kvStore: ccfapp.TypedKvMap<string, T>) {
     this.kvStore = kvStore;
   }
-  
+
   public set(key: string, value: T): ServiceResult<T> {
     try {
       this.kvStore.set(key, value);
@@ -74,7 +74,7 @@ export class KeyValueRepository<T> implements IRepository<T> {
       });
     }
   }
-  
+
   public get(key: string): ServiceResult<T> {
     try {
       const value = this.kvStore.get(key);
@@ -151,8 +151,10 @@ export class KeyValueRepository<T> implements IRepository<T> {
     }
   }
 
-  // 
-  public forEach(callback: (key: string, value: T) => void): ServiceResult<string> {
+  //
+  public forEach(
+    callback: (key: string, value: T) => void,
+  ): ServiceResult<string> {
     try {
       this.kvStore.forEach((val, key) => {
         callback(key, val);
@@ -181,6 +183,11 @@ export class KeyValueRepository<T> implements IRepository<T> {
   }
 }
 
-const kvStore = ccfapp.typedKv("data",ccfapp.string,ccfapp.json<ReconciledRecord>());
-const keyValueRepository: IRepository<ReconciledRecord> = new KeyValueRepository<ReconciledRecord>(kvStore);
+const kvStore = ccfapp.typedKv(
+  "data",
+  ccfapp.string,
+  ccfapp.json<ReconciledRecord>(),
+);
+const keyValueRepository: IRepository<ReconciledRecord> =
+  new KeyValueRepository<ReconciledRecord>(kvStore);
 export default keyValueRepository;

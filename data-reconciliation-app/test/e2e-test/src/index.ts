@@ -107,7 +107,7 @@ class Demo {
     await this.addCheckpoint("Ingestion Stage Complete");
 
     this.printTestSectionHeader(
-      "🔬 [TEST]: Data Reporting Service (Full Report)"
+      "🔬 [TEST]: Data Reporting Service (Full Report)",
     );
 
     for (const member of this.members) {
@@ -139,13 +139,13 @@ class Demo {
     let reportItem = await Api.reportById(
       this.demoProps,
       member,
-      id_inConsensus
+      id_inConsensus,
     );
     this.assertReportField(
       member.name,
       reportItem,
       "group_status",
-      "IN_CONSENSUS"
+      "IN_CONSENSUS",
     );
 
     await this.addCheckpoint("IN_CONSENSUS DATA");
@@ -156,7 +156,7 @@ class Demo {
       member.name,
       reportItem,
       "group_status",
-      "NOT_ENOUGH_DATA"
+      "NOT_ENOUGH_DATA",
     );
 
     await this.addCheckpoint("NOT_ENOUGH_DATA");
@@ -165,13 +165,13 @@ class Demo {
     reportItem = await Api.reportById(
       this.demoProps,
       member,
-      id_lackOfConsensus
+      id_lackOfConsensus,
     );
     this.assertReportField(
       member.name,
       reportItem,
       "group_status",
-      "LACK_OF_CONSENSUS"
+      "LACK_OF_CONSENSUS",
     );
 
     await this.addCheckpoint("LACK_OF_CONSENSUS DATA");
@@ -186,48 +186,48 @@ class Demo {
 
     member = this.members[2];
     console.log(
-      `📝 ${member.name} Data Status changes for id: ${id_newGroupStatus}...`
+      `📝 ${member.name} Data Status changes for id: ${id_newGroupStatus}...`,
     );
     reportItem = await Api.reportById(
       this.demoProps,
       member,
-      id_newGroupStatus
+      id_newGroupStatus,
     );
     this.assertReportField(
       member.name,
       reportItem,
       "group_status",
-      "IN_CONSENSUS"
+      "IN_CONSENSUS",
     );
 
     await this.addCheckpoint("Updated Report after New Data Submission");
 
     this.printTestSectionHeader(
-      "Test Suite - Assertion checks on report fields..."
+      "Test Suite - Assertion checks on report fields...",
     );
 
     let recordId = "984500F5BD5BE5767C51";
     console.log(
-      `\nChecking ALL fields for ${member.name} and id ${recordId} (In Consensus)\n`
+      `\nChecking ALL fields for ${member.name} and id ${recordId} (In Consensus)\n`,
     );
     reportItem = await Api.reportById(this.demoProps, member, recordId);
     this.assertReportField(
       member.name,
       reportItem,
       "group_status",
-      "IN_CONSENSUS"
+      "IN_CONSENSUS",
     );
     this.assertReportField(
       member.name,
       reportItem,
       "majority_minority",
-      "Majority"
+      "Majority",
     );
     this.assertReportField(
       member.name,
       reportItem,
       "count_of_unique_values",
-      1
+      1,
     );
     this.assertReportField(member.name, reportItem, "members_in_agreement", 3);
     this.assertReportField(member.name, reportItem, "lei", recordId);
@@ -236,59 +236,59 @@ class Demo {
     // member2
     recordId = "9845002B6B074505A715";
     console.log(
-      `\nChecking fields for ${member.name} and id ${recordId} (Not Enough Data with Minority of votes)\n`
+      `\nChecking fields for ${member.name} and id ${recordId} (Not Enough Data with Minority of votes)\n`,
     );
     reportItem = await Api.reportById(this.demoProps, member, recordId);
     this.assertReportField(
       member.name,
       reportItem,
       "group_status",
-      "NOT_ENOUGH_DATA"
+      "NOT_ENOUGH_DATA",
     );
     this.assertReportField(
       member.name,
       reportItem,
       "majority_minority",
-      "Minority"
+      "Minority",
     );
     this.assertReportField(
       member.name,
       reportItem,
       "count_of_unique_values",
-      2
+      2,
     );
     this.assertReportField(member.name, reportItem, "members_in_agreement", 1);
 
     // member2
     recordId = "984500BA57A56NBD3A24";
     console.log(
-      `\nChecking fields for ${member.name} and id ${recordId} (Not Enough Data with Majority of votes)\n`
+      `\nChecking fields for ${member.name} and id ${recordId} (Not Enough Data with Majority of votes)\n`,
     );
     reportItem = await Api.reportById(this.demoProps, member, recordId);
     this.assertReportField(
       member.name,
       reportItem,
       "group_status",
-      "NOT_ENOUGH_DATA"
+      "NOT_ENOUGH_DATA",
     );
     this.assertReportField(
       member.name,
       reportItem,
       "majority_minority",
-      "Majority"
+      "Majority",
     );
     this.assertReportField(
       member.name,
       reportItem,
       "count_of_unique_values",
-      1
+      1,
     );
     this.assertReportField(member.name, reportItem, "members_in_agreement", 2);
 
     // member2
     recordId = "984500E1B2CA1D4EKG67";
     console.log(
-      `\nChecking fields for ${member.name} and id ${recordId} (Lack of Consensus with Majority of votes)\n`
+      `\nChecking fields for ${member.name} and id ${recordId} (Lack of Consensus with Majority of votes)\n`,
     );
     reportItem = await Api.reportById(this.demoProps, member, recordId);
     this.assertReportField(member.name, reportItem, "lei", recordId);
@@ -297,26 +297,26 @@ class Demo {
       member.name,
       reportItem,
       "group_status",
-      "LACK_OF_CONSENSUS"
+      "LACK_OF_CONSENSUS",
     );
     this.assertReportField(
       member.name,
       reportItem,
       "majority_minority",
-      "Majority"
+      "Majority",
     );
     this.assertReportField(
       member.name,
       reportItem,
       "count_of_unique_values",
-      2
+      2,
     );
     this.assertReportField(member.name, reportItem, "members_in_agreement", 2);
 
     member = this.members[0];
     recordId = "984500E1B2CA1D4EKG67";
     console.log(
-      `\nChecking fields for ${member.name} and id ${recordId} (Lack of Consensus with Minority of votes)\n`
+      `\nChecking fields for ${member.name} and id ${recordId} (Lack of Consensus with Minority of votes)\n`,
     );
     reportItem = await Api.reportById(this.demoProps, member, recordId);
     this.assertReportField(member.name, reportItem, "lei", recordId);
@@ -325,52 +325,52 @@ class Demo {
       member.name,
       reportItem,
       "group_status",
-      "LACK_OF_CONSENSUS"
+      "LACK_OF_CONSENSUS",
     );
     this.assertReportField(
       member.name,
       reportItem,
       "majority_minority",
-      "Minority"
+      "Minority",
     );
     this.assertReportField(
       member.name,
       reportItem,
       "count_of_unique_values",
-      2
+      2,
     );
     this.assertReportField(member.name, reportItem, "members_in_agreement", 1);
 
     // member0
     recordId = "984500F5BD5BE5767C51";
     console.log(
-      `\nChecking fields for ${member.name} and id ${recordId} (In Consensus)\n`
+      `\nChecking fields for ${member.name} and id ${recordId} (In Consensus)\n`,
     );
     reportItem = await Api.reportById(this.demoProps, member, recordId);
     this.assertReportField(
       member.name,
       reportItem,
       "group_status",
-      "IN_CONSENSUS"
+      "IN_CONSENSUS",
     );
     this.assertReportField(
       member.name,
       reportItem,
       "majority_minority",
-      "Majority"
+      "Majority",
     );
     this.assertReportField(
       member.name,
       reportItem,
       "count_of_unique_values",
-      1
+      1,
     );
     this.assertReportField(member.name, reportItem, "members_in_agreement", 3);
 
     member = this.members[1];
     recordId = "984500E1B2CA1D4EKG67";
     console.log(
-      `\nChecking fields for ${member.name} and id ${recordId} (Lack of Consensus)\n`
+      `\nChecking fields for ${member.name} and id ${recordId} (Lack of Consensus)\n`,
     );
     reportItem = await Api.reportById(this.demoProps, member, recordId);
     this.assertReportField(member.name, reportItem, "lei", recordId);
@@ -379,20 +379,20 @@ class Demo {
       member.name,
       reportItem,
       "group_status",
-      "LACK_OF_CONSENSUS"
+      "LACK_OF_CONSENSUS",
     );
 
     // member1
     recordId = "984500F5BD5BE5767C51";
     console.log(
-      `\nChecking fields for ${member.name} and id ${recordId} (In Consensus)\n`
+      `\nChecking fields for ${member.name} and id ${recordId} (In Consensus)\n`,
     );
     reportItem = await Api.reportById(this.demoProps, member, recordId);
     this.assertReportField(
       member.name,
       reportItem,
       "group_status",
-      "IN_CONSENSUS"
+      "IN_CONSENSUS",
     );
 
     this.printTestSectionHeader("🎉 All Tests Passed...");
@@ -402,16 +402,16 @@ class Demo {
     memberName: string,
     reportItem: ReportItem,
     fieldName: string,
-    expectedValue: string | number
+    expectedValue: string | number,
   ) {
     const currentValue = reportItem[fieldName];
     if (currentValue == expectedValue) {
       console.log(
-        `✅ [PASS] - Assert ${memberName}::${reportItem.lei}.${fieldName} == ${expectedValue}`
+        `✅ [PASS] - Assert ${memberName}::${reportItem.lei}.${fieldName} == ${expectedValue}`,
       );
     } else {
       throw new Error(
-        `🛑 [TEST FAILURE]: Unexpected ${fieldName} for ${memberName}::${reportItem.lei} - Current: ${currentValue}. Expected: ${expectedValue}`
+        `🛑 [TEST FAILURE]: Unexpected ${fieldName} for ${memberName}::${reportItem.lei} - Current: ${currentValue}. Expected: ${expectedValue}`,
       );
     }
   }
@@ -428,10 +428,10 @@ class Demo {
   private static createHttpsAgent(memberId: string): https.Agent {
     return new https.Agent({
       cert: fs.readFileSync(
-        `${certificateStorePath}/member${memberId}_cert.pem`
+        `${certificateStorePath}/member${memberId}_cert.pem`,
       ),
       key: fs.readFileSync(
-        `${certificateStorePath}/member${memberId}_privk.pem`
+        `${certificateStorePath}/member${memberId}_privk.pem`,
       ),
       ca: fs.readFileSync(`${certificateStorePath}/service_cert.pem`),
     });

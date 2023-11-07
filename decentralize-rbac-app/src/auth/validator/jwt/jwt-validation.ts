@@ -31,7 +31,7 @@ export class JwtValidator implements IValidatorService {
   validate(request: ccfapp.Request<any>): ServiceResult<identityId> {
     const jwtCaller = request.caller as unknown as ccfapp.JwtAuthnIdentity;
     const provider = this.identityProviders.get(
-      <JwtIdentityProviderEnum>jwtCaller.jwt.keyIssuer
+      <JwtIdentityProviderEnum>jwtCaller.jwt.keyIssuer,
     );
     return provider.isValidJwtToken(jwtCaller);
   }

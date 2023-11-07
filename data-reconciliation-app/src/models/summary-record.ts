@@ -50,7 +50,10 @@ export class SummaryRecord implements SummaryRecordProps {
     this.uniqueValuesCount = summaryRecord.uniqueValuesCount;
   }
 
-  public static create(memberId: string, record: ReconciledRecord): ServiceResult<SummaryRecord> {
+  public static create(
+    memberId: string,
+    record: ReconciledRecord,
+  ): ServiceResult<SummaryRecord> {
     if (!record.key) {
       return ServiceResult.Failed({
         errorMessage: "Error: key cannot be null or empty",
@@ -90,11 +93,13 @@ export class SummaryRecord implements SummaryRecordProps {
 
     // count of members who submitted a value same as the current member (caller)
     const membersInAgreementCount = memberIds.filter(
-      (key) => record.values[key] == memberValue
+      (key) => record.values[key] == memberValue,
     ).length;
 
     // count of members who submitted a value differ from the current member (caller)
-    const membersInDisagreementCount = memberIds.filter((key) => record.values[key] != memberValue).length;
+    const membersInDisagreementCount = memberIds.filter(
+      (key) => record.values[key] != memberValue,
+    ).length;
 
     const summary: SummaryRecordProps = {
       key: record.key,
@@ -102,7 +107,7 @@ export class SummaryRecord implements SummaryRecordProps {
       type: record.type,
       minorityMajorityStatus: this.getSubDivisionStatus(
         membersInAgreementCount,
-        membersInDisagreementCount
+        membersInDisagreementCount,
       ),
       groupStatus: this.getGroupStatus(votesCount, uniqueValues.size),
       membersInAgreementCount: membersInAgreementCount,
@@ -115,18 +120,19 @@ export class SummaryRecord implements SummaryRecordProps {
     return ServiceResult.Succeeded(dataRecord);
   }
 
-  
   /**
    * Get the status of current value is it in (Majority or Minority) group
    */
-  private static getSubDivisionStatus(membersInAgreementCount: number, membersInDisagreementCount: number) {
+  private static getSubDivisionStatus(
+    membersInAgreementCount: number,
+    membersInDisagreementCount: number,
+  ) {
     if (membersInAgreementCount > membersInDisagreementCount) {
       return SummaryStatus.Majority;
     }
     return SummaryStatus.Minority;
   }
 
-  
   /**
    * Get group status (NotEnoughVotes,LackOfConsensus, InConsensus)
    */

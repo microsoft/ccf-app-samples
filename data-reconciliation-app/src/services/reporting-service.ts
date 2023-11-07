@@ -6,14 +6,14 @@ import { SummaryRecord } from "../models/summary-record";
 export interface IReportingService {
   /**
    * Reconciliation summary report by a member
-   * @param {string} memberId 
+   * @param {string} memberId
    * @returns {ServiceResult<SummaryRecord>}
    */
   getData(memberId: string): ServiceResult<SummaryRecord[]>;
 
   /**
    * Reconciliation summary report by all members
-   * @param {string} memberId 
+   * @param {string} memberId
    * @returns {ServiceResult<SummaryRecord>}
    */
   getDataById(memberId: string, key: string): ServiceResult<SummaryRecord>;
@@ -56,6 +56,6 @@ export class ReportingService implements IReportingService {
 }
 
 const reportingService: IReportingService = new ReportingService(
-  keyValueRepository
+  keyValueRepository,
 );
 export default reportingService;

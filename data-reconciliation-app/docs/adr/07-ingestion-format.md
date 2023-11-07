@@ -30,7 +30,7 @@ This approach means all of the CSV capabilities are in the test harness and not 
 
 ### Option 3: Provide a simple standalone script/tool that converts CSV into JSON.
 
-This option would be a utility kept in the sample folder to convert CSV files into JSON documents based on our accepted schema. This could be written in Python, TypeScript, or even Bash. 
+This option would be a utility kept in the sample folder to convert CSV files into JSON documents based on our accepted schema. This could be written in Python, TypeScript, or even Bash.
 
 This option would be a courtesy utility rather than enhancing the data-reconciliation application. Although this means no changes to the API or the test harness, it might not be what a customer intends and introduces another processing stage.
 

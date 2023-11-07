@@ -9,7 +9,7 @@ export class DemoJwtProvider implements IJwtIdentityProvider {
    * @returns {ServiceResult<string>}
    */
   public isValidJwtToken(
-    identity: ccfapp.JwtAuthnIdentity
+    identity: ccfapp.JwtAuthnIdentity,
   ): ServiceResult<string> {
     const identityId = identity?.jwt?.payload?.sub;
     return ServiceResult.Succeeded(identityId);

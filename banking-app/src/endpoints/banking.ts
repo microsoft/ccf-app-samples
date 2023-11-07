@@ -20,7 +20,7 @@ const claimTableName = "current_claim";
 const currentClaimTable = ccfapp.typedKv(
   claimTableName,
   ccfapp.string,
-  ccfapp.json<ClaimItem>()
+  ccfapp.json<ClaimItem>(),
 );
 const keyForClaimTable = "key";
 
@@ -28,7 +28,7 @@ function getAccountTable(userId: string): ccfapp.TypedKvMap<string, number> {
   return ccfapp.typedKv(
     `user_accounts:${userId}`,
     ccfapp.string,
-    ccfapp.uint32
+    ccfapp.uint32,
   );
 }
 
@@ -48,7 +48,7 @@ function validateUserId(userId: string): boolean {
   const usersCerts = ccfapp.typedKv(
     "public:ccf.gov.users.certs",
     ccfapp.arrayBuffer,
-    ccfapp.arrayBuffer
+    ccfapp.arrayBuffer,
   );
   return usersCerts.has(ccf.strToBuf(userId));
 }
@@ -91,7 +91,7 @@ interface DepositRequest {
 }
 
 export function deposit(
-  request: ccfapp.Request<DepositRequest>
+  request: ccfapp.Request<DepositRequest>,
 ): ccfapp.Response {
   let body;
   try {
@@ -139,7 +139,7 @@ interface BalanceResponse {
 }
 
 export function balance(
-  request: ccfapp.Request
+  request: ccfapp.Request,
 ): ccfapp.Response<BalanceResponse> {
   const userId = getCallerId(request);
 
@@ -162,7 +162,7 @@ interface TransferRequest {
 type TransferResponse = string;
 
 export function transfer(
-  request: ccfapp.Request<TransferRequest>
+  request: ccfapp.Request<TransferRequest>,
 ): ccfapp.Response<TransferResponse> {
   let body;
   try {
@@ -213,7 +213,7 @@ export function transfer(
   accountToBalance.set(accountName, balance - value);
   accountToBalanceTo.set(
     accountNameTo,
-    accountToBalanceTo.get(accountNameTo) + value
+    accountToBalanceTo.get(accountNameTo) + value,
   );
 
   const claim = `${userId} sent ${value} to ${userIdTo}`;
@@ -260,7 +260,7 @@ interface GetTransactionREceiptResponse {
 }
 
 export function getTransactionReceipt(
-  request: ccfapp.Request
+  request: ccfapp.Request,
 ): ccfapp.Response<GetTransactionREceiptResponse> | ccfapp.Response {
   const parsedQuery = parseRequestQuery(request);
   const transactionId = parsedQuery.transaction_id;
@@ -295,7 +295,7 @@ export function getTransactionReceipt(
     handle,
     rangeBegin,
     rangeEnd,
-    expirySeconds
+    expirySeconds,
   );
   if (states === null) {
     return {
@@ -311,7 +311,7 @@ export function getTransactionReceipt(
   const claimTable = ccfapp.typedKv(
     firstKv[claimTableName],
     ccfapp.string,
-    ccfapp.json<ClaimItem>()
+    ccfapp.json<ClaimItem>(),
   );
 
   if (!claimTable.has(keyForClaimTable)) {

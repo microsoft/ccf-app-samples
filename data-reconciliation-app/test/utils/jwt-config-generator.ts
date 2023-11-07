@@ -23,7 +23,9 @@ export class JwtConfigsGenerator {
       return;
 
     // make sure the workspace folder exists.
-    await fs.promises.mkdir(this.workspaceFolderPath, { recursive: true }).catch(console.error);
+    await fs.promises
+      .mkdir(this.workspaceFolderPath, { recursive: true })
+      .catch(console.error);
 
     let keyId: string = "12345";
     let issuer: string = "https://demo";
@@ -41,8 +43,13 @@ export class JwtConfigsGenerator {
     const attrs = [{ name: "commonName", value: "Test" }];
     cert.setIssuer(attrs);
     cert.publicKey = forge.pki.publicKeyFromPem(keys.publicKey);
-    cert.sign(forge.pki.privateKeyFromPem(keys.privateKey), forge.md.sha256.create());
-    const certDer = forge.asn1.toDer(forge.pki.certificateToAsn1(cert)).getBytes();
+    cert.sign(
+      forge.pki.privateKeyFromPem(keys.privateKey),
+      forge.md.sha256.create(),
+    );
+    const certDer = forge.asn1
+      .toDer(forge.pki.certificateToAsn1(cert))
+      .getBytes();
     const certDerB64 = forge.util.encode64(certDer);
     const jwtIssuer = {
       issuer: issuer,
@@ -107,12 +114,17 @@ export class JwtConfigsGenerator {
       return;
 
     // make sure the workspace folder exists.
-    await fs.promises.mkdir(this.workspaceFolderPath, { recursive: true }).catch(console.error);
+    await fs.promises
+      .mkdir(this.workspaceFolderPath, { recursive: true })
+      .catch(console.error);
 
     // Microsoft IDP config are provided by:https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration
     // Microsoft IDP keys are provided by: https://login.microsoftonline.com/common/discovery/v2.0/keys
     let issuer: string = "https://login.microsoftonline.com/common/v2.0";
-    const ms_openid_config = await axiosInstance.get(`${issuer}/.well-known/openid-configuration`, {});
+    const ms_openid_config = await axiosInstance.get(
+      `${issuer}/.well-known/openid-configuration`,
+      {},
+    );
     const ms_jwks = await axiosInstance.get(ms_openid_config.data.jwks_uri, {});
 
     // create the sandbox config file for Microsoft IDP.
@@ -156,8 +168,8 @@ export class JwtConfigsGenerator {
    * to be used on the TLS connection from CCF to the IdP during signing key refresh
    * https://learn.microsoft.com/en-us/azure/security/fundamentals/azure-ca-details
    * DigiCert Global Root CA: https://crt.sh/?d=853428
-   * @param retryCount 
-   * @returns 
+   * @param retryCount
+   * @returns
    */
   public static async getDigiCertGlobalRootCA(): Promise<string> {
     /*
@@ -172,4 +184,6 @@ export class JwtConfigsGenerator {
 await JwtConfigsGenerator.createSandboxTestJwtIssuerConfig();
 await JwtConfigsGenerator.createMSIdpJwtIssuerConfigs();
 
-console.log(`JWT issuer configs are generated successfully!, Path: ${JwtConfigsGenerator.workspaceFolderPath}`);
+console.log(
+  `JWT issuer configs are generated successfully!, Path: ${JwtConfigsGenerator.workspaceFolderPath}`,
+);

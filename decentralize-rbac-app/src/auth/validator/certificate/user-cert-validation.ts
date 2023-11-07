@@ -50,7 +50,7 @@ export class UserCertValidator implements IValidatorService {
     const usersCerts = ccfapp.typedKv(
       "public:ccf.gov.users.certs",
       ccfapp.string,
-      ccfapp.arrayBuffer
+      ccfapp.arrayBuffer,
     );
     const result = usersCerts.has(userId);
     return ServiceResult.Succeeded(result);

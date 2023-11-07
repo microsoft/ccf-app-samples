@@ -22,7 +22,7 @@ The files in this directory will help you deploy an Azure Managed CCF instance f
 
 At its simplest, you need 3 things to create an Azure Managed CCF instance:
 
-- a Service Principal, follow [here](https://learn.microsoft.com/en-us/powershell/azure/create-azure-service-principal-azureps?view=azps-9.3.0#create-a-service-principal) for further information 
+- a Service Principal, follow [here](https://learn.microsoft.com/en-us/powershell/azure/create-azure-service-principal-azureps?view=azps-9.3.0#create-a-service-principal) for further information
 - a name for your CCF instance
 - the certificate for the initial member
 
@@ -42,6 +42,7 @@ cd deploy
 ```
 
 Alternatively you could run the following command and enter the correct values.
+
 ```bash
 make deploy-mccf
 ```

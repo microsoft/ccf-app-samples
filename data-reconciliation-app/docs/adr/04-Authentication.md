@@ -15,7 +15,6 @@ In CCF, Members are capable of performing governance actions, whereas Users can 
 
 In the Data-Reconciliation Application, Members can also interact with the application endpoints. From an application perspective, Members and Users have the same roles (both are capable of ingesting and reporting data, and there is no distinction between them). For governance actions related to the Data-Reconciliation App (submitting and voting on proposals), again, only members will be able to interact with the governance-specific endpoints.
 
-
 ## Options
 
 ### Option1: Certificate Authentication
@@ -40,6 +39,7 @@ CCF provides support for managing public token signing keys required for validat
 ## Decision
 
 We will implement both options, **Certificate Authentication** and **JWT Authentication**, so the application endpoints caller will be authenticated using one of the following authentication methods:
+
 - Member Certificate
 - User Certificate
 - JWT (Microsoft Identity Provider as token issuer), which will have the same permissions as if using User Certificate (no governance permissions)
@@ -47,7 +47,7 @@ We will implement both options, **Certificate Authentication** and **JWT Authe
 ## Consequences
 
 - Implementing an authentication service to authenticate application caller using CCF certificate and JWT authentications methods.
-- The application can be accessed by member, user or valid user JWT token issued by a registered identity provider.  
+- The application can be accessed by member, user or valid user JWT token issued by a registered identity provider.
 
 ## Resource
 

@@ -49,7 +49,7 @@ The reconciliation application consists of three main parts: Data Ingestion, Dat
      └── data-samples    Data files for tests|demo
      └── e2e-test            Application end to end tests
      └── unit-test            Application unit tests
-     
+
 
 ```
 
@@ -70,19 +70,24 @@ make build                                             # Build and create the ap
 Now the environment is ready, and there are several scenarios that could be executed at this stage.
 
 - **Run the application's [e2e-tests](./test/test.sh) in a sandbox environment in the interactive mode**
+
   - `make demo`
 
 - **Run the application's [e2e-tests](./test/test.sh) in a sandbox (simulated) environment**
+
   - `make test`
 
 - **Run the application's [e2e-tests](./test/test.sh) on a Docker Container running a virtual (simulated) environment**
+
   - `make test-docker-virtual`
 
 - **Run the application [e2e-tests](./test/test.sh) on a Managed CCF environment**
+
   - First, create a Managed CCF instance on your Azure subscription. Please follow [here](https://github.com/microsoft/ccf-app-samples/tree/main/deploy#deploying-the-ccf-samples)
   - Run the e2e-test, please follow [here](https://github.com/microsoft/ccf-app-samples/tree/main/deploy#deploying-a-ccf-application-to-azure-managed-ccf)
 
 - **Start a CCF network with 3 active members and 1 user using the sandbox and deploy the application to it, the application and network are ready to receive requests**
+
   - `make start-host`
 
 - **Run the application's unit tests**
@@ -121,7 +126,7 @@ The application testing strategy depends on two main types of testing to maintai
 ```bash
 cd data-reconciliation-app    # Navigate to reconciliation sample folder
 make unit-test                # Run the unit tests
-make test                     # Run the end-to-end(e2e) tests 
+make test                     # Run the end-to-end(e2e) tests
 ```
 
 ### Demo

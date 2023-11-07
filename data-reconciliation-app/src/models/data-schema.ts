@@ -13,11 +13,14 @@ export class DataSchema {
 
   /**
    * Map ingested data model to data-record model based on the schema
-   * @param {object} dataRecord 
-   * @param {DataSchema} schema 
-   * @returns 
+   * @param {object} dataRecord
+   * @param {DataSchema} schema
+   * @returns
    */
-  static mapDataRecord(dataRecord: object, schema: DataSchema): ServiceResult<DataRecord> {
+  static mapDataRecord(
+    dataRecord: object,
+    schema: DataSchema,
+  ): ServiceResult<DataRecord> {
     if (!dataRecord || !schema) {
       return ServiceResult.Failed({
         errorMessage: "Error: data record is null or empty",
@@ -39,8 +42,8 @@ export class DataSchema {
 
   /**
    * Map ingested data-models to data-record model based on the schema
-   * @param {object[]} dataRecords 
-   * @returns 
+   * @param {object[]} dataRecords
+   * @returns
    */
   static mapDataRecords(dataRecords: object[]): ServiceResult<DataRecord[]> {
     if (!dataRecords || dataRecords.length == 0) {
@@ -64,11 +67,14 @@ export class DataSchema {
 
   /**
    * Map summary data model to report model based on the schema
-   * @param {SummaryRecord} summaryRecord 
+   * @param {SummaryRecord} summaryRecord
    * @param {DataSchema} schema?
-   * @returns 
+   * @returns
    */
-  static mapSummaryRecord(summaryRecord: SummaryRecord, schema?: DataSchema): ServiceResult<object> {
+  static mapSummaryRecord(
+    summaryRecord: SummaryRecord,
+    schema?: DataSchema,
+  ): ServiceResult<object> {
     if (!schema) {
       schema = DataSchema.getDefaultDataSchema();
     }
@@ -88,10 +94,12 @@ export class DataSchema {
 
   /**
    * Map summary data models to report models based on the schema
-   * @param {SummaryRecord[]} summaryRecords 
+   * @param {SummaryRecord[]} summaryRecords
    * @returns {ServiceResult<object[]>}
    */
-  static mapSummaryRecords(summaryRecords: SummaryRecord[]): ServiceResult<object[]> {
+  static mapSummaryRecords(
+    summaryRecords: SummaryRecord[],
+  ): ServiceResult<object[]> {
     const schema = DataSchema.getDefaultDataSchema();
     const results: object[] = [];
     if (summaryRecords && summaryRecords.length > 0) {
@@ -108,7 +116,10 @@ export class DataSchema {
   /**
    * Validate input object schema
    */
-  private static hasValidSchema(dataRecord: object,schema: DataSchema): boolean {
+  private static hasValidSchema(
+    dataRecord: object,
+    schema: DataSchema,
+  ): boolean {
     return (
       dataRecord.hasOwnProperty(schema.key.name) &&
       dataRecord.hasOwnProperty(schema.value.name)

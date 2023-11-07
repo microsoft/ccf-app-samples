@@ -8,9 +8,9 @@ import { UserMemberAuthnIdentity } from "./user-cert-validation";
  * CCF member information
  * https://microsoft.github.io/CCF/main/audit/builtin_maps.html#members-info
  */
-enum MemberStatus{
+enum MemberStatus {
   ACCEPTED = "Accepted",
-  ACTIVE = "Active"
+  ACTIVE = "Active",
 }
 
 interface CCFMember {
@@ -41,7 +41,7 @@ export class MemberCertValidator implements IValidatorService {
     const membersCerts = ccfapp.typedKv(
       "public:ccf.gov.members.certs",
       ccfapp.string,
-      ccfapp.arrayBuffer
+      ccfapp.arrayBuffer,
     );
 
     const isMember = membersCerts.has(memberId);
@@ -49,12 +49,13 @@ export class MemberCertValidator implements IValidatorService {
     const membersInfo = ccfapp.typedKv(
       "public:ccf.gov.members.info",
       ccfapp.string,
-      ccfapp.json<CCFMember>()
+      ccfapp.json<CCFMember>(),
     );
 
     const memberInfo = membersInfo.get(memberId);
 
-    const isActiveMember = memberInfo && memberInfo.status === MemberStatus.ACTIVE;
+    const isActiveMember =
+      memberInfo && memberInfo.status === MemberStatus.ACTIVE;
 
     return ServiceResult.Succeeded(isActiveMember && isMember);
   }

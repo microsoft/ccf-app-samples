@@ -47,7 +47,7 @@ After you press any key, we will start the ingestion service. This service is a 
 ✅ [PASS] [200 : OK] - Member 2 data has ingested successfully
 
 🎬 Ingestion Stage Complete
- - Press return key to continue... 
+ - Press return key to continue...
 ```
 
 ## Part 3. Reporting Service (Full Report)
@@ -105,7 +105,7 @@ The next part of the demo will show the reporting service. This service is a sim
 └─────────┴─────────────────────┴───────────────────┴────────────────────────┴──────────────────────┴────────────────────────┴───────────┘
 
 🎬 Full Reports Complete
- - Press return key to continue... 
+ - Press return key to continue...
 ```
 
 ## Part 4. Reporting Service (By Id) - IN CONSENSUS
@@ -186,7 +186,7 @@ And this example shows the result when the members do not agree on the value for
 
 ## Part 7. Ingesting more data
 
-To show how data ingestion can affect all members' reports, we can ingest more data and then re-run the report. We demonstrate this here with `member0` ingesting some new data and `member2` asking for a report for the same key as in the previous step. You can see that *group_status* has changed from `LACK_OF_CONSENSUS` to `IN_CONSENSUS`.
+To show how data ingestion can affect all members' reports, we can ingest more data and then re-run the report. We demonstrate this here with `member0` ingesting some new data and `member2` asking for a report for the same key as in the previous step. You can see that _group_status_ has changed from `LACK_OF_CONSENSUS` to `IN_CONSENSUS`.
 
 ```bash
 ===============================================

@@ -9,6 +9,7 @@ Proposed
 We need to build an API that reports the members' and users' reconciled records back to them.
 
 ## Requirements:
+
 - A report can be requested for a single record or for all records.
 - Members and Users will receive a report only for the data they have ingested.
 - A reconciliation report can be requested anytime by any member, and the report result will be presented based on the most recent data present in the KV store for the entire network.
@@ -41,7 +42,6 @@ We need to build an API that reports the members' and users' reconciled records 
     - Status: 400
     - Response: "Key does not exist."
 
-
 ### Report for all data
 
 - Description
@@ -65,7 +65,6 @@ We need to build an API that reports the members' and users' reconciled records 
   - NO_CONTENT
     - Status: 204
     - Response: "No data to report."
-
 
 ### Security
 
@@ -91,21 +90,19 @@ getDataByKey(userId: string, key: string) : SummaryResult   // for a single reco
 
 The [SummaryResult object](https://github.com/microsoft/ccf-app-samples/blob/main/data-reconciliation-app/src/models/summary-record.ts) will be the final output in the report. In the report, the key and value will match the schema defined.
 
-
-
 ```json
 {
   "lei": "<record key>",
   "nace": "<value informed by User>",
   "group_status": "<value>",
-  "total_votes_count": "#",                 // total opinions count - initially commented (DEMO CHANGE)
-  "count_of_unique_values": "#",            // count of unique values
-  "members_in_agreement": "#",              // # of members in agreement with the User value
+  "total_votes_count": "#", // total opinions count - initially commented (DEMO CHANGE)
+  "count_of_unique_values": "#", // count of unique values
+  "members_in_agreement": "#", // # of members in agreement with the User value
   "majority_minority": "<calculated value>" // relative to the number of active members in the network
-} 
+}
 ```
+
 For more detailed information regarding how each property above is calculated, refer to the [Reconciliation Logic ADR](https://github.com/microsoft/ccf-app-samples/blob/main/data-reconciliation-app/docs/adr/03-reconciliation-logic.md)
 
 During its creation, the [`voting_threshold`](./03-reconciliation-logic.md#voting-threshold) must be passed to it, as some of the calculations for its properties need this information.
 Additionally, the `total number of members in the network` is needed, and this can be retrieved from the CCF members' information.
-

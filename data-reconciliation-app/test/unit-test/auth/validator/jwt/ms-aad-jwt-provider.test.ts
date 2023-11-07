@@ -1,6 +1,8 @@
 // Use the CCF polyfill to mock-up all key-value map functionality for unit-test
 import * as ccfapp from "@microsoft/ccf-app";
-import msJwtProvider, { MSAccessToken } from "../../../../../src/auth/validator/jwt/ms-aad-jwt-provider";
+import msJwtProvider, {
+  MSAccessToken,
+} from "../../../../../src/auth/validator/jwt/ms-aad-jwt-provider";
 import { MS_AAD_CONFIG } from "../../../../../src/utils/config";
 
 describe("MS-AAD-Jwt-Provider", () => {
@@ -12,9 +14,18 @@ describe("MS-AAD-Jwt-Provider", () => {
 
   test("Should return the identityId", () => {
     // Arrange
-    const msJwttoken: MSAccessToken = { sub: sub, iss: iss, aud: aud, appid: appid, ver: ver };
+    const msJwttoken: MSAccessToken = {
+      sub: sub,
+      iss: iss,
+      aud: aud,
+      appid: appid,
+      ver: ver,
+    };
     const valid_jwt = { header: "test", keyIssuer: iss, payload: msJwttoken };
-    const valid_identity: ccfapp.JwtAuthnIdentity = { policy: "jwt", jwt: valid_jwt };
+    const valid_identity: ccfapp.JwtAuthnIdentity = {
+      policy: "jwt",
+      jwt: valid_jwt,
+    };
     // Act
     const result = msJwtProvider.isValidJwtToken(valid_identity);
 
@@ -26,9 +37,22 @@ describe("MS-AAD-Jwt-Provider", () => {
 
   test("Invalid appId, should throw authentication error", () => {
     // Arrange
-    const invalid_appid: MSAccessToken = { sub: sub, iss: iss, aud: aud, appid: "test_appId", ver: ver };
-    const invalid_appid_jwt = { header: "test", keyIssuer: iss, payload: invalid_appid };
-    const invalid_identity: ccfapp.JwtAuthnIdentity = { policy: "jwt", jwt: invalid_appid_jwt };
+    const invalid_appid: MSAccessToken = {
+      sub: sub,
+      iss: iss,
+      aud: aud,
+      appid: "test_appId",
+      ver: ver,
+    };
+    const invalid_appid_jwt = {
+      header: "test",
+      keyIssuer: iss,
+      payload: invalid_appid,
+    };
+    const invalid_identity: ccfapp.JwtAuthnIdentity = {
+      policy: "jwt",
+      jwt: invalid_appid_jwt,
+    };
     // Act
     const result = msJwtProvider.isValidJwtToken(invalid_identity);
     // Assert
@@ -39,9 +63,22 @@ describe("MS-AAD-Jwt-Provider", () => {
 
   test("Invalid version, should throw authentication error", () => {
     // Arrange
-    const invalid_version: MSAccessToken = { sub: sub, iss: iss, aud: aud, appid: appid, ver: "2.0" };
-    const invalid_version_jwt = { header: "test", keyIssuer: iss, payload: invalid_version };
-    const invalid_identity: ccfapp.JwtAuthnIdentity = { policy: "jwt", jwt: invalid_version_jwt };
+    const invalid_version: MSAccessToken = {
+      sub: sub,
+      iss: iss,
+      aud: aud,
+      appid: appid,
+      ver: "2.0",
+    };
+    const invalid_version_jwt = {
+      header: "test",
+      keyIssuer: iss,
+      payload: invalid_version,
+    };
+    const invalid_identity: ccfapp.JwtAuthnIdentity = {
+      policy: "jwt",
+      jwt: invalid_version_jwt,
+    };
     // Act
     const result = msJwtProvider.isValidJwtToken(invalid_identity);
     // Assert

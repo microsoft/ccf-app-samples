@@ -4,13 +4,13 @@ This is the _CCF Decentralized RBAC app - sample_ in typescript.
 
 ## Overview
 
-The CCF network will be used to host a decentralized RBAC application where a consortium of members from different organizations would manage the roles, their allowed actions and users. A user is assigned a role which determines the allowed action. 
+The CCF network will be used to host a decentralized RBAC application where a consortium of members from different organizations would manage the roles, their allowed actions and users. A user is assigned a role which determines the allowed action.
 
 An external service could use the application to perform authorization(AuthZ) decisions for the logged-in user.
 
 ## Architecture
 
-The application consists of three parts: 
+The application consists of three parts:
 
 (i) Role management,
 (ii) User management, and,
@@ -27,7 +27,7 @@ The application consists of three parts:
 ```text
 📂
 └── src                 Application source code
-|    └── auth           Member and User cert Authentication 
+|    └── auth           Member and User cert Authentication
 │    └── endpoints      Application endpoints
 │    └── repositories   Data repositories
 │    └── services       Domain services

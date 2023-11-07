@@ -1,5 +1,9 @@
 import { ServiceResult } from "../utils/service-result";
-import { keyValueUserRoleRepository, keyValueRoleActionRepository, IRepository } from "../repositories/kv-repository";
+import {
+  keyValueUserRoleRepository,
+  keyValueRoleActionRepository,
+  IRepository,
+} from "../repositories/kv-repository";
 
 export interface IUserService {
   /**
@@ -11,23 +15,29 @@ export interface IUserService {
 }
 
 export class UserService implements IUserService {
-  constructor(private readonly keyValueRepo: IRepository<any>, private readonly roleActionKVRepo: IRepository<any>) {}
+  constructor(
+    private readonly keyValueRepo: IRepository<any>,
+    private readonly roleActionKVRepo: IRepository<any>,
+  ) {}
 
-  public add_user(userId: string, role:string): ServiceResult<any> {
+  public add_user(userId: string, role: string): ServiceResult<any> {
     const saveUserRecord = this.keyValueRepo.set(userId, role);
 
-    if (!saveUserRecord.success){
+    if (!saveUserRecord.success) {
       return ServiceResult.Failed({
         errorMessage: "Error: user add failed",
         errorType: "InvalidInputData",
       });
     }
 
-    console.log(`Added user ${userId} with role ${role}`)
+    console.log(`Added user ${userId} with role ${role}`);
 
     return saveUserRecord;
   }
 }
 
-const userService: IUserService = new UserService(keyValueUserRoleRepository, keyValueRoleActionRepository);
+const userService: IUserService = new UserService(
+  keyValueUserRoleRepository,
+  keyValueRoleActionRepository,
+);
 export default userService;
