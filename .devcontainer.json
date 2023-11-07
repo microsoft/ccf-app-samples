@@ -25,7 +25,7 @@
       "version": "latest"
     },
     "ghcr.io/devcontainers/features/node:1": {
-      "version": "lts",
+      "version": "16",
       "nodeGypDependencies": true
     },
     "ghcr.io/devcontainers/features/powershell:1": {
