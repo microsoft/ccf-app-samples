@@ -20,7 +20,7 @@ jobs:
           persist-credentials: false
 
       - name: Build samples in DevContainer
-        uses: devcontainers/ci@v0.2
+        uses: devcontainers/ci@v0.3
         with:
           cacheFrom: ghcr.io/microsoft/ccf-samples-devcontainer
           runCmd: |
@@ -40,7 +40,7 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
       - name: Build samples in DevContainer
-        uses: devcontainers/ci@v0.2
+        uses: devcontainers/ci@v0.3
         with:
           cacheFrom: ghcr.io/microsoft/ccf-samples-devcontainer
           runCmd: |
@@ -56,7 +56,7 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
       - name: Build samples in DevContainer
-        uses: devcontainers/ci@v0.2
+        uses: devcontainers/ci@v0.3
         with:
           cacheFrom: ghcr.io/microsoft/ccf-samples-devcontainer
           runCmd: |
