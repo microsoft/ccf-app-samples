@@ -20,7 +20,7 @@ test: build ## 🧪 Test the Logging Application
 
 test-docker-virtual: build-virtual ## 🧪 Test the Logging Application in a Docker sandbox
 	@echo -e "\e[34m$@\e[0m" || true
-	@. ../scripts/test_docker.sh --virtual --serverIP 172.17.0.2 --port 8080
+	@. ../scripts/test_docker.sh --virtual --serverIP 127.0.0.1 --port 8080
 
 start-host: build ## 🏁 Start the CCF Sandbox
 	@echo -e "\e[34m$@\e[0m" || true
