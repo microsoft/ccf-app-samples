@@ -16,7 +16,8 @@
         "editor.codeActionsOnSave": {
           "source.fixAll": true
         }
-      }
+      },
+      "appPort": [ 8080 ]
     }
   },
   "postStartCommand": "scripts/devContainer_OnStart.sh",
