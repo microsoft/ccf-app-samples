@@ -42,7 +42,7 @@ jobs:
         with:
           inlineScript: |
             #!/bin/bash
-            az group create --name ${{ env.ccfName }} --location ${{ env.ResourceGroupLocation }}
+            az group create --name ${{ env.rgName }} --location ${{ env.ResourceGroupLocation }}
 
       - name: Deploy Managed CCF Network
         uses: azure/arm-deploy@v1
