@@ -1,6 +1,11 @@
 name: "deploy-mccf-resource"
 
-on: [workflow_dispatch]
+on: 
+  workflow_dispatch:
+    inputs:
+      parameter:
+          description: "Workflow to deploy Managed CCF and test sample apps"
+  pull_request:
 
 jobs:
   deploy:
