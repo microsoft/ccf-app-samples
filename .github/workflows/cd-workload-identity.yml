@@ -1,8 +1,9 @@
 name: "deploy-mccf-resource"
 
 on: 
-  workflow_dispatch:
   pull_request:
+    branches: [update-cd-pipeline]
+  workflow_dispatch:
 
 permissions:
   id-token: write
@@ -69,4 +70,4 @@ jobs:
           inlineScript: |
             #!/bin/bash
             echo "Always delete resource group because of quota"
-            az group delete --name ${{ env.ccfName }} --yes --no-wait
+            az group delete --name ${{ env.rgName }} --yes --no-wait
