@@ -7,6 +7,9 @@ on:
           description: "Workflow to deploy Managed CCF and test sample apps"
   pull_request:
 
+permissions:
+  id-token: write
+
 jobs:
   deploy:
     name: Managed CCF
