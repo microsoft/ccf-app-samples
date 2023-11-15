@@ -2,9 +2,6 @@ name: "deploy-mccf-resource"
 
 on: 
   workflow_dispatch:
-    inputs:
-      parameter:
-          description: "Workflow to deploy Managed CCF and test sample apps"
   pull_request:
 
 permissions:
@@ -16,7 +13,8 @@ jobs:
     runs-on: ubuntu-20.04
     environment: dev
     env:
-      ccfName: mCCF${{ github.run_number }}
+      ccfName: ccf-app-samples-test-${{ github.run_number }}
+      rgName: ccf-app-samples-test-${{ github.run_number }}-rg
       ResourceGroupLocation: "westeurope"
     steps:
       - name: Checkout repository
@@ -49,7 +47,7 @@ jobs:
       - name: Deploy Managed CCF Network
         uses: azure/arm-deploy@v1
         with:
-          resourceGroupName: ${{ env.ccfName }}
+          resourceGroupName: ${{ env.rgName }}
           template: ./deploy/arm/mccf.json
           parameters: ./deploy/arm/parameters.json mccfMemberBasedSecurityPrincipals="[{\"cert\":\"${{ secrets.PUBLIC_CERT }}\", \"encryptionKey\":\"\"}]" resourceName="${{ env.ccfName }}"
 

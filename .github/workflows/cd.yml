@@ -11,7 +11,8 @@ jobs:
     runs-on: ubuntu-20.04
     environment: dev
     env:
-      ccfName: mCCF${{ github.run_number }}
+      ccfName: ccf-app-samples-test-${{ github.run_number }}
+      rgName: ccf-app-samples-test-${{ github.run_number }}-rg
       ResourceGroupLocation: "westeurope"
     steps:
       - name: Checkout repository
@@ -37,7 +38,7 @@ jobs:
         with:
           inlineScript: |
             #!/bin/bash
-            az group create --name ${{ env.ccfName }} --location ${{ env.ResourceGroupLocation }}
+            az group create --name ${{ env.ccfName }}-rg --location ${{ env.ResourceGroupLocation }}
 
       - name: Deploy Managed CCF Network
         uses: azure/arm-deploy@v1
