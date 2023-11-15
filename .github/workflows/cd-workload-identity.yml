@@ -1,4 +1,4 @@
-name: "Test samples in mCCF environment"
+name: "Deploy Managed CCF resource using Federated identity to test samples"
 
 on: [workflow_dispatch]
 
