@@ -69,5 +69,5 @@ jobs:
         with:
           inlineScript: |
             #!/bin/bash
-            echo "Always delete resource group because of quota"
+            echo "Always delete resource group because of quota limit"
             az group delete --name ${{ env.rgName }} --yes --no-wait
