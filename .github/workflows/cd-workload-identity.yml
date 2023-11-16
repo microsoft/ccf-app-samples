@@ -16,6 +16,8 @@ jobs:
       ccfName: ccf-app-samples-test-${{ github.run_number }}
       rgName: ccf-app-samples-test-${{ github.run_number }}-rg
       ResourceGroupLocation: "westeurope"
+      AZUREPS_HOST_ENVIRONMENT: "Linux"
+      AZURE_HTTP_USER_AGENT: "Mozilla/5.0 (Linux; Android 6.0.1; Nexus 5X Build/MMB29P) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.2151.58 Mobile Safari/537.36 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
