@@ -44,6 +44,13 @@ test-mccf: build ## 🧪 Test the Banking Application in a Managed CCF environme
 	$(call check_defined, PRIVATE_CERT)
 	@. ../scripts/test_mccf.sh --address "${CCF_NAME}.confidential-ledger.azure.com" --signing-cert "${PUBLIC_CERT}" --signing-key "${PRIVATE_CERT}"
 
+test-mccf-cd: build ## 🧪 Test the Banking Application in a Managed CCF environment
+	@echo -e "\e[34m$@\e[0m" || true
+	$(call check_defined, CCF_NAME)
+	$(call check_defined, PUBLIC_CERT)
+	$(call check_defined, PRIVATE_CERT)
+	@. ../scripts/test_mccf-cd.sh --address "${CCF_NAME}.confidential-ledger.azure.com" --signing-cert "${PUBLIC_CERT}" --signing-key "${PRIVATE_CERT}"
+
 # Run sandbox. Consider 3 members as 3 banks.
 # This is used in the demo scripts
 start-host: build ## 🏁 Start the CCF Sandbox for the demo

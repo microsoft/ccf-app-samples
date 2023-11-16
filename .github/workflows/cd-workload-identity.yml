@@ -57,7 +57,7 @@ jobs:
           imageName: ghcr.io/microsoft/ccf-samples-devcontainer
           cacheFrom: ghcr.io/microsoft/ccf-samples-devcontainer
           runCmd: |
-            cd banking-app && make test-mccf
+            cd banking-app && make test-mccf-cd
           env: |
             PUBLIC_CERT=${{ secrets.PUBLIC_CERT }}
             PRIVATE_CERT=${{ secrets.PRIVATE_CERT }}
