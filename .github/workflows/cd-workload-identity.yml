@@ -51,7 +51,7 @@ jobs:
         with:
           resourceGroupName: ${{ env.rgName }}
           template: ./deploy/arm/mccf.json
-          parameters: ./deploy/arm/parameters.json mccfMemberBasedSecurityPrincipals="[{\"cert\":\"${{ secrets.PUBLIC_CERT }}\", \"encryptionKey\":\"\"}]" resourceName="${{ env.ccfName }}"
+          parameters: ./deploy/arm/parameters.json mccfMemberBasedSecurityPrincipals="[{\"cert\":\"${{ secrets.ARM_TEMPLATE_PUBLIC_CERT }}\", \"encryptionKey\":\"\"}]" resourceName="${{ env.ccfName }}"
 
       - name: Deploy Banking Sample to mCCF
         uses: devcontainers/ci@v0.2
