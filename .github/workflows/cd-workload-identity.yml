@@ -63,6 +63,17 @@ jobs:
             PRIVATE_CERT=${{ secrets.PRIVATE_CERT }}
             CCF_NAME=${{ env.ccfName }}
 
+      - name: Deploy Data Reconciliation Sample to mCCF
+        uses: devcontainers/ci@v0.2
+        with:
+          imageName: ghcr.io/microsoft/ccf-samples-devcontainer
+          runCmd: |
+            cd data-reconciliation-app && make test-mccf-cd
+          env: |
+            PUBLIC_CERT=${{ secrets.PUBLIC_CERT }}
+            PRIVATE_CERT=${{ secrets.PRIVATE_CERT }}
+            CCF_NAME=${{ env.ccfName }}
+
       - name: Delete Resource Group
         uses: Azure/CLI@v1
         if: always()
