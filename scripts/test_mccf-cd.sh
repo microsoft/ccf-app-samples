@@ -55,4 +55,4 @@ fi
 # Base64 decode
 export PUBLIC_CERT=$(echo "${signing_cert}" | base64 --decode)
 export PRIVATE_CERT=$(echo "${signing_key}" | base64 --decode)
-./test_mccf.sh --address "${address}.confidential-ledger.azure.com" --signing-cert "${PUBLIC_CERT}" --signing-key "${PRIVATE_CERT}"
+../scripts/test_mccf.sh --address "${address}.confidential-ledger.azure.com" --signing-cert "${PUBLIC_CERT}" --signing-key "${PRIVATE_CERT}"
