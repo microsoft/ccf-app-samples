@@ -1,9 +1,12 @@
-name: "Test samples in mCCF environment"
+name: "deploy-test-app-samples-to-mccf"
 
 on:
   push:
     branches: [main]
   workflow_dispatch:
+
+permissions:
+  id-token: write
 
 jobs:
   deploy:
@@ -11,8 +14,9 @@ jobs:
     runs-on: ubuntu-20.04
     environment: dev
     env:
-      ccfName: mCCF${{ github.run_number }}
-      ResourceGroupLocation: "westeurope"
+      ccfName: ccf-app-samples-test-${{ github.run_number }}
+      rgName: ccf-app-samples-test-${{ github.run_number }}-rg
+      ResourceGroupLocation: "southcentralus"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -23,7 +27,9 @@ jobs:
       - name: Azure Login
         uses: Azure/login@v1.4.5
         with:
-          creds: '{"clientId":"${{ secrets.ARM_CLIENT_ID }}","clientSecret":"${{ secrets.ARM_CLIENT_SECRET }}","subscriptionId":"${{ secrets.ARM_SUBSCRIPTION_ID }}","tenantId":"${{ secrets.ARM_TENANT_ID }}"}' # editorconfig-checker-disable-line
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Login to GH-CR to push the updated devcontainer image
         uses: docker/login-action@v1
@@ -37,24 +43,22 @@ jobs:
         with:
           inlineScript: |
             #!/bin/bash
-            az group create --name ${{ env.ccfName }} --location ${{ env.ResourceGroupLocation }}
+            az group create --name ${{ env.rgName }} --location ${{ env.ResourceGroupLocation }}
 
       - name: Deploy Managed CCF Network
         uses: azure/arm-deploy@v1
         with:
-          resourceGroupName: ${{ env.ccfName }}
+          resourceGroupName: ${{ env.rgName }}
           template: ./deploy/arm/mccf.json
-          parameters: ./deploy/arm/parameters.json mccfMemberBasedSecurityPrincipals="[{\"cert\":\"${{ secrets.PUBLIC_CERT }}\", \"encryptionKey\":\"\"}]" resourceName="${{ env.ccfName }}"
+          parameters: ./deploy/arm/parameters.json mccfMemberBasedSecurityPrincipals="[{\"cert\":\"${{ secrets.ARM_TEMPLATE_PUBLIC_CERT }}\", \"encryptionKey\":\"\"}]" resourceName="${{ env.ccfName }}"
 
       - name: Deploy Banking Sample to mCCF
         uses: devcontainers/ci@v0.2
         with:
           imageName: ghcr.io/microsoft/ccf-samples-devcontainer
           cacheFrom: ghcr.io/microsoft/ccf-samples-devcontainer
-          eventFilterForPush: push
-          refFilterForPush: refs/heads/main
           runCmd: |
-            cd banking-app && make test-mccf
+            cd banking-app && make test-mccf-cd
           env: |
             PUBLIC_CERT=${{ secrets.PUBLIC_CERT }}
             PRIVATE_CERT=${{ secrets.PRIVATE_CERT }}
@@ -65,7 +69,7 @@ jobs:
         with:
           imageName: ghcr.io/microsoft/ccf-samples-devcontainer
           runCmd: |
-            cd data-reconciliation-app && make test-mccf
+            cd data-reconciliation-app && make test-mccf-cd
           env: |
             PUBLIC_CERT=${{ secrets.PUBLIC_CERT }}
             PRIVATE_CERT=${{ secrets.PRIVATE_CERT }}
@@ -77,5 +81,5 @@ jobs:
         with:
           inlineScript: |
             #!/bin/bash
-            echo "Always delete resource group because of quota"
-            az group delete --name ${{ env.ccfName }} --yes --no-wait
+            echo "Always delete resource group because of quota limit"
+            az group delete --name ${{ env.rgName }} --yes --no-wait

@@ -47,6 +47,15 @@ test-mccf: build ## 🧪 Test the Data Reconciliation Application in a Managed C
 	$(call check_defined, PRIVATE_CERT)
 	@. ../scripts/test_mccf.sh --address "${CCF_NAME}.confidential-ledger.azure.com" --signing-cert "${PUBLIC_CERT}" --signing-key "${PRIVATE_CERT}"
 
+## This command is called from the Github workflow.
+## PUBLIC_CERT and PRIVATE_CERT are base64 encoded.
+test-mccf-cd: build ## 🧪 Test the Data Reconciliation Application in a Managed CCF environment
+	@echo -e "\e[34m$@\e[0m" || true
+	$(call check_defined, CCF_NAME)
+	$(call check_defined, PUBLIC_CERT)
+	$(call check_defined, PRIVATE_CERT)
+	@. ../scripts/test_mccf-cd.sh --address "${CCF_NAME}.confidential-ledger.azure.com" --signing-cert "${PUBLIC_CERT}" --signing-key "${PRIVATE_CERT}"
+
 unit-test: ## 🧪 Unit Test the Application
 	@echo -e "\e[34m$@\e[0m" || true
 	@npm run unit-test
