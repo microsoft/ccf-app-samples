@@ -110,7 +110,7 @@ check_eq "AuthZ: user1, contributor, readwrite" "200" "$(curl $server/app/$user1
 # Test cases for error handling
 reader='reader'
 check_eq "AuthZ: user not found" "400" "$(curl $server/app/$invalid_user_id/action/$reader $(cert_arg "user0") $only_status_code)"
-check_eq "AuthZ: user and action mismatch" "400" "$(curl $server/app/$user1_id/action/$reader $(cert_arg "user1") $only_status_code)"
+check_eq "AuthZ: user action unallowed" "400" "$(curl $server/app/$user1_id/action/$reader $(cert_arg "user1") $only_status_code)"
 
 printf "\n\n🏁 Test Completed...\n"
 exit 0

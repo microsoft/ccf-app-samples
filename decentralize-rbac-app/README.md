@@ -33,6 +33,12 @@ The application consists of three parts:
 │    └── services       Domain services
 │    └── utils          utility classes
 └── test                end-to-end tests
+└── docker              Contains the Dockerfile to build the virtual and enclave image
+└── governance          
+    └── constitution    Default constitution used for the tests
+    └── nodes           Config file for the virtual and enclave sandbox deployment
+    └── scripts         Scripts to generate member and user certs for running tests
+    └── vote            A json file that contains the vote body to accept proposals
 
 ```
 
