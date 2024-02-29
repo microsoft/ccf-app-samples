@@ -40,7 +40,7 @@ export class ApiResult {
 
   public static ActionDisallowed<T>(result: ServiceResult<T>): CCFResponse {
     const response: CCFResponse = {
-      statusCode: 200,
+      statusCode: 400,
       body: {
         allowed: false,
       },

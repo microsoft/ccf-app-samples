@@ -17,10 +17,10 @@ The application consists of three parts:
 (iii) Authorization
 
 - Role and User Management
-  - API Endpoint: allow members to add a role and allowed action.
-  - API Endpoint: allow members to add a user and the role.
+  - /{role}/roles/{action}: add a role and allowed action. Requires member auth.
+  - /{user_id}/users/{role}: add a user and the role. Requires member auth.
 - Authorization
-  - Check if a user exists and if an action is allowed.
+  - /{user_id}/action/{actionName} - Authorize a user and action. Requires user auth.
 
 ### Repository Layout
 
@@ -32,6 +32,7 @@ The application consists of three parts:
 │    └── repositories   Data repositories
 │    └── services       Domain services
 │    └── utils          utility classes
+└── test                end-to-end tests
 
 ```
 
@@ -45,8 +46,45 @@ git clone https://github.com/microsoft/ccf-app-samples # Clone the samples repos
 code ccf-app-samples                                   # open samples repository in Visual studio code
 
 # In the VScode terminal window
-cd decentralized-authz-app                             # Navigate to app folder
-npm run build                                          # Build and create the application deployment bundle
+cd decentralized-authz-app                          # Navigate to app folder
+make build                                          # Build and create the application deployment bundle
 ```
 
-## Local Deployment
+Now the environment is ready, and there are several scenarios that could be executed at this stage.
+
+- **Run the application's [e2e-tests](./test/test.sh) in a sandbox (simulated) environment**
+
+  - `make test`
+
+- **Run the application's [e2e-tests](./test/test.sh) on a Docker Container running a virtual (simulated) environment**
+
+  - `make test-docker-virtual`
+
+- **Start a CCF network with 1 active member and 2 users using the sandbox and deploy the application to it, the application and network are ready to receive requests**
+
+  - `make start-host`
+
+These are the main scenarios; more commands are available at makefile and are described in the following section.
+
+### Make file
+
+A Makefile provides a front-end to interact with the project. It is used both locally, during CI, and on GitHub Actions. This Makefile is self-documented, and has the following targets:
+
+```text
+help                 💬 This help message :)
+build                🔨 Build the Application
+build-virtual        📦 Build Virtual container image from Dockerfile
+build-enclave        📦 Build Enclave container image from Dockerfile
+start-host           🏃 Start the CCF network using Sandbox.sh
+test                 🧪 Test the Data Reconciliation Application in the sandbox
+test-docker-virtual  🧪 Test the Data Reconciliation Application in a Docker sandbox
+test-docker-enclave  🧪 Test the Data Reconciliation Application in a Docker enclave
+clean                🧹 Clean the working folders created during build/demo
+```
+
+## Testing
+
+```bash
+cd data-reconciliation-app    # Navigate to reconciliation sample folder
+make test                     # Run the end-to-end(e2e) tests
+```
