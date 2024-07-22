@@ -63,7 +63,7 @@ jobs:
             cd data-reconciliation-app && make unit-test && make test
 
   decentralized-rbac-app-sample:
-    name: Decentralised RBAC app sample
+    name: Decentralized RBAC app sample
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout repository
