@@ -35,7 +35,7 @@ deploy-ms-idp: ## 🔐 Create an Identity Provider
 	@echo -e "\e[34m$@\e[0m" || true
 	cd deploy && pwsh ./New-IdentityProvider.ps1
 
-generate-access-token: ## 🔐 Generate and access token
+generate-access-token: ## 🔐 Generate an access token
 	@echo -e "\e[34m$@\e[0m" || true
 	./scripts/generate_access_token.sh
 

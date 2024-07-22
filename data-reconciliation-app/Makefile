@@ -102,7 +102,7 @@ deploy-mccf: ## 🚀 Deploy Managed CCF
 deploy-ms-idp: ## 🔐 Create an Identity Provider
 	@cd .. && $(MAKE) deploy-ms-idp
 
-generate-access-token: ## 🔐 Generate and access token
+generate-access-token: ## 🔐 Generate an access token
 	@cd .. && $(MAKE) generate-access-token
 
 # Keep this at the bottom.
