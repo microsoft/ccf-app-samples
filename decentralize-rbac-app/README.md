@@ -17,10 +17,10 @@ The application consists of three parts:
 (iii) Authorization
 
 - Role and User Management
-  - /{role}/roles/{action}: add a role and allowed action. Requires member auth.
-  - /{user_id}/users/{role}: add a user and the role. Requires member auth.
+  - `PUT /{role}/roles/{action}`: Add a permitted action for a given role. Requires member cert auth.
+  - `PUT /{user_id}/users/{role}`: Assign a specific role to a given user. Requires member cert auth.
 - Authorization
-  - /{user_id}/action/{actionName} - Authorize a user and action. Requires user auth.
+  - `GET /{user_id}/action/{actionName}` - Check whether a user is permitted to make a given action. Requires user cert auth.
 
 ### Repository Layout
 
@@ -34,7 +34,7 @@ The application consists of three parts:
 │    └── utils          utility classes
 └── test                end-to-end tests
 └── docker              Contains the Dockerfile to build the virtual and enclave image
-└── governance          
+└── governance
     └── constitution    Default constitution used for the tests
     └── nodes           Config file for the virtual and enclave sandbox deployment
     └── scripts         Scripts to generate member and user certs for running tests
