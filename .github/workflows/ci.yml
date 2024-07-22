@@ -76,4 +76,4 @@ jobs:
         with:
           cacheFrom: ghcr.io/microsoft/ccf-samples-devcontainer
           runCmd: |
-            cd decentralize-rbac-app && make test
+            cd decentralized-rbac-app && make test

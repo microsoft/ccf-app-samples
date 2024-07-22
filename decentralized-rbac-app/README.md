@@ -91,6 +91,6 @@ clean                🧹 Clean the working folders created during build/demo
 ## Testing
 
 ```bash
-cd decentralize-rbac-app      # Navigate to RBAC sample folder
+cd decentralized-rbac-app      # Navigate to RBAC sample folder
 make test                     # Run the end-to-end(e2e) tests
 ```
