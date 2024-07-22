@@ -3,6 +3,7 @@ import * as path from "path";
 
 import yargs from "yargs";
 
+console.info(process.argv);
 const argv = yargs(process.argv.slice(2)).option("bundle", {
   describe: "JSON bundle describing application to host",
   type: "string",
@@ -28,7 +29,7 @@ export async function resolve(specifier, context, nextResolve) {
     }
     canonicalSpecifier = path.resolve(
       path.dirname(canonicalSpecifier),
-      specifier,
+      specifier
     );
     canonicalSpecifier = path.relative(targetRoot, canonicalSpecifier);
     specifier = canonicalSpecifier;
