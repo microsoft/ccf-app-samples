@@ -93,7 +93,7 @@ Now the environment is ready, and there are several scenarios that could be exec
 - **Run the application's unit tests**
   - `make unit-test`
 
-These are the main scenarios; more commands are available at makefile and are described in the following section.
+These are the main scenarios; more commands are defined in `Makefile` and are described in the following section.
 
 ### Make file
 

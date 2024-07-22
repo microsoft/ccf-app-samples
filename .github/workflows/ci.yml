@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           persist-credentials: false
@@ -35,7 +35,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           persist-credentials: false
@@ -51,7 +51,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           persist-credentials: false
@@ -61,3 +61,19 @@ jobs:
           cacheFrom: ghcr.io/microsoft/ccf-samples-devcontainer
           runCmd: |
             cd data-reconciliation-app && make unit-test && make test
+
+  decentralized-rbac-app-sample:
+    name: Decentralized RBAC app sample
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Build samples in DevContainer
+        uses: devcontainers/ci@v0.3
+        with:
+          cacheFrom: ghcr.io/microsoft/ccf-samples-devcontainer
+          runCmd: |
+            cd decentralized-rbac-app && make test

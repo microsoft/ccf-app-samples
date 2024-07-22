@@ -3,7 +3,6 @@ import { ApiResult, CCFResponse } from "../utils/api-result";
 import authenticationService from "../services/authentication-service";
 import authzService from "../services/authz-service";
 import { ServiceResult } from "../utils/service-result";
-import { Service } from "protobufjs";
 
 /**
  * HTTP GET Handler for checking if a user exists
@@ -11,7 +10,7 @@ import { Service } from "protobufjs";
  * @returns {ServiceResult<string>} - data has been ingested successfully
  */
 export function authorize(
-  request: ccfapp.Request<any>,
+  request: ccfapp.Request<any>
 ): ccfapp.Response<CCFResponse> {
   // check if caller has a valid identity
   const isValidIdentity = authenticationService.isAuthenticated(request);
@@ -27,8 +26,8 @@ export function authorize(
           errorMessage: "userId and action are required",
           errorType: "InvalidData",
         },
-        400,
-      ),
+        400
+      )
     );
   }
 
