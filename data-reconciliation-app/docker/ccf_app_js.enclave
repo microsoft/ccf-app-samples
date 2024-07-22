@@ -1,8 +1,8 @@
 # Build
-FROM mcr.microsoft.com/ccf/app/dev:4.0.12-sgx as builder
+FROM ghcr.io/microsoft/ccf/app/dev/sgx:ccf-5.0.0 as builder
 
 # Run
-FROM mcr.microsoft.com/ccf/app/run-js:4.0.12-sgx
+FROM ghcr.io/microsoft/ccf/app/run-js/sgx:ccf-5.0.0
 
 # copy configuration into image
 COPY ./governance/constitution/*.js /app/
