@@ -7,50 +7,50 @@ import { ServiceResult } from "../utils/service-result";
  */
 export interface IRepository<T> {
   /**
-   * Store {T} in CFF TypedKvMap storage by key
+   * Store {T} in CCF TypedKvMap storage by key
    * @param {string} key
    * @param {T} value
    */
   set(key: string, value: T): ServiceResult<T>;
 
   /**
-   * Retrive {T} in CFF TypedKvMap storage by key
+   * Retrive {T} in CCF TypedKvMap storage by key
    * @param {string} key
    * @param {T} value
    */
   get(key: string): ServiceResult<T>;
 
   /**
-   * Check if {T} exists in CFF TypedKvMap storage by key
+   * Check if {T} exists in CCF TypedKvMap storage by key
    * @param {string} key
    * @param {T} value
    */
   has(key: string): ServiceResult<boolean>;
 
   /**
-   * Retrieve all keys in CFF TypedKvMap storage
+   * Retrieve all keys in CCF TypedKvMap storage
    */
   keys(): ServiceResult<string[]>;
 
   /**
-   * Retrieve all values in CFF TypedKvMap storage
+   * Retrieve all values in CCF TypedKvMap storage
    */
   values(): ServiceResult<T[]>;
 
   /**
-   * Get size of CFF TypedKvMap storage
+   * Get size of CCF TypedKvMap storage
    * @returns {ServiceResult<number>}
    */
   get size(): ServiceResult<number>;
 
   /**
-   * Iterate through CFF TypedKvMap storage by key
+   * Iterate through CCF TypedKvMap storage by key
    * @param callback
    */
   forEach(callback: (key: string, value: T) => void): ServiceResult<string>;
 
   /**
-   * Clears CFF TypedKvMap storage
+   * Clears CCF TypedKvMap storage
    */
   clear(): ServiceResult<void>;
 

@@ -21,7 +21,7 @@ When a user requests a reconciliation report via the `/report` endpoint, it is g
 
 This decouples data ingestion from reconciliation reporting.
 
-Reconciliation is implemented by querying CFF KV Store for all the keys this user has submitted. Any keys unknown to this user are not used in the reconciliation report. This ensures the user only sees a report with their submitted data.
+Reconciliation is implemented by querying CCF KV Store for all the keys this user has submitted. Any keys unknown to this user are not used in the reconciliation report. This ensures the user only sees a report with their submitted data.
 
 ## Scenarios
 

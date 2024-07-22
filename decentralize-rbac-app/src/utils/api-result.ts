@@ -10,7 +10,7 @@ export enum StatusCode {
 }
 
 /**
- * Status code for CFF network conventions
+ * Status code for CCF network conventions
  */
 export interface CCFResponse {
   statusCode: number;
@@ -19,7 +19,7 @@ export interface CCFResponse {
 }
 
 /**
- * Utility class for wrapping the response with CFF network conventions
+ * Utility class for wrapping the response with CCF network conventions
  */
 export class ApiResult {
   /**

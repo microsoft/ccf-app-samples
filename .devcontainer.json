@@ -1,6 +1,6 @@
 {
   "name": "CCF Samples",
-  "image": "mcr.microsoft.com/ccf/app/dev:4.0.12-virtual",
+  "image": "ghcr.io/microsoft/ccf/app/dev/virtual:ccf-5.0.0",
   "customizations": {
     "vscode": {
       "extensions": [
