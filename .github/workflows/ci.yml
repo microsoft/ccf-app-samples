@@ -61,3 +61,19 @@ jobs:
           cacheFrom: ghcr.io/microsoft/ccf-samples-devcontainer
           runCmd: |
             cd data-reconciliation-app && make unit-test && make test
+
+  decentralized-rbac-app-sample:
+    name: Decentralised RBAC app sample
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Build samples in DevContainer
+        uses: devcontainers/ci@v0.3
+        with:
+          cacheFrom: ghcr.io/microsoft/ccf-samples-devcontainer
+          runCmd: |
+            cd decentralize-rbac-app && make test
