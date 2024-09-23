@@ -13,8 +13,22 @@ user1_id=$(openssl x509 -in "user1_cert.pem" -noout -fingerprint -sha256 | cut -
 account_type0='current_account'
 account_type1='savings_account'
 
+# Define user accounts Id for managers and tellers
+manager_id=$(openssl x509 -in "manager_cert.pem" -noout -fingerprint -sha256 | cut -d "=" -f 2 | sed 's/://g' | awk '{print tolower($0)}')
+teller_id=$(openssl x509 -in "teller_cert.pem" -noout -fingerprint -sha256 | cut -d "=" -f 2 | sed 's/://g' | awk '{print tolower($0)}')
+
+# TODO: Create custom role for teller
+
+# TODO: Create custom role for manager
+
+# TODO: Teller cannot create a new account for user 0
+
+
+# TODO: Manager can create a new account for user 0
+
+
 # Create account for user 0
-curl ${server}/app/account/$user0_id/$account_type0 -X PUT --cacert service_cert.pem --cert member0_cert.pem --key member0_privk.pem
+curl ${server}/app/account/$user0_id/$account_type0 -X PUT --cacert service_cert.pem --cert member0_cert.pem --key member0_privk.p
 
 # Create account for user 1
 curl ${server}/app/account/$user1_id/$account_type1 -X PUT --cacert service_cert.pem --cert member0_cert.pem --key member0_privk.pem
@@ -42,3 +56,8 @@ curl ${server}/app/balance/$account_type0 -X GET --cacert service_cert.pem --cer
 # Check user1 balance
 curl ${server}/app/balance/$account_type1 -X GET --cacert service_cert.pem --cert user1_cert.pem --key user1_privk.pem
 
+# Withdraw: user1, 100
+curl ${server}/app/withdraw/$user1_id/$account_type0 -X POST --cacert service_cert.pem --cert member0_cert.pem --key member0_privk.pem -H "Content-Type: application/json" --data-binary '{ "value": 100 }'
+
+# Check user1 balance
+curl ${server}/app/balance/$account_type1 -X GET --cacert service_cert.pem --cert user1_cert.pem --key user1_privk.pem

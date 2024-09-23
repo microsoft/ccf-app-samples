@@ -51,6 +51,39 @@
         }
       }
     },
+    "/withdraw/{user_id}/{account_name}": {
+      "post": {
+        "js_module": "endpoints/banking.js",
+        "js_function": "withdraw",
+        "forwarding_required": "always",
+        "authn_policies": ["member_cert"],
+        "mode": "readwrite",
+        "openapi": {
+          "responses": {
+            "204": {
+              "description": "Ok"
+            }
+          },
+          "security": [],
+          "parameters": [],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "value": {
+                      "type": "number"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/balance/{account_name}": {
       "get": {
         "js_module": "endpoints/banking.js",

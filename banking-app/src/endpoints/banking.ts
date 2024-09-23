@@ -134,6 +134,54 @@ export function deposit(
   };
 }
 
+interface WithdrawRequest {
+  value: number;
+}
+
+export function withdraw(
+  request: ccfapp.Request<WithdrawRequest>,
+): ccfapp.Response {
+  let body;
+  try {
+    body = request.body.json();
+  } catch {
+    return {
+      statusCode: 400,
+    };
+  }
+
+  const value = body.value;
+
+  if (!isPositiveInteger(value)) {
+    return {
+      statusCode: 400,
+    };
+  }
+
+  const userId = request.params.user_id;
+  if (!validateUserId(userId)) {
+    return {
+      statusCode: 404,
+    };
+  }
+
+  const accountName = request.params.account_name;
+
+  const accountToBalance = getAccountTable(userId);
+
+  if (!accountToBalance.has(accountName)) {
+    return { statusCode: 404 };
+  }
+
+  accountToBalance.set(accountName, accountToBalance.get(accountName) - value);
+
+  console.log("Withdrawal Completed");
+
+  return {
+    statusCode: 204,
+  };
+}
+
 interface BalanceResponse {
   balance: number;
 }
@@ -344,4 +392,27 @@ export function getTransactionReceipt(
   return {
     body,
   };
+}
+
+export function deleteAccount(request: ccfapp.Request): ccfapp.Response {
+  const userId = request.params.user_id;
+  if (!validateUserId(userId)) {
+    return {
+      statusCode: 404,
+    };
+  }
+
+  //TODO: Make it acutally delete the account
+
+  const accountToBalance = getAccountTable(userId);
+
+  const accountName = request.params.account_name;
+
+  if (accountToBalance.has(accountName)) {
+    // Nothing to do
+    return {
+      statusCode: 204,
+    };
+  }
+
 }
