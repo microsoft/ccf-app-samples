@@ -402,16 +402,19 @@ export function deleteAccount(request: ccfapp.Request): ccfapp.Response {
     };
   }
 
-  //TODO: Make it acutally delete the account
-
-  const accountToBalance = getAccountTable(userId);
-
+  const accountToDelete = getAccountTable(userId);
   const accountName = request.params.account_name;
 
-  if (accountToBalance.has(accountName)) {
+  if (accountToDelete.has(accountName)) {
     // Nothing to do
     return {
       statusCode: 204,
+    };
+  } else {
+    // TODO: Implement delete account here
+    accountToDelete.delete(accountName);
+    return {
+      body: `${accountName} for ${userId} has been deleted`,
     };
   }
 

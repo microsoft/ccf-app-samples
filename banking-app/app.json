@@ -1,9 +1,27 @@
 {
   "endpoints": {
-    "/account/{user_id}/{account_name}": {
+    "/account/create/{user_id}/{account_name}": {
       "put": {
         "js_module": "endpoints/banking.js",
         "js_function": "createAccount",
+        "forwarding_required": "always",
+        "authn_policies": ["member_cert"],
+        "mode": "readwrite",
+        "openapi": {
+          "responses": {
+            "204": {
+              "description": "Ok"
+            }
+          },
+          "security": [],
+          "parameters": []
+        }
+      }
+    },
+    "/account/delete/{user_id}/{account_name}": {
+      "delete": {
+        "js_module": "endpoints/banking.js",
+        "js_function": "deleteAccount",
         "forwarding_required": "always",
         "authn_policies": ["member_cert"],
         "mode": "readwrite",
@@ -52,9 +70,27 @@
       }
     },
     "/withdraw/{user_id}/{account_name}": {
-      "post": {
+      "put": {
         "js_module": "endpoints/banking.js",
         "js_function": "withdraw",
+        "forwarding_required": "always",
+        "authn_policies": ["member_cert"],
+        "mode": "readwrite",
+        "openapi": {
+          "responses": {
+            "204": {
+              "description": "Ok"
+            }
+          },
+          "security": [],
+          "parameters": []
+        }
+      }
+    },
+    "/roles/define/{role_name}": {
+      "post": {
+        "js_module": "endpoints/roles.js",
+        "js_function": "defineRole",
         "forwarding_required": "always",
         "authn_policies": ["member_cert"],
         "mode": "readwrite",
@@ -72,8 +108,8 @@
               "application/json": {
                 "schema": {
                   "properties": {
-                    "value": {
-                      "type": "number"
+                    "role_actions": {
+                      "type": "array"
                     }
                   },
                   "type": "object"
