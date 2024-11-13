@@ -16,6 +16,17 @@ if [ "200" != "$(curl $server/node/network -k -s -o /dev/null -w %{http_code})" 
     exit 1
 fi
 
+# Set up Python package
+echo -e "\n\e[34m <-- Installing Python dependencies --> \e[0m\n"
+
+
+if [ ! -f "env/bin/activate" ]
+    then
+        python3.8 -m venv env
+fi
+source env/bin/activate
+pip install -q ccf==$(cat /opt/ccf_virtual/share/VERSION)
+
 # Change working directory to the one that contains 
 # proposals, generated certs and keys, and constitution files
 cd ${certificate_dir}
