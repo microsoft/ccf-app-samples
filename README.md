@@ -2,7 +2,7 @@
 
 [![CCF App Samples CI](https://github.com/microsoft/ccf-app-samples/actions/workflows/ci.yml/badge.svg)](https://github.com/microsoft/ccf-app-samples/actions/workflows/ci.yml)
 
-Sample applications for the [Confidential Consortium Framework (CCF)](https://ccf.microsoft.com/).
+Sample applications for the [Confidential Consortium Framework (CCF)](https://www.microsoft.com/en-us/research/project/confidential-consortium-framework/).
 
 ## Quickstart
 
