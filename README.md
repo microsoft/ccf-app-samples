@@ -1,3 +1,6 @@
+> [!NOTE]
+> These samples are no longer maintained. See [ACL sample apps](https://github.com/microsoft/azureconfidentialledger-app-samples) for maintained samples, and ACL deployment steps, or the [main CCF repo](https://github.com/microsoft/CCF) for latest CCF version information.
+
 # CCF App Samples [![Open in VSCode](https://img.shields.io/static/v1?label=Open+in&message=VSCode&logo=visualstudiocode&color=007ACC&logoColor=007ACC&labelColor=2C2C32)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/microsoft/ccf-app-samples)
 
 [![CCF App Samples CI](https://github.com/microsoft/ccf-app-samples/actions/workflows/ci.yml/badge.svg)](https://github.com/microsoft/ccf-app-samples/actions/workflows/ci.yml)
